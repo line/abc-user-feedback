@@ -22,13 +22,13 @@ export class AddSearchMaxDaysOnChannel1746153314386
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE \`channels\` ADD \`search_max_days\` int NOT NULL DEFAULT '365'`,
+      `ALTER TABLE \`channels\` ADD \`feedback_search_max_days\` int NOT NULL DEFAULT '365'`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE \`channels\` DROP COLUMN \`search_max_days\``,
+      `ALTER TABLE \`channels\` DROP COLUMN \`feedback_search_max_days\``,
     );
   }
 }
