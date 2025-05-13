@@ -47,5 +47,5 @@ export class UpdateChannelRequestDto {
 
   @ApiProperty()
   @IsNumber()
-  searchMaxDays: number;
+  feedbackSearchMaxDays: number;
 }

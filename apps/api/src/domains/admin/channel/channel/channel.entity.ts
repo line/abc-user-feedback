@@ -54,7 +54,7 @@ export class ChannelEntity extends CommonEntity {
   imageConfig: ImageConfig | null;
 
   @Column('int', { default: 365 })
-  searchMaxDays: number;
+  feedbackSearchMaxDays: number;
 
   @ManyToOne(() => ProjectEntity, (project) => project.channels, {
     onDelete: 'CASCADE',
@@ -90,7 +90,7 @@ export class ChannelEntity extends CommonEntity {
     description: string | null,
     projectId: number,
     imageConfig: ImageConfig | null,
-    searchMaxDays: number,
+    feedbackSearchMaxDays: number,
   ) {
     const channel = new ChannelEntity();
     channel.name = name;
@@ -102,7 +102,7 @@ export class ChannelEntity extends CommonEntity {
     }
     channel.project = new ProjectEntity();
     channel.project.id = projectId;
-    channel.searchMaxDays = searchMaxDays;
+    channel.feedbackSearchMaxDays = feedbackSearchMaxDays;
 
     return channel;
   }
