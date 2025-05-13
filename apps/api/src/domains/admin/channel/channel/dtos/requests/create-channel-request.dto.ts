@@ -113,7 +113,7 @@ export class CreateChannelRequestDto {
 
   @ApiProperty()
   @IsNumber()
-  searchMaxDays: number;
+  feedbackSearchMaxDays: number;
 
   @ApiProperty({ type: [CreateChannelRequestFieldDto] })
   @Type(() => CreateChannelRequestFieldDto)

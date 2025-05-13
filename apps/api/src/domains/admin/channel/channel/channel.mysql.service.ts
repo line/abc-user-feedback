@@ -96,7 +96,7 @@ export class ChannelMySQLService {
 
   @Transactional()
   async update(channelId: number, dto: UpdateChannelDto) {
-    const { name, description, imageConfig, searchMaxDays } = dto;
+    const { name, description, imageConfig, feedbackSearchMaxDays } = dto;
     const channel = await this.findById({ channelId });
 
     if (
@@ -115,7 +115,7 @@ export class ChannelMySQLService {
     channel.name = name;
     channel.description = description;
     channel.imageConfig = imageConfig;
-    channel.searchMaxDays = searchMaxDays;
+    channel.feedbackSearchMaxDays = feedbackSearchMaxDays;
     return await this.repository.save(channel);
   }
 

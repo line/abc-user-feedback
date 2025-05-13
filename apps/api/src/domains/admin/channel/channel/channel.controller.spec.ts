@@ -54,7 +54,7 @@ describe('ChannelController', () => {
       const dto = new CreateChannelRequestDto();
       dto.name = faker.string.sample();
       dto.description = faker.string.sample();
-      dto.searchMaxDays = faker.number.int();
+      dto.feedbackSearchMaxDays = faker.number.int();
       dto.fields = [];
 
       await channelController.create(projectId, dto);

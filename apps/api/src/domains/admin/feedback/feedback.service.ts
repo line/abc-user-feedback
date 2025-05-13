@@ -96,7 +96,7 @@ export class FeedbackService {
   private validateQuery(
     query: FindFeedbacksByChannelIdDto['query'],
     fields: FieldEntity[],
-    searchMaxDays: number,
+    feedbackSearchMaxDays: number,
   ) {
     const fieldsByKey = fields.reduce(
       (fields: Record<string, FieldEntity>, field) => {
@@ -149,14 +149,14 @@ export class FeedbackService {
             throw new BadRequestException(`${fieldKey} must be DateTimeRange`);
 
           if (
-            searchMaxDays >= 0 &&
+            feedbackSearchMaxDays >= 0 &&
             calculateDaysBetweenDates(
               (query[fieldKey] as TimeRange).gte,
               (query[fieldKey] as TimeRange).lt,
-            ) > searchMaxDays
+            ) > feedbackSearchMaxDays
           ) {
             throw new BadRequestException(
-              `${fieldKey} must be less than ${searchMaxDays} days`,
+              `${fieldKey} must be less than ${feedbackSearchMaxDays} days`,
             );
           }
           break;
@@ -191,7 +191,7 @@ export class FeedbackService {
   private validateQueryV2(
     queries: FindFeedbacksByChannelIdDtoV2['queries'],
     fields: FieldEntity[],
-    searchMaxDays: number,
+    feedbackSearchMaxDays: number,
   ) {
     const fieldsByKey = fields.reduce(
       (fields: Record<string, FieldEntity>, field) => {
@@ -235,14 +235,14 @@ export class FeedbackService {
             throw new BadRequestException(`${fieldKey} must be DateTimeRange`);
 
           if (
-            searchMaxDays >= 0 &&
+            feedbackSearchMaxDays >= 0 &&
             calculateDaysBetweenDates(
               (fieldValue as TimeRange).gte,
               (fieldValue as TimeRange).lt,
-            ) > searchMaxDays
+            ) > feedbackSearchMaxDays
           ) {
             throw new BadRequestException(
-              `${fieldKey} must be less than ${searchMaxDays} days`,
+              `${fieldKey} must be less than ${feedbackSearchMaxDays} days`,
             );
           }
           break;
@@ -654,18 +654,18 @@ export class FeedbackService {
     delete dto.query?.issueName;
     if (!dto.query?.searchText) delete dto.query?.searchText;
 
-    let searchMaxDays = (
+    let feedbackSearchMaxDays = (
       await this.channelService.findById({
         channelId: dto.channelId,
       })
-    ).searchMaxDays;
+    ).feedbackSearchMaxDays;
 
-    if (dto.query?.searchMaxDays) {
-      searchMaxDays = dto.query.searchMaxDays as number;
-      delete dto.query.searchMaxDays;
+    if (dto.query?.feedbackSearchMaxDays) {
+      feedbackSearchMaxDays = dto.query.feedbackSearchMaxDays as number;
+      delete dto.query.feedbackSearchMaxDays;
     }
 
-    this.validateQuery(dto.query ?? {}, fields, searchMaxDays);
+    this.validateQuery(dto.query ?? {}, fields, feedbackSearchMaxDays);
 
     const feedbacksByPagination =
       this.configService.get('opensearch.use') ?
@@ -696,14 +696,14 @@ export class FeedbackService {
     }
     dto.fields = fields;
 
-    const searchMaxDays = (
+    const feedbackSearchMaxDays = (
       await this.channelService.findById({
         channelId: dto.channelId,
       })
-    ).searchMaxDays;
+    ).feedbackSearchMaxDays;
 
-    this.validateQueryV2(dto.queries, fields, searchMaxDays);
-    this.validateQueryV2(dto.defaultQueries, fields, searchMaxDays);
+    this.validateQueryV2(dto.queries, fields, feedbackSearchMaxDays);
+    this.validateQueryV2(dto.defaultQueries, fields, feedbackSearchMaxDays);
 
     const feedbacksByPagination =
       this.configService.get('opensearch.use') ?
@@ -871,14 +871,14 @@ export class FeedbackService {
       }
     }
 
-    const searchMaxDays = (
+    const feedbackSearchMaxDays = (
       await this.channelService.findById({
         channelId: dto.channelId,
       })
-    ).searchMaxDays;
+    ).feedbackSearchMaxDays;
 
-    this.validateQueryV2(dto.queries, fields, searchMaxDays);
-    this.validateQueryV2(dto.defaultQueries, fields, searchMaxDays);
+    this.validateQueryV2(dto.queries, fields, feedbackSearchMaxDays);
+    this.validateQueryV2(dto.defaultQueries, fields, feedbackSearchMaxDays);
 
     const fieldsByKey: Record<string, FieldEntity> = fields.reduce(
       (prev: Record<string, FieldEntity>, field) => {
