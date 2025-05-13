@@ -54,7 +54,7 @@ describe('ChannelService', () => {
       dto.name = channelFixture.name;
       dto.description = channelFixture.description;
       dto.projectId = channelFixture.project.id;
-      dto.searchMaxDays = channelFixture.searchMaxDays;
+      dto.feedbackSearchMaxDays = channelFixture.feedbackSearchMaxDays;
       dto.fields = Array.from({ length: fieldCount }).map(createFieldDto);
       jest.spyOn(channelRepo, 'findOneBy').mockResolvedValue(null);
       jest
@@ -71,7 +71,7 @@ describe('ChannelService', () => {
       dto.name = faker.string.sample();
       dto.description = faker.string.sample();
       dto.projectId = faker.number.int();
-      dto.searchMaxDays = faker.number.int();
+      dto.feedbackSearchMaxDays = faker.number.int();
       dto.fields = Array.from({ length: fieldCount }).map(createFieldDto);
 
       await expect(channelService.create(dto)).rejects.toThrow(
@@ -105,7 +105,7 @@ describe('ChannelService', () => {
       const dto = new UpdateChannelDto();
       dto.name = faker.string.sample();
       dto.description = faker.string.sample();
-      dto.searchMaxDays = faker.number.int();
+      dto.feedbackSearchMaxDays = faker.number.int();
       jest.spyOn(channelRepo, 'findOne').mockResolvedValueOnce(channelFixture);
       jest.spyOn(channelRepo, 'findOne').mockResolvedValueOnce(null);
 
@@ -119,7 +119,7 @@ describe('ChannelService', () => {
       const dto = new UpdateChannelDto();
       dto.name = channelFixture.name;
       dto.description = faker.string.sample();
-      dto.searchMaxDays = faker.number.int();
+      dto.feedbackSearchMaxDays = faker.number.int();
 
       await expect(channelService.updateInfo(channelId, dto)).rejects.toThrow(
         ChannelInvalidNameException,
