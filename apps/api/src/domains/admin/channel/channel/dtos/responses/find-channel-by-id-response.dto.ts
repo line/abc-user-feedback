@@ -38,7 +38,7 @@ export class FindChannelByIdResponseDto {
 
   @Expose()
   @ApiProperty()
-  searchMaxDays: number;
+  feedbackSearchMaxDays: number;
 
   @Expose()
   @ApiProperty()

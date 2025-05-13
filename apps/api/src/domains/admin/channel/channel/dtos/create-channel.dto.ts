@@ -33,7 +33,7 @@ export class CreateChannelDto {
   imageConfig: ImageConfigDto | null;
 
   @Expose()
-  searchMaxDays: number;
+  feedbackSearchMaxDays: number;
 
   @Expose()
   @Type(() => CreateFieldDto)
@@ -51,7 +51,7 @@ export class CreateChannelDto {
       params.description,
       params.projectId,
       params.imageConfig,
-      params.searchMaxDays,
+      params.feedbackSearchMaxDays,
     );
   }
 }
