@@ -19,6 +19,7 @@ import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { AIIntegrationsEntity } from './ai-integrations.entity';
+import { AIClient } from './ai.client';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 
 @Injectable()
@@ -51,5 +52,28 @@ export class AIService {
     };
     await this.aiIntegrationsRepo.save(updatedIntegration);
     return updatedIntegration;
+  }
+
+  async getModels(projectId: number) {
+    const integration = await this.aiIntegrationsRepo.findOne({
+      where: {
+        project: {
+          id: projectId,
+        },
+      },
+    });
+
+    if (!integration) {
+      return [];
+    }
+
+    const client = new AIClient({
+      apiKey: integration.apiKey,
+      provider: integration.provider,
+    });
+
+    const models = await client.getModelList();
+
+    return models;
   }
 }

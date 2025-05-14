@@ -16,17 +16,23 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseIntPipe,
   Post,
-  Put,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { AIService } from './ai.service';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import { CreateAIIntegrationsRequestDto } from './dtos/requests/create-ai-integrations-request.dto';
 import { CreateAIIntegrationsResponseDto } from './dtos/responses/create-ai-integrations-response.dto';
+import { GetAIIntegrationsModelsResponseDto } from './dtos/responses/get-ai-integrations-models-response.dto';
 
 @ApiTags('ai')
 @Controller('/admin/projects/:projectId/ai')
@@ -45,5 +51,14 @@ export class AIController {
         CreateAIIntegrationsDto.from({ ...body, projectId }),
       ),
     );
+  }
+
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: GetAIIntegrationsModelsResponseDto })
+  @Get('integrations/models')
+  async getModels(@Param('projectId', ParseIntPipe) projectId: number) {
+    return GetAIIntegrationsModelsResponseDto.transform({
+      models: await this.aiService.getModels(projectId),
+    });
   }
 }
