@@ -62,14 +62,16 @@
         "invalid-member": "유효하지 않은 Member 목록이 존재합니다.",
         "invalid-role": "유효하지 않는 Role 정보가 존재합니다.",
         "invalid-project": "유효하지 않는 Project 정보가 존재합니다."
-      }
+      },
+      "alert-description": "이어서 Channel을 생성하러 갈까요?"
     },
     "create-channel": {
       "title": "Channel 생성",
       "complete-title": "Channel 생성이 완료되었습니다.",
       "guide": {
         "invalid-channel": "유효하지 않은 Project 정보가 존재합니다."
-      }
+      },
+      "alert-description": "축하합니다! 이제 본격적으로 시작할 준비가 되었습니다."
     }
   },
   "header": {
@@ -115,7 +117,8 @@
       "today": "오늘",
       "yesterday": "어제",
       "before-days": "{{day, number}}일",
-      "before-years": "{{day, number}}년",
+      "before-years": "{{year, number}}년",
+      "entire-period": "전체 기간",
       "last-days": "지난 {{day, number}}일",
       "date-range-over-max-days": "조회 기간은 최대 {{maxDays}}일까지만 입력 가능합니다."
     },
@@ -338,11 +341,11 @@
         "member": "등록된 Member가 없습니다.",
         "api-key": "생성된 API Key가 없습니다.",
         "webhook": "등록된 Webhook이 없습니다.",
-        "empty": "등록된 데이터가 없습니다.",
-        "search": "검색된 결과가 없습니다."
+        "empty": "아직 데이터가 없습니다.",
+        "filter": "조회 결과가 없습니다. 조회 또는 필터 조건을 변경해 보세요."
       },
-      "required-step": "필수로 입력해야하는 하는 단계입니다.",
-      "optional-step": "선택적으로 입력해야하는 하는 단계입니다.",
+      "required-step": "필수 입력 단계입니다. 필수 정보를 입력해 주세요.",
+      "optional-step": "선택 입력 단계입니다. 나중에 설정 메뉴에서 다시 입력할 수 있어요.",
       "create-project": "Project 생성",
       "create-channel": "Channel 생성",
       "name": {

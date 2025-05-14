@@ -28,8 +28,6 @@ import type {
 } from '@/shared';
 import { client, TableFilterOperators } from '@/shared';
 
-import { env } from '@/env';
-
 const toQuery = (
   projectId: number,
 ): Record<TableFilterFieldFotmat, (valeu: unknown) => unknown> => ({
@@ -73,18 +71,30 @@ const toQuery = (
   multiSelect: (value) => value,
 });
 
-const DEFAULT_DATE_RANGE = {
-  gte: dayjs()
-    .subtract(env.NEXT_PUBLIC_MAX_DAYS - 1, 'day')
-    .toDate(),
-  lt: dayjs().endOf('day').toDate(),
-};
+const DEFAULT_DATE_RANGE = (
+  feedbackSearchMaxDays: number,
+): SearchQuery | null =>
+  feedbackSearchMaxDays === -1 ? null : (
+    {
+      key: 'createdAt',
+      value: {
+        gte: dayjs()
+          .subtract(feedbackSearchMaxDays - 1, 'day')
+          .startOf('day')
+          .toDate(),
+        lt: dayjs().endOf('day').toDate(),
+      },
+      condition: 'BETWEEN',
+    }
+  );
 
 const useFeedbackQueryConverter = (input: {
   projectId: number;
   filterFields: TableFilterField[];
+  feedbackSearchMaxDays: number;
 }) => {
-  const { projectId, filterFields } = input;
+  const { projectId, filterFields, feedbackSearchMaxDays } = input;
+  const defaultDateRange = DEFAULT_DATE_RANGE(feedbackSearchMaxDays);
 
   const [operator, setOperator] = useQueryState<TableFilterOperator>(
     'operator',
@@ -104,9 +114,7 @@ const useFeedbackQueryConverter = (input: {
     createParser({
       parse: (value) => JSON.parse(value) as SearchQuery[],
       serialize: (value) => JSON.stringify(value),
-    }).withDefault([
-      { key: 'createdAt', value: DEFAULT_DATE_RANGE, condition: 'BETWEEN' },
-    ]),
+    }).withDefault(defaultDateRange ? [defaultDateRange] : []),
   );
 
   const dateRange = useMemo(() => {
@@ -125,8 +133,10 @@ const useFeedbackQueryConverter = (input: {
   }, [defaultQueries]);
 
   const onChangeDateRange = useCallback(async (value: DateRangeType) => {
-    if (!value) return;
-
+    if (!value) {
+      await setDefaultQueries([]);
+      return;
+    }
     await setDefaultQueries([
       {
         key: 'createdAt',
@@ -162,9 +172,7 @@ const useFeedbackQueryConverter = (input: {
       );
 
       if (result.length === 0 && !dateRange) {
-        await setDefaultQueries([
-          { key: 'createdAt', value: DEFAULT_DATE_RANGE, condition: 'BETWEEN' },
-        ]);
+        await setDefaultQueries(defaultDateRange ? [defaultDateRange] : []);
         await setQueries([]);
         await setOperator('AND');
         return;
@@ -188,6 +196,9 @@ const useFeedbackQueryConverter = (input: {
     dateRange,
     updateTableFilters: onChageTableFilters,
     updateDateRage: onChangeDateRange,
+    resetDateRange: async () => {
+      await setDefaultQueries(defaultDateRange ? [defaultDateRange] : []);
+    },
   };
 };
 

@@ -68,14 +68,16 @@
         "invalid-member": "Invalid member list detected.",
         "invalid-role": "Invalid role information detected.",
         "invalid-project": "Invalid project information detected."
-      }
+      },
+      "alert-description": "Shall you proceed to create a Channel?"
     },
     "create-channel": {
       "title": "Create Channel",
       "complete-title": "Channel Creation Complete",
       "guide": {
         "invalid-channel": "Invalid channel information detected."
-      }
+      },
+      "alert-description": "Congratulations! Now you are ready to start in earnest."
     }
   },
   "header": {
@@ -121,7 +123,8 @@
       "today": "Today",
       "yesterday": "Yesterday",
       "before-days": "{{day, number}} Days",
-      "before-years": "{{day, number}} Years",
+      "before-years": "{{year, number}} Years",
+      "entire-period": "Entire period",
       "last-days": "Last {{day, number}} Days",
       "date-range-over-max-days": "Inquiry period is limited to {{maxDays}} days"
     },
@@ -344,11 +347,11 @@
         "channel": "No Channel has been created.",
         "webhook": "No Webhook has been registered.",
         "feedback": "No Feedback has been collected.",
-        "empty": "There is no registered data.",
-        "search": "No results found."
+        "empty": "There is no data yet.",
+        "filter": "There is no results. Try changing the query or filter conditions."
       },
-      "required-step": "This is a step that must be filled out.",
-      "optional-step": "This is a step that can be filled out optionally.",
+      "required-step": "This is a required input step. Please enter the required information.",
+      "optional-step": "This is an optional input step. You can enter it again later in the settings menu.",
       "create-project": "Create Project",
       "create-channel": "Create Channel",
       "name": {

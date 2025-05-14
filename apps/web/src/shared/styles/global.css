@@ -39,9 +39,6 @@
 .setting-action-buttons .button {
   @apply min-w-[120px];
 }
-.create-template-footer .button {
-  @apply min-w-[120px];
-}
 
 .dialog-footer button {
   @apply min-w-[84px];

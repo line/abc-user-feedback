@@ -18,3 +18,4 @@ export { default as FeedbackTableDownload } from './feedback-table-download.ui';
 export { default as FeedbackTableExpand } from './feedback-table-expand.ui';
 export { default as FeedbackTableViewOptions } from './feedback-table-view-options.ui';
 export { default as FeedbackTableChannelSelection } from './feedback-table-channel-selection.ui';
+export { default as FeedbackTable } from './feedback-table.ui';

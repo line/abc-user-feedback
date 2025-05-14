@@ -69,7 +69,7 @@ const CreateInputTemplate: React.FC<IProps> = (props) => {
   const isLastStep = currentStepIndex === lastStep;
 
   return (
-    <div className="border-neutral-tertiary flex h-[calc(100vh-100px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
+    <div className="border-neutral-tertiary flex h-[calc(100vh-96px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
       <div className="flex items-center justify-between">
         <h3 className="text-title-h3">
           {onClickBack && (
@@ -87,9 +87,9 @@ const CreateInputTemplate: React.FC<IProps> = (props) => {
       {scrollable ?
         <ScrollArea className="h-full">{children}</ScrollArea>
       : <div className="flex h-full flex-col gap-4">{children}</div>}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-        {!onClickBack && (
-          <Alert className="w-[calc(100vw-32px)] max-w-[600px]">
+      {!onClickBack && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+          <Alert className="w-[calc(100vw-32px)] max-w-[600px] shadow-md">
             <AlertContent>
               <AlertTextContainer>
                 <AlertTitle>
@@ -105,7 +105,7 @@ const CreateInputTemplate: React.FC<IProps> = (props) => {
                 <AlertButton
                   variant="outline"
                   onClick={onPrev}
-                  className="min-w-[80px]"
+                  className="min-w-[120px]"
                 >
                   {t('button.previous')}
                 </AlertButton>
@@ -118,14 +118,14 @@ const CreateInputTemplate: React.FC<IProps> = (props) => {
                   onNext();
                 }}
                 disabled={disableNextBtn}
-                className="min-w-[80px]"
+                className="min-w-[120px]"
               >
                 {isLastStep ? t('button.complete') : t('button.next')}
               </AlertButton>
             </AlertContent>
           </Alert>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

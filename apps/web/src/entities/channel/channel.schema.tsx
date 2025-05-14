@@ -40,9 +40,9 @@ export const channelSchema = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
   imageConfig: channelImageConfigSchema.nullable(),
-  searchMaxDays: z.number(),
+  feedbackSearchMaxDays: z.number(),
 });
 
 export const channelInfoSchema = channelSchema
-  .pick({ name: true, description: true, searchMaxDays: true })
+  .pick({ name: true, description: true, feedbackSearchMaxDays: true })
   .merge(z.object({ id: z.number().optional() }));

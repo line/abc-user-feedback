@@ -1247,9 +1247,13 @@ export interface components {
       permissions: string[];
     };
     QueryV2: {
+      /** @description Feedback IDs that are being requested. */
       ids?: string[];
+      /** @description Indicates the key string of field that are being requested as a condition. For example: "createdAt", "message", "issueIds". */
       key: string;
+      /** @description Indicates the value of field that are being requested as a condition. This can be a type of string, number, TimeRange, or array of string and number. */
       value: unknown;
+      /** @description Condition of the query. */
       condition: components['schemas']['QueryV2ConditionsEnum'];
     };
     FindFeedbacksByChannelIdRequestDtoV2: {
@@ -1263,9 +1267,9 @@ export interface components {
        * @example 1
        */
       page?: number;
-      /** @description You can query by key-value with this object. */
+      /** @description You can query by key-value with this object. Queries are concatenated with 'AND' or 'OR' operator. */
       queries?: components['schemas']['QueryV2'][];
-      /** @description You can query by key-value with this object by default (like createdAt). */
+      /** @description You can query by key-value with this object by default (like createdAt). This condition always applies regardless of the conditions of the queries. */
       defaultQueries?: components['schemas']['QueryV2'][];
       /** @description You can concatenate queries with 'AND' or 'OR' operators. */
       operator?: string;
@@ -1317,9 +1321,9 @@ export interface components {
        * @example 1
        */
       page?: number;
-      /** @description You can query by key-value with this object. */
+      /** @description You can query by key-value with this object. Queries are concatenated with 'AND' or 'OR' operator. */
       queries?: components['schemas']['QueryV2'][];
-      /** @description You can query by key-value with this object by default (like createdAt). */
+      /** @description You can query by key-value with this object by default (like createdAt). This condition always applies regardless of the conditions of the queries. */
       defaultQueries?: components['schemas']['QueryV2'][];
       /** @description You can concatenate queries with 'AND' or 'OR' operators. */
       operator?: string;
@@ -1524,6 +1528,7 @@ export interface components {
       name: string;
       description: string | null;
       imageConfig?: components['schemas']['ImageConfigRequestDto'] | null;
+      feedbackSearchMaxDays: number;
       fields: components['schemas']['CreateChannelRequestFieldDto'][];
     };
     CreateChannelResponseDto: {
@@ -1541,6 +1546,7 @@ export interface components {
       id: number;
       name: string;
       description: string;
+      feedbackSearchMaxDays: number;
       imageConfig: components['schemas']['ImageConfigResponseDto'];
       /** Format: date-time */
       createdAt: string;
@@ -1586,6 +1592,7 @@ export interface components {
       name: string;
       description: string;
       imageConfig: components['schemas']['ImageConfigResponseDto'];
+      feedbackSearchMaxDays: number;
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -1596,6 +1603,7 @@ export interface components {
       name: string;
       description: string | null;
       imageConfig?: components['schemas']['ImageConfigRequestDto'] | null;
+      feedbackSearchMaxDays: number;
     };
     UpdateChannelRequestFieldDto: {
       name: string;

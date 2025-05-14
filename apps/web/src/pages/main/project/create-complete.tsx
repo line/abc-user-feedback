@@ -20,7 +20,15 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Accordion, Button } from '@ufb/react';
+import {
+  Accordion,
+  Alert,
+  AlertButton,
+  AlertContent,
+  AlertDescription,
+  AlertTextContainer,
+  AlertTitle,
+} from '@ufb/react';
 
 import {
   CreateSectionTemplate,
@@ -74,7 +82,7 @@ const CompleteProjectCreationPage: NextPage = () => {
           {t('v2.description.create-project')}
         </p>
       }
-      leftBottm={
+      leftBottom={
         <div className="flex justify-end">
           <Image
             src={`/assets/images/create-complete.svg`}
@@ -86,7 +94,7 @@ const CompleteProjectCreationPage: NextPage = () => {
         </div>
       }
     >
-      <div className="border-neutral-tertiary flex h-[calc(100vh-100px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
+      <div className="border-neutral-tertiary flex h-[calc(100vh-96px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
         <h3 className="text-title-h3">{t('v2.text.summary')}</h3>
         <Accordion
           type="multiple"
@@ -111,26 +119,44 @@ const CompleteProjectCreationPage: NextPage = () => {
             <ApiKeyTable data={apiKeys?.items ?? []} />
           </CreateSectionTemplate>
         </Accordion>
-        <div className="create-template-footer flex justify-end gap-2">
-          <Button
-            variant="outline"
-            onClick={() =>
-              router.push({ pathname: Path.DASHBOARD, query: { projectId } })
-            }
-          >
-            {t('button.next-time')}
-          </Button>
-          <Button
-            onClick={async () => {
-              reset();
-              await router.push({
-                pathname: Path.CREATE_CHANNEL,
-                query: { projectId },
-              });
-            }}
-          >
-            {t('main.setting.button.create-channel')}
-          </Button>
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+          <Alert className="w-[calc(100vw-32px)] max-w-[600px] shadow-md">
+            <AlertContent>
+              <AlertTextContainer>
+                <AlertTitle>
+                  {t('main.create-project.complete-title')}
+                </AlertTitle>
+                <AlertDescription>
+                  {t('main.create-project.alert-description')}
+                </AlertDescription>
+              </AlertTextContainer>
+              <AlertButton
+                variant="outline"
+                onClick={() =>
+                  router.push({
+                    pathname: Path.DASHBOARD,
+                    query: { projectId },
+                  })
+                }
+                className="min-w-[120px]"
+              >
+                {t('button.next-time')}
+              </AlertButton>
+              <AlertButton
+                onClick={async () => {
+                  reset();
+                  await router.push({
+                    pathname: Path.CREATE_CHANNEL,
+                    query: { projectId },
+                  });
+                }}
+                variant="primary"
+                className="min-w-[120px]"
+              >
+                {t('main.setting.button.create-channel')}
+              </AlertButton>
+            </AlertContent>
+          </Alert>
         </div>
       </div>
     </CreationLayout>

@@ -68,14 +68,16 @@
         "invalid-member": "Ungültige Mitgliederliste erkannt.",
         "invalid-role": "Ungültige Rolleninformationen erkannt.",
         "invalid-project": "Ungültige Projektinformationen erkannt."
-      }
+      },
+      "alert-description": "Möchten Sie fortfahren, um einen Channel zu erstellen?"
     },
     "create-channel": {
       "title": "Kanal erstellen",
       "complete-title": "Kanal erstellt",
       "guide": {
         "invalid-channel": "Ungültige Kanalinformationen erkannt."
-      }
+      },
+      "alert-description": "Herzlichen Glückwunsch! Sie sind jetzt bereit, richtig zu beginnen."
     }
   },
   "header": {
@@ -121,7 +123,8 @@
       "today": "Heute",
       "yesterday": "Gestern",
       "before-days": "{{day, number}} Tagen",
-      "before-years": "{{day, number}} Jahren",
+      "before-years": "{{year, number}} Jahren",
+      "entire-period": "Gesamtzeitraum",
       "last-days": "Letzten {{day, number}} Tagen",
       "date-range-over-max-days": "Anfragezeitraum ist auf {{maxDays}} Tage begrenzt"
     },
@@ -343,11 +346,11 @@
         "channel": "Es wurde noch kein Channel erstellt.",
         "webhook": "Es wurde noch kein Webhook registriert.",
         "feedback": "Es wurde noch kein Feedback gesammelt.",
-        "empty": "Es gibt keine registrierten Daten.",
-        "search": "Keine Ergebnisse gefunden."
+        "empty": "Es liegen noch keine Daten vor.",
+        "filter": "Es gibt keine Ergebnisse. Versuchen Sie, die Abfrage oder Filterbedingungen zu ändern."
       },
-      "required-step": "Dies ist ein Schritt, der ausgefüllt werden muss.",
-      "optional-step": "Dies ist ein Schritt, der optional ausgefüllt werden kann.",
+      "required-step": "Dies ist ein erforderlicher Eingabeschritt. Bitte geben Sie die erforderlichen Informationen ein.",
+      "optional-step": "Dies ist ein optionaler Eingabeschritt. Sie können ihn später im Einstellungsmenü erneut eingeben.",
       "create-project": "Project erstellen",
       "create-channel": "Channel erstellen",
       "name": {

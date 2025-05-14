@@ -166,7 +166,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
                 table.getRowCount() === 0 || disableRound,
             })}
           >
-            {table.getRowCount() === 0 ?
+            {!isLoading && table.getRowCount() === 0 ?
               <TableRow className="hover:bg-inherit">
                 <TableCell colSpan={table.getFlatHeaders().length}>
                   <div className="my-10 flex flex-col items-center justify-center gap-4 [&>button]:min-w-[120px]">
@@ -179,7 +179,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
                           alt="empty image"
                         />
                         <p className="text-small text-neutral-tertiary">
-                          {t('v2.text.no-data.search')}
+                          {t('v2.text.no-data.filter')}
                         </p>
                       </>
                     : <>
