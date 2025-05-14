@@ -13,14 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { AIIntegrationsEntity } from './ai-integrations.entity';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
-import { UpdateAIIntegrationsDto } from './dtos/update-ai-integrations.dto';
 
 @Injectable()
 export class AIService {
@@ -30,17 +29,7 @@ export class AIService {
   ) {}
 
   @Transactional()
-  async create(dto: CreateAIIntegrationsDto) {
-    const aiIntegration = CreateAIIntegrationsDto.toAIIntegrationsEntity(dto);
-
-    const savedAiIntegration =
-      await this.aiIntegrationsRepo.save(aiIntegration);
-
-    return savedAiIntegration;
-  }
-
-  @Transactional()
-  async update(dto: UpdateAIIntegrationsDto) {
+  async upsert(dto: CreateAIIntegrationsDto) {
     const existingIntegration = await this.aiIntegrationsRepo.findOne({
       where: {
         project: {
@@ -50,7 +39,10 @@ export class AIService {
     });
 
     if (!existingIntegration) {
-      throw new BadRequestException('AI Integration not found');
+      const newIntegration =
+        CreateAIIntegrationsDto.toAIIntegrationsEntity(dto);
+      await this.aiIntegrationsRepo.save(newIntegration);
+      return newIntegration;
     }
 
     const updatedIntegration = {

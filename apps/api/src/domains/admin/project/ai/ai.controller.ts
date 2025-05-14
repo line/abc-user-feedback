@@ -24,6 +24,7 @@ import {
 import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 
 import { AIService } from './ai.service';
+import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import { CreateAIIntegrationsRequestDto } from './dtos/requests/create-ai-integrations-request.dto';
 import { CreateAIIntegrationsResponseDto } from './dtos/responses/create-ai-integrations-response.dto';
 
@@ -40,19 +41,9 @@ export class AIController {
     @Body() body: CreateAIIntegrationsRequestDto,
   ) {
     return CreateAIIntegrationsResponseDto.transform(
-      await this.aiService.create({ ...body, projectId }),
-    );
-  }
-
-  @ApiBearerAuth()
-  @ApiCreatedResponse({ type: CreateAIIntegrationsResponseDto })
-  @Put('integrations')
-  async update(
-    @Param('projectId', ParseIntPipe) projectId: number,
-    @Body() body: CreateAIIntegrationsRequestDto,
-  ) {
-    return CreateAIIntegrationsResponseDto.transform(
-      await this.aiService.update({ ...body, projectId }),
+      await this.aiService.upsert(
+        CreateAIIntegrationsDto.from({ ...body, projectId }),
+      ),
     );
   }
 }
