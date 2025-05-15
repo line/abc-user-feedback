@@ -16,10 +16,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
   Post,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -30,9 +32,16 @@ import {
 
 import { AIService } from './ai.service';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
-import { CreateAIIntegrationsRequestDto } from './dtos/requests/create-ai-integrations-request.dto';
-import { CreateAIIntegrationsResponseDto } from './dtos/responses/create-ai-integrations-response.dto';
-import { GetAIIntegrationsModelsResponseDto } from './dtos/responses/get-ai-integrations-models-response.dto';
+import {
+  CreateAIIntegrationsRequestDto,
+  CreateAITemplateRequestDto,
+} from './dtos/requests';
+import {
+  CreateAIIntegrationsResponseDto,
+  CreateAITemplateResponseDto,
+  GetAIIntegrationsModelsResponseDto,
+  GetAITemplatesResponseDto,
+} from './dtos/responses';
 
 @ApiTags('ai')
 @Controller('/admin/projects/:projectId/ai')
@@ -42,7 +51,7 @@ export class AIController {
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: CreateAIIntegrationsResponseDto })
   @Post('integrations')
-  async create(
+  async createIntegration(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Body() body: CreateAIIntegrationsRequestDto,
   ) {
@@ -60,5 +69,55 @@ export class AIController {
     return GetAIIntegrationsModelsResponseDto.transform({
       models: await this.aiService.getModels(projectId),
     });
+  }
+
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: GetAITemplatesResponseDto })
+  @Get('templates')
+  async getTemplates(@Param('projectId', ParseIntPipe) projectId: number) {
+    return GetAITemplatesResponseDto.transform(
+      await this.aiService.findTemplatesByProjectId(projectId),
+    );
+  }
+
+  @ApiBearerAuth()
+  @ApiOkResponse()
+  @Post('templates/default')
+  async createDefaultTemplates(
+    @Param('projectId', ParseIntPipe) projectId: number,
+  ) {
+    await this.aiService.createDefaultTemplates(projectId);
+  }
+
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ type: CreateAITemplateResponseDto })
+  @ApiOkResponse()
+  @Post('templates/new')
+  async createNewTemplate(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Body() body: CreateAITemplateRequestDto,
+  ) {
+    return CreateAITemplateResponseDto.transform(
+      await this.aiService.createNewTemplate({ ...body, projectId }),
+    );
+  }
+
+  @ApiBearerAuth()
+  @Put('templates/:templateId')
+  async update(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('templateId', ParseIntPipe) templateId: number,
+    @Body() body: CreateAITemplateRequestDto,
+  ) {
+    await this.aiService.updateTemplate({ ...body, projectId, templateId });
+  }
+
+  @ApiBearerAuth()
+  @Delete('templates/:templateId')
+  async delete(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('templateId', ParseIntPipe) templateId: number,
+  ) {
+    await this.aiService.deleteById(projectId, templateId);
   }
 }

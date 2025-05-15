@@ -13,20 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsString, MaxLength } from 'class-validator';
 
-import { AIIntegrationsEntity } from './ai-integrations.entity';
-import { AITemplatesEntity } from './ai-templates.entity';
-import { AIController } from './ai.controller';
-import { AIService } from './ai.service';
+export class CreateAITemplateRequestDto {
+  @ApiProperty({ nullable: false, type: String })
+  @IsString()
+  @MaxLength(255)
+  title: string;
 
-@Module({
-  imports: [
-    TypeOrmModule.forFeature([AIIntegrationsEntity, AITemplatesEntity]),
-  ],
-  providers: [AIService],
-  controllers: [AIController],
-  exports: [AIService],
-})
-export class AIModule {}
+  @ApiProperty({ nullable: false, type: String })
+  @IsString()
+  prompt: string;
+
+  @ApiProperty({ nullable: false, type: Boolean })
+  @IsBoolean()
+  autoProcessing: boolean;
+}

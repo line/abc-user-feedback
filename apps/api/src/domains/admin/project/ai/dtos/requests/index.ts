@@ -13,20 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AIIntegrationsEntity } from './ai-integrations.entity';
-import { AITemplatesEntity } from './ai-templates.entity';
-import { AIController } from './ai.controller';
-import { AIService } from './ai.service';
-
-@Module({
-  imports: [
-    TypeOrmModule.forFeature([AIIntegrationsEntity, AITemplatesEntity]),
-  ],
-  providers: [AIService],
-  controllers: [AIController],
-  exports: [AIService],
-})
-export class AIModule {}
+export { CreateAIIntegrationsRequestDto } from './create-ai-integrations-request.dto';
+export { CreateAITemplateRequestDto } from './create-ai-template-request.dto';

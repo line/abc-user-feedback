@@ -13,20 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AIIntegrationsEntity } from './ai-integrations.entity';
-import { AITemplatesEntity } from './ai-templates.entity';
-import { AIController } from './ai.controller';
-import { AIService } from './ai.service';
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose, plainToInstance } from 'class-transformer';
+import { IsNumber } from 'class-validator';
 
-@Module({
-  imports: [
-    TypeOrmModule.forFeature([AIIntegrationsEntity, AITemplatesEntity]),
-  ],
-  providers: [AIService],
-  controllers: [AIController],
-  exports: [AIService],
-})
-export class AIModule {}
+export class CreateAITemplateResponseDto {
+  @ApiProperty()
+  @IsNumber()
+  @Expose()
+  id: number;
+
+  public static transform(params: any): CreateAITemplateResponseDto {
+    return plainToInstance(CreateAITemplateResponseDto, params, {
+      excludeExtraneousValues: true,
+    });
+  }
+}

@@ -13,20 +13,26 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { AIIntegrationsEntity } from './ai-integrations.entity';
+import { AITemplatesEntity } from './ai-templates.entity';
 import { AIClient } from './ai.client';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
+import { CreateAITemplateDto } from './dtos/create-ai-template.dto';
+import { UpdateAITemplateDto } from './dtos/update-ai-template.dto';
 
 @Injectable()
 export class AIService {
   constructor(
     @InjectRepository(AIIntegrationsEntity)
     private readonly aiIntegrationsRepo: Repository<AIIntegrationsEntity>,
+
+    @InjectRepository(AITemplatesEntity)
+    private readonly aiTemplatesRepo: Repository<AITemplatesEntity>,
   ) {}
 
   @Transactional()
@@ -52,6 +58,111 @@ export class AIService {
     };
     await this.aiIntegrationsRepo.save(updatedIntegration);
     return updatedIntegration;
+  }
+
+  async findTemplatesByProjectId(projectId: number) {
+    const templates = await this.aiTemplatesRepo.find({
+      where: {
+        project: {
+          id: projectId,
+        },
+      },
+      order: {
+        createdAt: 'ASC',
+      },
+    });
+
+    return templates.map((template) => ({
+      id: template.id,
+      title: template.title,
+      prompt: template.prompt,
+      autoProcessing: template.autoProcessing,
+      createdAt: template.createdAt,
+      updatedAt: template.updatedAt,
+    }));
+  }
+
+  @Transactional()
+  async createDefaultTemplates(projectId: number) {
+    const templates = [
+      {
+        title: 'Feedback Summary',
+        prompt: 'Summarize the following feedback within 2 sentences',
+        autoProcessing: false,
+        projectId,
+      },
+      {
+        title: 'Feedback sentiment analysis',
+        prompt: 'Analyze the sentiment of the following feedback',
+        autoProcessing: false,
+      },
+      {
+        title: 'Feedback translation',
+        prompt: 'Translate the following feedback to English',
+        autoProcessing: false,
+      },
+      {
+        title: 'Feedback keyword extraction',
+        prompt: 'Extract the keywords from the following feedback',
+        autoProcessing: false,
+      },
+    ];
+
+    await this.aiTemplatesRepo.save(
+      templates.map((template) =>
+        AITemplatesEntity.from({
+          ...template,
+          projectId,
+        }),
+      ),
+    );
+  }
+
+  @Transactional()
+  async createNewTemplate(template: CreateAITemplateDto) {
+    const newTemplate = AITemplatesEntity.from(template);
+    await this.aiTemplatesRepo.save(newTemplate);
+
+    return newTemplate;
+  }
+
+  @Transactional()
+  async updateTemplate(template: UpdateAITemplateDto) {
+    const existingTemplate = await this.aiTemplatesRepo.findOne({
+      where: {
+        id: template.templateId,
+        project: {
+          id: template.projectId,
+        },
+      },
+    });
+    if (!existingTemplate) {
+      throw new BadRequestException('Template not found');
+    }
+    const updatedTemplate = {
+      ...existingTemplate,
+      ...template,
+    };
+    await this.aiTemplatesRepo.save(updatedTemplate);
+    return updatedTemplate;
+  }
+
+  @Transactional()
+  async deleteById(projectId: number, templateId: number) {
+    const template = await this.aiTemplatesRepo.findOne({
+      where: {
+        id: templateId,
+        project: {
+          id: projectId,
+        },
+      },
+    });
+
+    if (!template) {
+      throw new BadRequestException('Template not found');
+    }
+
+    await this.aiTemplatesRepo.delete(templateId);
   }
 
   async getModels(projectId: number) {

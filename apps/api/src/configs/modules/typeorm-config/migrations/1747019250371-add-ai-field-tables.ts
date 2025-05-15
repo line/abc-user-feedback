@@ -37,9 +37,32 @@ export class AddAIFieldTables1700795163535 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE \`ai_integrations\` ADD CONSTRAINT \`FK_project_id\` FOREIGN KEY (\`project_id\`) REFERENCES \`projects\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
+    await queryRunner.query(
+      `CREATE TABLE \`ai_templates\` (
+        \`id\` int NOT NULL AUTO_INCREMENT,
+        \`project_id\` int NOT NULL,
+        \`title\` varchar(255) NOT NULL DEFAULT '',
+        \`prompt\` text NOT NULL,
+        \`auto_processing\` boolean NOT NULL DEFAULT true,
+        \`created_at\` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+        \`updated_at\` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+        \`deleted_at\` DATETIME(6) DEFAULT NULL,
+        PRIMARY KEY (\`id\`)
+      ) ENGINE=InnoDB`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE \`ai_templates\`
+       ADD CONSTRAINT \`FK_ai_templates_project_id\`
+       FOREIGN KEY (\`project_id\`) REFERENCES \`projects\`(\`id\`)
+       ON DELETE CASCADE ON UPDATE NO ACTION`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`ai_templates\` DROP FOREIGN KEY \`FK_ai_templates_project_id\``,
+    );
+    await queryRunner.query(`DROP TABLE \`ai_templates\``);
     await queryRunner.query(
       `ALTER TABLE \`ai_integrations\` DROP FOREIGN KEY \`FK_project_id\``,
     );

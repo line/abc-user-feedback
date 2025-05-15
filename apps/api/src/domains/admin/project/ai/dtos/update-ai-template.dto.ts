@@ -13,20 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Expose } from 'class-transformer';
 
-import { AIIntegrationsEntity } from './ai-integrations.entity';
-import { AITemplatesEntity } from './ai-templates.entity';
-import { AIController } from './ai.controller';
-import { AIService } from './ai.service';
+export class UpdateAITemplateDto {
+  @Expose()
+  title: string;
 
-@Module({
-  imports: [
-    TypeOrmModule.forFeature([AIIntegrationsEntity, AITemplatesEntity]),
-  ],
-  providers: [AIService],
-  controllers: [AIController],
-  exports: [AIService],
-})
-export class AIModule {}
+  @Expose()
+  prompt: string;
+
+  @Expose()
+  autoProcessing: boolean;
+
+  @Expose()
+  projectId: number;
+
+  @Expose()
+  templateId: number;
+}
