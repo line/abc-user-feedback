@@ -52,7 +52,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
 
   const onChangeProject = async (currentProjectId?: string) => {
     await router.push({
-      pathname: `/main/project/[projectId]/dashboard`, // pathname: router.pathname,
+      pathname: router.pathname,
       query: { projectId: currentProjectId },
     });
   };
