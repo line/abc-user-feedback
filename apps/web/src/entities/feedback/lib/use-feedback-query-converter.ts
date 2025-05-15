@@ -196,9 +196,8 @@ const useFeedbackQueryConverter = (input: {
     dateRange,
     updateTableFilters: onChageTableFilters,
     updateDateRage: onChangeDateRange,
-    resetDateRange: async () => {
-      await setDefaultQueries(defaultDateRange ? [defaultDateRange] : []);
-    },
+    resetDateRange: () =>
+      setDefaultQueries(defaultDateRange ? [defaultDateRange] : []),
   };
 };
 

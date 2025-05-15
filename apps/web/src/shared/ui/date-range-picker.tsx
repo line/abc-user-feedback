@@ -55,7 +55,6 @@ interface IProps {
   options?: {
     label: string | React.ReactNode;
     dateRange: DateRangeType;
-    endDate: Date;
   }[];
   children?: React.ReactNode;
 }

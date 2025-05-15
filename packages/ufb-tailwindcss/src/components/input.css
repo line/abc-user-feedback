@@ -14,29 +14,22 @@
  * under the License.
  */
 .input-field {
-  --input-text-default: var(--text-neutral-tertiary);
-  --input-text-typing: var(--text-neutral-primary);
-  --input-text-filled: var(--text-neutral-primary);
-  --input-text-error: var(--text-neutral-primary);
-  --input-label-default: var(--text-neutral-primary);
-  --input-caption-default: var(--text-neutral-tertiary);
-  --input-caption-success: var(--text-tint-green);
-  --input-caption-error: var(--text-tint-red);
-  --input-icon-default: var(--icon-neutral-tertiary);
-  --input-icon-typing: var(--icon-neutral-primary);
-  --input-icon-filled: var(--icon-neutral-primary);
-  --input-icon-error: var(--icon-neutral-primary);
-  --input-icon-caption-default: var(--icon-neutral-tertiary);
-  --input-icon-caption-success: var(--icon-tint-green);
-  --input-icon-caption-error: var(--icon-tint-red);
-  --input-border-default: var(--border-neutral-tertiary);
+  --input-fg: var(--fg-neutral-tertiary);
+  --input-fg-typing: var(--fg-neutral-primary);
+  --input-fg-filled: var(--fg-neutral-primary);
+  --input-fg-error: var(--fg-neutral-primary);
+  --input-label-fg: var(--fg-neutral-primary);
+  --input-caption-fg: var(--fg-neutral-tertiary);
+  --input-caption-fg-success: var(--fg-tint-green);
+  --input-caption-fg-error: var(--fg-tint-red);
+  --input-border: var(--border-neutral-tertiary);
   --input-border-typing: var(--tint, var(--border-neutral-primary));
   --input-border-filled: var(--border-neutral-tertiary);
   --input-border-error: var(--border-tint-red);
-  --input-fg-default: var(--fg-neutral-primary);
-  --input-fg-typing: var(--fg-neutral-tertiary);
-  --input-fg-filled: var(--fg-neutral-primary);
-  --input-fg-error: var(--fg-neutral-primary);
+  --input-bg: var(--bg-neutral-primary);
+  --input-bg-typing: var(--bg-neutral-tertiary);
+  --input-bg-filled: var(--bg-neutral-primary);
+  --input-bg-error: var(--bg-neutral-primary);
 
   @apply flex flex-col gap-1.5;
 }
@@ -48,9 +41,9 @@
 }
 
 .input {
-  @apply text-[var(--input-text-filled)] placeholder:text-[var(--input-text-default)] placeholder-shown:text-[var(--input-text-default)] focus-visible:text-[var(--input-text-typing)];
-  @apply border border-[var(--input-border-filled)] placeholder-shown:border placeholder-shown:border-[var(--input-border-default)] focus-visible:border-2 focus-visible:border-[var(--input-border-typing)];
-  @apply bg-[var(--input-fg-filled)] placeholder-shown:bg-[var(--input-fg-default)] focus-visible:bg-[var(--input-fg-typing)];
+  @apply text-[var(--input-fg-filled)] placeholder:text-[var(--input-fg)] placeholder-shown:text-[var(--input-fg)] focus-visible:text-[var(--input-fg-typing)];
+  @apply border border-[var(--input-border-filled)] placeholder-shown:border placeholder-shown:border-[var(--input-border)] focus-visible:border-2 focus-visible:border-[var(--input-border-typing)];
+  @apply bg-[var(--input-bg-filled)] placeholder-shown:bg-[var(--input-bg)] focus-visible:bg-[var(--input-bg-typing)];
 
   @apply w-full outline-none;
   @apply disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-search-cancel-button]:hidden;
@@ -84,7 +77,7 @@
 }
 
 .input-label {
-  @apply text-base-normal font-normal text-[var(--input-label-default)];
+  @apply text-base-normal font-normal text-[var(--input-label-fg)];
 }
 
 .input-caption {

@@ -14,21 +14,20 @@
  * under the License.
  */
 .alert {
-  --alert-text-default: var(--text-neutral-primary);
-  --alert-text-description: var(--text-neutral-secondary);
-  --alert-border-default: var(--border-neutral-tertiary);
+  --alert-fg: var(--fg-neutral-primary);
+  --alert-description-fg: var(--fg-neutral-secondary);
+  --alert-fg-warning: var(--fg-tint-orange);
+  --alert-fg-success: var(--fg-tint-green);
+  --alert-fg-error: var(--fg-tint-red);
+  --alert-fg-informative: var(--fg-tint-blue);
+  --alert-border: var(--border-neutral-tertiary);
   --alert-border-warning: var(--border-tint-orange);
   --alert-border-success: var(--border-tint-green);
   --alert-border-error: var(--border-tint-red);
   --alert-border-informative: var(--border-tint-blue);
-  --alert-icon-default: var(--icon-neutral-primary);
-  --alert-icon-warning: var(--icon-tint-orange);
-  --alert-icon-success: var(--icon-tint-green);
-  --alert-icon-error: var(--icon-tint-red);
-  --alert-icon-informative: var(--icon-tint-blue);
-  --alert-fg-default: var(--fg-neutral-primary);
+  --alert-bg: var(--bg-neutral-primary);
 
-  @apply relative inline-flex min-w-[356px] items-center space-x-2 border bg-[var(--alert-fg-default)] px-5 py-4;
+  @apply relative inline-flex min-w-[356px] items-center space-x-2 border bg-[var(--alert-bg)] px-5 py-4;
 
   /* default */
   @apply alert-radius-medium alert-default;
@@ -50,11 +49,11 @@
 }
 
 .alert-title {
-  @apply text-title-h5 flex flex-1 flex-col text-[var(--alert-text-default)];
+  @apply text-title-h5 flex flex-1 flex-col text-[var(--alert-fg)];
 }
 
 .alert-description {
-  @apply text-base-normal text-[var(--alert-text-description)];
+  @apply text-base-normal text-[var(--alert-description-fg)];
 }
 
 .alert-button {

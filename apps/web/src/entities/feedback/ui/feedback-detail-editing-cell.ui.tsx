@@ -16,7 +16,14 @@
 
 import dayjs from 'dayjs';
 
-import { Calendar, InputField, Textarea, TextInput } from '@ufb/react';
+import {
+  Calendar,
+  Divider,
+  InputField,
+  Textarea,
+  TextInput,
+  TimePicker,
+} from '@ufb/react';
 
 import { ImagePreviewButton, SelectInput } from '@/shared';
 import type { FieldInfo } from '@/entities/field';
@@ -37,8 +44,21 @@ const FeedbackDetailEditingCell = (props: Props) => {
     <>
       {field.format === 'date' ?
         <Calendar
+          mode="single"
           selected={dayjs(value as string).toDate()}
           onDayClick={(date) => setCurrentValue(date)}
+          defaultMonth={dayjs(value as string).toDate()}
+          footer={
+            <div className="border-neutral-transparent border-t-8">
+              <Divider variant="subtle" />
+              <div className="px-2 pt-2">
+                <TimePicker
+                  date={dayjs(value as string).toDate()}
+                  onChange={(date) => setCurrentValue(date)}
+                />
+              </div>
+            </div>
+          }
         />
       : field.format === 'multiSelect' ?
         <SelectInput
@@ -73,6 +93,7 @@ const FeedbackDetailEditingCell = (props: Props) => {
           onChange={(e) => setCurrentValue(e.target.value)}
         />
       }
+      1
     </>
   );
 };

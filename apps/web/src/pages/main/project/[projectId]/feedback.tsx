@@ -15,12 +15,15 @@
  */
 import { useEffect, useMemo } from 'react';
 import type { GetServerSideProps } from 'next';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import { parseAsInteger, useQueryState } from 'nuqs';
 
-import { Icon } from '@ufb/react';
+import { Button, Icon } from '@ufb/react';
 
 import type { TableFilterField } from '@/shared';
-import { useAllChannels, useOAIQuery } from '@/shared';
+import { Path, useAllChannels, useOAIQuery } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { FeedbackTable } from '@/entities/feedback';
 import { ProjectGuard } from '@/entities/project';
@@ -35,6 +38,9 @@ interface IProps {
 const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   const { projectId } = props;
 
+  const router = useRouter();
+  const { t } = useTranslation();
+
   const { data: channels, isLoading } = useAllChannels(projectId);
 
   const [currentChannelId, setCurrentChannelId] = useQueryState<number>(
@@ -42,7 +48,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     parseAsInteger.withDefault(-1),
   );
 
-  const { data: channelData } = useOAIQuery({
+  const { data: channelData, isLoading: isChannelLoading } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId: currentChannelId, projectId },
     queryOptions: {
@@ -129,7 +135,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     void setCurrentChannelId(channels.items[0]?.id ?? null);
   }, [channels, currentChannelId]);
 
-  if (isLoading) {
+  if (isLoading || isChannelLoading) {
     return (
       <div className="flex h-full items-center justify-center">
         <Icon name="RiLoader4Line" className="animate-spin" />
@@ -141,10 +147,25 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="flex flex-col items-center gap-2">
-          <Icon name="RiInboxArchiveLine" size={32} />
+          <Image
+            src="/assets/images/channel-make.svg"
+            alt="No channels"
+            width={200}
+            height={200}
+          />
           <p className="text-neutral-secondary text-center">
-            No channels found. Please create a channel to manage feedback.
+            {t('v2.text.no-data.channel')}
           </p>
+          <Button
+            onClick={() =>
+              router.push({
+                pathname: Path.CREATE_CHANNEL,
+                query: { projectId },
+              })
+            }
+          >
+            {t('v2.text.create-channel')}
+          </Button>
         </div>
       </div>
     );
@@ -156,8 +177,18 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
         <div className="flex flex-col items-center gap-2">
           <Icon name="RiInboxArchiveLine" size={32} />
           <p className="text-neutral-secondary text-center">
-            Channel not found. Please select a valid channel.
+            Channel is invalid.
           </p>
+          <Button
+            onClick={() =>
+              router.replace({
+                pathname: router.pathname,
+                query: { projectId },
+              })
+            }
+          >
+            Reload
+          </Button>
         </div>
       </div>
     );

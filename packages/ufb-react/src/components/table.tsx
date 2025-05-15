@@ -13,64 +13,64 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { VariantProps } from "class-variance-authority";
-import * as React from "react";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
-import type { IconNameType } from "./icon";
-import { cn } from "../lib/utils";
-import { Icon } from "./icon";
+import { cn } from '../lib/utils';
+import type { IconNameType } from './icon';
+import { Icon } from './icon';
 
 const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <table ref={ref} className={cn("table", className)} {...props} />
+  <table ref={ref} className={cn('table', className)} {...props} />
 ));
-Table.displayName = "Table";
+Table.displayName = 'Table';
 
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn("table-header", className)} {...props} />
+  <thead ref={ref} className={cn('table-header', className)} {...props} />
 ));
-TableHeader.displayName = "TableHeader";
+TableHeader.displayName = 'TableHeader';
 
 const TableBody = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tbody ref={ref} className={cn("table-body", className)} {...props} />
+  <tbody ref={ref} className={cn('table-body', className)} {...props} />
 ));
-TableBody.displayName = "TableBody";
+TableBody.displayName = 'TableBody';
 
 const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tfoot ref={ref} className={cn("table-footer", className)} {...props} />
+  <tfoot ref={ref} className={cn('table-footer', className)} {...props} />
 ));
-TableFooter.displayName = "TableFooter";
+TableFooter.displayName = 'TableFooter';
 
 const TableRow = React.forwardRef<
   HTMLTableRowElement,
   React.HTMLAttributes<HTMLTableRowElement>
 >(({ className, ...props }, ref) => (
-  <tr ref={ref} className={cn("table-row", className)} {...props} />
+  <tr ref={ref} className={cn('table-row', className)} {...props} />
 ));
-TableRow.displayName = "TableRow";
+TableRow.displayName = 'TableRow';
 
-const tableHeadVariants = cva("table-head", {
+const tableHeadVariants = cva('table-head', {
   variants: {
     textAlign: {
-      left: "table-head-left",
-      center: "table-head-center",
-      right: "table-head-right",
+      left: 'table-head-left',
+      center: 'table-head-center',
+      right: 'table-head-right',
     },
   },
   defaultVariants: {
-    textAlign: "left",
+    textAlign: 'left',
   },
 });
 
@@ -80,7 +80,7 @@ const TableHead = React.forwardRef<
     VariantProps<typeof tableHeadVariants> & {
       icon?: IconNameType;
     }
->(({ icon, textAlign = "left", children, className, ...props }, ref) => (
+>(({ icon, textAlign = 'left', children, className, ...props }, ref) => (
   <th
     ref={ref}
     className={cn(tableHeadVariants({ textAlign, className }))}
@@ -90,18 +90,18 @@ const TableHead = React.forwardRef<
     {children}
   </th>
 ));
-TableHead.displayName = "TableHead";
+TableHead.displayName = 'TableHead';
 
-const tableCellVariants = cva("table-cell", {
+const tableCellVariants = cva('table-cell', {
   variants: {
     textAlign: {
-      left: "table-cell-left",
-      center: "table-cell-center",
-      right: "table-cell-right",
+      left: 'table-cell-left',
+      center: 'table-cell-center',
+      right: 'table-cell-right',
     },
   },
   defaultVariants: {
-    textAlign: "left",
+    textAlign: 'left',
   },
 });
 
@@ -109,22 +109,22 @@ const TableCell = React.forwardRef<
   HTMLTableCellElement,
   React.TdHTMLAttributes<HTMLTableCellElement> &
     VariantProps<typeof tableCellVariants>
->(({ textAlign = "left", className, ...props }, ref) => (
+>(({ textAlign = 'left', className, ...props }, ref) => (
   <td
     ref={ref}
     className={cn(tableCellVariants({ textAlign, className }))}
     {...props}
   />
 ));
-TableCell.displayName = "TableCell";
+TableCell.displayName = 'TableCell';
 
 const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,
   React.HTMLAttributes<HTMLTableCaptionElement>
 >(({ className, ...props }, ref) => (
-  <caption ref={ref} className={cn("table-caption", className)} {...props} />
+  <caption ref={ref} className={cn('table-caption', className)} {...props} />
 ));
-TableCaption.displayName = "TableCaption";
+TableCaption.displayName = 'TableCaption';
 
 export {
   Table,

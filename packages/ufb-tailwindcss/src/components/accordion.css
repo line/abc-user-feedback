@@ -14,16 +14,16 @@
  * under the License.
  */
 .accordion {
-  --accordion-text-default: var(--text-neutral-primary);
-  --accordion-border-default: var(--border-neutral-tertiary);
-  --accordion-fg-default: var(--bg-primary);
-  --accordion-fg-filled: var(--bg-tertiary);
+  --accordion-fg: var(--fg-neutral-primary);
+  --accordion-border: var(--border-neutral-tertiary);
+  --accordion-bg: var(--bg-primary);
+  --accordion-bg-filled: var(--bg-tertiary);
 
-  @apply h-fit overflow-hidden bg-[var(--accordion-fg-default)] text-[var(--accordion-text-default)];
+  @apply h-fit overflow-hidden bg-[var(--accordion-bg)] text-[var(--accordion-fg)];
 }
 
 .accordion-border {
-  @apply border border-[var(--accordion-border-default)] [&>div:last-of-type]:border-b-0;
+  @apply border border-[var(--accordion-border)] [&>div:last-of-type]:border-b-0;
 }
 
 .accordion-item {
@@ -31,7 +31,7 @@
 }
 
 .accordion-item-border {
-  @apply border-b border-[var(--accordion-border-default)];
+  @apply border-b border-[var(--accordion-border)];
 }
 
 .accordion-trigger {
@@ -39,7 +39,7 @@
 }
 
 .accordion-trigger-bg {
-  @apply bg-[var(--accordion-fg-filled)];
+  @apply bg-[var(--accordion-bg-filled)];
 }
 
 .accordion-trigger-align-left {

@@ -14,19 +14,19 @@
  * under the License.
  */
 .textarea {
-  --textarea-text-default: var(--text-neutral-tertiary);
-  --textarea-text-typing: var(--text-neutral-primary);
-  --textarea-text-filled: var(--text-neutral-primary);
-  --textarea-border-default: var(--border-neutral-tertiary);
-  --textarea-border-typing: var(--tint, var(--border-neutral-primary));
-  --textarea-border-filled: var(--border-neutral-tertiary);
-  --textarea-fg-default: var(--fg-neutral-primary);
+  --textarea-fg: var(--fg-neutral-tertiary);
   --textarea-fg-typing: var(--fg-neutral-primary);
   --textarea-fg-filled: var(--fg-neutral-primary);
+  --textarea-border: var(--border-neutral-tertiary);
+  --textarea-border-typing: var(--tint, var(--border-neutral-primary));
+  --textarea-border-filled: var(--border-neutral-tertiary);
+  --textarea-bg: var(--bg-neutral-primary);
+  --textarea-bg-typing: var(--bg-neutral-primary);
+  --textarea-bg-filled: var(--bg-neutral-primary);
 
-  @apply text-[var(--textarea-text-filled)] placeholder:text-[var(--textarea-text-default)] placeholder-shown:text-[var(--textarea-text-default)] focus-visible:text-[var(--textarea-text-typing)];
-  @apply border-[var(--textarea-border-filled)] placeholder-shown:border-[var(--textarea-border-default)] focus-visible:border-[var(--textarea-border-typing)];
-  @apply bg-[var(--textarea-fg-filled)] placeholder-shown:bg-[var(--textarea-fg-default)] focus-visible:bg-[var(--textarea-fg-typing)];
+  @apply text-[var(--textarea-fg-filled)] placeholder:text-[var(--textarea-fg)] placeholder-shown:text-[var(--textarea-fg)] focus-visible:text-[var(--textarea-fg-typing)];
+  @apply border-[var(--textarea-border-filled)] placeholder-shown:border-[var(--textarea-border)] focus-visible:border-[var(--textarea-border-typing)];
+  @apply bg-[var(--textarea-bg-filled)] placeholder-shown:bg-[var(--textarea-bg)] focus-visible:bg-[var(--textarea-bg-typing)];
 
   @apply rounded-8 text-base-normal flex min-h-20 w-full border px-3 py-2 outline-none;
   @apply disabled:cursor-not-allowed disabled:opacity-50;

@@ -14,7 +14,7 @@
  * under the License.
  */
 .input-error {
-  @apply !border-2 !border-[var(--input-border-error)] !bg-[var(--input-fg-error)];
+  @apply !border-2 !border-[var(--input-border-error)] !bg-[var(--input-bg-error)];
 }
 
 .input-large {
@@ -66,19 +66,19 @@
 }
 
 .input-caption-default {
-  @apply text-[var(--input-caption-default)];
+  @apply text-[var(--input-caption-fg)];
 }
 
 .input-caption-success {
-  @apply text-[var(--input-caption-success)];
+  @apply text-[var(--input-caption-fg-success)];
 }
 
 .input-caption-info {
-  @apply text-[var(--input-caption-default)];
+  @apply text-[var(--input-caption-fg)];
 }
 
 .input-caption-error {
-  @apply text-[var(--input-caption-error)];
+  @apply text-[var(--input-caption-fg-error)];
 }
 
 .input-caption-small {

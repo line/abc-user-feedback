@@ -38,17 +38,17 @@
 }
 
 .tag-primary {
-  @apply bg-[var(--tag-primary-fg-default)] text-[var(--tag-primary-text-default)];
+  @apply bg-[var(--tag-primary-bg)] text-[var(--tag-primary-fg)];
 }
 
 .tag-secondary {
-  @apply bg-[var(--tag-secondary-fg-default)] text-[var(--tag-secondary-text-default)];
+  @apply bg-[var(--tag-secondary-bg)] text-[var(--tag-secondary-fg)];
 }
 
 .tag-destructive {
-  @apply bg-[var(--tag-destructive-fg-default)] text-[var(--tag-destructive-text-default)];
+  @apply bg-[var(--tag-destructive-bg)] text-[var(--tag-destructive-fg)];
 }
 
 .tag-outline {
-  @apply border border-[var(--tag-outline-border-default)] bg-[var(--tag-outline-fg-default)] text-[var(--tag-outline-text-default)] hover:bg-[var(--tag-outline-fg-hover)];
+  @apply border border-[var(--tag-outline-border)] bg-[var(--tag-outline-bg)] text-[var(--tag-outline-fg)] hover:bg-[var(--tag-outline-bg-hover)];
 }

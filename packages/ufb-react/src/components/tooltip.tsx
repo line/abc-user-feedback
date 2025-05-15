@@ -13,22 +13,22 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import * as React from "react";
-import { Slottable } from "@radix-ui/react-slot";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import { Slottable } from '@radix-ui/react-slot';
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import { cva } from 'class-variance-authority';
 
-import { cn } from "../lib/utils";
+import { cn } from '../lib/utils';
 
-const tooltipVariants = cva("tooltip", {
+const tooltipVariants = cva('tooltip', {
   variants: {
     textAlign: {
-      left: "tooltip-text-left",
-      center: "tooltip-text-center",
-      right: "tooltip-text-right",
+      left: 'tooltip-text-left',
+      center: 'tooltip-text-center',
+      right: 'tooltip-text-right',
     },
     defaultVariants: {
-      textAlign: "center",
+      textAlign: 'center',
     },
   },
 });
@@ -41,7 +41,7 @@ const TooltipTrigger = TooltipPrimitive.Trigger;
 
 interface TooltipContentProps
   extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> {
-  textAlign?: "left" | "center" | "right";
+  textAlign?: 'left' | 'center' | 'right';
 }
 
 const TooltipContent = React.forwardRef<
@@ -55,7 +55,7 @@ const TooltipContent = React.forwardRef<
       className,
       side,
       sideOffset = 4,
-      textAlign = "center",
+      textAlign = 'center',
       ...props
     },
     ref,
@@ -67,19 +67,19 @@ const TooltipContent = React.forwardRef<
       className={cn(tooltipVariants({ textAlign, className }))}
       {...props}
     >
-      {title && <strong className={cn("tooltip-title")}>{title}</strong>}
+      {title && <strong className={cn('tooltip-title')}>{title}</strong>}
       <Slottable>{children}</Slottable>
       {side !== undefined && (
         <>
           <TooltipPrimitive.TooltipArrow
             width={10}
             height={6}
-            className={cn("tooltip-arrow-border")}
+            className={cn('tooltip-arrow-border')}
           />
           <TooltipPrimitive.TooltipArrow
             width={8}
             height={5}
-            className={cn("tooltip-arrow")}
+            className={cn('tooltip-arrow')}
           />
         </>
       )}

@@ -27,9 +27,9 @@
 }
 
 .sheet-trigger {
-  --sheet-fg-open: var(--fg-neutral-tertiary);
+  --sheet-bg-open: var(--bg-neutral-tertiary);
 
-  @apply data-[state=open]:bg-[var(--sheet-fg-open)];
+  @apply data-[state=open]:bg-[var(--sheet-bg-open)];
 }
 
 .sheet-close {

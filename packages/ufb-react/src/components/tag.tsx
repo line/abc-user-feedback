@@ -13,36 +13,36 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva } from "class-variance-authority";
+import React from 'react';
+import { Slot } from '@radix-ui/react-slot';
+import { cva } from 'class-variance-authority';
 
-import type { Radius, Size } from "../lib/types";
-import { cn } from "../lib/utils";
-import useTheme from "./use-theme";
+import type { Radius, Size } from '../lib/types';
+import { cn } from '../lib/utils';
+import useTheme from './use-theme';
 
-type TagVariant = "primary" | "secondary" | "outline" | "destructive";
+type TagVariant = 'primary' | 'secondary' | 'outline' | 'destructive';
 
-const tagVariants = cva("tag", {
+const tagVariants = cva('tag', {
   variants: {
     variant: {
-      primary: "tag-primary",
-      secondary: "tag-secondary",
-      outline: "tag-outline",
-      destructive: "tag-destructive",
+      primary: 'tag-primary',
+      secondary: 'tag-secondary',
+      outline: 'tag-outline',
+      destructive: 'tag-destructive',
     },
     size: {
-      large: "tag-large",
-      medium: "tag-medium",
-      small: "tag-small",
+      large: 'tag-large',
+      medium: 'tag-medium',
+      small: 'tag-small',
     },
     radius: {
-      large: "tag-radius-large",
-      medium: "tag-radius-medium",
-      small: "tag-radius-small",
+      large: 'tag-radius-large',
+      medium: 'tag-radius-medium',
+      small: 'tag-radius-small',
     },
     defaultVariants: {
-      variant: "primary",
+      variant: 'primary',
       size: undefined,
       radius: undefined,
     },
@@ -58,7 +58,7 @@ interface TagProps extends React.HTMLAttributes<HTMLElement> {
 
 const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
   const {
-    variant = "primary",
+    variant = 'primary',
     size,
     radius,
     className,
@@ -68,7 +68,7 @@ const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
   } = props;
 
   const { themeSize, themeRadius } = useTheme();
-  const Comp = asChild ? Slot : "span";
+  const Comp = asChild ? Slot : 'span';
 
   return (
     <Comp
@@ -88,6 +88,6 @@ const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
   );
 });
 
-Tag.displayName = "Tag";
+Tag.displayName = 'Tag';
 
 export { Tag, type TagProps };

@@ -13,19 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import * as React from "react";
-import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { Slottable } from "@radix-ui/react-slot";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import { Slottable } from '@radix-ui/react-slot';
+import { cva } from 'class-variance-authority';
 
-import type { Size } from "../types";
-import { ICON_SIZE } from "../constants";
-import { cn } from "../lib/utils";
-import { Icon } from "./icon";
+import { ICON_SIZE } from '../constants';
+import { cn } from '../lib/utils';
+import type { Size } from '../types';
+import { Icon } from './icon';
 
 const DefaultValue = {
-  iconSize: "small",
-  iconAlign: "right",
+  iconSize: 'small',
+  iconAlign: 'right',
   divider: true,
   border: false,
   bgColor: false,
@@ -33,7 +33,7 @@ const DefaultValue = {
 
 const AccordionContext = React.createContext<{
   iconSize: Size;
-  iconAlign: "left" | "right";
+  iconAlign: 'left' | 'right';
   divider: boolean;
   bgColor: boolean;
 }>({
@@ -47,7 +47,7 @@ const Accordion = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> & {
     iconSize?: Size;
-    iconAlign?: "left" | "right";
+    iconAlign?: 'left' | 'right';
     divider?: boolean;
     border?: boolean;
     bgColor?: boolean;
@@ -70,13 +70,13 @@ const Accordion = React.forwardRef<
     >
       <AccordionPrimitive.Root
         ref={ref}
-        className={cn("accordion", border && "accordion-border", className)}
+        className={cn('accordion', border && 'accordion-border', className)}
         {...props}
       />
     </AccordionContext.Provider>
   ),
 );
-Accordion.displayName = "Accordion";
+Accordion.displayName = 'Accordion';
 
 const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
@@ -87,15 +87,15 @@ const AccordionItem = React.forwardRef<
     <AccordionPrimitive.Item
       ref={ref}
       className={cn(
-        "accordion-item",
-        divider && "accordion-item-border",
+        'accordion-item',
+        divider && 'accordion-item-border',
         className,
       )}
       {...props}
     />
   );
 });
-AccordionItem.displayName = "AccordionItem";
+AccordionItem.displayName = 'AccordionItem';
 
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
@@ -107,18 +107,18 @@ const AccordionTrigger = React.forwardRef<
       <AccordionPrimitive.Trigger
         ref={ref}
         className={cn(
-          "accordion-trigger",
-          bgColor && "accordion-trigger-bg",
-          iconAlign === "left" && "accordion-trigger-align-left",
+          'accordion-trigger',
+          bgColor && 'accordion-trigger-bg',
+          iconAlign === 'left' && 'accordion-trigger-align-left',
           className,
         )}
         {...props}
       >
-        {iconAlign === "left" && (
+        {iconAlign === 'left' && (
           <Icon name="RiArrowDownSLine" size={ICON_SIZE[iconSize]} />
         )}
         <Slottable>{children}</Slottable>
-        {iconAlign === "right" && (
+        {iconAlign === 'right' && (
           <Icon name="RiArrowDownSLine" size={ICON_SIZE[iconSize]} />
         )}
       </AccordionPrimitive.Trigger>
@@ -127,33 +127,33 @@ const AccordionTrigger = React.forwardRef<
 });
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
 
-const accordionContentVariants = cva("accordion-content", {
+const accordionContentVariants = cva('accordion-content', {
   variants: {
     iconAlign: {
-      left: "",
-      right: "",
+      left: '',
+      right: '',
     },
     iconSize: {
-      small: "",
-      medium: "",
-      large: "",
+      small: '',
+      medium: '',
+      large: '',
     },
   },
   compoundVariants: [
     {
-      iconAlign: "left",
-      iconSize: "small",
-      className: "accordion-content-inset-small",
+      iconAlign: 'left',
+      iconSize: 'small',
+      className: 'accordion-content-inset-small',
     },
     {
-      iconAlign: "left",
-      iconSize: "medium",
-      className: "accordion-content-inset-medium",
+      iconAlign: 'left',
+      iconSize: 'medium',
+      className: 'accordion-content-inset-medium',
     },
     {
-      iconAlign: "left",
-      iconSize: "large",
-      className: "accordion-content-inset-large",
+      iconAlign: 'left',
+      iconSize: 'large',
+      className: 'accordion-content-inset-large',
     },
   ],
   defaultVariants: {

@@ -223,6 +223,7 @@ const SheetDetailTable = (props: Props) => {
         value={value as string | undefined | null}
         onChange={(date) => onChange?.(row.key, date ?? null)}
         disabled={row.disabled}
+        mode="datetime"
       />
     ),
     select: (value, row) => {
