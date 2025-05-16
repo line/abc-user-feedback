@@ -88,7 +88,7 @@ th {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
-  background-color: var(--fg-neutral-tertiary);
+  background-color: var(--bg-neutral-tertiary);
 }
 
 .swiper {

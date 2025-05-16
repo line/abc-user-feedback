@@ -78,7 +78,7 @@ const FeedbackTableChannelSelection = (props: Props) => {
   const handleScroll = (direction: 'left' | 'right') => {
     const container = tabsContainerRef.current;
     if (container) {
-      const scrollAmount = 100; // 스크롤 양 조절
+      const scrollAmount = 200;
       if (direction === 'left') {
         container.scrollLeft -= scrollAmount;
       } else {
@@ -90,7 +90,6 @@ const FeedbackTableChannelSelection = (props: Props) => {
   return (
     <div className="relative flex items-center overflow-auto">
       <div className="scrollbar-hide relative flex-1 overflow-auto">
-        {/* 왼쪽 그라디언트 */}
         {showLeftGradient && (
           <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-12 bg-gradient-to-r from-white to-transparent" />
         )}
@@ -118,13 +117,11 @@ const FeedbackTableChannelSelection = (props: Props) => {
           </TabsList>
         </Tabs>
 
-        {/* 오른쪽 그라디언트 */}
         {showRightGradient && (
           <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-12 bg-gradient-to-l from-white to-transparent" />
         )}
       </div>
 
-      {/* 스크롤 버튼 - 스크롤 가능할 때만 표시 */}
       {showScrollButtons && (
         <div className="ml-2 flex items-center gap-2">
           <Button

@@ -23,8 +23,9 @@ import { parseAsInteger, useQueryState } from 'nuqs';
 import { Button, Icon } from '@ufb/react';
 
 import type { TableFilterField } from '@/shared';
-import { Path, useAllChannels, useOAIQuery } from '@/shared';
+import { useAllChannels, useOAIQuery } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
+import { useRoutingChannelCreation } from '@/entities/channel/lib';
 import { FeedbackTable } from '@/entities/feedback';
 import { ProjectGuard } from '@/entities/project';
 import { Layout } from '@/widgets/layout';
@@ -42,6 +43,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   const { t } = useTranslation();
 
   const { data: channels, isLoading } = useAllChannels(projectId);
+  const { openChannelInProgress } = useRoutingChannelCreation(projectId);
 
   const [currentChannelId, setCurrentChannelId] = useQueryState<number>(
     'channelId',
@@ -156,14 +158,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           <p className="text-neutral-secondary text-center">
             {t('v2.text.no-data.channel')}
           </p>
-          <Button
-            onClick={() =>
-              router.push({
-                pathname: Path.CREATE_CHANNEL,
-                query: { projectId },
-              })
-            }
-          >
+          <Button onClick={openChannelInProgress}>
             {t('v2.text.create-channel')}
           </Button>
         </div>

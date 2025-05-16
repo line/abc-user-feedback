@@ -89,7 +89,7 @@ const CreateInputTemplate: React.FC<IProps> = (props) => {
       : <div className="flex h-full flex-col gap-4">{children}</div>}
       {!onClickBack && (
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-          <Alert className="w-[calc(100vw-32px)] max-w-[600px] shadow-md">
+          <Alert className="w-[calc(100vw-32px)] max-w-[700px] shadow-md">
             <AlertContent>
               <AlertTextContainer>
                 <AlertTitle>

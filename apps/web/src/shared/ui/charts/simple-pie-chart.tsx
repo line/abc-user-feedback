@@ -87,14 +87,14 @@ const SimplePieChart: React.FC<IProps> = (props) => {
                       <tspan
                         x={viewBox.cx}
                         y={viewBox.cy}
-                        className="fill-foreground text-3xl font-bold"
+                        className="fill-neutral-primary text-3xl font-bold"
                       >
                         {total.toLocaleString()}
                       </tspan>
                       <tspan
                         x={viewBox.cx}
                         y={(viewBox.cy ?? 0) + 24}
-                        className="fill-muted-foreground"
+                        className="fill-neutral-secondary"
                       >
                         Total Issues
                       </tspan>
@@ -112,7 +112,7 @@ const SimplePieChart: React.FC<IProps> = (props) => {
           />
           <Tooltip
             formatter={(value) => value.toLocaleString()}
-            cursor={{ fill: 'var(--fg-neutral-tertiary)' }}
+            cursor={{ fill: 'var(--bg-neutral-tertiary)' }}
             content={({ payload }) => {
               return (
                 <div className="bg-neutral-primary border-neutral-tertiary max-w-[240px] rounded border px-4 py-3 shadow-lg">

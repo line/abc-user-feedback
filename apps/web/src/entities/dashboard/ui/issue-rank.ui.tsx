@@ -47,7 +47,7 @@ interface IssueTableData {
 }
 
 const columnHelper = createColumnHelper<IssueTableData>();
-const getColumns = () => [
+const columns = [
   columnHelper.accessor('no', {
     header: 'No',
     enableSorting: false,
@@ -140,7 +140,6 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
       })) ?? [],
     [data, t],
   );
-  const columns = useMemo(() => getColumns(), [t]);
 
   const table = useReactTable({
     columns,

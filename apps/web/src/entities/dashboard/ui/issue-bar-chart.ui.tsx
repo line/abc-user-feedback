@@ -54,6 +54,9 @@ const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
       refetchInterval: false,
     },
   });
+  const onChangeType = (type: 'bar' | 'pie') => (v: string) => {
+    setType(v === '' ? type : v);
+  };
 
   return (
     <>
@@ -70,7 +73,11 @@ const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
           description={t('chart.issue-status-count.description')}
           height={415}
           filterContent={
-            <ToggleGroup type="single" value={type} onValueChange={setType}>
+            <ToggleGroup
+              type="single"
+              value={type}
+              onValueChange={onChangeType('pie')}
+            >
               <ToggleGroupItem value="bar">Bar</ToggleGroupItem>
               <ToggleGroupItem value="pie">Pie</ToggleGroupItem>
             </ToggleGroup>
@@ -102,7 +109,11 @@ const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
           description={t('chart.issue-status-count.description')}
           height={415}
           filterContent={
-            <ToggleGroup type="single" value={type} onValueChange={setType}>
+            <ToggleGroup
+              type="single"
+              value={type}
+              onValueChange={onChangeType('bar')}
+            >
               <ToggleGroupItem value="bar">Bar</ToggleGroupItem>
               <ToggleGroupItem value="pie">Pie</ToggleGroupItem>
             </ToggleGroup>
@@ -123,35 +134,6 @@ const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
       )}
     </>
   );
-  // return (
-  //   <SimpleBarChart
-  //     data={ISSUES(t).map(({ key, name }) => ({
-  //       name,
-  //       value: +(data?.statistics.find((v) => v.status === key)?.count ?? 0),
-  //     }))}
-  //     title={t('chart.issue-status-count.title')}
-  //     description={t('chart.issue-status-count.description')}
-  //     height={415}
-  //     filterContent={
-  //       <ToggleGroup type="single" value={type} onValueChange={setType}>
-  //         <ToggleGroupItem value="bar">Bar</ToggleGroupItem>
-  //         <ToggleGroupItem value="pie">Pie</ToggleGroupItem>
-  //       </ToggleGroup>
-  //     }
-  //     onClick={(data) => {
-  //       if (!data) return;
-  //       const issue = ISSUES(t).find((v) => v.name === data.name);
-  //       window.open(
-  //         Path.ISSUE.replace('[projectId]', projectId.toString()) +
-  //           '?queries=' +
-  //           JSON.stringify([
-  //             { key: 'status', value: issue?.key, condition: 'IS' },
-  //           ]),
-  //         '_blank',
-  //       );
-  //     }}
-  //   />
-  // );
 };
 
 export default IssueBarChart;

@@ -76,7 +76,7 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
           />
           <Tooltip
             formatter={(value) => value.toLocaleString()}
-            cursor={{ fill: 'var(--fg-neutral-tertiary)' }}
+            cursor={{ fill: 'var(--bg-neutral-tertiary)' }}
             content={({ payload }) => (
               <div className="bg-neutral-primary border-neutral-tertiary max-w-[240px] rounded border px-4 py-3 shadow-lg">
                 {payload?.map(({ value, payload }, i) => (
