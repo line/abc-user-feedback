@@ -34,7 +34,6 @@ const FeedbackTableChannelSelection = (props: Props) => {
   const [showLeftGradient, setShowLeftGradient] = useState(false);
   const [showRightGradient, setShowRightGradient] = useState(false);
 
-  // 스크롤 상태 체크 함수
   const checkScrollState = () => {
     const container = tabsContainerRef.current;
     if (container) {
@@ -54,7 +53,6 @@ const FeedbackTableChannelSelection = (props: Props) => {
     }
   };
 
-  // ResizeObserver로 크기 변화 감지
   useEffect(() => {
     const container = tabsContainerRef.current;
     if (!container) return;
@@ -74,7 +72,6 @@ const FeedbackTableChannelSelection = (props: Props) => {
     };
   }, [channels, tabsContainerRef]);
 
-  // 스크롤 핸들러
   const handleScroll = (direction: 'left' | 'right') => {
     const container = tabsContainerRef.current;
     if (container) {
