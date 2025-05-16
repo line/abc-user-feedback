@@ -14,28 +14,28 @@
  * under the License.
  */
 .dropdown-content {
-  --dropdown-text-default: var(--text-neutral-primary);
-  --dropdown-text-pressed: var(--tint, var(--text-neutral-primary));
-  --dropdown-text-empty: var(--text-neutral-secondary);
-  --dropdown-text-shortcut: var(--text-neutral-tertiary);
-  --dropdown-fg-default: var(--fg-neutral-primary);
-  --dropdown-fg-hover: var(--fg-neutral-tertiary);
-  --dropdown-fg-pressed: var(--fg-neutral-tertiary);
-  --dropdown-border-default: var(--border-neutral-tertiary);
+  --dropdown-fg: var(--fg-neutral-primary);
+  --dropdown-fg-pressed: var(--tint, var(--fg-neutral-primary));
+  --dropdown-fg-empty: var(--fg-neutral-secondary);
+  --dropdown-shortcut-fg: var(--fg-neutral-tertiary);
+  --dropdown-bg: var(--bg-neutral-primary);
+  --dropdown-bg-hover: var(--bg-neutral-tertiary);
+  --dropdown-bg-pressed: var(--bg-neutral-tertiary);
+  --dropdown-border: var(--border-neutral-tertiary);
 
   @apply data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95;
   @apply data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
   @apply data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
   @apply rounded-8 z-50 min-w-[--radix-dropdown-menu-trigger-width] overflow-hidden border p-1 shadow-md;
-  @apply border-[var(--dropdown-border-default)] bg-[var(--dropdown-fg-default)] text-[var(--dropdown-text-default)];
+  @apply border-[var(--dropdown-border)] bg-[var(--dropdown-bg)] text-[var(--dropdown-fg)];
 }
 
 .dropdown-trigger {
-  @apply data-[state=open]:bg-[var(--dropdown-fg-pressed)];
+  @apply data-[state=open]:bg-[var(--dropdown-bg-pressed)];
 }
 
 .dropdown-sub-trigger {
-  @apply rounded-6 text-base-normal flex cursor-pointer select-none items-center p-2 outline-none focus:bg-[var(--dropdown-fg-hover)] data-[state=open]:bg-[var(--dropdown-fg-pressed)] data-[state=open]:text-[var(--dropdown-text-pressed)];
+  @apply rounded-6 text-base-normal flex cursor-pointer select-none items-center p-2 outline-none focus:bg-[var(--dropdown-bg-hover)] data-[state=open]:bg-[var(--dropdown-bg-pressed)] data-[state=open]:text-[var(--dropdown-fg-pressed)];
 }
 
 .dropdown-sub-trigger-inset {
@@ -43,25 +43,25 @@
 }
 
 .dropdown-sub-content {
-  --dropdown-text-default: var(--text-neutral-primary);
-  --dropdown-text-pressed: var(--tint, var(--text-neutral-primary));
-  --dropdown-text-empty: var(--text-neutral-secondary);
-  --dropdown-text-shortcut: var(--text-neutral-tertiary);
-  --dropdown-fg-default: var(--fg-neutral-primary);
-  --dropdown-fg-hover: var(--fg-neutral-tertiary);
-  --dropdown-fg-pressed: var(--fg-neutral-tertiary);
-  --dropdown-border-default: var(--border-neutral-tertiary);
+  --dropdown-fg: var(--fg-neutral-primary);
+  --dropdown-fg-pressed: var(--tint, var(--fg-neutral-primary));
+  --dropdown-fg-empty: var(--fg-neutral-secondary);
+  --dropdown-shortcut-fg: var(--fg-neutral-tertiary);
+  --dropdown-bg: var(--bg-neutral-primary);
+  --dropdown-bg-hover: var(--bg-neutral-tertiary);
+  --dropdown-bg-pressed: var(--bg-neutral-tertiary);
+  --dropdown-border: var(--border-neutral-tertiary);
 
   @apply data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95;
   @apply data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
   @apply data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
   @apply data-[side=bottom]:mt-1 data-[side=left]:mr-1 data-[side=right]:ml-1 data-[side=top]:mb-1;
   @apply rounded-8 z-50 min-w-[--radix-dropdown-menu-trigger-width] overflow-hidden border p-1 shadow-lg;
-  @apply border-[var(--dropdown-border-default)] bg-[var(--dropdown-fg-default)] text-[var(--dropdown-text-default)];
+  @apply border-[var(--dropdown-border)] bg-[var(--dropdown-bg)] text-[var(--dropdown-fg)];
 }
 
 .dropdown-item {
-  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center gap-2 p-2 outline-none transition-colors focus:bg-[var(--dropdown-fg-hover)] data-[disabled]:pointer-events-none data-[state=on]:bg-[var(--dropdown-fg-pressed)] data-[state=on]:text-[var(--dropdown-text-pressed)] data-[disabled]:opacity-50;
+  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center p-2 outline-none transition-colors focus:bg-[var(--dropdown-bg-hover)] data-[disabled]:pointer-events-none data-[state=on]:bg-[var(--dropdown-bg-pressed)] data-[state=on]:text-[var(--dropdown-fg-pressed)] data-[disabled]:opacity-50;
   @apply [&>svg]:h-4 [&>svg]:w-4;
 }
 
@@ -70,7 +70,7 @@
 }
 
 .dropdown-checkbox {
-  @apply rounded-8 text-base-normal relative flex cursor-pointer select-none items-center py-2 pl-8 outline-none transition-colors focus:bg-[var(--dropdown-fg-hover)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+  @apply rounded-8 text-base-normal relative flex cursor-pointer select-none items-center py-2 pl-8 outline-none transition-colors focus:bg-[var(--dropdown-bg-hover)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 }
 
 .dropdown-checkbox-icon {
@@ -78,7 +78,7 @@
 }
 
 .dropdown-radio {
-  @apply rounded-8 text-base-normal relative flex cursor-pointer select-none items-center py-2 pl-8 outline-none transition-colors focus:bg-[var(--dropdown-fg-hover)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+  @apply rounded-8 text-base-normal relative flex cursor-pointer select-none items-center py-2 pl-8 outline-none transition-colors focus:bg-[var(--dropdown-bg-hover)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 }
 
 .dropdown-radio-icon {
@@ -98,13 +98,13 @@
 }
 
 .dropdown-caption {
-  @apply text-small-normal ml-auto tracking-widest text-[var(--dropdown-text-shortcut)];
+  @apply text-small-normal ml-auto tracking-widest text-[var(--dropdown-shortcut-fg)];
 }
 
 .dropdown-separator {
-  @apply -mx-1 my-1 h-px bg-[var(--dropdown-border-default)];
+  @apply -mx-1 my-1 h-px bg-[var(--dropdown-border)];
 }
 
 .dropdown-empty {
-  @apply text-base-normal flex items-center justify-center p-6 text-[var(--dropdown-text-empty)];
+  @apply text-base-normal flex items-center justify-center p-6 text-[var(--dropdown-fg-empty)];
 }

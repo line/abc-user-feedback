@@ -16,3 +16,23 @@
 .spinner {
   @apply inline-flex animate-[spin_1s_cubic-bezier(0.4,0,0.2,1)_infinite];
 }
+
+.spinner-small {
+  @apply w-4 h-4;
+}
+
+.spinner-medium {
+  @apply w-5 h-5;
+}
+
+.spinner-large {
+  @apply w-6 h-6;
+}
+
+.spinner {
+  mask-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath opacity='0.25' fill-rule='evenodd' clip-rule='evenodd' d='M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z' fill='black'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12 2C6.47715 2 2 6.47715 2 12C2 12.5523 1.55228 13 1 13C0.447715 13 0 12.5523 0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12C24 12.5523 23.5523 13 23 13C22.4477 13 22 12.5523 22 12C22 6.47715 17.5228 2 12 2Z' fill='black'/%3E%3C/svg%3E%0A");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: 100%;
+  background-color: currentcolor;
+}

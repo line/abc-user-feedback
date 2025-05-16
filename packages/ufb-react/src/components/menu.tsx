@@ -13,30 +13,30 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import * as React from "react";
-import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
+import { cva } from 'class-variance-authority';
 
-import { cn } from "../lib/utils";
+import { cn } from '../lib/utils';
 import {
   Dropdown,
   DropdownContent,
   DropdownGroup,
   DropdownItem,
   DropdownTrigger,
-} from "./dropdown";
-import { Icon } from "./icon";
+} from './dropdown';
+import { Icon } from './icon';
 
 const DefaultValue = {
-  orientation: "horizontal",
-  size: "small",
+  orientation: 'horizontal',
+  size: 'small',
 } as const;
 
-const menuVariants = cva("menu", {
+const menuVariants = cva('menu', {
   variants: {
     orientation: {
-      horizontal: "menu-horizontal",
-      vertical: "menu-vertical",
+      horizontal: 'menu-horizontal',
+      vertical: 'menu-vertical',
     },
     defaultVariants: {
       orientation: DefaultValue.orientation,
@@ -45,8 +45,8 @@ const menuVariants = cva("menu", {
 });
 
 const MenuContext = React.createContext<{
-  orientation?: "vertical" | "horizontal";
-  size?: "small" | "medium" | "large";
+  orientation?: 'vertical' | 'horizontal';
+  size?: 'small' | 'medium' | 'large';
 }>({
   orientation: DefaultValue.orientation,
   size: DefaultValue.size,
@@ -55,8 +55,8 @@ const MenuContext = React.createContext<{
 const Menu = React.forwardRef<
   React.ElementRef<typeof ToggleGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> & {
-    orientation?: "vertical" | "horizontal";
-    size?: "small" | "medium" | "large";
+    orientation?: 'vertical' | 'horizontal';
+    size?: 'small' | 'medium' | 'large';
   }
 >(
   (
@@ -82,12 +82,12 @@ const Menu = React.forwardRef<
 );
 Menu.displayName = ToggleGroupPrimitive.Root.displayName;
 
-const menuItemVariants = cva("!menu-item", {
+const menuItemVariants = cva('!menu-item', {
   variants: {
     size: {
-      small: "!menu-item-small",
-      medium: "!menu-item-medium",
-      large: "!menu-item-large",
+      small: '!menu-item-small',
+      medium: '!menu-item-medium',
+      large: '!menu-item-large',
     },
     defaultVariants: {
       size: DefaultValue.size,
@@ -117,7 +117,7 @@ const MenuDropdown = Dropdown;
 const MenuDropdownTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownTrigger>,
   React.ComponentPropsWithoutRef<typeof DropdownTrigger>
->(({ variant = "ghost", className, children, ...props }, ref) => {
+>(({ variant = 'ghost', className, children, ...props }, ref) => {
   const { size = DefaultValue.size, orientation } =
     React.useContext(MenuContext);
 
@@ -138,17 +138,17 @@ const MenuDropdownTrigger = React.forwardRef<
       ref={ref}
       variant={variant}
       className={cn(
-        "flex justify-between",
+        'flex justify-between',
         menuItemVariants({ size, className }),
       )}
       {...props}
     >
       {children}
-      {orientation === "vertical" && <Icon name="RiArrowRightSLine" />}
+      {orientation === 'vertical' && <Icon name="RiArrowRightSLine" />}
     </DropdownTrigger>
   );
 });
-MenuDropdownTrigger.displayName = "MenuDropdownTrigger";
+MenuDropdownTrigger.displayName = 'MenuDropdownTrigger';
 
 const MenuDropdownContent = DropdownContent;
 const MenuDropdownGroup = DropdownGroup;
@@ -156,11 +156,11 @@ const MenuDropdownItem = React.forwardRef<
   React.ElementRef<typeof DropdownItem>,
   React.ComponentPropsWithoutRef<typeof MenuItem>
 >(({ className, ...props }, ref) => (
-  <DropdownItem ref={ref} className={cn("menu-dropdown-item", className)}>
+  <DropdownItem ref={ref} className={cn('menu-dropdown-item', className)}>
     <MenuItem {...props} />
   </DropdownItem>
 ));
-MenuDropdownItem.displayName = "MenuDropdownItem";
+MenuDropdownItem.displayName = 'MenuDropdownItem';
 
 export {
   Menu,

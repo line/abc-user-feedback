@@ -14,24 +14,21 @@
  * under the License.
  */
 .toggle-group {
-  --toggle-group-text-default: var(--text-neutral-primary);
-  --toggle-group-text-hover: var(--text-neutral-primary);
-  --toggle-group-text-pressed: var(--tint, var(--text-neutral-primary));
-  --toggle-group-icon-default: var(--icon-neutral-primary);
-  --toggle-group-icon-hover: var(--icon-neutral-primary);
-  --toggle-group-icon-pressed: var(--tint, var(--icon-neutral-primary));
-  --toggle-group-border-default: var(--border-neutral-tertiary);
+  --toggle-group-fg: var(--fg-neutral-primary);
+  --toggle-group-fg-hover: var(--fg-neutral-primary);
+  --toggle-group-fg-pressed: var(--tint, var(--fg-neutral-primary));
+  --toggle-group-border: var(--border-neutral-tertiary);
   --toggle-group-border-hover: var(--border-neutral-tertiary);
   --toggle-group-border-pressed: var(--border-neutral-tertiary);
-  --toggle-group-fg-default: var(--fg-neutral-primary);
-  --toggle-group-fg-hover: var(--fg-neutral-tertiary);
-  --toggle-group-fg-pressed: var(--fg-neutral-tertiary);
+  --toggle-group-bg: var(--bg-neutral-primary);
+  --toggle-group-bg-hover: var(--bg-neutral-tertiary);
+  --toggle-group-bg-pressed: var(--bg-neutral-tertiary);
 
   @apply relative inline-flex items-center justify-center;
 }
 
 .toggle-group-item {
-  @apply inline-flex cursor-pointer items-center justify-center gap-1 border border-[var(--toggle-group-border-default)] bg-[var(--toggle-group-fg-default)] text-[var(--toggle-group-text-default)] transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=on]:border-[var(--toggle-group-border-pressed)] data-[state=on]:bg-[var(--toggle-group-fg-pressed)] data-[state=on]:text-[var(--toggle-group-text-pressed)] [&:not(:disabled)]:hover:border-[var(--toggle-group-border-hover)] [&:not(:disabled)]:hover:bg-[var(--toggle-group-fg-hover)] [&:not(:disabled)]:hover:text-[var(--toggle-group-text-hover)] data-[state=on]:[&:not(:disabled)]:hover:border-[var(--toggle-group-border-hover)] data-[state=on]:[&:not(:disabled)]:hover:bg-[var(--toggle-group-fg-hover)] data-[state=on]:[&:not(:disabled)]:hover:text-[var(--toggle-group-text-hover)];
+  @apply inline-flex cursor-pointer items-center justify-center gap-1 border border-[var(--toggle-group-border)] bg-[var(--toggle-group-bg)] text-[var(--toggle-group-fg)] transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=on]:border-[var(--toggle-group-border-pressed)] data-[state=on]:bg-[var(--toggle-group-bg-pressed)] data-[state=on]:text-[var(--toggle-group-fg-pressed)] [&:not(:disabled)]:hover:border-[var(--toggle-group-border-hover)] [&:not(:disabled)]:hover:bg-[var(--toggle-group-bg-hover)] [&:not(:disabled)]:hover:text-[var(--toggle-group-fg-hover)] data-[state=on]:[&:not(:disabled)]:hover:border-[var(--toggle-group-border-hover)] data-[state=on]:[&:not(:disabled)]:hover:bg-[var(--toggle-group-bg-hover)] data-[state=on]:[&:not(:disabled)]:hover:text-[var(--toggle-group-fg-hover)];
 
   /* default */
   @apply toggle-group-item-small toggle-group-item-radius-medium;

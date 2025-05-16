@@ -71,6 +71,10 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
 
   const [open, setOpen] = useState(false);
 
+  const currentOptions = options.filter(
+    (option) => !value?.some((v) => v === option.value),
+  );
+
   return (
     <InputField>
       {label && (
@@ -79,7 +83,10 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
         </InputLabel>
       )}
       <Combobox open={open} onOpenChange={setOpen}>
-        <ComboboxTrigger disabled={disabled} className="font-normal">
+        <ComboboxTrigger
+          disabled={disabled}
+          className="scrollbar-hide max-w-[300px] overflow-auto font-normal"
+        >
           {!!value && value.length > 0 ?
             value.map((v) => (
               <Tag key={v} variant="outline" size="small">
@@ -97,28 +104,59 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
           />
           <ComboboxList maxHeight="200px">
             <ComboboxEmpty>No results found.</ComboboxEmpty>
-            <ComboboxGroup>
-              {options.map((option) => {
-                const isChecked = value?.some((v) => v === option.value);
-                return (
+            {!!value && value.length > 0 && (
+              <ComboboxGroup
+                heading={
+                  <span className="text-neutral-tertiary text-base-normal">
+                    Selected
+                  </span>
+                }
+              >
+                {value.map((p) => (
                   <ComboboxSelectItem
-                    key={option.value}
-                    value={option.value}
-                    checked={isChecked}
+                    key={p}
+                    value={p}
                     onSelect={() => {
-                      onChange(
-                        isChecked ?
-                          (value?.filter((v) => v !== option.value) ?? [])
-                        : [...(value ?? []), option.value],
-                      );
-                      setOpen(false);
+                      onChange(value.filter((q) => p !== q));
                     }}
+                    checked
                   >
-                    {option.label}
+                    {p}
                   </ComboboxSelectItem>
-                );
-              })}
-            </ComboboxGroup>
+                ))}
+              </ComboboxGroup>
+            )}
+            {currentOptions.length > 0 && (
+              <ComboboxGroup
+                heading={
+                  <span className="text-neutral-tertiary text-base-normal">
+                    List
+                  </span>
+                }
+              >
+                {options
+                  .filter((option) => !value?.some((v) => v === option.value))
+                  .map((option) => {
+                    const isChecked = value?.some((v) => v === option.value);
+                    return (
+                      <ComboboxSelectItem
+                        key={option.value}
+                        value={option.value}
+                        checked={isChecked}
+                        onSelect={() => {
+                          onChange(
+                            isChecked ?
+                              (value?.filter((v) => v !== option.value) ?? [])
+                            : [...(value ?? []), option.value],
+                          );
+                        }}
+                      >
+                        {option.label}
+                      </ComboboxSelectItem>
+                    );
+                  })}
+              </ComboboxGroup>
+            )}
             <InfiniteScrollArea
               hasNextPage={hasNextPage}
               fetchNextPage={fetchNextPage}

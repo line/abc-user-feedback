@@ -329,7 +329,6 @@ const MemberSetting: React.FC<IProps> = (props) => {
       <BasicTable
         table={table}
         isLoading={isPending}
-        emptyCaption={t('v2.text.no-data.member')}
         createButton={
           <Button
             disabled={!perms.includes('project_member_create')}
@@ -339,6 +338,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
           </Button>
         }
         onClickRow={openUpdateMemberFormDialog}
+        isFiltered={queries.length > 0}
       />
       <TablePagination table={table} />
     </SettingTemplate>

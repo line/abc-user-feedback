@@ -14,18 +14,18 @@
  * under the License.
  */
 .tabs {
-  --tabs-text-selected: var(--text-neutral-primary);
-  --tabs-text-unselected: var(--text-neutral-disabled);
+  --tabs-fg-unselected: var(--fg-neutral-tertiary);
   --tabs-fg-selected: var(--fg-neutral-primary);
-  --tabs-fg-background: var(--fg-neutral-tertiary);
+  --tabs-bg-unselected: var(--bg-neutral-tertiary);
+  --tabs-bg-selected: var(--bg-neutral-primary);
 }
 
 .tabs-list {
-  @apply rounded-8 h-9.5 inline-flex items-center justify-center bg-[var(--tabs-fg-background)] p-1 text-[var(--tabs-text-selected)];
+  @apply rounded-8 h-9.5 inline-flex items-center justify-center bg-[var(--tabs-bg-unselected)] p-1 text-[var(--tabs-fg-selected)];
 }
 
 .tabs-trigger {
-  @apply rounded-6 data-[state=active]:shadow-default text-base-normal inline-flex items-center justify-center whitespace-nowrap px-3 py-1 font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-[var(--tabs-fg-selected)] data-[state=active]:text-[var(--tabs-text-selected)] [&>svg]:h-4 [&>svg]:w-4;
+  @apply rounded-6 data-[state=active]:shadow-default text-base-normal inline-flex items-center justify-center whitespace-nowrap px-3 py-1 font-medium text-[var(--tabs-fg-unselected)] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-[var(--tabs-bg-selected)] data-[state=active]:text-[var(--tabs-fg-selected)] [&>svg]:h-4 [&>svg]:w-4;
 }
 
 .tabs-content {

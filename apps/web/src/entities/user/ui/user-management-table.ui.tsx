@@ -17,7 +17,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import {
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -80,13 +79,11 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     data: rows,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => String(row.id),
-    enableColumnFilters: true,
     initialState: {
       sorting: [{ id: 'createdAt', desc: true }],
       pagination: { pageIndex: 0, pageSize: 20 },
     },
     getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     manualPagination: true,
     pageCount,
     rowCount,
@@ -269,6 +266,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
         onClickRow={(_, row) => openUpdateUserDialog(row)}
         isLoading={isLoading}
         createButton={createButton}
+        isFiltered={tableFilters.length > 0}
       />
       <TablePagination table={table} />
     </>

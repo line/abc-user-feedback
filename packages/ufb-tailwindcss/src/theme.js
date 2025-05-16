@@ -9,72 +9,39 @@ const colors = {
 };
 
 /** @type {import("tailwindcss").Config["theme"]} */
-export default {
+module.exports = {
   ...theme,
   colors,
   fill: {
-    ...colors,
-    neutral: {
-      primary: "var(--icon-neutral-primary)",
-      secondary: "var(--icon-neutral-secondary)",
-      tertiary: "var(--icon-neutral-tertiary)",
-      inverse: "var(--icon-neutral-inverse)",
-      static: "var(--icon-neutral-static)",
-    },
-    tint: {
-      red: "var(--icon-tint-red)",
-      orange: "var(--icon-tint-orange)",
-      green: "var(--icon-tint-green)",
-      blue: "var(--icon-tint-blue)",
-    },
-  },
-  textColor: {
-    ...colors,
-    neutral: {
-      primary: "var(--text-neutral-primary)",
-      secondary: "var(--text-neutral-secondary)",
-      tertiary: "var(--text-neutral-tertiary)",
-      inverse: "var(--text-neutral-inverse)",
-      static: "var(--text-neutral-static)",
-    },
-    tint: {
-      red: "var(--text-tint-red)",
-      orange: "var(--text-tint-orange)",
-      green: "var(--text-tint-green)",
-      blue: "var(--text-tint-blue)",
-    },
-  },
-  backgroundColor: {
     ...colors,
     neutral: {
       primary: "var(--fg-neutral-primary)",
       secondary: "var(--fg-neutral-secondary)",
       tertiary: "var(--fg-neutral-tertiary)",
       inverse: "var(--fg-neutral-inverse)",
-      disabled: "var(--fg-neutral-disabled)",
-      transparent: "var(--base-transparent)",
+      static: "var(--fg-neutral-static)",
     },
-    primary: "var(--bg-primary)",
-    secondary: "var(--bg-secondary)",
-    tertiary: "var(--bg-tertiary)",
-    dim: "var(--bg-dim)",
     tint: {
-      red: {
-        bold: "var(--fg-tint-red-bold)",
-        subtle: "var(--fg-tint-red-subtle)",
-      },
-      orange: {
-        bold: "var(--fg-tint-orange-bold)",
-        subtle: "var(--fg-tint-orange-subtle)",
-      },
-      green: {
-        bold: "var(--fg-tint-green-bold)",
-        subtle: "var(--fg-tint-green-subtle)",
-      },
-      blue: {
-        bold: "var(--fg-tint-blue-bold)",
-        subtle: "var(--fg-tint-blue-subtle)",
-      },
+      red: "var(--fg-tint-red)",
+      orange: "var(--fg-tint-orange)",
+      green: "var(--fg-tint-green)",
+      blue: "var(--fg-tint-blue)",
+    },
+  },
+  textColor: {
+    ...colors,
+    neutral: {
+      primary: "var(--fg-neutral-primary)",
+      secondary: "var(--fg-neutral-secondary)",
+      tertiary: "var(--fg-neutral-tertiary)",
+      inverse: "var(--fg-neutral-inverse)",
+      static: "var(--fg-neutral-static)",
+    },
+    tint: {
+      red: "var(--fg-tint-red)",
+      orange: "var(--fg-tint-orange)",
+      green: "var(--fg-tint-green)",
+      blue: "var(--fg-tint-blue)",
     },
   },
   borderColor: {
@@ -89,6 +56,39 @@ export default {
       orange: "var(--border-tint-orange)",
       green: "var(--border-tint-green)",
       blue: "var(--border-tint-blue)",
+    },
+  },
+  backgroundColor: {
+    ...colors,
+    primary: "var(--bg-primary)",
+    secondary: "var(--bg-secondary)",
+    tertiary: "var(--bg-tertiary)",
+    dim: "var(--bg-dim)",
+    neutral: {
+      primary: "var(--bg-neutral-primary)",
+      secondary: "var(--bg-neutral-secondary)",
+      tertiary: "var(--bg-neutral-tertiary)",
+      inverse: "var(--bg-neutral-inverse)",
+      hover: "var(--bg-neutral-hover)",
+      transparent: "var(--base-transparent)",
+    },
+    tint: {
+      red: {
+        bold: "var(--bg-tint-red-bold)",
+        subtle: "var(--bg-tint-red-subtle)",
+      },
+      orange: {
+        bold: "var(--bg-tint-orange-bold)",
+        subtle: "var(--bg-tint-orange-subtle)",
+      },
+      green: {
+        bold: "var(--bg-tint-green-bold)",
+        subtle: "var(--bg-tint-green-subtle)",
+      },
+      blue: {
+        bold: "var(--bg-tint-blue-bold)",
+        subtle: "var(--bg-tint-blue-subtle)",
+      },
     },
   },
   borderRadius,

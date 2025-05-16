@@ -1,66 +1,52 @@
-import fs from "fs";
-import { glob } from "glob";
-import { exec } from "child_process";
-
-function runCommand(command) {
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve({ stdout, stderr });
-      }
-    });
-  });
-}
-
-async function concatCssFiles(source, output) {
-  try {
-    // Use glob to match all css files in the source files
-    const files = await glob(source);
-
-    // Concatenate the content of all matched CSS files
-    const combinedCss = files
-      .map((file) => fs.readFileSync(file, "utf8"))
-      .join("");
-
-    // Write the combined content to output css file
-    fs.writeFileSync(output, combinedCss);
-  } catch (error) {
-    console.error("Error concatenating CSS files:", error);
-    process.exit(1);
-  }
-}
+const generateCss = require("./build-functions/generate-css");
+const mergeCss = require("./build-functions/merge-css");
+const convertCssToJs = require("./build-functions/convert-css-to-js");
+const log = require("./build-functions/log");
 
 async function executeCommands() {
   try {
-    console.log("Building base CSS files");
-    await runCommand("npm run build:postcss-base");
-    console.log("Concatenating base CSS files");
-    await concatCssFiles("dist/base/*.css", "dist/base.css");
-    console.log("Building pre JSS base CSS files");
-    await runCommand("npm run build:prejss-base");
-    console.log("Done building base CSS files");
+    const totalSteps = 9;
+    let currentStep = 0;
 
-    console.log("Building utilities CSS files");
-    await runCommand("npm run build:postcss-utilities");
-    console.log("Concatenating utilities CSS files");
-    await concatCssFiles("dist/utilities/*.css", "dist/utilities.css");
-    console.log("Building pre JSS utilities CSS files");
-    await runCommand("npm run build:prejss-utilities");
-    console.log("Done building utilities CSS files");
+    log.info("Starting CSS build process...");
 
-    console.log("Building components CSS files");
-    await runCommand("npm run build:postcss-components");
-    console.log("Concatenating components CSS files");
-    await concatCssFiles("dist/components/*.css", "dist/components.css");
-    console.log("Building pre JSS components CSS files");
-    await runCommand("npm run build:prejss-components");
-    console.log("Done building components CSS files");
+    // Base CSS processing
+    log.step(++currentStep, totalSteps, "Generating base CSS files");
+    await generateCss("base");
+
+    log.step(++currentStep, totalSteps, "Merging base CSS files");
+    await mergeCss("base");
+
+    log.step(++currentStep, totalSteps, "Converting base CSS to JS");
+    await convertCssToJs("base");
+    log.success("Base CSS processing completed");
+
+    // Utilities CSS processing
+    log.step(++currentStep, totalSteps, "Generating utilities CSS files");
+    await generateCss("utilities");
+
+    log.step(++currentStep, totalSteps, "Merging utilities CSS files");
+    await mergeCss("utilities");
+
+    log.step(++currentStep, totalSteps, "Converting utilities CSS to JS");
+    await convertCssToJs("utilities");
+    log.success("Utilities CSS processing completed");
+
+    // Components CSS processing
+    log.step(++currentStep, totalSteps, "Generating components CSS files");
+    await generateCss("components");
+
+    log.step(++currentStep, totalSteps, "Merging components CSS files");
+    await mergeCss("components");
+
+    log.step(++currentStep, totalSteps, "Converting components CSS to JS");
+    await convertCssToJs("components");
+    log.success("Components CSS processing completed");
+
+    log.success("All CSS files built successfully!");
   } catch (error) {
-    console.error("Error executing commands:", error);
+    log.error(`Error executing commands: ${error.message}`);
   }
 }
 
-// Run the commands asynchronously
 executeCommands();
