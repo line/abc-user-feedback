@@ -39,6 +39,7 @@ import {
 import {
   CreateAIIntegrationsResponseDto,
   CreateAITemplateResponseDto,
+  GetAIIntegrationResponseDto,
   GetAIIntegrationsModelsResponseDto,
   GetAITemplatesResponseDto,
 } from './dtos/responses';
@@ -49,14 +50,23 @@ export class AIController {
   constructor(private readonly aiService: AIService) {}
 
   @ApiBearerAuth()
+  @ApiCreatedResponse({ type: GetAIIntegrationResponseDto })
+  @Get('integrations')
+  async getIntegration(@Param('projectId', ParseIntPipe) projectId: number) {
+    return GetAIIntegrationResponseDto.transform(
+      await this.aiService.getOrCreateIntegration(projectId),
+    );
+  }
+
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: CreateAIIntegrationsResponseDto })
-  @Post('integrations')
-  async createIntegration(
+  @Put('integrations')
+  async updateIntegration(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Body() body: CreateAIIntegrationsRequestDto,
   ) {
     return CreateAIIntegrationsResponseDto.transform(
-      await this.aiService.upsert(
+      await this.aiService.upsertIntegration(
         CreateAIIntegrationsDto.from({ ...body, projectId }),
       ),
     );
@@ -118,6 +128,6 @@ export class AIController {
     @Param('projectId', ParseIntPipe) projectId: number,
     @Param('templateId', ParseIntPipe) templateId: number,
   ) {
-    await this.aiService.deleteById(projectId, templateId);
+    await this.aiService.deleteTemplateById(projectId, templateId);
   }
 }

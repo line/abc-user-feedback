@@ -35,8 +35,37 @@ export class AIService {
     private readonly aiTemplatesRepo: Repository<AITemplatesEntity>,
   ) {}
 
+  async getOrCreateIntegration(projectId: number) {
+    const integration = await this.aiIntegrationsRepo.findOne({
+      where: {
+        project: {
+          id: projectId,
+        },
+      },
+    });
+
+    if (!integration) {
+      return await this.upsertIntegration(
+        CreateAIIntegrationsDto.from({
+          projectId,
+          provider: 'OPEN_AI',
+          model: '',
+          apiKey: '',
+        }),
+      );
+    }
+
+    return {
+      id: integration.id,
+      provider: integration.provider,
+      model: integration.model,
+      apiKey: integration.apiKey,
+      endpointUrl: integration.endpointUrl,
+    };
+  }
+
   @Transactional()
-  async upsert(dto: CreateAIIntegrationsDto) {
+  async upsertIntegration(dto: CreateAIIntegrationsDto) {
     const existingIntegration = await this.aiIntegrationsRepo.findOne({
       where: {
         project: {
@@ -148,7 +177,7 @@ export class AIService {
   }
 
   @Transactional()
-  async deleteById(projectId: number, templateId: number) {
+  async deleteTemplateById(projectId: number, templateId: number) {
     const template = await this.aiTemplatesRepo.findOne({
       where: {
         id: templateId,
