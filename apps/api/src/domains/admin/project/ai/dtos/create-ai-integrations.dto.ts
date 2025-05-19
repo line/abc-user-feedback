@@ -32,7 +32,13 @@ export class CreateAIIntegrationsDto {
   apiKey: string;
 
   @Expose()
-  endpointUrl: string | null;
+  endpointUrl: string;
+
+  @Expose()
+  temperature: number;
+
+  @Expose()
+  systemPrompt: string;
 
   public static from(params: any): CreateAIIntegrationsDto {
     return plainToInstance(CreateAIIntegrationsDto, params, {
@@ -41,13 +47,23 @@ export class CreateAIIntegrationsDto {
   }
 
   static toAIIntegrationsEntity(params: CreateAIIntegrationsDto) {
-    const { provider, model, apiKey, endpointUrl, projectId } = params;
+    const {
+      provider,
+      model,
+      apiKey,
+      endpointUrl,
+      projectId,
+      temperature,
+      systemPrompt,
+    } = params;
 
     return AIIntegrationsEntity.from({
       provider,
       model,
       apiKey,
       endpointUrl,
+      temperature,
+      systemPrompt,
       projectId,
     });
   }

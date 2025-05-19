@@ -43,9 +43,18 @@ export class GetAIIntegrationResponseDto {
 
   @ApiProperty()
   @IsString()
-  @IsNullable()
   @Expose()
-  endpointUrl: string | null;
+  endpointUrl: string;
+
+  @ApiProperty()
+  @IsString()
+  @Expose()
+  systemPrompt: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @Expose()
+  temperature: number;
 
   public static transform(params: any): GetAIIntegrationResponseDto {
     return plainToInstance(GetAIIntegrationResponseDto, params, {

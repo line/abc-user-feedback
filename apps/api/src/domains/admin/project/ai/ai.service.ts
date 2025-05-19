@@ -51,6 +51,9 @@ export class AIService {
           provider: 'OPEN_AI',
           model: '',
           apiKey: '',
+          endpointUrl: '',
+          systemPrompt: '',
+          temperature: 0.7,
         }),
       );
     }
@@ -61,6 +64,8 @@ export class AIService {
       model: integration.model,
       apiKey: integration.apiKey,
       endpointUrl: integration.endpointUrl,
+      systemPrompt: integration.systemPrompt,
+      temperature: integration.temperature,
     };
   }
 
@@ -210,6 +215,7 @@ export class AIService {
     const client = new AIClient({
       apiKey: integration.apiKey,
       provider: integration.provider,
+      baseUrl: integration.endpointUrl,
     });
 
     const models = await client.getModelList();

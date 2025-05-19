@@ -33,8 +33,8 @@ import {
 import { AIService } from './ai.service';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import {
-  CreateAIIntegrationsRequestDto,
   CreateAITemplateRequestDto,
+  UpdateAIIntegrationsRequestDto,
 } from './dtos/requests';
 import {
   CreateAIIntegrationsResponseDto,
@@ -63,7 +63,7 @@ export class AIController {
   @Put('integrations')
   async updateIntegration(
     @Param('projectId', ParseIntPipe) projectId: number,
-    @Body() body: CreateAIIntegrationsRequestDto,
+    @Body() body: UpdateAIIntegrationsRequestDto,
   ) {
     return CreateAIIntegrationsResponseDto.transform(
       await this.aiService.upsertIntegration(

@@ -30,8 +30,14 @@ export class AIIntegrationsEntity extends CommonEntity {
   @Column('varchar')
   apiKey: string;
 
-  @Column('varchar', { nullable: true, default: null })
-  endpointUrl: string | null;
+  @Column('varchar', { default: '' })
+  endpointUrl: string;
+
+  @Column('text')
+  systemPrompt: string;
+
+  @Column('float', { default: 0.7 })
+  temperature: number;
 
   @OneToOne(() => ProjectEntity, (project) => project.aiIntegrations, {
     onDelete: 'CASCADE',
@@ -44,12 +50,16 @@ export class AIIntegrationsEntity extends CommonEntity {
     model,
     apiKey,
     endpointUrl,
+    systemPrompt,
+    temperature,
     projectId,
   }: {
     provider: AIProvidersEnum;
     model: string;
     apiKey: string;
-    endpointUrl: string | null;
+    endpointUrl: string;
+    systemPrompt: string;
+    temperature: number;
     projectId: number;
   }) {
     const aiIntegrations = new AIIntegrationsEntity();
@@ -57,9 +67,9 @@ export class AIIntegrationsEntity extends CommonEntity {
     aiIntegrations.provider = provider;
     aiIntegrations.model = model;
     aiIntegrations.apiKey = apiKey;
-    if (endpointUrl) {
-      aiIntegrations.endpointUrl = endpointUrl;
-    }
+    aiIntegrations.endpointUrl = endpointUrl;
+    aiIntegrations.systemPrompt = systemPrompt;
+    aiIntegrations.temperature = temperature;
     aiIntegrations.project = new ProjectEntity();
     aiIntegrations.project.id = projectId;
 

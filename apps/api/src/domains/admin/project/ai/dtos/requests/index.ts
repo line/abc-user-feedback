@@ -14,5 +14,5 @@
  * under the License.
  */
 
-export { CreateAIIntegrationsRequestDto } from './create-ai-integrations-request.dto';
+export { UpdateAIIntegrationsRequestDto } from './update-ai-integrations-request.dto';
 export { CreateAITemplateRequestDto } from './create-ai-template-request.dto';

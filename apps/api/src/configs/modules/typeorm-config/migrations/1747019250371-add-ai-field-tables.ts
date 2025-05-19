@@ -28,6 +28,8 @@ export class AddAIFieldTables1700795163535 implements MigrationInterface {
         \`model\` varchar(255) NOT NULL, 
         \`api_key\` varchar(255)  NOT NULL, 
         \`endpoint_url\` varchar(255) DEFAULT NULL, 
+        \`system_prompt\` text NOT NULL,
+        \`temperature\` float NOT NULL DEFAULT 0.7,
         \`created_at\` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
         \`updated_at\` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
         \`deleted_at\` DATETIME(6) DEFAULT NULL,

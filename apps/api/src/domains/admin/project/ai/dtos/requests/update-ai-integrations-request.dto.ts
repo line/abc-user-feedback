@@ -14,11 +14,17 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString, MaxLength } from 'class-validator';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 
-export class CreateAIIntegrationsRequestDto {
+export class UpdateAIIntegrationsRequestDto {
   @ApiProperty({ enum: AIProvidersEnum, enumName: 'AIProvidersEnum' })
   @IsEnum(AIProvidersEnum)
   provider: AIProvidersEnum;
@@ -33,9 +39,16 @@ export class CreateAIIntegrationsRequestDto {
   @MaxLength(255)
   apiKey: string;
 
-  @ApiProperty({ nullable: true, type: String })
-  @IsOptional()
+  @ApiProperty({ nullable: false, type: String })
   @IsString()
   @MaxLength(255)
-  endpointUrl: string | null;
+  endpointUrl: string;
+
+  @ApiProperty({ nullable: false, type: String })
+  @IsNumber()
+  temperature: number;
+
+  @ApiProperty({ nullable: false, type: String })
+  @IsString()
+  systemPrompt: string;
 }

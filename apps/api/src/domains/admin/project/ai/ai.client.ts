@@ -20,16 +20,19 @@ import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 interface AIClientConfig {
   apiKey: string;
   provider: AIProvidersEnum;
+  baseUrl: string;
 }
 
 export class AIClient {
   private axiosInstance: AxiosInstance;
   private provider: AIProvidersEnum;
   private apiKey: string;
+  private baseUrl: string;
 
   constructor(config: AIClientConfig) {
     this.provider = config.provider;
     this.apiKey = config.apiKey;
+    this.baseUrl = config.baseUrl;
 
     let baseURL = '';
     let headers = {};
@@ -43,6 +46,7 @@ export class AIClient {
     } else if (this.provider === AIProvidersEnum.GEMINI) {
       baseURL = 'https://generativelanguage.googleapis.com/v1beta';
     }
+    baseURL = this.baseUrl || baseURL;
 
     this.axiosInstance = axios.create({
       baseURL,
