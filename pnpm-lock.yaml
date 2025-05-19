@@ -347,8 +347,23 @@ importers:
       '@docusaurus/types':
         specifier: 3.7.0
         version: 3.7.0(acorn@8.14.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@ufb/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
+      '@ufb/prettier-config':
+        specifier: workspace:*
+        version: link:../../tooling/prettier
+      '@ufb/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/typescript
+      eslint:
+        specifier: 'catalog:'
+        version: 9.23.0(jiti@2.4.2)
+      prettier:
+        specifier: 'catalog:'
+        version: 3.5.3
       typescript:
-        specifier: ^5.5.4
+        specifier: 'catalog:'
         version: 5.8.3
 
   apps/e2e:

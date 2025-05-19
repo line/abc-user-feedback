@@ -8,11 +8,11 @@ description: '주요 기능 대한 설명입니다.'
 
 ABC User Feedback은 사용자 피드백을 효과적으로 수집, 관리 및 분석하기 위한 다양한 기능을 제공합니다. 이 문서에서는 핵심 기능들을 자세히 설명합니다.
 
-## 피드백 이슈 시스템
+## 피드백 태깅 시스템
 
 ![Feedback Tag](../../static/assets/01-feedback-tag.png)
 
-피드백 이슈 시스템은 대량의 사용자 피드백을 체계적으로 분류하고 관리하는 핵심 기능입니다.
+피드백 태깅 시스템은 대량의 사용자 피드백을 체계적으로 분류하고 관리하는 핵심 기능입니다.
 
 ### 주요 특징
 
@@ -88,11 +88,8 @@ ABC User Feedback은 사용자 피드백을 효과적으로 수집, 관리 및 �
 
 ### 지원하는 SSO 제공자
 
-- Google Workspace
-- Microsoft Azure AD
-- Okta
-- Auth0
-- 기타 표준 OAuth 2.0 및 OpenID Connect 제공자
+- Google
+- Custom (표준 OAuth 2.0 및 OpenID Connect 제공자)
 
 ### 활용 방법
 

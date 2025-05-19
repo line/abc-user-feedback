@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-title: '시스템 요구사항'
+title: '시작하기'
 description: '시스템 요구사항 대한 설명입니다.'
 ---
 
