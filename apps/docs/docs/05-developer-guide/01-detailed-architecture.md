@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: '아키텍처 상세'
-description: '�� 대한 설명입니다.'
+description: '아키텍처 상세에 대한 설명입니다.'
 ---
 
 # 아키텍처 상세

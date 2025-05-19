@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 title: '수동 설치'
-description: '�� 대한 설명입니다.'
+description: '소스 코드에서 직접 ABC User Feedback을 빌드하고 실행하는 수동 설치 가이드입니다.'
 ---
 
 # 수동 설치
@@ -68,7 +68,7 @@ JWT_SECRET=your-jwt-secret-key
 MYSQL_PRIMARY_URL=mysql://username:password@localhost:3306/database
 BASE_URL=http://localhost:4000
 ACCESS_TOKEN_EXPIRED_TIME=10m
-REFESH_TOKEN_EXPIRED_TIME=1h
+REFRESH_TOKEN_EXPIRED_TIME=1h
 
 # 선택적 환경 변수
 APP_PORT=4000

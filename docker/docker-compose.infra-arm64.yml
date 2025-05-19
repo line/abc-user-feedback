@@ -2,7 +2,7 @@ services:
   mysql:
     hostname: mysql
     image: mysql:8.0.39
-    platform: linux/x86_64
+    platform: linux/arm64/v8
     restart: always
     command:
       [

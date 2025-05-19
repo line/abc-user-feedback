@@ -72,13 +72,13 @@ The following is a list of environment variables used by the application, along 
 
 ### Required Environment Variables
 
-| Environment                 | Description                                  | Default Value                                            |
-| --------------------------- | -------------------------------------------- | -------------------------------------------------------- |
-| `JWT_SECRET`                | Secret key for signing JSON Web Tokens (JWT) | _required_                                               |
-| `MYSQL_PRIMARY_URL`         | Primary MySQL connection URL                 | `mysql://userfeedback:userfeedback@localhost:13306/test` |
-| `BASE_URL`                  | Base URL of the application                  | `http://localhost:3000`                                  |
-| `ACCESS_TOKEN_EXPIRED_TIME` | Duration until the access token expires      | `10m`                                                    |
-| `REFESH_TOKEN_EXPIRED_TIME` | Duration until the refresh token expires     | `1h`                                                     |
+| Environment                  | Description                                  | Default Value                                            |
+| ---------------------------- | -------------------------------------------- | -------------------------------------------------------- |
+| `JWT_SECRET`                 | Secret key for signing JSON Web Tokens (JWT) | _required_                                               |
+| `MYSQL_PRIMARY_URL`          | Primary MySQL connection URL                 | `mysql://userfeedback:userfeedback@localhost:13306/test` |
+| `BASE_URL`                   | Base URL of the application                  | `http://localhost:3000`                                  |
+| `ACCESS_TOKEN_EXPIRED_TIME`  | Duration until the access token expires      | `10m`                                                    |
+| `REFRESH_TOKEN_EXPIRED_TIME` | Duration until the refresh token expires     | `1h`                                                     |
 
 ### Optional Environment Variables
 

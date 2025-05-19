@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: 'Docker Hub 이미지 사용'
-description: '�� 대한 설명입니다.'
+description: 'Docker Hub 이미지를 사용하여 ABC User Feedback을 설치하고 실행하는 방법을 안내합니다.'
 ---
 
 # Docker Hub 이미지 사용
@@ -181,7 +181,7 @@ services:
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
       - BASE_URL=http://api:4000
       - ACCESS_TOKEN_EXPIRED_TIME=10m
-      - REFESH_TOKEN_EXPIRED_TIME=1h
+      - REFRESH_TOKEN_EXPIRED_TIME=1h
       - APP_PORT=4000
       - APP_ADDRESS=0.0.0.0
       - AUTO_MIGRATION=true
@@ -322,7 +322,7 @@ services:
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
       - BASE_URL=http://api:4000
       - ACCESS_TOKEN_EXPIRED_TIME=10m
-      - REFESH_TOKEN_EXPIRED_TIME=1h
+      - REFRESH_TOKEN_EXPIRED_TIME=1h
       - APP_PORT=4000
       - APP_ADDRESS=0.0.0.0
       - AUTO_MIGRATION=true

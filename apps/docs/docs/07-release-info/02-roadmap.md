@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: '로드맵'
-description: '�� 대한 설명입니다.'
+description: '로드맵에 대한 설명입니다.'
 ---
 
 # 로드맵

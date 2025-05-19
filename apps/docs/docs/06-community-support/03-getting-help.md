@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
 title: '지원 받는 방법'
-description: '�� 대한 설명입니다.'
+description: '지원 채널 및 프로세스에 대한 안내입니다.'
 ---
 
 # 지원 받는 방법

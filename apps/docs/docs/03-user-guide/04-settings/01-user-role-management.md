@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: '사용자 및 역할 관리'
-description: '�� 대한 설명입니다.'
+description: '사용자 및 역할 관리를 설정하는 방법을 설명합니다.'
 ---
 
 # 사용자 및 역할 관리

@@ -12,13 +12,13 @@ description: '환경 변수 구성 대한 설명입니다.'
 
 ### 필수 환경 변수
 
-| 환경 변수                   | 설명                                        | 기본값 | 예시                                                        |
-| --------------------------- | ------------------------------------------- | ------ | ----------------------------------------------------------- |
-| `JWT_SECRET`                | JSON Web Token(JWT) 서명에 사용되는 비밀 키 | _필수_ | `jwtsecretjwtsecretjwtsecret`                               |
-| `MYSQL_PRIMARY_URL`         | 주 MySQL 데이터베이스 연결 URL              | _필수_ | `mysql://userfeedback:userfeedback@mysql:3306/userfeedback` |
-| `BASE_URL`                  | 애플리케이션의 기본 URL                     | _필수_ | `http://api:4000`                                           |
-| `ACCESS_TOKEN_EXPIRED_TIME` | 액세스 토큰 만료 시간                       | `10m`  | `10m` (10분)                                                |
-| `REFESH_TOKEN_EXPIRED_TIME` | 리프레시 토큰 만료 시간                     | `1h`   | `1h` (1시간)                                                |
+| 환경 변수                    | 설명                                        | 기본값 | 예시                                                        |
+| ---------------------------- | ------------------------------------------- | ------ | ----------------------------------------------------------- |
+| `JWT_SECRET`                 | JSON Web Token(JWT) 서명에 사용되는 비밀 키 | _필수_ | `jwtsecretjwtsecretjwtsecret`                               |
+| `MYSQL_PRIMARY_URL`          | 주 MySQL 데이터베이스 연결 URL              | _필수_ | `mysql://userfeedback:userfeedback@mysql:3306/userfeedback` |
+| `BASE_URL`                   | 애플리케이션의 기본 URL                     | _필수_ | `http://api:4000`                                           |
+| `ACCESS_TOKEN_EXPIRED_TIME`  | 액세스 토큰 만료 시간                       | `10m`  | `10m` (10분)                                                |
+| `REFRESH_TOKEN_EXPIRED_TIME` | 리프레시 토큰 만료 시간                     | `1h`   | `1h` (1시간)                                                |
 
 ### 선택적 환경 변수
 
@@ -156,7 +156,7 @@ mysql://username:password@hostname:port/database
 
 ## 토큰 만료 시간 형식
 
-`ACCESS_TOKEN_EXPIRED_TIME` 및 `REFESH_TOKEN_EXPIRED_TIME` 환경 변수는 다음 형식을 사용합니다:
+`ACCESS_TOKEN_EXPIRED_TIME` 및 `REFRESH_TOKEN_EXPIRED_TIME` 환경 변수는 다음 형식을 사용합니다:
 
 - `Xs`: X초 (예: `30s`)
 - `Xm`: X분 (예: `10m`)

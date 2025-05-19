@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: '버전 히스토리'
-description: '�� 대한 설명입니다.'
+description: '버전 히스토리에 대한 설명입니다.'
 ---
 
 # 버전 히스토리

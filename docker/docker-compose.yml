@@ -22,7 +22,7 @@ services:
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
       - BASE_URL=http://api:3000
       - ACCESS_TOKEN_EXPIRED_TIME=10m
-      - REFESH_TOKEN_EXPIRED_TIME=1h
+      - REFRESH_TOKEN_EXPIRED_TIME=1h
       - APP_PORT=4000
       - APP_ADDRESS=api
       - AUTO_MIGRATION=true

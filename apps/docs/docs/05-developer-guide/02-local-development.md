@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: '로컬 개발 환경 설정'
-description: '�� 대한 설명입니다.'
+description: '로컬에서 ABC User Feedback 개발 환경을 설정하는 단계별 가이드입니다.'
 ---
 
 # 로컬 개발 환경 설정
@@ -84,7 +84,7 @@ JWT_SECRET=development_jwt_secret_key
 MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@localhost:13306/userfeedback
 BASE_URL=http://localhost:4000
 ACCESS_TOKEN_EXPIRED_TIME=10m
-REFESH_TOKEN_EXPIRED_TIME=1h
+REFRESH_TOKEN_EXPIRED_TIME=1h
 
 # 선택적 환경 변수
 APP_PORT=4000
