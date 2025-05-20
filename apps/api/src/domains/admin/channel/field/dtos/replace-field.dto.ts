@@ -47,6 +47,12 @@ export class ReplaceFieldDto {
   order?: number | null;
 
   @Expose()
+  aiTemplateId?: number | null;
+
+  @Expose()
+  aiFieldTargetIds?: number[] | null;
+
+  @Expose()
   @Type(() => Option)
   options?: Option[];
 }

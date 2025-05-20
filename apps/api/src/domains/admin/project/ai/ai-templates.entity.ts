@@ -13,9 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Column, Entity, ManyToOne, Relation } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, Relation } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
+import { FieldEntity } from '../../channel/field/field.entity';
 import { ProjectEntity } from '../project/project.entity';
 
 @Entity('ai_templates')
@@ -33,6 +34,12 @@ export class AITemplatesEntity extends CommonEntity {
     onDelete: 'CASCADE',
   })
   project: Relation<ProjectEntity>;
+
+  @OneToMany(() => FieldEntity, (field) => field.aiTemplate, {
+    nullable: true,
+    cascade: true,
+  })
+  field: Relation<FieldEntity>[] | undefined;
 
   static from({
     title,

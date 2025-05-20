@@ -29,6 +29,7 @@ import {
   FieldPropertyEnum,
   FieldStatusEnum,
 } from '../../../../common/enums';
+import { AITemplatesEntity } from '../../project/ai/ai-templates.entity';
 import { ChannelEntity } from '../channel/channel.entity';
 import { OptionEntity } from '../option/option.entity';
 
@@ -58,6 +59,16 @@ export class FieldEntity extends CommonEntity {
   @Column('int', { default: 0 })
   order: number | null;
 
+  @ManyToOne(() => AITemplatesEntity, (aiTemplate) => aiTemplate.field, {
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+    nullable: true,
+  })
+  aiTemplate: Relation<AITemplatesEntity>;
+
+  @Column('json', { nullable: true })
+  aiFieldTargetIds: number[] | null;
+
   @ManyToOne(() => ChannelEntity, (channel) => channel.fields, {
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',
@@ -79,6 +90,8 @@ export class FieldEntity extends CommonEntity {
     property,
     status,
     order,
+    aiTemplateId,
+    aiFieldTargetIds,
   }: {
     channelId: number;
     name: string;
@@ -88,6 +101,8 @@ export class FieldEntity extends CommonEntity {
     property: FieldPropertyEnum;
     status: FieldStatusEnum;
     order?: number | null;
+    aiTemplateId?: number | null;
+    aiFieldTargetIds?: number[] | null;
   }) {
     const field = new FieldEntity();
     field.channel = new ChannelEntity();
@@ -99,6 +114,11 @@ export class FieldEntity extends CommonEntity {
     field.property = property;
     field.status = status;
     field.order = order ?? 0;
+    if (aiTemplateId) {
+      field.aiTemplate = new AITemplatesEntity();
+      field.aiTemplate.id = aiTemplateId;
+    }
+    field.aiFieldTargetIds = aiFieldTargetIds ?? null;
 
     return field;
   }
