@@ -123,20 +123,19 @@ export class AIService {
         title: 'Feedback Summary',
         prompt: 'Summarize the following feedback within 2 sentences',
         autoProcessing: false,
-        projectId,
       },
       {
-        title: 'Feedback sentiment analysis',
+        title: 'Feedback Sentiment Analysis',
         prompt: 'Analyze the sentiment of the following feedback',
         autoProcessing: false,
       },
       {
-        title: 'Feedback translation',
+        title: 'Feedback Translation',
         prompt: 'Translate the following feedback to English',
         autoProcessing: false,
       },
       {
-        title: 'Feedback keyword extraction',
+        title: 'Feedback Keyword Extraction',
         prompt: 'Extract the keywords from the following feedback',
         autoProcessing: false,
       },
