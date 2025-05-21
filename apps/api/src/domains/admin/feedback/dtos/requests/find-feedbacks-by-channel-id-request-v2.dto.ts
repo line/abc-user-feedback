@@ -21,22 +21,34 @@ import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
 import { IsNullable } from '@/domains/admin/user/decorators';
 
 class QueryV2 {
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: 'Feedback IDs that are being requested.',
+    required: false,
+  })
   @IsOptional()
   @IsArray()
   ids?: number[];
 
-  @ApiProperty({ required: true })
+  @ApiProperty({
+    description:
+      'Indicates the key string of field that are being requested as a condition. For example: "createdAt", "message", "issueIds".',
+    required: true,
+  })
   @IsString()
   key: string;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({
+    description:
+      'Indicates the value of field that are being requested as a condition. This can be a type of string, number, TimeRange, or array of string and number.',
+    required: true,
+  })
   @IsNullable()
   value: string | string[] | TimeRange | number | number[] | undefined;
 
   @ApiProperty({
     enum: QueryV2ConditionsEnum,
     enumName: 'QueryV2ConditionsEnum',
+    description: 'Condition of the query.',
   })
   @IsEnum(QueryV2ConditionsEnum)
   condition: QueryV2ConditionsEnum;
@@ -45,7 +57,8 @@ class QueryV2 {
 export class FindFeedbacksByChannelIdRequestDtoV2 extends PaginationRequestDto {
   @ApiProperty({
     required: false,
-    description: 'You can query by key-value with this object.',
+    description:
+      "You can query by key-value with this object. Queries are concatenated with 'AND' or 'OR' operator.",
     type: [QueryV2],
   })
   @IsOptional()
@@ -54,7 +67,7 @@ export class FindFeedbacksByChannelIdRequestDtoV2 extends PaginationRequestDto {
   @ApiProperty({
     required: false,
     description:
-      'You can query by key-value with this object by default (like createdAt).',
+      'You can query by key-value with this object by default (like createdAt). This condition always applies regardless of the conditions of the queries.',
     type: [QueryV2],
   })
   @IsOptional()

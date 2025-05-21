@@ -14,10 +14,10 @@
  * under the License.
  */
 .radio-group {
-  --radio-text-default: var(--text-neutral-primary);
-  --radio-border-default: var(--border-neutral-tertiary);
-  --radio-fg-default: var(--fg-neutral-primary);
-  --radio-fg-select: var(--tint, var(--fg-neutral-inverse));
+  --radio-fg: var(--fg-neutral-primary);
+  --radio-border: var(--border-neutral-tertiary);
+  --radio-bg: var(--bg-neutral-primary);
+  --radio-bg-select: var(--tint, var(--bg-neutral-inverse));
 
   @apply flex;
 
@@ -26,13 +26,13 @@
 }
 
 .radio-item {
-  @apply text-base-normal flex items-center py-2 text-[var(--radio-text-default)] disabled:cursor-not-allowed disabled:opacity-50;
+  @apply text-base-normal flex items-center py-2 text-[var(--radio-fg)] disabled:cursor-not-allowed disabled:opacity-50;
 }
 
 .radio {
-  @apply relative mr-2 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--radio-fg-default)] before:absolute before:inset-0 before:flex before:rounded-full before:border before:border-[var(--radio-border-default)];
+  @apply relative mr-2 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--radio-bg)] before:absolute before:inset-0 before:flex before:rounded-full before:border before:border-[var(--radio-border)];
 }
 
 .radio-indicator {
-  @apply absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-full bg-[var(--radio-fg-select)] text-[var(--radio-fg-default)] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+  @apply absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-full bg-[var(--radio-bg-select)] text-[var(--radio-bg)] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
 }

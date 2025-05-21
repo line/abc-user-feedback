@@ -13,9 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { IconNameType } from "./components";
-import type { CaptionType } from "./lib/types";
-import type { Size } from "./types";
+import type { IconNameType } from './components';
+import type { CaptionType } from './lib/types';
+import type { Size } from './types';
 
 export const ICON_SIZE: Record<Size, number> = {
   large: 24,
@@ -46,15 +46,15 @@ export const CAPTION_DEFAULT_ICON: Record<
   IconNameType | undefined
 > = {
   default: undefined,
-  error: "RiErrorWarningFill",
-  info: "RiInformationFill",
-  success: "RiCheckboxCircleFill",
+  error: 'RiErrorWarningFill',
+  info: 'RiInformationFill',
+  success: 'RiCheckboxCircleFill',
 } as const;
 
 export const ALERT_DEFAULT_ICON: Record<string, IconNameType | undefined> = {
   default: undefined,
-  warning: "RiErrorWarningFill",
-  informative: "RiInformation2Fill",
-  success: "RiCheckboxCircleFill",
-  error: "RiCloseCircleFill",
+  warning: 'RiErrorWarningFill',
+  informative: 'RiInformation2Fill',
+  success: 'RiCheckboxCircleFill',
+  error: 'RiCloseCircleFill',
 };

@@ -14,12 +14,12 @@
  * under the License.
  */
 .radio-card-group {
-  --radio-card-text-title: var(--text-neutral-primary);
-  --radio-card-text-description: var(--text-neutral-tertiary);
+  --radio-card-text-title: var(--fg-neutral-primary);
+  --radio-card-text-description: var(--fg-neutral-tertiary);
   --radio-card-border-default: var(--border-neutral-tertiary);
   --radio-card-border-selected: var(--tint, var(--border-neutral-primary));
-  --radio-card-fg-default: var(--fg-neutral-primary);
-  --radio-card-fg-hover: var(--fg-neutral-tertiary);
+  --radio-card-fg-default: var(--bg-neutral-primary);
+  --radio-card-fg-hover: var(--bg-neutral-tertiary);
 
   @apply inline-flex;
 

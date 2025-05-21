@@ -37,7 +37,7 @@ interface IBody
 
 const useIssueSearchInfinite = (
   projectId: number,
-  body: IBody = { limit: 10, page: 1, queries: [], sort: {} },
+  body: IBody = { limit: 20, page: 1, queries: [], sort: {} },
 ) => {
   return useInfiniteQuery<TData>({
     queryKey: [

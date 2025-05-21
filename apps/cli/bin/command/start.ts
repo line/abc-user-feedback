@@ -22,7 +22,7 @@ import getDestinationPath from '../utils/get-destination-path';
 import getSourcePath from '../utils/get-source-path';
 import logger from '../utils/logger';
 
-const WEB_ENV_VARS = ['NEXT_PUBLIC_API_BASE_URL', 'NEXT_PUBLIC_MAX_DAYS'];
+const WEB_ENV_VARS = ['NEXT_PUBLIC_API_BASE_URL'];
 const API_ENV_VARS = [
   'JWT_SECRET',
   'MYSQL_PRIMARY_URL',

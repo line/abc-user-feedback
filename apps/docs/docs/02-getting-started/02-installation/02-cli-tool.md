@@ -110,7 +110,6 @@ SMTP_BASE_URL = "http://localhost:3000"
 
 [web]
 NEXT_PUBLIC_API_BASE_URL = "http://localhost:4000"
-NEXT_PUBLIC_MAX_DAYS = 90
 ```
 
 필요에 따라 이 파일을 편집하여 환경 변수를 조정할 수 있습니다. 환경 변수에 대한 자세한 설명은 [환경 변수 구성](./04-configuration.md) 문서를 참조하세요.

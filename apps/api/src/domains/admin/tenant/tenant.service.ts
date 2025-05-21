@@ -128,6 +128,7 @@ export class TenantService {
       const feedbacks = await this.feedbackService.findByChannelId({
         channelId: id,
         query: {
+          feedbackSearchMaxDays: -1,
           createdAt: {
             gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),
             lt: DateTime.now()

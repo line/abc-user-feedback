@@ -14,23 +14,23 @@
  * under the License.
  */
 .combobox-content {
-  --combobox-text-default: var(--text-neutral-primary);
-  --combobox-text-empty: var(--text-neutral-secondary);
-  --combobox-text-shortcut: var(--text-neutral-tertiary);
-  --combobox-text-placeholder: var(--text-neutral-tertiary);
-  --combobox-fg-default: var(--fg-neutral-primary);
-  --combobox-fg-hover: var(--fg-neutral-tertiary);
-  --combobox-border-default: var(--border-neutral-tertiary);
+  --combobox-fg: var(--fg-neutral-primary);
+  --combobox-fg-empty: var(--fg-neutral-secondary);
+  --combobox-fg-placeholder: var(--fg-neutral-tertiary);
+  --combobox-shortcut-fg: var(--fg-neutral-tertiary);
+  --combobox-bg: var(--bg-neutral-primary);
+  --combobox-bg-hover: var(--bg-neutral-tertiary);
+  --combobox-border: var(--border-neutral-tertiary);
 
-  @apply flex h-full min-w-[--radix-popover-trigger-width] flex-col overflow-hidden p-1 text-[var(--combobox-text-default)];
+  @apply flex h-full min-w-[--radix-popover-trigger-width] flex-col overflow-hidden p-1 text-[var(--combobox-fg)];
 }
 
 .combobox-empty {
-  @apply text-base-normal flex items-center justify-center p-6 text-center text-[var(--combobox-text-empty)];
+  @apply text-base-normal flex items-center justify-center p-6 text-center text-[var(--combobox-fg-empty)];
 }
 
 .combobox-item {
-  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center p-2 outline-none transition-colors hover:bg-[var(--combobox-fg-hover)] data-[selected=true]:bg-[var(--combobox-fg-hover)];
+  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center p-2 outline-none transition-colors hover:bg-[var(--combobox-bg-hover)] data-[selected=true]:bg-[var(--combobox-bg-hover)];
 }
 
 .combobox-item-inset {
@@ -46,15 +46,15 @@
 }
 
 .combobox-caption {
-  @apply text-small-normal ml-auto tracking-widest text-[var(--combobox-text-shortcut)];
+  @apply text-small-normal ml-auto tracking-widest text-[var(--combobox-shortcut-fg)];
 }
 
 .combobox-separator {
-  @apply -mx-1 my-1 h-px bg-[var(--combobox-border-default)];
+  @apply -mx-1 my-1 h-px bg-[var(--combobox-border)];
 }
 
 .combobox-group {
-  @apply [&_[cmdk-group-heading]]:text-base-strong overflow-hidden p-[1px] text-[var(--combobox-text-default)] [&_[cmdk-group-heading]]:p-2;
+  @apply [&_[cmdk-group-heading]]:text-base-strong overflow-hidden p-[1px] text-[var(--combobox-fg)] [&_[cmdk-group-heading]]:p-2;
 }
 
 .combobox-list {
@@ -62,13 +62,13 @@
 }
 
 .combobox-input-box {
-  @apply relative flex items-center justify-center border-b border-b-[var(--combobox-border-default)] bg-[var(--combobox-fg-default)] [&>svg]:ml-2 [&>svg]:shrink-0 [&>svg]:opacity-50;
+  @apply relative flex items-center justify-center border-b border-b-[var(--combobox-border)] bg-[var(--combobox-bg)] [&>svg]:ml-2 [&>svg]:shrink-0 [&>svg]:opacity-50;
 }
 
 .combobox-input {
-  @apply text-base-normal min-w-0 flex-1 bg-[transparent] p-2 text-[var(--combobox-text-default)] outline-none placeholder:text-[var(--combobox-text-placeholder)];
+  @apply text-base-normal min-w-0 flex-1 bg-[transparent] p-2 text-[var(--combobox-fg)] outline-none placeholder:text-[var(--combobox-fg-placeholder)];
 }
 
 .combobox-trigger {
-  @apply data-[state=open]:bg-[var(--combobox-fg-hover)] [&>svg:last-of-type]:!ml-auto;
+  @apply data-[state=open]:bg-[var(--combobox-bg-hover)] [&>svg:last-of-type]:!ml-auto;
 }

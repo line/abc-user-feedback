@@ -24,7 +24,11 @@ import { cn } from '@/shared/utils';
 import { IssueSelectBox } from '@/entities/issue';
 
 import DateRangePicker from '../date-range-picker';
-import { DatePicker, SelectInput, SelectSearchInput } from '../inputs';
+import {
+  DatePicker,
+  MultiSelectSearchInput,
+  SelectSearchInput,
+} from '../inputs';
 import type {
   TableFilter,
   TableFilterField,
@@ -169,21 +173,19 @@ const TableFilterPopoverInput = (props: Props) => {
         />
       )}
       {filterfieid.format === 'multiSelect' && (
-        <SelectInput
-          type="multiple"
-          placeholder={t('v2.placeholder.select')}
+        <MultiSelectSearchInput
           options={filterfieid.options.map((option) => ({
             label: option.name,
             value: option.name,
           }))}
-          onValuesChange={(values) => {
+          onChange={(values) => {
             onChange(
               filterfieid.options
-                .filter((v) => values?.includes(v.name))
+                .filter((v) => values.includes(v.name))
                 .map((v) => v.key),
             );
           }}
-          values={filterfieid.options
+          value={filterfieid.options
             .filter((v) =>
               (value as (string | number)[] | undefined)?.includes(v.key),
             )

@@ -36,9 +36,9 @@ jobs:
         image: opensearchproject/opensearch:2.17.1
         env:
           discovery.type: single-node
-          bootstrap.memory_lock: "true"
-          plugins.security.disabled: "true"
-          OPENSEARCH_INITIAL_ADMIN_PASSWORD: "UserFeedback123!@#"
+          bootstrap.memory_lock: 'true'
+          plugins.security.disabled: 'true'
+          OPENSEARCH_INITIAL_ADMIN_PASSWORD: 'UserFeedback123!@#'
         options: >-
           --health-cmd="curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"'"
           --health-interval=10s
@@ -54,6 +54,7 @@ jobs:
       - name: Setup integration test (with opensearch)
         run: |
           npm install -g corepack@latest
+          corepack enable
           pnpm install --frozen-lockfile
           pnpm build
           echo "BASE_URL=http://localhost:3000" >> ./apps/api/.env

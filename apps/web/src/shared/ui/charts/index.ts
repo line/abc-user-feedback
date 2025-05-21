@@ -15,3 +15,4 @@
  */
 export { default as SimpleBarChart } from './simple-bar-chart';
 export { default as SimpleLineChart } from './simple-line-chart';
+export { default as SimplePieChart } from './simple-pie-chart';

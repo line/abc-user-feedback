@@ -14,21 +14,21 @@
  * under the License.
  */
 .switch-default {
-  @apply data-[state=checked]:before:bg-[var(--switch-fg-default)];
+  @apply data-[state=checked]:before:bg-[var(--switch-bg)];
 }
 
 .switch-blue {
-  @apply data-[state=checked]:before:bg-[var(--switch-fg-blue)];
+  @apply data-[state=checked]:before:bg-[var(--switch-bg-blue)];
 }
 
 .switch-orange {
-  @apply data-[state=checked]:before:bg-[var(--switch-fg-orange)];
+  @apply data-[state=checked]:before:bg-[var(--switch-bg-orange)];
 }
 
 .switch-red {
-  @apply data-[state=checked]:before:bg-[var(--switch-fg-red)];
+  @apply data-[state=checked]:before:bg-[var(--switch-bg-red)];
 }
 
 .switch-green {
-  @apply data-[state=checked]:before:bg-[var(--switch-fg-green)];
+  @apply data-[state=checked]:before:bg-[var(--switch-bg-green)];
 }

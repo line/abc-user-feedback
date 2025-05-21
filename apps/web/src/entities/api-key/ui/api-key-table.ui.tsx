@@ -20,7 +20,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useOverlay } from '@toss/use-overlay';
-import { useTranslation } from 'next-i18next';
 
 import type { EntityTable } from '@/shared';
 import { BasicTable } from '@/shared';
@@ -46,7 +45,6 @@ const ApiKeyTable: React.FC<IProps> = (props) => {
     disabledDelete,
   } = props;
 
-  const { t } = useTranslation();
   const overlay = useOverlay();
   const columns = useMemo(() => getApiKeyColumns(), []);
 
@@ -87,7 +85,6 @@ const ApiKeyTable: React.FC<IProps> = (props) => {
     <BasicTable
       isLoading={isLoading}
       table={table}
-      emptyCaption={t('v2.text.no-data.api-key')}
       createButton={createButton}
       onClickRow={(_, row) => openApiKeyDialog(row)}
     />

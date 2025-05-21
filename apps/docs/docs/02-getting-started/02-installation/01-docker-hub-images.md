@@ -152,7 +152,6 @@ services:
       - 3000:3000
     environment:
       - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
-      - NEXT_PUBLIC_MAX_DAYS=90
     depends_on:
       - api
 
@@ -281,7 +280,6 @@ services:
       - 3000:3000
     environment:
       - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
-      - NEXT_PUBLIC_MAX_DAYS=90
     depends_on:
       - api
 
@@ -317,7 +315,6 @@ services:
       - 3000:3000
     environment:
       - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
-      - NEXT_PUBLIC_MAX_DAYS=90
     depends_on:
       - api
 

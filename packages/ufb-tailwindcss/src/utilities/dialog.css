@@ -26,23 +26,23 @@
 }
 
 .dialog-icon-default {
-  @apply text-[var(--text-neutral-primary)];
+  @apply text-[var(--fg-neutral-primary)];
 }
 
 .dialog-icon-warning {
-  @apply text-[var(--icon-tint-orange)];
+  @apply text-[var(--fg-tint-orange)];
 }
 
 .dialog-icon-informative {
-  @apply text-[var(--icon-tint-blue)];
+  @apply text-[var(--fg-tint-blue)];
 }
 
 .dialog-icon-success {
-  @apply text-[var(--icon-tint-green)];
+  @apply text-[var(--fg-tint-green)];
 }
 
 .dialog-icon-error {
-  @apply text-[var(--icon-tint-red)];
+  @apply text-[var(--fg-tint-red)];
 }
 
 .dialog-footer-left {

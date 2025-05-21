@@ -38,41 +38,41 @@
 }
 
 .button-primary {
-  @apply bg-[var(--button-primary-fg-default)] text-[var(--button-primary-text-default)];
+  @apply bg-[var(--button-primary-bg)] text-[var(--button-primary-fg)];
 }
 
 .button-secondary {
-  @apply bg-[var(--button-secondary-fg-default)] text-[var(--button-secondary-text-default)];
+  @apply bg-[var(--button-secondary-bg)] text-[var(--button-secondary-fg)];
 }
 
 .button-destructive {
-  @apply bg-[var(--button-destructive-fg-default)] text-[var(--button-destructive-text-default)];
+  @apply bg-[var(--button-destructive-bg)] text-[var(--button-destructive-fg)];
 }
 
 .button-ghost {
-  @apply bg-[var(--button-ghost-fg-default)] text-[var(--button-ghost-text-default)] transition-colors [&:not(:disabled)]:hover:bg-[var(--button-ghost-fg-hover)];
+  @apply bg-[var(--button-ghost-bg)] text-[var(--button-ghost-fg)] transition-colors [&:not(:disabled)]:hover:bg-[var(--button-ghost-bg-hover)];
 }
 
 .button-outline {
-  @apply border border-[var(--button-outline-border-default)] bg-[var(--button-outline-fg-default)] text-[var(--button-outline-text-default)] transition-colors [&:not(:disabled)]:hover:bg-[var(--button-outline-fg-hover)];
+  @apply border border-[var(--button-outline-border)] bg-[var(--button-outline-bg)] text-[var(--button-outline-fg)] transition-colors [&:not(:disabled)]:hover:bg-[var(--button-outline-bg-hover)];
 }
 
 .button-loading-primary {
-  @apply text-[var(--button-primary-text-default)];
+  @apply text-[var(--button-primary-fg)];
 }
 
 .button-loading-secondary {
-  @apply text-[var(--button-secondary-text-default)];
+  @apply text-[var(--button-secondary-fg)];
 }
 
 .button-loading-destructive {
-  @apply text-[var(--button-destructive-text-default)];
+  @apply text-[var(--button-destructive-fg)];
 }
 
 .button-loading-ghost {
-  @apply text-[var(--button-ghost-text-default)];
+  @apply text-[var(--button-ghost-fg)];
 }
 
 .button-loading-outline {
-  @apply text-[var(--button-outline-text-default)];
+  @apply text-[var(--button-outline-fg)];
 }

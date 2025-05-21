@@ -68,14 +68,16 @@
         "invalid-member": "检测到无效的成员列表。",
         "invalid-role": "检测到无效的角色信息。",
         "invalid-project": "检测到无效的项目信息。"
-      }
+      },
+      "alert-description": "接下来要去创建 Channel 吗？"
     },
     "create-channel": {
       "title": "创建频道",
       "complete-title": "频道创建完成",
       "guide": {
         "invalid-channel": "检测到无效的频道信息。"
-      }
+      },
+      "alert-description": "恭喜您！现在您已准备好正式开始了。"
     }
   },
   "header": {
@@ -121,6 +123,8 @@
       "today": "今天",
       "yesterday": "昨天",
       "before-days": "{{day, number}}天",
+      "before-years": "{{year, number}}年",
+      "entire-period": "整个期间",
       "last-days": "过去{{days, number}}天",
       "date-range-over-max-days": "查询期限限制为{{maxDays}}天"
     },
@@ -203,7 +207,10 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "与此问题相关的反馈数量。"
+    "issue-feedback-count": "与此问题相关的反馈数量。",
+    "feedback-date-picker-button": "根据反馈生成的日期搜索数据。",
+    "issue-date-picker-button": "根据问题生成的日期搜索数据。",
+    "dashboard-date-picker-button": "根据反馈生成或问题注册日期搜索数据。"
   },
   "tenant-setting-menu": {
     "tenant-info": "租户信息",
@@ -338,8 +345,12 @@
         "member": "尚未注册Member。",
         "channel": "尚未创建Channel。",
         "webhook": "尚未注册Webhook。",
-        "feedback": "尚未收到Feedback。"
+        "feedback": "尚未收到Feedback。",
+        "empty": "还没有数据。",
+        "filter": "没有结果。 试试更改查询或过滤条件。"
       },
+      "required-step": "这是必填输入步骤。请输入必要信息。",
+      "optional-step": "这是可选输入步骤。您可以稍后在设置菜单中重新输入。",
       "create-project": "创建Project",
       "create-channel": "创建Channel",
       "name": {

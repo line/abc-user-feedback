@@ -97,9 +97,6 @@ OPENSEARCH_USE=false
 ```
 # 필수 환경 변수
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
-
-# 선택적 환경 변수
-NEXT_PUBLIC_MAX_DAYS=90
 ```
 
 환경 변수에 대한 자세한 설명은 [환경 변수 구성](./04-configuration.md) 문서를 참조하세요.
