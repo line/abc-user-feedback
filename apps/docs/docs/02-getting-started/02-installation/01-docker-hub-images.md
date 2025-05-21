@@ -1,10 +1,17 @@
 ---
 sidebar_position: 1
-title: 'Docker Hub 이미지 사용'
+title: 'Docker Hub 이미지'
 description: 'Docker Hub 이미지를 사용하여 ABC User Feedback을 설치하고 실행하는 방법을 안내합니다.'
 ---
 
-# Docker Hub 이미지 사용
+# 필수 요구사항
+
+- **버전**: 최신 안정 버전
+- **설명**: 컨테이너화된 배포와 인프라 구성 요소 실행을 위해 필요합니다.
+- **다운로드**: [Docker 공식 웹사이트](https://docs.docker.com/desktop/)
+- **참고**: Docker Compose도 함께 설치되어야 합니다.
+
+# Docker Hub 이미지
 
 ABC User Feedback은 손쉬운 배포를 위해 Docker Hub에 공식 이미지를 제공합니다. 이 문서에서는 Docker Hub 이미지를 사용하여 ABC User Feedback을 설치하고 실행하는 방법을 안내합니다.
 
@@ -12,8 +19,8 @@ ABC User Feedback은 손쉬운 배포를 위해 Docker Hub에 공식 이미지�
 
 ABC User Feedback은 두 가지 주요 컴포넌트에 대한 Docker 이미지를 제공합니다:
 
-1. **웹 관리자 프론트엔드**: Next.js 기반의 웹 인터페이스
-2. **API 백엔드**: NestJS 기반의 API 서버
+1. **웹 관리자 프론트엔드**: Next.js 기반의 웹 인터페이스 [[이미지](https://hub.docker.com/r/line/abc-user-feedback-web)]
+2. **API 백엔드**: NestJS 기반의 API 서버 [[이미지](https://hub.docker.com/r/line/abc-user-feedback-api)]
 
 각 이미지는 모든 릴리스에서 Docker Hub에 게시되며, 최신 안정 버전과 특정 버전 태그를 모두 제공합니다.
 
@@ -45,15 +52,7 @@ docker pull line/abc-user-feedback-api
 docker pull line/abc-user-feedback-api:1.0.0
 ```
 
-## 사전 요구사항
-
-Docker 이미지를 실행하기 전에 다음 요구사항을 충족해야 합니다:
-
-1. MySQL 데이터베이스가 실행 중이어야 합니다.
-2. (선택 사항) OpenSearch가 실행 중이어야 합니다.
-3. (선택 사항) SMTP 서버가 구성되어 있어야 합니다.
-
-[시스템 요구사항](../01-system-requirements.md) 문서에서 자세한 정보를 확인할 수 있습니다.
+환경 변수에 대한 자세한 설명은 [환경 변수 구성](./04-configuration.md) 문서를 참조하세요.
 
 ## Docker Compose를 사용한 설치
 
@@ -64,13 +63,10 @@ Docker 이미지를 실행하기 전에 다음 요구사항을 충족해야 합�
 먼저 필요한 인프라 서비스를 설정합니다:
 
 ```yaml
-version: '3'
-
 services:
   mysql:
     hostname: mysql
     image: mysql:8.0.39
-    platform: linux/amd64
     restart: always
     command:
       [
@@ -87,23 +83,8 @@ services:
       - 13306:3306
     volumes:
       - mysql:/var/lib/mysql
-    healthcheck:
-      test:
-        [
-          'CMD',
-          'mysqladmin',
-          'ping',
-          '-h',
-          'localhost',
-          '-u',
-          'root',
-          '-p$$MYSQL_ROOT_PASSWORD',
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
-  # 이메일 검증을 위한 SMTP 서버 (선택 사항)
+  # optional for email verification on creating user
   smtp4dev:
     image: rnwood/smtp4dev:v3
     restart: always
@@ -114,7 +95,7 @@ services:
     volumes:
       - smtp4dev:/smtp4dev
 
-  # 피드백 검색 성능 향상을 위한 OpenSearch (선택 사항)
+  # optional for better performance on searching feedbacks
   opensearch-node:
     image: opensearchproject/opensearch:2.16.0
     restart: always
@@ -138,11 +119,18 @@ services:
     ports:
       - 9200:9200
       - 9600:9600
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:9200/_cluster/health']
-      interval: 30s
-      timeout: 10s
-      retries: 3
+
+  # optional for opensearch
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.16.0
+    restart: always
+    ports:
+      - 5601:5601
+    environment:
+      - 'OPENSEARCH_HOSTS=["http://opensearch-node:9200"]'
+      - 'DISABLE_SECURITY_DASHBOARDS_PLUGIN=true'
+    depends_on:
+      - opensearch-node
 
 volumes:
   mysql:
@@ -155,8 +143,6 @@ volumes:
 그런 다음 ABC User Feedback 애플리케이션 서비스를 설정합니다:
 
 ```yaml
-version: '3'
-
 services:
   web:
     hostname: web
@@ -179,20 +165,17 @@ services:
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
-      - BASE_URL=http://api:4000
+      - BASE_URL=http://api:3000
       - ACCESS_TOKEN_EXPIRED_TIME=10m
       - REFRESH_TOKEN_EXPIRED_TIME=1h
       - APP_PORT=4000
-      - APP_ADDRESS=0.0.0.0
+      - APP_ADDRESS=api
       - AUTO_MIGRATION=true
       - NODE_OPTIONS="--max_old_space_size=3072"
       - SMTP_HOST=smtp4dev
       - SMTP_PORT=25
       - SMTP_SENDER=user@feedback.com
       - SMTP_BASE_URL=http://localhost:3000
-    depends_on:
-      mysql:
-        condition: service_healthy
 ```
 
 환경 변수에 대한 자세한 설명은 [환경 변수 구성](./04-configuration.md) 문서를 참조하세요.
@@ -219,14 +202,10 @@ docker-compose -f docker-compose.yml up -d
 인프라와 애플리케이션을 단일 Docker Compose 파일로 통합하여 사용할 수도 있습니다:
 
 ```yaml
-version: '3'
-
 services:
-  # 인프라 서비스
   mysql:
     hostname: mysql
     image: mysql:8.0.39
-    platform: linux/amd64
     restart: always
     command:
       [
@@ -243,22 +222,8 @@ services:
       - 13306:3306
     volumes:
       - mysql:/var/lib/mysql
-    healthcheck:
-      test:
-        [
-          'CMD',
-          'mysqladmin',
-          'ping',
-          '-h',
-          'localhost',
-          '-u',
-          'root',
-          '-p$$MYSQL_ROOT_PASSWORD',
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
+  # optional for email verification on creating user
   smtp4dev:
     image: rnwood/smtp4dev:v3
     restart: always
@@ -269,6 +234,7 @@ services:
     volumes:
       - smtp4dev:/smtp4dev
 
+  # optional for better performance on searching feedbacks
   opensearch-node:
     image: opensearchproject/opensearch:2.16.0
     restart: always
@@ -292,11 +258,19 @@ services:
     ports:
       - 9200:9200
       - 9600:9600
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:9200/_cluster/health']
-      interval: 30s
-      timeout: 10s
-      retries: 3
+
+  # optional for opensearch
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.16.0
+    restart: always
+    ports:
+      - 5601:5601
+    environment:
+      - 'OPENSEARCH_HOSTS=["http://opensearch-node:9200"]'
+      - 'DISABLE_SECURITY_DASHBOARDS_PLUGIN=true'
+    depends_on:
+      - opensearch-node
+
 
   # 애플리케이션 서비스
   web:
@@ -335,6 +309,38 @@ services:
       mysql:
         condition: service_healthy
 
+  web:
+    hostname: web
+    image: line/abc-user-feedback-web:latest
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
+      - NEXT_PUBLIC_MAX_DAYS=90
+    depends_on:
+      - api
+
+  api:
+    hostname: api
+    image: line/abc-user-feedback-api:latest
+    restart: always
+    ports:
+      - 4000:4000
+    environment:
+      - JWT_SECRET=jwtsecretjwtsecretjwtsecret
+      - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
+      - BASE_URL=http://api:3000
+      - ACCESS_TOKEN_EXPIRED_TIME=10m
+      - REFRESH_TOKEN_EXPIRED_TIME=1h
+      - APP_PORT=4000
+      - APP_ADDRESS=api
+      - AUTO_MIGRATION=true
+      - NODE_OPTIONS="--max_old_space_size=3072"
+      - SMTP_HOST=smtp4dev
+      - SMTP_PORT=25
+      - SMTP_SENDER=user@feedback.com
+      - SMTP_BASE_URL=http://localhost:3000
 volumes:
   mysql:
   smtp4dev:

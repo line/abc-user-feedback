@@ -18,13 +18,6 @@ ABC User Feedback을 설치하기 위해 다음 구성 요소가 필요합니다
 - **설명**: 백엔드 API 서버와 프론트엔드 웹 서버를 실행하기 위해 필요합니다.
 - **다운로드**: [Node.js 공식 웹사이트](https://nodejs.org/en/download/)
 
-### Docker
-
-- **버전**: 최신 안정 버전
-- **설명**: 컨테이너화된 배포와 인프라 구성 요소 실행을 위해 필요합니다.
-- **다운로드**: [Docker 공식 웹사이트](https://docs.docker.com/desktop/)
-- **참고**: Docker Compose도 함께 설치되어야 합니다.
-
 ### MySQL
 
 - **버전**: 8.0 이상
