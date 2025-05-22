@@ -76,4 +76,69 @@ export class AIClient {
       throw new Error(`Error fetching model list: ${error}`);
     }
   }
+
+  async executePrompt(
+    model: string,
+    temperature: number,
+    systemPrompt: string,
+    prompt: string,
+    targetFields: string,
+    promptTargetText: string,
+  ) {
+    try {
+      let response;
+
+      if (this.provider === AIProvidersEnum.OPEN_AI) {
+        response = await this.axiosInstance.post('/chat/completions', {
+          model,
+          messages: [
+            { role: 'developer', content: systemPrompt },
+            {
+              role: 'user',
+              content: ` ${prompt}
+                Please refer to the following data for the ${targetFields} 
+                fields: ${promptTargetText}
+              `,
+            },
+          ],
+        });
+        return response.data.choices[0].message.content;
+      } else if (this.provider === AIProvidersEnum.GEMINI) {
+        response = await this.axiosInstance.post(
+          `/models/${model}:generateContent`,
+          {
+            systemInstruction: {
+              parts: [
+                {
+                  text: systemPrompt,
+                },
+              ],
+            },
+            contents: [
+              {
+                parts: [
+                  {
+                    text: ` ${prompt}
+                      Please refer to the following data for the ${targetFields} 
+                      fields: ${promptTargetText}
+                    `,
+                  },
+                ],
+              },
+            ],
+            generationConfig: {
+              temperature: temperature,
+            },
+          },
+          {
+            params: { key: this.apiKey },
+          },
+        );
+      }
+
+      return response.data.candidates[0].content.parts[0].text;
+    } catch (error) {
+      return `Error executing prompt: ${error}`;
+    }
+  }
 }

@@ -13,11 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
+import { FieldEntity } from '../../channel/field/field.entity';
+import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { AIIntegrationsEntity } from './ai-integrations.entity';
 import { AITemplatesEntity } from './ai-templates.entity';
 import { AIClient } from './ai.client';
@@ -27,12 +29,17 @@ import { UpdateAITemplateDto } from './dtos/update-ai-template.dto';
 
 @Injectable()
 export class AIService {
+  private logger = new Logger(AIService.name);
+
   constructor(
     @InjectRepository(AIIntegrationsEntity)
     private readonly aiIntegrationsRepo: Repository<AIIntegrationsEntity>,
 
     @InjectRepository(AITemplatesEntity)
     private readonly aiTemplatesRepo: Repository<AITemplatesEntity>,
+
+    @InjectRepository(FeedbackEntity)
+    private readonly feedbackRepo: Repository<FeedbackEntity>,
   ) {}
 
   async getOrCreateIntegration(projectId: number) {
@@ -220,5 +227,66 @@ export class AIService {
     const models = await client.getModelList();
 
     return models;
+  }
+
+  @Transactional()
+  async executePrompt(
+    feedback: FeedbackEntity,
+    aiField: FieldEntity,
+    aiTargetFields: FieldEntity[],
+  ) {
+    const integration = await this.aiIntegrationsRepo.findOne({
+      where: {
+        project: {
+          id: feedback.channel.project.id,
+        },
+      },
+    });
+
+    if (!integration) {
+      throw new BadRequestException('Integration not found');
+    }
+
+    if (!aiField.aiTemplate) {
+      throw new BadRequestException('AI template not found');
+    }
+
+    const promptTargetText = aiTargetFields.reduce((acc, field) => {
+      if (field.key === 'issues') {
+        const issues = feedback.issues
+          .map((issue) => `${issue.name}: ${issue.description}`)
+          .join(', ');
+        return `${acc}\n${field.key}: ${issues}`;
+      }
+      return `${acc}\n${field.key}: ${feedback.data[field.key]}`;
+    }, '');
+
+    const client = new AIClient({
+      apiKey: integration.apiKey,
+      provider: integration.provider,
+      baseUrl: integration.endpointUrl,
+    });
+
+    this.logger.log(
+      `Executing prompt for field ${aiField.key} with target fields: ${aiTargetFields
+        .map((field) => field.key)
+        .join(', ')}`,
+    );
+    this.logger.log(`Prompt target text: ${promptTargetText}`);
+    this.logger.log(`Prompt: ${aiField.aiTemplate.prompt}`);
+    this.logger.log(`System prompt: ${integration.systemPrompt}`);
+
+    const result = await client.executePrompt(
+      integration.model,
+      integration.temperature,
+      integration.systemPrompt,
+      aiField.aiTemplate.prompt,
+      aiTargetFields.map((field) => field.key).join(', '),
+      promptTargetText,
+    );
+    this.logger.log(`Result: ${result}`);
+    feedback.data[aiField.key] = result;
+
+    await this.feedbackRepo.save(feedback);
   }
 }

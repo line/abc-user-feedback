@@ -39,7 +39,7 @@ export class AITemplatesEntity extends CommonEntity {
     nullable: true,
     cascade: true,
   })
-  field: Relation<FieldEntity>[] | undefined;
+  fields: Relation<FieldEntity>[];
 
   static from({
     title,

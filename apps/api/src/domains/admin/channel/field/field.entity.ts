@@ -59,12 +59,12 @@ export class FieldEntity extends CommonEntity {
   @Column('int', { default: 0 })
   order: number | null;
 
-  @ManyToOne(() => AITemplatesEntity, (aiTemplate) => aiTemplate.field, {
+  @ManyToOne(() => AITemplatesEntity, (aiTemplate) => aiTemplate.fields, {
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',
     nullable: true,
   })
-  aiTemplate: Relation<AITemplatesEntity>;
+  aiTemplate: Relation<AITemplatesEntity> | null;
 
   @Column('json', { nullable: true })
   aiFieldTargetIds: number[] | null;

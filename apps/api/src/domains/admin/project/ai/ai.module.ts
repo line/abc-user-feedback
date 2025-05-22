@@ -16,16 +16,24 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { FieldEntity } from '../../channel/field/field.entity';
+import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { AIIntegrationsEntity } from './ai-integrations.entity';
 import { AITemplatesEntity } from './ai-templates.entity';
 import { AIController } from './ai.controller';
+import { AIListener } from './ai.listener';
 import { AIService } from './ai.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AIIntegrationsEntity, AITemplatesEntity]),
+    TypeOrmModule.forFeature([
+      AIIntegrationsEntity,
+      AITemplatesEntity,
+      FeedbackEntity,
+      FieldEntity,
+    ]),
   ],
-  providers: [AIService],
+  providers: [AIService, AIListener],
   controllers: [AIController],
   exports: [AIService],
 })
