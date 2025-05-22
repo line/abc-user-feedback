@@ -147,6 +147,7 @@ export class FeedbackOSService {
               } else if (
                 [
                   FieldFormatEnum.text,
+                  FieldFormatEnum.aiField,
                   FieldFormatEnum.keyword,
                   FieldFormatEnum.select,
                   FieldFormatEnum.multiSelect,
@@ -199,6 +200,7 @@ export class FeedbackOSService {
                 osQuery.bool.must.push(
                   this.getMultiFieldQuery(query[fieldKey] ?? '', fields, [
                     FieldFormatEnum.text,
+                    FieldFormatEnum.aiField,
                     FieldFormatEnum.keyword,
                     FieldFormatEnum.number,
                     FieldFormatEnum.select,
@@ -243,7 +245,11 @@ export class FeedbackOSService {
                   },
                 });
               } else if (
-                [FieldFormatEnum.text, FieldFormatEnum.images].includes(format)
+                [
+                  FieldFormatEnum.text,
+                  FieldFormatEnum.images,
+                  FieldFormatEnum.aiField,
+                ].includes(format)
               ) {
                 osQuery.bool.must.push({
                   match_phrase: {
@@ -443,7 +449,11 @@ export class FeedbackOSService {
           },
         });
       } else if (
-        [FieldFormatEnum.text, FieldFormatEnum.images].includes(format)
+        [
+          FieldFormatEnum.text,
+          FieldFormatEnum.images,
+          FieldFormatEnum.aiField,
+        ].includes(format)
       ) {
         osQuery.bool.must.push({
           match_phrase: {

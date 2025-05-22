@@ -175,6 +175,7 @@ export class FeedbackService {
             throw new BadRequestException(`${fieldKey} must be string`);
           break;
         case FieldFormatEnum.text:
+        case FieldFormatEnum.aiField:
           if (typeof query[fieldKey] !== 'string')
             throw new BadRequestException(`${fieldKey} must be string`);
           break;
@@ -261,6 +262,7 @@ export class FeedbackService {
             throw new BadRequestException(`${fieldKey} must be string`);
           break;
         case FieldFormatEnum.text:
+        case FieldFormatEnum.aiField:
           if (typeof fieldValue !== 'string')
             throw new BadRequestException(`${fieldKey} must be string`);
           break;

@@ -117,6 +117,7 @@ export class FeedbackMySQLService {
             [
               FieldFormatEnum.keyword,
               FieldFormatEnum.text,
+              FieldFormatEnum.aiField,
               FieldFormatEnum.number,
               FieldFormatEnum.select,
               FieldFormatEnum.multiSelect,
@@ -146,7 +147,10 @@ export class FeedbackMySQLService {
                   } else {
                     qb.orWhere(`${jsonExtractExpression} = :value`, { value });
                   }
-                } else if (field.format === FieldFormatEnum.text) {
+                } else if (
+                  field.format === FieldFormatEnum.text ||
+                  field.format === FieldFormatEnum.aiField
+                ) {
                   if (i === 0) {
                     qb.where(`${jsonExtractExpression} like :likeValue`, {
                       likeValue: `%${value as string | number}%`,
@@ -225,7 +229,11 @@ export class FeedbackMySQLService {
             );
           }
         } else if (
-          [FieldFormatEnum.text, FieldFormatEnum.images].includes(format)
+          [
+            FieldFormatEnum.text,
+            FieldFormatEnum.images,
+            FieldFormatEnum.aiField,
+          ].includes(format)
         ) {
           queryBuilder.andWhere(
             `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') like :value`,
@@ -430,7 +438,10 @@ export class FeedbackMySQLService {
                   qb[method]('1 = 0');
                 }
               }
-            } else if (format === FieldFormatEnum.text) {
+            } else if (
+              format === FieldFormatEnum.text ||
+              format === FieldFormatEnum.aiField
+            ) {
               qb[method](
                 `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') like :${paramName}`,
                 { [paramName]: `%${value as string | number}%` },
