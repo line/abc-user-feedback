@@ -190,11 +190,11 @@
     },
     "issue-status-count": {
       "title": "Issue Status Overview",
-      "description": "Shows the current status distribution of all issues."
+      "description": "Shows the status of all issues. (entire period)"
     },
     "issue-rank": {
       "title": "Top Issues",
-      "description": "Lists the most reported issues."
+      "description": "Lists the most reported issues. (entire period)"
     },
     "issue-comparison": {
       "title": "Issue Comparison",
@@ -348,7 +348,7 @@
         "webhook": "No Webhook has been registered.",
         "feedback": "No Feedback has been collected.",
         "empty": "There is no data yet.",
-        "filter": "There is no results. Try changing the query or filter conditions."
+        "filter": "There is no results.\nTry changing the query or filter conditions."
       },
       "required-step": "This is a required input step. Please enter the required information.",
       "optional-step": "This is an optional input step. You can enter it again later in the settings menu.",

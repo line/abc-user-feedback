@@ -178,7 +178,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
                           src="/assets/images/no-data-with-search.svg"
                           alt="empty image"
                         />
-                        <p className="text-small text-neutral-tertiary">
+                        <p className="text-small text-neutral-tertiary whitespace-pre-wrap text-center">
                           {t('v2.text.no-data.filter')}
                         </p>
                       </>

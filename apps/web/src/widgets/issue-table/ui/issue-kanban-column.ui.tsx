@@ -148,28 +148,26 @@ const IssueKanbanColumn = (props: Props) => {
               />
             ))
           }
-          {items.length > 0 && (
-            <>
-              {hasNextPage ?
-                <Button
-                  variant="outline"
-                  className="!bg-neutral-primary"
-                  onClick={() => fetchNextPage()}
-                  loading={isFetching}
-                >
-                  View More
-                  <Icon name="RiArrowDownSLine" />
-                </Button>
-              : <Button
-                  variant="outline"
-                  className="!bg-neutral-primary"
-                  onClick={resetQuery}
-                >
-                  View Less
-                  <Icon name="RiArrowUpSLine" />
-                </Button>
-              }
-            </>
+          {hasNextPage && (
+            <Button
+              variant="outline"
+              className="!bg-neutral-primary"
+              onClick={() => fetchNextPage()}
+              loading={isFetching}
+            >
+              View More
+              <Icon name="RiArrowDownSLine" />
+            </Button>
+          )}
+          {items.length > 5 && !hasNextPage && (
+            <Button
+              variant="outline"
+              className="!bg-neutral-primary"
+              onClick={resetQuery}
+            >
+              View Less
+              <Icon name="RiArrowUpSLine" />
+            </Button>
           )}
         </div>
       </SortableContext>

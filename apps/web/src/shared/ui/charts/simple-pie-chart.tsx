@@ -72,6 +72,7 @@ const SimplePieChart: React.FC<IProps> = (props) => {
                 key={`cell-${index}`}
                 fill={entry.color}
                 onClick={() => onClick?.(entry)}
+                className="focus:outline-none"
               />
             ))}
             <Label

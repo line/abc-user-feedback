@@ -13,12 +13,32 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export const commandFilter = (value: string, search: string) => {
+export const commandFilter = (
+  value: string,
+  search: string,
+  keywords?: string[],
+) => {
   value = value.toLocaleLowerCase();
   search = search.toLocaleLowerCase();
+  console.log(
+    value,
+    search,
+    keywords,
+    value.startsWith(search) ||
+      keywords?.some((keyword) => keyword.startsWith(search)),
+  );
+
   return (
-    value.startsWith(search) ? 1
-    : value.includes(search) ? 0.5
+    (
+      value.startsWith(search) ||
+        keywords?.some((keyword) => keyword.startsWith(search))
+    ) ?
+      1
+    : (
+      value.includes(search) ||
+      keywords?.some((keyword) => keyword.includes(search))
+    ) ?
+      0.5
     : 0
   );
 };
