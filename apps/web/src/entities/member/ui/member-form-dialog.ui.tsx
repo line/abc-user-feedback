@@ -21,7 +21,7 @@ import { useForm } from 'react-hook-form';
 import { useThrottle } from 'react-use';
 
 import type { FormOverlayProps } from '@/shared';
-import { FormDialog, SelectSearchInput, TextInput } from '@/shared';
+import { AsyncSelectSearchInput, FormDialog, TextInput } from '@/shared';
 import { SelectInput } from '@/shared/ui/inputs';
 import type { ProjectInfo } from '@/entities/project';
 import type { Role } from '@/entities/role';
@@ -71,6 +71,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
       defaultValues: data,
       resolver: zodResolver(memberInfoFormSchema),
     });
+  const user = watch('user');
 
   return (
     <FormDialog
@@ -95,11 +96,13 @@ const MemberFormDialog: React.FC<Props> = (props) => {
         })}
       >
         {!data && <TextInput label="Project" value={project.name} disabled />}
-        <SelectSearchInput
+        <AsyncSelectSearchInput
           label="Email"
-          value={watch('user')?.email}
+          value={user ? { label: user.email, value: user.email } : null}
           onChange={(value) => {
-            const user = userData?.items.find((user) => user.email === value);
+            const user = userData?.items.find(
+              (user) => user.email === value?.value,
+            );
             setValue('user', user, { shouldDirty: true });
           }}
           options={

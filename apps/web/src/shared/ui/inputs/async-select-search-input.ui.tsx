@@ -33,19 +33,26 @@ import {
 
 import { commandFilter } from '@/shared/utils';
 
+import InfiniteScrollArea from '../infinite-scroll-area.ui';
+
+type Option = { label: string; value: string };
+
 interface Props {
   label?: string;
-  value?: string | null;
-  onChange?: (value: string | null) => void;
-  options: { label: string; value: string }[];
+  value?: Option | null;
+  onChange?: (value: Option | null) => void;
+  options: Option[];
   required?: boolean;
   disabled?: boolean;
   error?: string;
   inputValue?: string;
   setInputValue?: (value: string) => void;
+  hasNextPage: boolean;
+  fetchNextPage: () => void;
+  isFetchingNextPage?: boolean;
 }
 
-const SelectSearchInput: React.FC<Props> = (props) => {
+const AsyncSelectSearchInput: React.FC<Props> = (props) => {
   const {
     onChange,
     value,
@@ -54,16 +61,20 @@ const SelectSearchInput: React.FC<Props> = (props) => {
     required,
     disabled = false,
     error,
+    fetchNextPage,
+    hasNextPage,
     inputValue,
     setInputValue,
+    isFetchingNextPage,
   } = props;
 
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
 
-  const currentOptions = options.filter((option) => option.value !== value);
-  const selectedValue = options.find((option) => option.value === value);
+  const currentOptions = options.filter(
+    (option) => option.value !== value?.value,
+  );
 
   return (
     <InputField>
@@ -74,7 +85,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
       )}
       <Combobox open={open} onOpenChange={setOpen}>
         <ComboboxTrigger disabled={disabled} className="font-normal">
-          {selectedValue?.label ?? t('v2.placeholder.select')}
+          {value?.label ?? t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
         <ComboboxContent align="start" commandProps={{ filter: commandFilter }}>
@@ -85,7 +96,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
           />
           <ComboboxList maxHeight="200px">
             <ComboboxEmpty>No results found.</ComboboxEmpty>
-            {selectedValue && (
+            {value && (
               <ComboboxGroup
                 heading={
                   <span className="text-neutral-tertiary text-base-normal">
@@ -94,12 +105,12 @@ const SelectSearchInput: React.FC<Props> = (props) => {
                 }
               >
                 <ComboboxSelectItem
-                  value={selectedValue.value}
-                  keywords={[selectedValue.label]}
+                  value={value.value}
+                  keywords={[value.label]}
                   onSelect={() => onChange?.(null)}
                   checked
                 >
-                  {selectedValue.label}
+                  {value.label}
                 </ComboboxSelectItem>
               </ComboboxGroup>
             )}
@@ -116,9 +127,9 @@ const SelectSearchInput: React.FC<Props> = (props) => {
                     key={option.value}
                     value={option.value}
                     keywords={[option.label]}
-                    checked={option.value === value}
+                    checked={option.value === value?.value}
                     onSelect={(input) =>
-                      onChange?.(input === value ? null : input)
+                      onChange?.(input === value?.value ? null : option)
                     }
                   >
                     {option.label}
@@ -126,6 +137,11 @@ const SelectSearchInput: React.FC<Props> = (props) => {
                 ))}
               </ComboboxGroup>
             )}
+            <InfiniteScrollArea
+              hasNextPage={hasNextPage}
+              fetchNextPage={fetchNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+            />
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
@@ -134,4 +150,4 @@ const SelectSearchInput: React.FC<Props> = (props) => {
   );
 };
 
-export default SelectSearchInput;
+export default AsyncSelectSearchInput;

@@ -34,21 +34,16 @@ import {
 
 import { commandFilter } from '@/shared/utils';
 
-import InfiniteScrollArea from '../infinite-scroll-area.ui';
-
 interface Props {
   label?: string;
-  value: string[] | null;
-  onChange: (value: string[]) => void;
+  value?: string[];
+  onChange?: (value: string[]) => void;
   options: { label: string; value: string }[];
   required?: boolean;
   disabled?: boolean;
   error?: string;
-  fetchNextPage?: () => void;
-  hasNextPage?: boolean;
   inputValue?: string;
   setInputValue?: (value: string) => void;
-  isFetchingNextPage?: boolean;
 }
 
 const MultiSelectSearchInput: React.FC<Props> = (props) => {
@@ -60,11 +55,8 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
     required,
     disabled = false,
     error,
-    fetchNextPage,
-    hasNextPage,
     inputValue,
     setInputValue,
-    isFetchingNextPage,
   } = props;
 
   const { t } = useTranslation();
@@ -73,6 +65,9 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
 
   const currentOptions = options.filter(
     (option) => !value?.some((v) => v === option.value),
+  );
+  const currentValues = options.filter((option) =>
+    value?.some((v) => v === option.value),
   );
 
   return (
@@ -85,12 +80,12 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
       <Combobox open={open} onOpenChange={setOpen}>
         <ComboboxTrigger
           disabled={disabled}
-          className="scrollbar-hide max-w-[300px] overflow-auto font-normal"
+          className="scrollbar-hide overflow-auto font-normal"
         >
-          {!!value && value.length > 0 ?
-            value.map((v) => (
-              <Tag key={v} variant="outline" size="small">
-                {v}
+          {currentValues.length > 0 ?
+            currentValues.map((v) => (
+              <Tag key={v.value} variant="outline" size="small">
+                {v.label}
               </Tag>
             ))
           : t('v2.placeholder.select')}
@@ -104,7 +99,7 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
           />
           <ComboboxList maxHeight="200px">
             <ComboboxEmpty>No results found.</ComboboxEmpty>
-            {!!value && value.length > 0 && (
+            {currentValues.length > 0 && (
               <ComboboxGroup
                 heading={
                   <span className="text-neutral-tertiary text-base-normal">
@@ -112,16 +107,21 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
                   </span>
                 }
               >
-                {value.map((p) => (
+                {currentValues.map((currentValue) => (
                   <ComboboxSelectItem
-                    key={p}
-                    value={p}
-                    onSelect={() => {
-                      onChange(value.filter((q) => p !== q));
+                    key={currentValue.value}
+                    value={currentValue.value}
+                    keywords={[currentValue.label]}
+                    onSelect={(input) => {
+                      onChange?.(
+                        currentValues
+                          .filter((v) => v.value !== input)
+                          .map((v) => v.value),
+                      );
                     }}
                     checked
                   >
-                    {p}
+                    {currentValue.label}
                   </ComboboxSelectItem>
                 ))}
               </ComboboxGroup>
@@ -143,8 +143,9 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
                         key={option.value}
                         value={option.value}
                         checked={isChecked}
+                        keywords={[option.label]}
                         onSelect={() => {
-                          onChange(
+                          onChange?.(
                             isChecked ?
                               (value?.filter((v) => v !== option.value) ?? [])
                             : [...(value ?? []), option.value],
@@ -157,11 +158,6 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
                   })}
               </ComboboxGroup>
             )}
-            <InfiniteScrollArea
-              hasNextPage={hasNextPage}
-              fetchNextPage={fetchNextPage}
-              isFetchingNextPage={isFetchingNextPage}
-            />
           </ComboboxList>
         </ComboboxContent>
       </Combobox>

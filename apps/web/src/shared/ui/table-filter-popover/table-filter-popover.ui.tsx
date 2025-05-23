@@ -209,12 +209,12 @@ const TableFilterPopover = (props: Props) => {
                       <SelectSearchInput
                         onChange={(value) => {
                           const field = filterFields.find(
-                            (field) => field.name === value,
+                            (field) => field.key === value,
                           );
                           if (!field) return;
                           updateFilter(index, field);
                         }}
-                        value={filter.name}
+                        value={filter.key}
                         options={filterFields
                           .filter(
                             (v) =>
@@ -225,7 +225,10 @@ const TableFilterPopover = (props: Props) => {
                                   .some((column) => column.id === v.key)
                               : true),
                           )
-                          .map(({ name }) => ({ label: name, value: name }))}
+                          .map((filter) => ({
+                            label: filter.name,
+                            value: filter.key,
+                          }))}
                       />
                     </td>
                     <td>{renderOperator(filter, index)}</td>

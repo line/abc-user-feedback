@@ -29,23 +29,31 @@ import {
   InputCaption,
   InputField,
   InputLabel,
+  Tag,
 } from '@ufb/react';
 
 import { commandFilter } from '@/shared/utils';
 
+import InfiniteScrollArea from '../infinite-scroll-area.ui';
+
+type Option = { label: string; value: string };
+
 interface Props {
   label?: string;
-  value?: string | null;
-  onChange?: (value: string | null) => void;
-  options: { label: string; value: string }[];
+  value: Option[];
+  onChange: (value: Option[]) => void;
+  options: Option[];
   required?: boolean;
   disabled?: boolean;
   error?: string;
   inputValue?: string;
   setInputValue?: (value: string) => void;
+  fetchNextPage?: () => void;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
 }
 
-const SelectSearchInput: React.FC<Props> = (props) => {
+const AsyncMultiSelectSearchInput: React.FC<Props> = (props) => {
   const {
     onChange,
     value,
@@ -56,14 +64,18 @@ const SelectSearchInput: React.FC<Props> = (props) => {
     error,
     inputValue,
     setInputValue,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   } = props;
 
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
 
-  const currentOptions = options.filter((option) => option.value !== value);
-  const selectedValue = options.find((option) => option.value === value);
+  const currentOptions = options.filter(
+    (option) => !value.some((v) => v.value === option.value),
+  );
 
   return (
     <InputField>
@@ -73,8 +85,17 @@ const SelectSearchInput: React.FC<Props> = (props) => {
         </InputLabel>
       )}
       <Combobox open={open} onOpenChange={setOpen}>
-        <ComboboxTrigger disabled={disabled} className="font-normal">
-          {selectedValue?.label ?? t('v2.placeholder.select')}
+        <ComboboxTrigger
+          disabled={disabled}
+          className="scrollbar-hide overflow-auto font-normal"
+        >
+          {value.length > 0 ?
+            value.map((v) => (
+              <Tag key={v.value} variant="outline" size="small">
+                {v.label}
+              </Tag>
+            ))
+          : t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
         <ComboboxContent align="start" commandProps={{ filter: commandFilter }}>
@@ -85,7 +106,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
           />
           <ComboboxList maxHeight="200px">
             <ComboboxEmpty>No results found.</ComboboxEmpty>
-            {selectedValue && (
+            {value.length > 0 && (
               <ComboboxGroup
                 heading={
                   <span className="text-neutral-tertiary text-base-normal">
@@ -93,14 +114,19 @@ const SelectSearchInput: React.FC<Props> = (props) => {
                   </span>
                 }
               >
-                <ComboboxSelectItem
-                  value={selectedValue.value}
-                  keywords={[selectedValue.label]}
-                  onSelect={() => onChange?.(null)}
-                  checked
-                >
-                  {selectedValue.label}
-                </ComboboxSelectItem>
+                {value.map((v) => (
+                  <ComboboxSelectItem
+                    key={v.value}
+                    value={v.value}
+                    keywords={[v.label]}
+                    onSelect={(input) => {
+                      onChange(value.filter((v) => v.value !== input));
+                    }}
+                    checked
+                  >
+                    {v.label}
+                  </ComboboxSelectItem>
+                ))}
               </ComboboxGroup>
             )}
             {currentOptions.length > 0 && (
@@ -111,21 +137,33 @@ const SelectSearchInput: React.FC<Props> = (props) => {
                   </span>
                 }
               >
-                {currentOptions.map((option) => (
-                  <ComboboxSelectItem
-                    key={option.value}
-                    value={option.value}
-                    keywords={[option.label]}
-                    checked={option.value === value}
-                    onSelect={(input) =>
-                      onChange?.(input === value ? null : input)
-                    }
-                  >
-                    {option.label}
-                  </ComboboxSelectItem>
-                ))}
+                {currentOptions.map((option) => {
+                  const isChecked = value.some((v) => v.value === option.value);
+                  return (
+                    <ComboboxSelectItem
+                      key={option.value}
+                      value={option.value}
+                      checked={isChecked}
+                      keywords={[option.label]}
+                      onSelect={() => {
+                        onChange(
+                          isChecked ?
+                            value.filter((v) => v.value !== option.value)
+                          : [...value, option],
+                        );
+                      }}
+                    >
+                      {option.label}
+                    </ComboboxSelectItem>
+                  );
+                })}
               </ComboboxGroup>
             )}
+            <InfiniteScrollArea
+              hasNextPage={hasNextPage}
+              fetchNextPage={fetchNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+            />
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
@@ -134,4 +172,4 @@ const SelectSearchInput: React.FC<Props> = (props) => {
   );
 };
 
-export default SelectSearchInput;
+export default AsyncMultiSelectSearchInput;

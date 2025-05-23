@@ -190,11 +190,11 @@
     },
     "issue-status-count": {
       "title": "Übersicht über den Status von Problemen",
-      "description": "Zeigt die aktuelle Statusverteilung aller Probleme."
+      "description": "Zeigt den Status aller Probleme an. (gesamter Zeitraum)"
     },
     "issue-rank": {
       "title": "Top-Probleme",
-      "description": "Listet die am häufigsten gemeldeten Probleme auf."
+      "description": "Listet die am häufigsten gemeldeten Probleme auf. (gesamter Zeitraum)"
     },
     "issue-comparison": {
       "title": "Vergleich von Problemen",
@@ -347,7 +347,7 @@
         "webhook": "Es wurde noch kein Webhook registriert.",
         "feedback": "Es wurde noch kein Feedback gesammelt.",
         "empty": "Es liegen noch keine Daten vor.",
-        "filter": "Es gibt keine Ergebnisse. Versuchen Sie, die Abfrage oder Filterbedingungen zu ändern."
+        "filter": "Es gibt keine Ergebnisse.\nVersuchen Sie, die Abfrage oder Filterbedingungen zu ändern."
       },
       "required-step": "Dies ist ein erforderlicher Eingabeschritt. Bitte geben Sie die erforderlichen Informationen ein.",
       "optional-step": "Dies ist ein optionaler Eingabeschritt. Sie können ihn später im Einstellungsmenü erneut eingeben.",

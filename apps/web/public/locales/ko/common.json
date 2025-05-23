@@ -184,11 +184,11 @@
     },
     "issue-status-count": {
       "title": "이슈 현황",
-      "description": "전체 이슈의 현황을 보여줍니다."
+      "description": "전체 이슈의 현황을 보여줍니다. (전체 기간)"
     },
     "issue-rank": {
       "title": "상위 이슈",
-      "description": "피드백 개수가 많은 상위 이슈를 보여줍니다."
+      "description": "피드백 개수가 많은 상위 이슈를 보여줍니다. (전체 기간)"
     },
     "issue-comparison": {
       "title": "이슈 비교",
@@ -342,7 +342,7 @@
         "api-key": "생성된 API Key가 없습니다.",
         "webhook": "등록된 Webhook이 없습니다.",
         "empty": "아직 데이터가 없습니다.",
-        "filter": "조회 결과가 없습니다. 조회 또는 필터 조건을 변경해 보세요."
+        "filter": "조회 결과가 없습니다.\n조회 또는 필터 조건을 변경해 보세요."
       },
       "required-step": "필수 입력 단계입니다. 필수 정보를 입력해 주세요.",
       "optional-step": "선택 입력 단계입니다. 나중에 설정 메뉴에서 다시 입력할 수 있어요.",

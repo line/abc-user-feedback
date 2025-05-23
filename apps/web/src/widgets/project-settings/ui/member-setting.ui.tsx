@@ -48,6 +48,7 @@ import type { Member, MemberInfo } from '@/entities/member';
 import { MemberFormDialog } from '@/entities/member';
 import { useMembmerSearch } from '@/entities/member/lib';
 import { memberColumns } from '@/entities/member/member-columns';
+import { useUserStore } from '@/entities/user';
 
 interface IProps {
   projectId: number;
@@ -61,6 +62,8 @@ const MemberSetting: React.FC<IProps> = (props) => {
   const queryClient = useQueryClient();
   const overlay = useOverlay();
   const router = useRouter();
+  const { user } = useUserStore();
+
   const [tableFilters, setTableFilters] = useState<TableFilter[]>([]);
   const [operator, setOperator] = useState<TableFilterOperator>('AND');
   const [rows, setRows] = useState<Member[]>([]);
@@ -89,6 +92,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
     manualPagination: true,
     pageCount,
     rowCount,
+    enableRowSelection: (row) => row.original.user.email !== user?.email,
   });
 
   const { rowSelection, pagination } = table.getState();
@@ -210,7 +214,10 @@ const MemberSetting: React.FC<IProps> = (props) => {
         project={projectData}
         roles={rolesData.roles}
         members={data?.items ?? []}
-        disabledDelete={!perms.includes('project_member_delete')}
+        disabledDelete={
+          !perms.includes('project_member_delete') ||
+          member.user.email === user?.email
+        }
         disabledUpdate={!perms.includes('project_member_update')}
       />
     ));

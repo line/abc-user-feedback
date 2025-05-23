@@ -26,7 +26,7 @@ export const memberSchema = z.object({
     name: true,
     department: true,
   }),
-  role: roleSchema,
+  role: roleSchema.pick({ id: true, name: true }),
   createdAt: z.string(),
 });
 

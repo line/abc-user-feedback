@@ -49,12 +49,12 @@ export interface TableFilterFieldDate {
 export interface TableFilterFieldSelect {
   format: 'select';
   matchType: ('IS' | 'CONTAINS')[];
-  options: { key: string | number; name: string }[];
+  options: { key: string; name: string }[];
 }
 export interface TableFilterFieldMultiSelect {
   format: 'multiSelect';
   matchType: ('IS' | 'CONTAINS')[];
-  options: { key: string | number; name: string }[];
+  options: { key: string; name: string }[];
 }
 
 export interface TableFilterFieldTicket {
@@ -69,9 +69,9 @@ export interface TableFilterFieldIssue {
 }
 
 export interface TableFilter {
-  value: unknown;
   key: string;
   name: string;
   format: TableFilterFieldFotmat;
   condition: TableFilterCondition;
+  value: unknown;
 }
