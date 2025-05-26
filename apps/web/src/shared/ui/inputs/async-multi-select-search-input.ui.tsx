@@ -90,11 +90,13 @@ const AsyncMultiSelectSearchInput: React.FC<Props> = (props) => {
           className="scrollbar-hide overflow-auto font-normal"
         >
           {value.length > 0 ?
-            value.map((v) => (
-              <Tag key={v.value} variant="outline" size="small">
-                {v.label}
-              </Tag>
-            ))
+            value
+              .sort((a, b) => a.value.localeCompare(b.value))
+              .map((v) => (
+                <Tag key={v.value} variant="outline" size="small">
+                  {v.label}
+                </Tag>
+              ))
           : t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
