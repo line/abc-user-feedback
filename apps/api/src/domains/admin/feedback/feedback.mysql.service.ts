@@ -365,14 +365,26 @@ export class FeedbackMySQLService {
             const issueIds = value as string[];
 
             if (condition === QueryV2ConditionsEnum.IS) {
-              queryBuilder.having(
-                "JSON_LENGTH(JSON_ARRAYAGG(feedbacks_issues_issues.issues_id)) = :arrayLength AND JSON_CONTAINS(JSON_ARRAYAGG(feedbacks_issues_issues.issues_id), JSON_ARRAY(:...issueIds), '$')",
+              qb[method](
+                `feedbacks.id IN (
+                  SELECT feedbacks_id
+                  FROM feedbacks_issues_issues
+                  GROUP BY feedbacks_id
+                  HAVING COUNT(DISTINCT issues_id) = :arrayLength
+                  AND COUNT(DISTINCT CASE WHEN issues_id IN (:...issueIds) THEN issues_id END) = :arrayLength
+                )`,
                 { arrayLength: issueIds.length, issueIds },
               );
-            } else {
+            } else if (condition === QueryV2ConditionsEnum.CONTAINS) {
               qb[method](
-                'feedbacks_issues_issues.issues_id IN (:...issueIds)',
-                { issueIds },
+                `feedbacks.id IN (
+                  SELECT feedbacks_id
+                  FROM feedbacks_issues_issues
+                  WHERE issues_id IN (:...issueIds)
+                  GROUP BY feedbacks_id
+                  HAVING COUNT(DISTINCT issues_id) = :arrayLength
+                )`,
+                { arrayLength: issueIds.length, issueIds },
               );
             }
           } else if (fieldKey === 'updatedAt') {
