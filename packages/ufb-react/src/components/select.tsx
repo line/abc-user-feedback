@@ -105,7 +105,7 @@ const Select = ({
   React.useEffect(() => {
     if (singleValue === value) return;
     setSingleValue(value);
-  }, [value]);
+  }, [value, singleValue]);
 
   React.useEffect(() => {
     if (
@@ -114,7 +114,7 @@ const Select = ({
     )
       return;
     setMultipleValues(values);
-  }, [values]);
+  }, [values, multipleValues]);
   return (
     <SelectContext.Provider
       value={{

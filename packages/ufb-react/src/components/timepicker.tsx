@@ -184,13 +184,13 @@ const TimePickerInput = React.forwardRef<
     };
 
     return (
-      <InputField className={cn('w-12', className)}>
+      <InputField className={cn('w-24', className)}>
         <InputBox>
           <TextInput
             ref={ref}
             id={id ?? picker}
             name={name ?? picker}
-            className="text-center font-mono tabular-nums caret-transparent [&::-webkit-inner-spin-button]:appearance-none"
+            className="text-left font-mono tabular-nums caret-transparent [&::-webkit-inner-spin-button]:appearance-none"
             value={value ?? calculatedValue}
             onChange={(e) => {
               e.preventDefault();
@@ -289,6 +289,7 @@ const TimePicker = React.forwardRef<TimePickerRef, TimePickerProps>(
               ref={secondRef}
               onLeftFocus={() => minuteRef.current?.focus()}
               onRightFocus={() => periodRef.current?.focus()}
+              className="w-24"
             />
           </>
         )}

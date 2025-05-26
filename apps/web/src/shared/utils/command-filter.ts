@@ -20,14 +20,6 @@ export const commandFilter = (
 ) => {
   value = value.toLocaleLowerCase();
   search = search.toLocaleLowerCase();
-  console.log(
-    value,
-    search,
-    keywords,
-    value.startsWith(search) ||
-      keywords?.some((keyword) => keyword.startsWith(search)),
-  );
-
   return (
     (
       value.startsWith(search) ||

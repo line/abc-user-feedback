@@ -86,6 +86,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   });
 
   useEffect(() => {
+    if (!data) return;
     methods.reset(data);
   }, [data]);
 

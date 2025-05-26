@@ -33,6 +33,8 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
   const { register, formState, setValue, watch } =
     useFormContext<ChannelInfo>();
 
+  const feedbackSearchMaxDays = watch('feedbackSearchMaxDays');
+
   return (
     <div className="flex flex-col gap-4">
       {type === 'update' && (
@@ -54,9 +56,12 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
         error={formState.errors.description?.message}
       />
       <SelectInput
-        label="Maximum period for feedback search"
-        value={String(watch('feedbackSearchMaxDays'))}
+        label="Maximum feedback search period"
+        value={
+          feedbackSearchMaxDays ? String(feedbackSearchMaxDays) : undefined
+        }
         onChange={(value) => {
+          if (!value) return;
           setValue('feedbackSearchMaxDays', Number(value), {
             shouldDirty: true,
           });
@@ -71,7 +76,6 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
         ]}
         disabled={readOnly}
         error={formState.errors.feedbackSearchMaxDays?.message}
-        required
       />
     </div>
   );
