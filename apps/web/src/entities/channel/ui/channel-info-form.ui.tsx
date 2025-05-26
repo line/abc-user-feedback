@@ -71,7 +71,6 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
           { value: '90', label: t('text.date.before-days', { day: 90 }) },
           { value: '180', label: t('text.date.before-days', { day: 180 }) },
           { value: '365', label: t('text.date.before-years', { year: 1 }) },
-          { value: '730', label: t('text.date.before-years', { year: 2 }) },
           { value: '-1', label: t('text.date.entire-period') },
         ]}
         disabled={readOnly}

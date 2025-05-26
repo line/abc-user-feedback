@@ -124,20 +124,12 @@ const DateRangePicker: React.FC<IProps> = (props) => {
         days: 180,
       },
       {
-        label: t('text.date.before-years', { year: 1 }),
+        label: t('text.date.before-days', { day: 365 }),
         dateRange: {
           startDate: dayjs().subtract(364, 'day').toDate(),
           endDate: dayjs().endOf('day').toDate(),
         },
         days: 365,
-      },
-      {
-        label: t('text.date.before-years', { year: 2 }),
-        dateRange: {
-          startDate: dayjs().subtract(729, 'day').startOf('day').toDate(),
-          endDate: dayjs().endOf('day').toDate(),
-        },
-        days: 730,
       },
       {
         label: t('text.date.entire-period'),
