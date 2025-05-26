@@ -22,4 +22,4 @@ export { default as AsyncSelectSearchInput } from './async-select-search-input.u
 export { default as ComboboxInputbox } from './combobox-input-box.ui';
 export { default as DatePicker } from './date-picker.ui';
 export { default as MultiSelectSearchInput } from './multi-select-search-input.ui';
-export { default as AsyncMultiSelectSearchInput } from './multi-select-search-input.ui';
+export { default as AsyncMultiSelectSearchInput } from './async-multi-select-search-input.ui';

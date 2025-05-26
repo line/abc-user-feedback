@@ -49,16 +49,25 @@ const IssueSelectBox = ({ onChange, value }: Props) => {
       setSelectedIssues([]);
       return;
     }
-
-    void Promise.all(
+    void Promise.allSettled(
       value.map(async (issueId) => {
-        const { data } = await client.get({
-          path: '/api/admin/projects/{projectId}/issues/{issueId}',
-          pathParams: { projectId, issueId },
-        });
-        return { label: data.name, value: String(issueId) };
+        try {
+          const { data } = await client.get({
+            path: '/api/admin/projects/{projectId}/issues/{issueId}',
+            pathParams: { projectId, issueId },
+          });
+          return { label: data.name, value: String(issueId) };
+        } catch (error) {
+          console.warn(`Failed to fetch issue ${issueId}:`, error);
+          return { label: `Issue ${issueId}`, value: String(issueId) };
+        }
       }),
-    ).then((v) => setSelectedIssues(v));
+    ).then((results) => {
+      const successfulResults = results
+        .filter((result) => result.status === 'fulfilled')
+        .map((result) => result.value);
+      setSelectedIssues(successfulResults);
+    });
   }, [value]);
 
   return (
