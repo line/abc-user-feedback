@@ -123,7 +123,6 @@
       "today": "Today",
       "yesterday": "Yesterday",
       "before-days": "{{day, number}} Days",
-      "before-years": "{{year, number}} Years",
       "entire-period": "Entire period",
       "last-days": "Last {{day, number}} Days",
       "date-range-over-max-days": "Inquiry period is limited to {{maxDays}} days"

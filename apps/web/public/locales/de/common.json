@@ -123,7 +123,6 @@
       "today": "Heute",
       "yesterday": "Gestern",
       "before-days": "{{day, number}} Tagen",
-      "before-years": "{{year, number}} Jahren",
       "entire-period": "Gesamtzeitraum",
       "last-days": "Letzten {{day, number}} Tagen",
       "date-range-over-max-days": "Anfragezeitraum ist auf {{maxDays}} Tage begrenzt"
