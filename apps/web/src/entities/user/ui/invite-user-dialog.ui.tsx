@@ -17,6 +17,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
+import type { ZodType } from 'zod';
 import { z } from 'zod';
 
 import type { FormOverlayProps } from '@/shared';
@@ -36,7 +37,7 @@ interface IForm {
   roleId?: number;
 }
 
-const scheme: Zod.ZodType<IForm> = z
+const scheme: ZodType<IForm> = z
   .object({
     email: z.string().email(),
     type: z.literal('SUPER'),

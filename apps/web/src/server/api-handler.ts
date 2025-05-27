@@ -14,6 +14,7 @@
  * under the License.
  */
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
+import type { ZodType } from 'zod';
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS';
 
@@ -22,13 +23,13 @@ type CustomNextApiRequest<T = Record<string, unknown>> = Omit<
   'body'
 > & { body: T };
 
-type CustomNextApiHandler<T extends Zod.ZodType> = (
+type CustomNextApiHandler<T extends ZodType> = (
   req: CustomNextApiRequest<T['_output']>,
   res: NextApiResponse,
 ) => unknown;
 
 const queryHandler =
-  <T extends Zod.ZodType<unknown>>(schema?: T) =>
+  <T extends ZodType<unknown>>(schema?: T) =>
   (input: CustomNextApiHandler<T>) => {
     if (!schema) return input;
 
@@ -44,7 +45,7 @@ const queryHandler =
   };
 
 const bodyHandler =
-  <T extends Zod.ZodType<unknown>>(schema?: T) =>
+  <T extends ZodType<unknown>>(schema?: T) =>
   (input: CustomNextApiHandler<T>) => {
     if (!schema) return input;
 
@@ -60,10 +61,10 @@ const bodyHandler =
   };
 
 export const procedure = {
-  input: <T extends Zod.ZodType>(schema?: T) => ({
+  input: <T extends ZodType>(schema?: T) => ({
     handle: queryHandler(schema),
   }),
-  query: <T extends Zod.ZodType>(schema?: T) => ({
+  query: <T extends ZodType>(schema?: T) => ({
     handle: bodyHandler(schema),
   }),
 };
