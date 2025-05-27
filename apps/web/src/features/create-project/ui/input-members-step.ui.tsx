@@ -156,11 +156,7 @@ const InputMembersStep: React.FC<IProps> = () => {
         </>
       }
     >
-      <BasicTable
-        table={table}
-        emptyCaption={t('v2.text.no-data.member')}
-        onClickRow={openUpdateMemberFormDialog}
-      />
+      <BasicTable table={table} onClickRow={openUpdateMemberFormDialog} />
     </CreateProjectInputTemplate>
   );
 };

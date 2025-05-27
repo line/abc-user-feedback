@@ -38,19 +38,19 @@
 }
 
 .select-caption-default {
-  @apply text-[var(--select-caption-default)];
+  @apply text-[var(--select-caption-fg)];
 }
 
 .select-caption-success {
-  @apply text-[var(--select-caption-success)];
+  @apply text-[var(--select-caption-fg-success)];
 }
 
 .select-caption-info {
-  @apply text-[var(--select-caption-default)];
+  @apply text-[var(--select-caption-fg)];
 }
 
 .select-caption-error {
-  @apply text-[var(--select-caption-error)];
+  @apply text-[var(--select-caption-fg-error)];
 }
 
 .select-item-left {

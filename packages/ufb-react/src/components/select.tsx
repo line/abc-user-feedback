@@ -47,6 +47,7 @@ const SelectContext = React.createContext<SelectContextProps>({
   error: false,
   value: undefined,
   values: [],
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setItemByValue: () => {},
   itemByValue: {},
 });
@@ -77,6 +78,7 @@ const Select = ({
   error = false,
   value,
   values = [],
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   onValueChange,
   onValuesChange,
   ...props
@@ -113,7 +115,6 @@ const Select = ({
       return;
     setMultipleValues(values);
   }, [values]);
-
   return (
     <SelectContext.Provider
       value={{
@@ -126,10 +127,7 @@ const Select = ({
         setItemByValue,
       }}
     >
-      <div
-        className={cn(selectVariants({ size: size ?? themeSize }))}
-        {...props}
-      >
+      <div className={cn(selectVariants({ size: size ?? themeSize }))}>
         {type === 'single' ?
           <SingleSelect
             {...props}

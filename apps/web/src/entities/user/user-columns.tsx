@@ -35,11 +35,7 @@ export const getUserColumns = () => [
         indeterminate={
           table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
         }
-        onCheckedChange={(checked) => {
-          console.log('checked: ', checked);
-          console.log(table.getIsAllRowsSelected());
-          table.toggleAllRowsSelected(checked);
-        }}
+        onCheckedChange={table.toggleAllRowsSelected}
       />
     ),
     cell: ({ row }) => (

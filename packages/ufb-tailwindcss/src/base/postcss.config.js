@@ -1,6 +1,3 @@
-import postcssImport from "postcss-import";
-import tailwindcssNesting from "tailwindcss/nesting/index.js";
-
-export default {
-  plugins: [postcssImport, tailwindcssNesting],
+module.exports = {
+  plugins: [require('postcss-import'), require('tailwindcss/nesting')],
 };

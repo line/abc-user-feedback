@@ -158,8 +158,8 @@ const TableFilterPopover = (props: Props) => {
   };
 
   const submitFilters = () => {
-    onSubmit(filters, currentOperator);
     setOpen(false);
+    onSubmit(filters, currentOperator);
   };
 
   return (

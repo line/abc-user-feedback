@@ -54,7 +54,7 @@ const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
         />
         <TextInput
           {...register('oauthConfig.clientSecret')}
-          label="Client Secret"
+          label="Client Secret 1"
           placeholder={t('v2.placeholder.text')}
           error={formState.errors.oauthConfig?.clientSecret?.message}
           disabled={disabled}

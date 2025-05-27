@@ -14,11 +14,11 @@
  * under the License.
  */
 .menu {
-  --menu-text-default: var(--text-neutral-tertiary);
-  --menu-text-hover: var(--text-neutral-tertiary);
-  --menu-text-pressed: var(--text-neutral-primary);
+  --menu-fg: var(--fg-neutral-tertiary);
   --menu-fg-hover: var(--fg-neutral-tertiary);
-  --menu-fg-pressed: var(--fg-neutral-tertiary);
+  --menu-fg-pressed: var(--fg-neutral-primary);
+  --menu-bg-hover: var(--bg-neutral-tertiary);
+  --menu-bg-pressed: var(--bg-neutral-tertiary);
 
   @apply rounded-8 inline-flex px-2 py-3;
 
@@ -27,7 +27,7 @@
 }
 
 .menu-item {
-  @apply rounded-8 relative flex w-full cursor-pointer select-none items-center gap-2 text-left text-[var(--menu-text-default)] outline-none hover:bg-[var(--menu-fg-hover)] hover:text-[var(--menu-text-hover)] hover:opacity-100 data-[disabled]:pointer-events-none data-[state=on]:bg-[var(--menu-fg-pressed)] data-[state=open]:bg-[var(--menu-fg-pressed)] data-[state=on]:text-[var(--menu-text-pressed)] data-[state=open]:text-[var(--menu-text-pressed)] data-[disabled]:opacity-50 [&>svg]:flex-shrink-0;
+  @apply rounded-8 relative flex w-full cursor-pointer select-none items-center gap-2 text-left text-[var(--menu-fg)] outline-none hover:bg-[var(--menu-bg-hover)] hover:text-[var(--menu-fg-hover)] hover:opacity-100 data-[disabled]:pointer-events-none data-[state=on]:bg-[var(--menu-bg-pressed)] data-[state=open]:bg-[var(--menu-bg-pressed)] data-[state=on]:text-[var(--menu-fg-pressed)] data-[state=open]:text-[var(--menu-fg-pressed)] data-[disabled]:opacity-50 [&>svg]:flex-shrink-0;
 
   /* default */
   @apply menu-item-small;

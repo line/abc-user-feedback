@@ -45,7 +45,7 @@ const CreateProject: React.FC<IProps> = () => {
           stepTitle={CREATE_PROJECT_STEPPER_TEXT}
         />
       }
-      leftBottm={
+      leftBottom={
         <div className="flex justify-end">
           <Image
             src={`/assets/images/create-project-step-${currentStep.index + 1}.svg`}

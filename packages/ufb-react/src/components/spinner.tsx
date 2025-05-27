@@ -13,27 +13,42 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { Size } from "../types";
-import { ICON_SIZE } from "../constants";
-import { cn } from "../lib/utils";
-import { Icon } from "./icon";
-import useTheme from "./use-theme";
+import { cva } from 'class-variance-authority';
+
+import { cn } from '../lib/utils';
+import type { Size } from '../types';
+import useTheme from './use-theme';
 
 export interface SpinnerProps extends React.HTMLAttributes<HTMLSpanElement> {
   size?: Size;
 }
+
+const defaultVariants: {
+  size?: Size;
+} = {
+  size: undefined,
+};
+
+const spinnerVariants = cva('spinner', {
+  variants: {
+    size: {
+      small: 'spinner-small',
+      medium: 'spinner-medium',
+      large: 'spinner-large',
+    },
+  },
+  defaultVariants,
+});
 
 const Spinner: React.FC<SpinnerProps> = (props) => {
   const { size, className } = props;
   const { themeSize } = useTheme();
 
   return (
-    <Icon
-      name="spinner"
-      size={ICON_SIZE[size ?? themeSize]}
-      className={cn("spinner", className)}
+    <span
+      className={cn(spinnerVariants({ size: size ?? themeSize }), className)}
       aria-label="loading..."
-    />
+    ></span>
   );
 };
 export { Spinner };

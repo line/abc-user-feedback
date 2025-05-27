@@ -16,7 +16,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
 
 import type { IconNameType } from '@ufb/react';
@@ -36,14 +35,8 @@ import {
   MenuItem,
 } from '@ufb/react';
 
-import {
-  cn,
-  CreatingDialog,
-  Path,
-  useAllChannels,
-  usePermissions,
-} from '@/shared';
-import { useCreateChannelStore } from '@/features/create-channel/create-channel-model';
+import { cn, Path, useAllChannels, usePermissions } from '@/shared';
+import { useRoutingChannelCreation } from '@/entities/channel/lib';
 
 import type { SettingMenu as SettingMenuList } from '../setting-menu.type';
 
@@ -57,10 +50,10 @@ const SettingsMenuList: React.FC<Props> = (props) => {
   const { settingMenuValue, projectId, channelId } = props;
 
   const { t } = useTranslation();
-  const { editingStepIndex, reset, jumpStepByIndex } = useCreateChannelStore();
+  const { isCreatingChannel, openChannelInProgress } =
+    useRoutingChannelCreation(projectId);
 
   const router = useRouter();
-  const overlay = useOverlay();
   const menuValue =
     channelId ? `${settingMenuValue}_${channelId}` : settingMenuValue;
 
@@ -118,31 +111,6 @@ const SettingsMenuList: React.FC<Props> = (props) => {
       disabled: !perms.includes('channel_image_read'),
     },
   ];
-
-  const openChannelInProgress = async () => {
-    if (editingStepIndex !== null) {
-      await new Promise<boolean>((resolve) =>
-        overlay.open(({ close, isOpen }) => (
-          <CreatingDialog
-            isOpen={isOpen}
-            close={close}
-            type="Channel"
-            onRestart={() => {
-              reset();
-              resolve(true);
-            }}
-            onContinue={() => {
-              jumpStepByIndex(editingStepIndex);
-              resolve(true);
-            }}
-          />
-        )),
-      );
-    }
-    await router.push({ pathname: Path.CREATE_CHANNEL, query: { projectId } });
-  };
-
-  const isCreatingChannel = editingStepIndex !== null;
 
   return (
     <Menu

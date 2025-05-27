@@ -14,14 +14,14 @@
  * under the License.
  */
 .tooltip {
-  --tooltip-text: var(--text-neutral-primary);
-  --tooltip-border: var(--border-neutral-tertiary);
   --tooltip-fg: var(--fg-neutral-primary);
+  --tooltip-border: var(--border-neutral-tertiary);
+  --tooltip-bg: var(--bg-neutral-primary);
 
   @apply rounded-8 animate-in fade-in-0 zoom-in-95;
   @apply data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
   @apply data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
-  @apply text-base-normal z-50 flex flex-col overflow-hidden whitespace-pre-wrap border border-[var(--tooltip-border)] bg-[var(--tooltip-fg)] px-3 py-1 text-[var(--tooltip-text)] shadow-md;
+  @apply text-base-normal z-50 flex flex-col overflow-hidden whitespace-pre-wrap border border-[var(--tooltip-border)] bg-[var(--tooltip-bg)] px-3 py-1 text-[var(--tooltip-fg)] shadow-md;
 
   /* default */
   @apply tooltip-text-center;
@@ -32,7 +32,7 @@
 }
 
 .tooltip-arrow {
-  @apply fill-current text-[var(--tooltip-fg)];
+  @apply fill-current text-[var(--tooltip-bg)];
 }
 
 [data-side="top"].tooltip .tooltip-arrow {

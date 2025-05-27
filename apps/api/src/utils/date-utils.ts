@@ -13,17 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { DateTime } from 'luxon';
+
 export default function calculateDaysBetweenDates(
   date1: string,
   date2: string,
 ): number {
-  const startDate = new Date(date1);
-  const endDate = new Date(date2);
+  const startDate = DateTime.fromISO(date1);
+  const endDate = DateTime.fromISO(date2);
 
-  const differenceInMilliseconds = endDate.getTime() - startDate.getTime();
-
-  const millisecondsPerDay = 24 * 60 * 60 * 1000;
-  const differenceInDays = differenceInMilliseconds / millisecondsPerDay;
-
-  return Math.abs(differenceInDays) + 1;
+  return endDate.diff(startDate, 'days').days;
 }
