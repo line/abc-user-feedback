@@ -354,7 +354,7 @@ importers:
         version: 0.5.9(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@t3-oss/env-nextjs':
         specifier: ^0.13.0
-        version: 0.13.5(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.30)
+        version: 0.13.6(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.30)
       '@tanstack/react-query':
         specifier: ^5.45.1
         version: 5.77.2(react@19.1.0)
@@ -402,7 +402,7 @@ importers:
         version: 1.11.13
       framer-motion:
         specifier: ^12.0.0
-        version: 12.14.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 12.15.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       i18next:
         specifier: ^25.2.1
         version: 25.2.1(typescript@5.8.3)
@@ -4325,8 +4325,8 @@ packages:
     resolution: {integrity: sha512-+PmQX0PiAYPMeVYe237LJAYvOMYW1j2rH5YROyS3b4CTVJum34HfRvKvAzozHAQG0TnHNdUfY9nCeUyRAs//cw==}
     engines: {node: '>=14.16'}
 
-  '@t3-oss/env-core@0.13.5':
-    resolution: {integrity: sha512-HfWdt2axe/2FanHaRYV/zprVNqPsiZRlu0qHiIudEOzbhBzWXGxokqNBXU6fn8W8Emj/qJfeHkRCUk7duQacsQ==}
+  '@t3-oss/env-core@0.13.6':
+    resolution: {integrity: sha512-rH7FgcB1YGbv/tvv7mdJAxnNvRkK/gEqdVYBwO1AVvaWOTNuftqskxkEYyhM2O+lkNPJmTq5YBE7H+Unl7CLjg==}
     peerDependencies:
       arktype: ^2.1.0
       typescript: '>=5.0.0'
@@ -4342,8 +4342,8 @@ packages:
       zod:
         optional: true
 
-  '@t3-oss/env-nextjs@0.13.5':
-    resolution: {integrity: sha512-apsKITQbwWUhcinwsVJuzHghED6i9ptgr9r+9xqlINiM6qYMqy8d15/oZDVhuSKhaOq9i4S3z0Ezha2bvPXv9w==}
+  '@t3-oss/env-nextjs@0.13.6':
+    resolution: {integrity: sha512-KcA5U8L+Be4OuR5YxmrBzkeo7WsKkEFJDwcAgYFwcBgxxc3oJBdTB7KPQfVrx7wjtX5aDr2jZ0LG55yEXqQi9A==}
     peerDependencies:
       arktype: ^2.1.0
       typescript: '>=5.0.0'
@@ -6504,8 +6504,8 @@ packages:
   fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
 
-  framer-motion@12.14.0:
-    resolution: {integrity: sha512-P/CLiA+YLc0GL1nB2bgtRBFAbRh0aawU5KPLqnXi6QEZQE2BEwqgIH8qUIT7cMN+4a4nj0iZ2uWTKOrzcYsyGQ==}
+  framer-motion@12.15.0:
+    resolution: {integrity: sha512-XKg/LnKExdLGugZrDILV7jZjI599785lDIJZLxMiiIFidCsy0a4R2ZEf+Izm67zyOuJgQYTHOmodi7igQsw3vg==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -7867,8 +7867,8 @@ packages:
   mockdate@3.0.5:
     resolution: {integrity: sha512-iniQP4rj1FhBdBYS/+eQv7j1tadJ9lJtdzgOpvsOHng/GbcDh2Fhdeq+ZRldrPYdXvCyfFUmFeEwEGXZB5I/AQ==}
 
-  motion-dom@12.14.0:
-    resolution: {integrity: sha512-t5v1QNXrOsLmIzTdmB9OlZ1cA8zkHlpPhn85123/B+8Xe6tiENWKELAZm0yvAoFjcbFmq4u80uUXortZTTvDbg==}
+  motion-dom@12.15.0:
+    resolution: {integrity: sha512-D2ldJgor+2vdcrDtKJw48k3OddXiZN1dDLLWrS8kiHzQdYVruh0IoTwbJBslrnTXIPgFED7PBN2Zbwl7rNqnhA==}
 
   motion-utils@12.12.1:
     resolution: {integrity: sha512-f9qiqUHm7hWSLlNW8gS9pisnsN7CRFRD58vNjptKdsqFLpkVnX00TNeD6Q0d27V9KzT7ySFyK1TZ/DShfVOv6w==}
@@ -14423,15 +14423,15 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@t3-oss/env-core@0.13.5(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.30)':
+  '@t3-oss/env-core@0.13.6(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.30)':
     optionalDependencies:
       arktype: 2.1.20
       typescript: 5.8.3
       zod: 3.25.30
 
-  '@t3-oss/env-nextjs@0.13.5(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.30)':
+  '@t3-oss/env-nextjs@0.13.6(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.30)':
     dependencies:
-      '@t3-oss/env-core': 0.13.5(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.30)
+      '@t3-oss/env-core': 0.13.6(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.30)
     optionalDependencies:
       arktype: 2.1.20
       typescript: 5.8.3
@@ -17064,9 +17064,9 @@ snapshots:
 
   fraction.js@4.3.7: {}
 
-  framer-motion@12.14.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  framer-motion@12.15.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
-      motion-dom: 12.14.0
+      motion-dom: 12.15.0
       motion-utils: 12.12.1
       tslib: 2.8.1
     optionalDependencies:
@@ -18876,7 +18876,7 @@ snapshots:
 
   mockdate@3.0.5: {}
 
-  motion-dom@12.14.0:
+  motion-dom@12.15.0:
     dependencies:
       motion-utils: 12.12.1
 
