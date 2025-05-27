@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
+import type { AxiosInstance } from 'axios';
 
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 
@@ -21,6 +22,26 @@ interface AIClientConfig {
   apiKey: string;
   provider: AIProvidersEnum;
   baseUrl: string;
+}
+
+interface Model {
+  id: string;
+  name?: string;
+  model?: string;
+}
+
+interface ModelListResponse {
+  data: {
+    data: Model[];
+    models: Model[];
+  };
+}
+
+interface ExecutePromptResponse {
+  data: {
+    choices: { message: { content: string } }[];
+    candidates: { content: { parts: { text: string }[] } }[];
+  };
 }
 
 export class AIClient {
@@ -43,7 +64,7 @@ export class AIClient {
         Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
       };
-    } else if (this.provider === AIProvidersEnum.GEMINI) {
+    } else {
       baseURL = 'https://generativelanguage.googleapis.com/v1beta';
     }
     baseURL = this.baseUrl || baseURL;
@@ -54,22 +75,22 @@ export class AIClient {
     });
   }
 
-  async getModelList() {
+  async getModelList(): Promise<{ id: string }[]> {
     try {
       const endpoint = '/models';
-      let response;
+      let response: ModelListResponse;
 
       if (this.provider === AIProvidersEnum.OPEN_AI) {
         response = await this.axiosInstance.get(endpoint);
-        return response.data.data.map((model: any) => ({
+        return response.data.data.map((model: Model) => ({
           id: model.id,
-        }));
-      } else if (this.provider === AIProvidersEnum.GEMINI) {
+        })) as { id: string }[];
+      } else {
         response = await this.axiosInstance.get(endpoint, {
           params: { key: this.apiKey },
         });
-        return response.data.models.map((model: any) => ({
-          id: model.name,
+        return response.data.models.map((model: Model) => ({
+          id: model.name ?? '',
         }));
       }
     } catch (error) {
@@ -86,7 +107,7 @@ export class AIClient {
     promptTargetText: string,
   ) {
     try {
-      let response;
+      let response: ExecutePromptResponse;
 
       if (this.provider === AIProvidersEnum.OPEN_AI) {
         response = await this.axiosInstance.post('/chat/completions', {
@@ -103,7 +124,7 @@ export class AIClient {
           ],
         });
         return response.data.choices[0].message.content;
-      } else if (this.provider === AIProvidersEnum.GEMINI) {
+      } else {
         response = await this.axiosInstance.post(
           `/models/${model}:generateContent`,
           {

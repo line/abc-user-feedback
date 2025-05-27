@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -60,7 +60,7 @@ export class AIListener {
           field.aiFieldTargetIds?.includes(f.id),
         );
 
-        this.aiService.executePrompt(feedback, field, targetFields);
+        void this.aiService.executePrompt(feedback, field, targetFields);
       }
     });
   }

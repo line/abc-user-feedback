@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddAiFieldType1747717939594 implements MigrationInterface {
   name = 'AddAiFieldType1747717939594';

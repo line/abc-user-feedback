@@ -14,13 +14,7 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import { IsEnum, IsNumber, IsString, MaxLength } from 'class-validator';
 
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 

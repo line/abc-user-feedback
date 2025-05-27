@@ -18,8 +18,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
 
-import { IsNullable } from '@/domains/admin/user/decorators';
-
 export class GetAIIntegrationResponseDto {
   @ApiProperty()
   @IsNumber()
