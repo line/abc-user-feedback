@@ -139,26 +139,16 @@ const AsyncMultiSelectSearchInput: React.FC<Props> = (props) => {
                   </span>
                 }
               >
-                {currentOptions.map((option) => {
-                  const isChecked = value.some((v) => v.value === option.value);
-                  return (
-                    <ComboboxSelectItem
-                      key={option.value}
-                      value={option.value}
-                      checked={isChecked}
-                      keywords={[option.label]}
-                      onSelect={() => {
-                        onChange(
-                          isChecked ?
-                            value.filter((v) => v.value !== option.value)
-                          : [...value, option],
-                        );
-                      }}
-                    >
-                      {option.label}
-                    </ComboboxSelectItem>
-                  );
-                })}
+                {currentOptions.map((option) => (
+                  <ComboboxSelectItem
+                    key={option.value}
+                    value={option.value}
+                    keywords={[option.label]}
+                    onSelect={() => onChange([...value, option])}
+                  >
+                    {option.label}
+                  </ComboboxSelectItem>
+                ))}
               </ComboboxGroup>
             )}
             <InfiniteScrollArea

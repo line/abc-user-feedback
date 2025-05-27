@@ -20,15 +20,16 @@ export const commandFilter = (
 ) => {
   value = value.toLocaleLowerCase();
   search = search.toLocaleLowerCase();
+  const normalizedKeywords = keywords?.map((k) => k.toLocaleLowerCase());
   return (
     (
       value.startsWith(search) ||
-        keywords?.some((keyword) => keyword.startsWith(search))
+        normalizedKeywords?.some((keyword) => keyword.startsWith(search))
     ) ?
       1
     : (
       value.includes(search) ||
-      keywords?.some((keyword) => keyword.includes(search))
+      normalizedKeywords?.some((keyword) => keyword.includes(search))
     ) ?
       0.5
     : 0

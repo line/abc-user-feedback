@@ -83,11 +83,13 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
           className="scrollbar-hide overflow-auto font-normal"
         >
           {currentValues.length > 0 ?
-            currentValues.map((v) => (
-              <Tag key={v.value} variant="outline" size="small">
-                {v.label}
-              </Tag>
-            ))
+            currentValues
+              .sort((a, b) => a.value.localeCompare(b.value))
+              .map((v) => (
+                <Tag key={v.value} variant="outline" size="small">
+                  {v.label}
+                </Tag>
+              ))
           : t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
@@ -137,20 +139,14 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
                 {options
                   .filter((option) => !value?.some((v) => v === option.value))
                   .map((option) => {
-                    const isChecked = value?.some((v) => v === option.value);
                     return (
                       <ComboboxSelectItem
                         key={option.value}
                         value={option.value}
-                        checked={isChecked}
                         keywords={[option.label]}
-                        onSelect={() => {
-                          onChange?.(
-                            isChecked ?
-                              (value?.filter((v) => v !== option.value) ?? [])
-                            : [...(value ?? []), option.value],
-                          );
-                        }}
+                        onSelect={() =>
+                          onChange?.([...(value ?? []), option.value])
+                        }
                       >
                         {option.label}
                       </ComboboxSelectItem>
