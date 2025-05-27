@@ -18,6 +18,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
+import { FeedbackModule } from '../../feedback/feedback.module';
 import { AIIntegrationsEntity } from './ai-integrations.entity';
 import { AITemplatesEntity } from './ai-templates.entity';
 import { AIController } from './ai.controller';
@@ -32,6 +33,7 @@ import { AIService } from './ai.service';
       FeedbackEntity,
       FieldEntity,
     ]),
+    FeedbackModule,
   ],
   providers: [AIService, AIListener],
   controllers: [AIController],

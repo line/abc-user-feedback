@@ -14,12 +14,15 @@
  * under the License.
  */
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
+import { FeedbackMySQLService } from '../../feedback/feedback.mysql.service';
+import { FeedbackOSService } from '../../feedback/feedback.os.service';
 import { AIIntegrationsEntity } from './ai-integrations.entity';
 import { AITemplatesEntity } from './ai-templates.entity';
 import { AIClient } from './ai.client';
@@ -32,14 +35,15 @@ export class AIService {
   private logger = new Logger(AIService.name);
 
   constructor(
+    private readonly feedbackMySQLService: FeedbackMySQLService,
+    private readonly feedbackOSService: FeedbackOSService,
+    private readonly configService: ConfigService,
+
     @InjectRepository(AIIntegrationsEntity)
     private readonly aiIntegrationsRepo: Repository<AIIntegrationsEntity>,
 
     @InjectRepository(AITemplatesEntity)
     private readonly aiTemplatesRepo: Repository<AITemplatesEntity>,
-
-    @InjectRepository(FeedbackEntity)
-    private readonly feedbackRepo: Repository<FeedbackEntity>,
   ) {}
 
   async getOrCreateIntegration(projectId: number) {
@@ -287,6 +291,17 @@ export class AIService {
     this.logger.log(`Result: ${result}`);
     feedback.data[aiField.key] = result;
 
-    await this.feedbackRepo.save(feedback);
+    await this.feedbackMySQLService.updateFeedback({
+      feedbackId: feedback.id,
+      data: feedback.data,
+    });
+
+    if (this.configService.get('opensearch.use')) {
+      await this.feedbackOSService.upsertFeedbackItem({
+        feedbackId: feedback.id,
+        data: feedback.data,
+        channelId: feedback.channel.id,
+      });
+    }
   }
 }
