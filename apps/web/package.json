@@ -6,7 +6,7 @@
   "scripts": {
     "build": "next build",
     "clean": "git clean -xdf .next .turbo node_modules coverage .swc .cache",
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "format": "prettier --check . --ignore-path ../../.gitignore --ignore-path .prettierignore",
     "format:fix": "prettier --write --list-different \"./src/**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
     "generate-api-type": "openapi-typescript http://0.0.0.0:4000/admin-docs-json --output src/shared/types/api.type.ts --default-non-nullable=false --empty-objects-unknown",

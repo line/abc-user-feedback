@@ -93,6 +93,7 @@ const Select = ({
   );
 
   const handleSingleValueChange = (value: string) => {
+    if (value === '') return;
     setSingleValue(value);
     onValueChange?.(value);
   };
@@ -105,7 +106,7 @@ const Select = ({
   React.useEffect(() => {
     if (singleValue === value) return;
     setSingleValue(value);
-  }, [value, singleValue]);
+  }, [value]);
 
   React.useEffect(() => {
     if (
@@ -114,7 +115,8 @@ const Select = ({
     )
       return;
     setMultipleValues(values);
-  }, [values, multipleValues]);
+  }, [values]);
+
   return (
     <SelectContext.Provider
       value={{
