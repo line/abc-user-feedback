@@ -20,6 +20,7 @@ import {
   Select,
   SelectCaption,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectLabel,
   SelectTrigger,
@@ -90,11 +91,13 @@ const SelectInput: React.FC<Props> = (props) => {
         )}
       </SelectTrigger>
       <SelectContent>
-        {options.map(({ label, value, icon }) => (
-          <SelectItem key={value} value={value} icon={icon}>
-            {label}
-          </SelectItem>
-        ))}
+        <SelectGroup>
+          {options.map(({ label, value, icon }) => (
+            <SelectItem key={value} value={value} icon={icon}>
+              {label}
+            </SelectItem>
+          ))}
+        </SelectGroup>
       </SelectContent>
       {error && <SelectCaption variant="error">{error}</SelectCaption>}
     </Select>

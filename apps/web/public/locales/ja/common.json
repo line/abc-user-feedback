@@ -123,7 +123,6 @@
       "today": "今日",
       "yesterday": "昨日",
       "before-days": "{{day, number}}日",
-      "before-years": "{{year, number}}年",
       "entire-period": "全期間",
       "last-days": "過去{{day, number}}日",
       "date-range-over-max-days": "照会期間は最大{{maxDays}}日まで入力可能です。"
@@ -190,11 +189,11 @@
     },
     "issue-status-count": {
       "title": "イシュー現況",
-      "description": "全体イシューの現況を示します。"
+      "description": "すべての課題の状況を表示します。(全期間)"
     },
     "issue-rank": {
       "title": "上位イシュー",
-      "description": "フィードバック数が多い上位イシューを表示します。"
+      "description": "フィードバック数が多い上位イシューを表示します。(全期間)"
     },
     "issue-comparison": {
       "title": "イシュー比較",
@@ -347,7 +346,7 @@
         "webhook": "登録されたWebhookがありません。",
         "feedback": "登録されたFeedbackありません。",
         "empty": "まだデータはありません。",
-        "filter": "何の成果もありません。 クエリーまたはフィルタ条件を変更してみます。"
+        "filter": "何の成果もありません。\nクエリーまたはフィルタ条件を変更してみます。"
       },
       "required-step": "これは必須入力ステップです。必要な情報を入力してください。",
       "optional-step": "これは任意入力ステップです。後で設定メニューで再入力することができます。",

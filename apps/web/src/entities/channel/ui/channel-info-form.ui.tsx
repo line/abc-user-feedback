@@ -33,6 +33,8 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
   const { register, formState, setValue, watch } =
     useFormContext<ChannelInfo>();
 
+  const feedbackSearchMaxDays = watch('feedbackSearchMaxDays');
+
   return (
     <div className="flex flex-col gap-4">
       {type === 'update' && (
@@ -54,9 +56,12 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
         error={formState.errors.description?.message}
       />
       <SelectInput
-        label="Maximum period for feedback search"
-        value={String(watch('feedbackSearchMaxDays'))}
+        label="Maximum feedback search period"
+        value={
+          feedbackSearchMaxDays ? String(feedbackSearchMaxDays) : undefined
+        }
         onChange={(value) => {
+          if (!value) return;
           setValue('feedbackSearchMaxDays', Number(value), {
             shouldDirty: true,
           });
@@ -65,13 +70,11 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
           { value: '30', label: t('text.date.before-days', { day: 30 }) },
           { value: '90', label: t('text.date.before-days', { day: 90 }) },
           { value: '180', label: t('text.date.before-days', { day: 180 }) },
-          { value: '365', label: t('text.date.before-years', { year: 1 }) },
-          { value: '730', label: t('text.date.before-years', { year: 2 }) },
+          { value: '365', label: t('text.date.before-days', { day: 365 }) },
           { value: '-1', label: t('text.date.entire-period') },
         ]}
         disabled={readOnly}
         error={formState.errors.feedbackSearchMaxDays?.message}
-        required
       />
     </div>
   );

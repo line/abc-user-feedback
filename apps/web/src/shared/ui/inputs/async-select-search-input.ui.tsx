@@ -29,24 +29,30 @@ import {
   InputCaption,
   InputField,
   InputLabel,
-  Tag,
 } from '@ufb/react';
 
 import { commandFilter } from '@/shared/utils';
 
+import InfiniteScrollArea from '../infinite-scroll-area.ui';
+
+type Option = { label: string; value: string };
+
 interface Props {
   label?: string;
-  value?: string[];
-  onChange?: (value: string[]) => void;
-  options: { label: string; value: string }[];
+  value?: Option | null;
+  onChange?: (value: Option | null) => void;
+  options: Option[];
   required?: boolean;
   disabled?: boolean;
   error?: string;
   inputValue?: string;
   setInputValue?: (value: string) => void;
+  hasNextPage: boolean;
+  fetchNextPage: () => void;
+  isFetchingNextPage?: boolean;
 }
 
-const MultiSelectSearchInput: React.FC<Props> = (props) => {
+const AsyncSelectSearchInput: React.FC<Props> = (props) => {
   const {
     onChange,
     value,
@@ -55,8 +61,11 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
     required,
     disabled = false,
     error,
+    fetchNextPage,
+    hasNextPage,
     inputValue,
     setInputValue,
+    isFetchingNextPage,
   } = props;
 
   const { t } = useTranslation();
@@ -64,10 +73,7 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
 
   const currentOptions = options.filter(
-    (option) => !value?.some((v) => v === option.value),
-  );
-  const currentValues = options.filter((option) =>
-    value?.some((v) => v === option.value),
+    (option) => option.value !== value?.value,
   );
 
   return (
@@ -78,19 +84,8 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
         </InputLabel>
       )}
       <Combobox open={open} onOpenChange={setOpen}>
-        <ComboboxTrigger
-          disabled={disabled}
-          className="scrollbar-hide overflow-auto font-normal"
-        >
-          {currentValues.length > 0 ?
-            currentValues
-              .sort((a, b) => a.value.localeCompare(b.value))
-              .map((v) => (
-                <Tag key={v.value} variant="outline" size="small">
-                  {v.label}
-                </Tag>
-              ))
-          : t('v2.placeholder.select')}
+        <ComboboxTrigger disabled={disabled} className="font-normal">
+          {value?.label ?? t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
         <ComboboxContent align="start" commandProps={{ filter: commandFilter }}>
@@ -101,7 +96,7 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
           />
           <ComboboxList maxHeight="200px">
             <ComboboxEmpty>No results found.</ComboboxEmpty>
-            {currentValues.length > 0 && (
+            {value && (
               <ComboboxGroup
                 heading={
                   <span className="text-neutral-tertiary text-base-normal">
@@ -109,23 +104,14 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
                   </span>
                 }
               >
-                {currentValues.map((currentValue) => (
-                  <ComboboxSelectItem
-                    key={currentValue.value}
-                    value={currentValue.value}
-                    keywords={[currentValue.label]}
-                    onSelect={(input) => {
-                      onChange?.(
-                        currentValues
-                          .filter((v) => v.value !== input)
-                          .map((v) => v.value),
-                      );
-                    }}
-                    checked
-                  >
-                    {currentValue.label}
-                  </ComboboxSelectItem>
-                ))}
+                <ComboboxSelectItem
+                  value={value.value}
+                  keywords={[value.label]}
+                  onSelect={() => onChange?.(null)}
+                  checked
+                >
+                  {value.label}
+                </ComboboxSelectItem>
               </ComboboxGroup>
             )}
             {currentOptions.length > 0 && (
@@ -136,24 +122,26 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
                   </span>
                 }
               >
-                {options
-                  .filter((option) => !value?.some((v) => v === option.value))
-                  .map((option) => {
-                    return (
-                      <ComboboxSelectItem
-                        key={option.value}
-                        value={option.value}
-                        keywords={[option.label]}
-                        onSelect={() =>
-                          onChange?.([...(value ?? []), option.value])
-                        }
-                      >
-                        {option.label}
-                      </ComboboxSelectItem>
-                    );
-                  })}
+                {currentOptions.map((option) => (
+                  <ComboboxSelectItem
+                    key={option.value}
+                    value={option.value}
+                    keywords={[option.label]}
+                    checked={option.value === value?.value}
+                    onSelect={(input) =>
+                      onChange?.(input === value?.value ? null : option)
+                    }
+                  >
+                    {option.label}
+                  </ComboboxSelectItem>
+                ))}
               </ComboboxGroup>
             )}
+            <InfiniteScrollArea
+              hasNextPage={hasNextPage}
+              fetchNextPage={fetchNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+            />
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
@@ -162,4 +150,4 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
   );
 };
 
-export default MultiSelectSearchInput;
+export default AsyncSelectSearchInput;
