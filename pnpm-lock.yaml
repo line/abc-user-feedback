@@ -320,7 +320,7 @@ importers:
   apps/e2e:
     devDependencies:
       '@playwright/test':
-        specifier: ^1.43.1
+        specifier: ^1.52.0
         version: 1.52.0
       axios:
         specifier: ^1.7.2
