@@ -477,7 +477,7 @@ importers:
         specifier: ^7.27.3
         version: 7.27.3
       '@rollup/plugin-commonjs':
-        specifier: ^28.0.0
+        specifier: ^28.0.3
         version: 28.0.3(rollup@4.34.8)
       '@svgr/webpack':
         specifier: ^8.1.0
