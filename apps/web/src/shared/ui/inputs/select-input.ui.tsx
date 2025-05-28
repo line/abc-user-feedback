@@ -15,8 +15,6 @@
  */
 import type { IconNameType, Size } from '@ufb/react';
 import {
-  Button,
-  Icon,
   Select,
   SelectCaption,
   SelectContent,
@@ -40,7 +38,6 @@ interface Props {
   type?: 'single' | 'multiple';
   error?: string;
   size?: Size;
-  clearable?: boolean;
 }
 
 const SelectInput: React.FC<Props> = (props) => {
@@ -57,7 +54,6 @@ const SelectInput: React.FC<Props> = (props) => {
     type = 'single',
     error,
     size,
-    clearable = false,
   } = props;
 
   return (
@@ -77,18 +73,6 @@ const SelectInput: React.FC<Props> = (props) => {
       )}
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
-        {clearable && (!!value || (!!values && values.length > 0)) && (
-          <Button variant="ghost" onClick={(e) => e.stopPropagation()}>
-            <Icon
-              name="RiCloseCircleFill"
-              className="z-20"
-              onClick={() => {
-                onChange?.(undefined);
-                onValuesChange?.([]);
-              }}
-            />
-          </Button>
-        )}
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
