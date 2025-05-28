@@ -22,7 +22,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import type { TFunction } from 'i18next';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -34,7 +33,7 @@ import {
   Icon,
 } from '@ufb/react';
 
-import { DescriptionTooltip, ISSUES, Path } from '@/shared';
+import { ISSUES, Path } from '@/shared';
 import { DashboardTable } from '@/shared/ui';
 import type { IssueStatus } from '@/entities/issue';
 import { IssueBadge, useIssueSearch } from '@/entities/issue';
@@ -48,7 +47,7 @@ interface IssueTableData {
 }
 
 const columnHelper = createColumnHelper<IssueTableData>();
-const getColumns = (t: TFunction) => [
+const columns = [
   columnHelper.accessor('no', {
     header: 'No',
     enableSorting: false,
@@ -86,22 +85,17 @@ const getColumns = (t: TFunction) => [
       );
     },
   }),
-  columnHelper.accessor('count', {
-    header: () => (
-      <div className="flex items-center">
-        <p>Count</p>
-        <DescriptionTooltip description={t('tooltip.issue-feedback-count')} />
-      </div>
-    ),
-    cell: ({ getValue }) => <p>{getValue().toLocaleString()}</p>,
-    enableSorting: false,
-  }),
   columnHelper.accessor('status', {
     header: 'Status',
     enableSorting: false,
     cell({ getValue }) {
       return <IssueBadge status={getValue()} />;
     },
+  }),
+  columnHelper.accessor('count', {
+    header: 'Feedback Count',
+    cell: ({ getValue }) => <p>{getValue().toLocaleString()}</p>,
+    enableSorting: true,
   }),
 ];
 interface IProps {
@@ -110,10 +104,10 @@ interface IProps {
   to: Date;
 }
 const limitOptions = [
-  { label: '5', value: '5' },
-  { label: '10', value: '10' },
-  { label: '15', value: '15' },
-  { label: '20', value: '20' },
+  { label: 'Top 5', value: '5' },
+  { label: 'Top 10', value: '10' },
+  { label: 'Top 15', value: '15' },
+  { label: 'Top 20', value: '20' },
 ];
 
 const IssueRank: React.FC<IProps> = ({ projectId }) => {
@@ -146,12 +140,10 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
       })) ?? [],
     [data, t],
   );
-  const columns = useMemo(() => getColumns(t), [t]);
 
   const table = useReactTable({
     columns,
     data: newData,
-    enableSorting: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });

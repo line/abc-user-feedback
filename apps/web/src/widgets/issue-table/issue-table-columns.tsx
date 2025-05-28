@@ -21,7 +21,7 @@ import type { TFunction } from 'next-i18next';
 import { Tag } from '@ufb/react';
 
 import { DATE_TIME_FORMAT, ExpandableText, ISSUES } from '@/shared';
-import CategoryCombobox from '@/shared/ui/category-combobox.ui';
+import { CategoryCombobox } from '@/entities/category';
 import type { Issue } from '@/entities/issue';
 import { IssueBadge } from '@/entities/issue';
 

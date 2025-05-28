@@ -15,6 +15,7 @@
  */
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsNumber,
   IsObject,
   IsOptional,
   IsString,
@@ -43,4 +44,8 @@ export class UpdateChannelRequestDto {
   @IsNullable()
   @IsObject()
   imageConfig: ImageConfigRequestDto | null;
+
+  @ApiProperty()
+  @IsNumber()
+  feedbackSearchMaxDays: number;
 }

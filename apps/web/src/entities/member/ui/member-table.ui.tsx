@@ -18,7 +18,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useTranslation } from 'next-i18next';
 
 import type { EntityTable } from '@/shared';
 import { BasicTable } from '@/shared';
@@ -31,8 +30,6 @@ interface IProps extends EntityTable<MemberInfo> {}
 const MemberTable: React.FC<IProps> = (props) => {
   const { isLoading, createButton, data, onClickRow } = props;
 
-  const { t } = useTranslation();
-
   const table = useReactTable({
     columns: memberColumns,
     data,
@@ -44,7 +41,6 @@ const MemberTable: React.FC<IProps> = (props) => {
     <BasicTable
       table={table}
       isLoading={isLoading}
-      emptyCaption={t('v2.text.no-data.member')}
       createButton={createButton}
       onClickRow={onClickRow}
     />

@@ -13,118 +13,118 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { VariantProps } from "class-variance-authority";
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import { Slot } from '@radix-ui/react-slot';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
-import type { Color, Radius } from "../lib/types";
-import { cn } from "../lib/utils";
-import useTheme from "./use-theme";
+import type { Color, Radius } from '../lib/types';
+import { cn } from '../lib/utils';
+import useTheme from './use-theme';
 
-type BadgeVariant = "bold" | "subtle" | "outline";
+type BadgeVariant = 'bold' | 'subtle' | 'outline';
 
-const badgeVariants = cva("badge", {
+const badgeVariants = cva('badge', {
   variants: {
     radius: {
-      large: "badge-radius-large",
-      medium: "badge-radius-medium",
-      small: "badge-radius-small",
+      large: 'badge-radius-large',
+      medium: 'badge-radius-medium',
+      small: 'badge-radius-small',
     },
     variant: {
-      bold: "",
-      subtle: "",
-      outline: "",
+      bold: '',
+      subtle: '',
+      outline: '',
     },
     color: {
-      default: "",
-      blue: "",
-      orange: "",
-      red: "",
-      green: "",
+      default: '',
+      blue: '',
+      orange: '',
+      red: '',
+      green: '',
     },
   },
   compoundVariants: [
     {
-      variant: "bold",
-      color: "default",
-      className: "badge-bold-default",
+      variant: 'bold',
+      color: 'default',
+      className: 'badge-bold-default',
     },
     {
-      variant: "bold",
-      color: "blue",
-      className: "badge-bold-blue",
+      variant: 'bold',
+      color: 'blue',
+      className: 'badge-bold-blue',
     },
     {
-      variant: "bold",
-      color: "orange",
-      className: "badge-bold-orange",
+      variant: 'bold',
+      color: 'orange',
+      className: 'badge-bold-orange',
     },
     {
-      variant: "bold",
-      color: "red",
-      className: "badge-bold-red",
+      variant: 'bold',
+      color: 'red',
+      className: 'badge-bold-red',
     },
     {
-      variant: "bold",
-      color: "green",
-      className: "badge-bold-green",
+      variant: 'bold',
+      color: 'green',
+      className: 'badge-bold-green',
     },
     {
-      variant: "subtle",
-      color: "default",
-      className: "badge-subtle-default",
+      variant: 'subtle',
+      color: 'default',
+      className: 'badge-subtle-default',
     },
     {
-      variant: "subtle",
-      color: "blue",
-      className: "badge-subtle-blue",
+      variant: 'subtle',
+      color: 'blue',
+      className: 'badge-subtle-blue',
     },
     {
-      variant: "subtle",
-      color: "orange",
-      className: "badge-subtle-orange",
+      variant: 'subtle',
+      color: 'orange',
+      className: 'badge-subtle-orange',
     },
     {
-      variant: "subtle",
-      color: "red",
-      className: "badge-subtle-red",
+      variant: 'subtle',
+      color: 'red',
+      className: 'badge-subtle-red',
     },
     {
-      variant: "subtle",
-      color: "green",
-      className: "badge-subtle-green",
+      variant: 'subtle',
+      color: 'green',
+      className: 'badge-subtle-green',
     },
     {
-      variant: "outline",
-      color: "default",
-      className: "badge-outline-default",
+      variant: 'outline',
+      color: 'default',
+      className: 'badge-outline-default',
     },
     {
-      variant: "outline",
-      color: "blue",
-      className: "badge-outline-blue",
+      variant: 'outline',
+      color: 'blue',
+      className: 'badge-outline-blue',
     },
     {
-      variant: "outline",
-      color: "orange",
-      className: "badge-outline-orange",
+      variant: 'outline',
+      color: 'orange',
+      className: 'badge-outline-orange',
     },
     {
-      variant: "outline",
-      color: "red",
-      className: "badge-outline-red",
+      variant: 'outline',
+      color: 'red',
+      className: 'badge-outline-red',
     },
     {
-      variant: "outline",
-      color: "green",
-      className: "badge-outline-green",
+      variant: 'outline',
+      color: 'green',
+      className: 'badge-outline-green',
     },
   ],
   defaultVariants: {
     radius: undefined,
-    variant: "bold",
-    color: "default",
+    variant: 'bold',
+    color: 'default',
   },
 });
 
@@ -141,8 +141,8 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
   (
     {
       radius,
-      variant = "bold",
-      color = "default",
+      variant = 'bold',
+      color = 'default',
       className,
       asChild,
       ...props
@@ -150,7 +150,7 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
     ref,
   ) => {
     const { themeRadius } = useTheme();
-    const Comp = asChild ? Slot : "div";
+    const Comp = asChild ? Slot : 'div';
 
     return (
       <Comp
@@ -165,6 +165,6 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
   },
 );
 
-Badge.displayName = "Badge";
+Badge.displayName = 'Badge';
 
 export { Badge, type BadgeProps };

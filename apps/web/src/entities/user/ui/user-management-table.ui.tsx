@@ -17,7 +17,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import {
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -40,6 +39,7 @@ import {
 
 import { useUserSearch } from '../lib';
 import { getUserColumns } from '../user-columns';
+import { useUserStore } from '../user.model';
 import type { UpdateUser, UserMember } from '../user.type';
 import UpdateUserDialog from './update-user-dialog.ui';
 
@@ -50,6 +50,7 @@ interface IProps {
 const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   const { t } = useTranslation();
   const overlay = useOverlay();
+  const { user } = useUserStore();
 
   const [rows, setRows] = useState<UserMember[]>([]);
 
@@ -78,16 +79,15 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     data: rows,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => String(row.id),
-    enableColumnFilters: true,
     initialState: {
       sorting: [{ id: 'createdAt', desc: true }],
       pagination: { pageIndex: 0, pageSize: 20 },
     },
     getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     manualPagination: true,
     pageCount,
     rowCount,
+    enableRowSelection: (row) => row.original.email !== user?.email,
   });
 
   const { sorting, pagination, rowSelection } = table.getState();
@@ -181,6 +181,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
           close();
         }}
         onClickDelete={() => deleteUsers({ ids: [data.id] })}
+        disabledDelete={user?.email === data.email}
       />
     ));
   };
@@ -265,6 +266,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
         onClickRow={(_, row) => openUpdateUserDialog(row)}
         isLoading={isLoading}
         createButton={createButton}
+        isFiltered={tableFilters.length > 0}
       />
       <TablePagination table={table} />
     </>

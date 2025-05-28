@@ -907,9 +907,25 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: operations['CategoryController_findAll'];
+    get?: never;
     put?: never;
     post: operations['CategoryController_create'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/categories/search': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['CategoryController_findAll'];
     delete?: never;
     options?: never;
     head?: never;
@@ -1231,9 +1247,13 @@ export interface components {
       permissions: string[];
     };
     QueryV2: {
+      /** @description Feedback IDs that are being requested. */
       ids?: string[];
+      /** @description Indicates the key string of field that are being requested as a condition. For example: "createdAt", "message", "issueIds". */
       key: string;
+      /** @description Indicates the value of field that are being requested as a condition. This can be a type of string, number, TimeRange, or array of string and number. */
       value: unknown;
+      /** @description Condition of the query. */
       condition: components['schemas']['QueryV2ConditionsEnum'];
     };
     FindFeedbacksByChannelIdRequestDtoV2: {
@@ -1247,9 +1267,9 @@ export interface components {
        * @example 1
        */
       page?: number;
-      /** @description You can query by key-value with this object. */
+      /** @description You can query by key-value with this object. Queries are concatenated with 'AND' or 'OR' operator. */
       queries?: components['schemas']['QueryV2'][];
-      /** @description You can query by key-value with this object by default (like createdAt). */
+      /** @description You can query by key-value with this object by default (like createdAt). This condition always applies regardless of the conditions of the queries. */
       defaultQueries?: components['schemas']['QueryV2'][];
       /** @description You can concatenate queries with 'AND' or 'OR' operators. */
       operator?: string;
@@ -1301,9 +1321,9 @@ export interface components {
        * @example 1
        */
       page?: number;
-      /** @description You can query by key-value with this object. */
+      /** @description You can query by key-value with this object. Queries are concatenated with 'AND' or 'OR' operator. */
       queries?: components['schemas']['QueryV2'][];
-      /** @description You can query by key-value with this object by default (like createdAt). */
+      /** @description You can query by key-value with this object by default (like createdAt). This condition always applies regardless of the conditions of the queries. */
       defaultQueries?: components['schemas']['QueryV2'][];
       /** @description You can concatenate queries with 'AND' or 'OR' operators. */
       operator?: string;
@@ -1508,6 +1528,7 @@ export interface components {
       name: string;
       description: string | null;
       imageConfig?: components['schemas']['ImageConfigRequestDto'] | null;
+      feedbackSearchMaxDays: number;
       fields: components['schemas']['CreateChannelRequestFieldDto'][];
     };
     CreateChannelResponseDto: {
@@ -1525,6 +1546,7 @@ export interface components {
       id: number;
       name: string;
       description: string;
+      feedbackSearchMaxDays: number;
       imageConfig: components['schemas']['ImageConfigResponseDto'];
       /** Format: date-time */
       createdAt: string;
@@ -1570,6 +1592,7 @@ export interface components {
       name: string;
       description: string;
       imageConfig: components['schemas']['ImageConfigResponseDto'];
+      feedbackSearchMaxDays: number;
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -1580,6 +1603,7 @@ export interface components {
       name: string;
       description: string | null;
       imageConfig?: components['schemas']['ImageConfigRequestDto'] | null;
+      feedbackSearchMaxDays: number;
     };
     UpdateChannelRequestFieldDto: {
       name: string;
@@ -1866,6 +1890,26 @@ export interface components {
        * @example 1
        */
       id: number;
+    };
+    GetAllCategoriesRequestDto: {
+      /**
+       * @default 10
+       * @example 10
+       */
+      limit?: number;
+      /**
+       * @default 1
+       * @example 1
+       */
+      page?: number;
+      categoryName?: string;
+      /**
+       * @description You can sort category by specific key with sort method values: 'ASC', 'DESC'
+       * @example {
+       *       "name": "ASC"
+       *     }
+       */
+      sort?: Record<string, unknown>;
     };
     GetAllCategoriesDto: {
       id: number;
@@ -3752,31 +3796,6 @@ export interface operations {
       };
     };
   };
-  CategoryController_findAll: {
-    parameters: {
-      query?: {
-        limit?: number;
-        page?: number;
-        categoryName?: string;
-      };
-      header?: never;
-      path: {
-        projectId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['GetAllCategoriesResponseDto'];
-        };
-      };
-    };
-  };
   CategoryController_create: {
     parameters: {
       query?: never;
@@ -3798,6 +3817,31 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['CreateCategoryResponseDto'];
+        };
+      };
+    };
+  };
+  CategoryController_findAll: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['GetAllCategoriesRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['GetAllCategoriesResponseDto'];
         };
       };
     };

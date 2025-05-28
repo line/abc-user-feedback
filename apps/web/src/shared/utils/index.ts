@@ -20,3 +20,4 @@ export * from './display-string';
 export * from './path-parsing';
 export * from './is-object-equal';
 export * from './first-letter-pascal';
+export * from './command-filter';

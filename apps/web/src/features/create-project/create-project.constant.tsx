@@ -53,3 +53,13 @@ export const CREATE_PROJECT_HELP_TEXT: Record<
   members: <Trans i18nKey="help-card.member" />,
   'api-keys': <HelpCardDocs i18nKey="help-card.api-key" />,
 };
+
+export const CREATE_PROJECT_REQUIRED_STEP: Record<
+  CreateProjectStepKey,
+  boolean
+> = {
+  'project-info': true,
+  members: false,
+  roles: false,
+  'api-keys': false,
+};

@@ -108,18 +108,56 @@ export class FeedbackOSService {
     fieldFormats: FieldFormatEnum[],
   ) {
     type FieldFormatCondition = {
-      match_phrase: Record<string, string>;
+      match_phrase?: Record<string, string>;
+      term?: Record<string, string>;
     }[];
+
+    const isDateFormat = (value: string): boolean => {
+      return /^\d{4}-\d{2}-\d{2}$/.test(value);
+    };
+
     return {
       bool: {
         should: fields.reduce(
           (prev: FieldFormatCondition, field: FieldEntity) => {
+            if (
+              field.key === 'id' ||
+              field.key === 'createdAt' ||
+              field.key === 'updatedAt'
+            ) {
+              return prev;
+            }
+
             if (fieldFormats.includes(field.format)) {
-              prev.push({
-                match_phrase: {
-                  [field.key]: query,
-                },
-              });
+              if (
+                field.format === FieldFormatEnum.date &&
+                isDateFormat(query)
+              ) {
+                prev.push({
+                  term: {
+                    [field.key]: query,
+                  },
+                });
+              } else if (field.format === FieldFormatEnum.number) {
+                prev.push({
+                  term: {
+                    [field.key]: query,
+                  },
+                });
+              } else if (
+                [
+                  FieldFormatEnum.text,
+                  FieldFormatEnum.keyword,
+                  FieldFormatEnum.select,
+                  FieldFormatEnum.multiSelect,
+                ].includes(field.format)
+              ) {
+                prev.push({
+                  match_phrase: {
+                    [field.key]: query,
+                  },
+                });
+              }
             }
             return prev;
           },
@@ -158,29 +196,16 @@ export class FeedbackOSService {
               }
 
               if (fieldKey === 'searchText') {
-                if (typeof query[fieldKey] === 'string') {
-                  osQuery.bool.must.push(
-                    this.getMultiFieldQuery(query[fieldKey], fields, [
-                      FieldFormatEnum.text,
-                      FieldFormatEnum.keyword,
-                    ]),
-                  );
-                } else if (typeof query[fieldKey] === 'number') {
-                  osQuery.bool.must.push({
-                    bool: {
-                      should: [
-                        this.getMultiFieldQuery(query[fieldKey], fields, [
-                          FieldFormatEnum.number,
-                        ]),
-                        this.getMultiFieldQuery(
-                          (query[fieldKey] as string).toString(),
-                          fields,
-                          [FieldFormatEnum.text, FieldFormatEnum.keyword],
-                        ),
-                      ],
-                    },
-                  });
-                }
+                osQuery.bool.must.push(
+                  this.getMultiFieldQuery(query[fieldKey] ?? '', fields, [
+                    FieldFormatEnum.text,
+                    FieldFormatEnum.keyword,
+                    FieldFormatEnum.number,
+                    FieldFormatEnum.select,
+                    FieldFormatEnum.multiSelect,
+                    FieldFormatEnum.date,
+                  ]),
+                );
 
                 return osQuery;
               }

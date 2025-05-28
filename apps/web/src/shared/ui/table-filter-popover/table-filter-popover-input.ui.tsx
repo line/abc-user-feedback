@@ -24,7 +24,11 @@ import { cn } from '@/shared/utils';
 import { IssueSelectBox } from '@/entities/issue';
 
 import DateRangePicker from '../date-range-picker';
-import { DatePicker, SelectInput, SelectSearchInput } from '../inputs';
+import {
+  DatePicker,
+  MultiSelectSearchInput,
+  SelectSearchInput,
+} from '../inputs';
 import type {
   TableFilter,
   TableFilterField,
@@ -160,38 +164,24 @@ const TableFilterPopoverInput = (props: Props) => {
         <SelectSearchInput
           options={filterfieid.options.map((option) => ({
             label: option.name,
-            value: option.name,
+            value: option.key,
           }))}
-          onChange={(value) => {
-            onChange(filterfieid.options.find((v) => v.name === value)?.key);
-          }}
-          value={filterfieid.options.find((v) => v.key === value)?.name}
+          onChange={(value) => onChange(value)}
+          value={value as string | undefined | null}
         />
       )}
       {filterfieid.format === 'multiSelect' && (
-        <SelectInput
-          type="multiple"
-          placeholder={t('v2.placeholder.select')}
+        <MultiSelectSearchInput
           options={filterfieid.options.map((option) => ({
             label: option.name,
-            value: option.name,
+            value: option.key,
           }))}
-          onValuesChange={(values) => {
-            onChange(
-              filterfieid.options
-                .filter((v) => values?.includes(v.name))
-                .map((v) => v.key),
-            );
-          }}
-          values={filterfieid.options
-            .filter((v) =>
-              (value as (string | number)[] | undefined)?.includes(v.key),
-            )
-            .map((v) => v.name)}
+          onChange={(values) => onChange(values)}
+          value={(value ?? []) as string[]}
         />
       )}
       {filterfieid.format === 'issue' && (
-        <IssueSelectBox onChange={onChange} value={(value ?? []) as string[]} />
+        <IssueSelectBox onChange={onChange} value={(value ?? []) as number[]} />
       )}
     </>
   );

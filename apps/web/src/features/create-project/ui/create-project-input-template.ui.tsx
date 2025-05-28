@@ -46,6 +46,7 @@ import {
 import { CREATE_PROJECT_MAIN_STEP_LIST } from '../create-project-type';
 import {
   CREATE_PROJECT_HELP_TEXT,
+  CREATE_PROJECT_REQUIRED_STEP,
   CREATE_PROJECT_STEPPER_TEXT,
 } from '../create-project.constant';
 
@@ -177,6 +178,7 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
       helpText={CREATE_PROJECT_HELP_TEXT[currentStep.key]}
       onClickBack={onClickBack}
       scrollable={scrollable}
+      isRequiredStep={CREATE_PROJECT_REQUIRED_STEP[currentStep.key]}
     >
       {children}
     </CreateInputTemplate>

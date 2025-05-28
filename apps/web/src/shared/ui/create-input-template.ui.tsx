@@ -15,7 +15,17 @@
  */
 import { useTranslation } from 'next-i18next';
 
-import { Button, Icon, ScrollArea } from '@ufb/react';
+import {
+  Alert,
+  AlertButton,
+  AlertContent,
+  AlertDescription,
+  AlertTextContainer,
+  AlertTitle,
+  Button,
+  Icon,
+  ScrollArea,
+} from '@ufb/react';
 
 import SettingAlert from './setting-alert.ui';
 
@@ -29,6 +39,7 @@ interface IProps extends React.PropsWithChildren {
   helpText?: React.ReactNode;
   onClickBack?: () => void;
   scrollable?: boolean;
+  isRequiredStep?: boolean;
 
   onNext: () => void;
   onPrev: () => void;
@@ -50,6 +61,7 @@ const CreateInputTemplate: React.FC<IProps> = (props) => {
     helpText,
     onClickBack,
     scrollable = false,
+    isRequiredStep = false,
   } = props;
 
   const { t } = useTranslation();
@@ -57,7 +69,7 @@ const CreateInputTemplate: React.FC<IProps> = (props) => {
   const isLastStep = currentStepIndex === lastStep;
 
   return (
-    <div className="border-neutral-tertiary flex h-[calc(100vh-100px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
+    <div className="border-neutral-tertiary flex h-[calc(100vh-96px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
       <div className="flex items-center justify-between">
         <h3 className="text-title-h3">
           {onClickBack && (
@@ -76,22 +88,42 @@ const CreateInputTemplate: React.FC<IProps> = (props) => {
         <ScrollArea className="h-full">{children}</ScrollArea>
       : <div className="flex h-full flex-col gap-4">{children}</div>}
       {!onClickBack && (
-        <div className="create-template-footer flex justify-end gap-2">
-          {currentStepIndex !== 0 && (
-            <Button variant="outline" onClick={onPrev}>
-              {t('button.previous')}
-            </Button>
-          )}
-          <Button
-            onClick={async () => {
-              if (validate && !(await validate())) return;
-              if (isLastStep) return onComplete();
-              onNext();
-            }}
-            disabled={disableNextBtn}
-          >
-            {isLastStep ? t('button.complete') : t('button.next')}
-          </Button>
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+          <Alert className="w-[calc(100vw-32px)] max-w-[700px] shadow-md">
+            <AlertContent>
+              <AlertTextContainer>
+                <AlertTitle>
+                  {`Step ${currentStepIndex + 1} -`} {title}
+                </AlertTitle>
+                <AlertDescription>
+                  {isRequiredStep ?
+                    t('v2.text.required-step')
+                  : t('v2.text.optional-step')}
+                </AlertDescription>
+              </AlertTextContainer>
+              {currentStepIndex !== 0 && (
+                <AlertButton
+                  variant="outline"
+                  onClick={onPrev}
+                  className="min-w-[120px]"
+                >
+                  {t('button.previous')}
+                </AlertButton>
+              )}
+              <AlertButton
+                variant="primary"
+                onClick={async () => {
+                  if (validate && !(await validate())) return;
+                  if (isLastStep) return onComplete();
+                  onNext();
+                }}
+                disabled={disableNextBtn}
+                className="min-w-[120px]"
+              >
+                {isLastStep ? t('button.complete') : t('button.next')}
+              </AlertButton>
+            </AlertContent>
+          </Alert>
         </div>
       )}
     </div>

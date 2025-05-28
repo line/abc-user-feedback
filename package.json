@@ -1,9 +1,14 @@
 {
   "name": "abc-user-feedback",
   "private": true,
+  "packageManager": "pnpm@10.11.0",
+  "engines": {
+    "node": ">=22.11.0",
+    "pnpm": "^10.0.0"
+  },
   "scripts": {
     "build": "turbo run build",
-    "clean": "git clean -xdf node_modules",
+    "clean": "git clean -xdf node_modules .turbo",
     "clean:workspaces": "turbo run clean",
     "dev": "turbo watch dev --continue",
     "dev:api": "turbo watch dev -F api...",
@@ -25,9 +30,19 @@
     "turbo": "^2.3.4",
     "typescript": "catalog:"
   },
-  "packageManager": "pnpm@9.15.9",
-  "engines": {
-    "node": ">=22.11.0",
-    "pnpm": "^9.15.4"
+  "prettier": "@ufb/prettier-config",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@scarf/scarf",
+      "@swc/core",
+      "bcrypt",
+      "core-js",
+      "core-js-pure",
+      "deasync",
+      "esbuild",
+      "nestjs-pino",
+      "sharp"
+    ]
   }
 }

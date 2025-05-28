@@ -34,6 +34,10 @@ class FindChannelsByProjectDto {
 
   @Expose()
   @ApiProperty()
+  feedbackSearchMaxDays: number;
+
+  @Expose()
+  @ApiProperty()
   imageConfig: ImageConfigResponseDto;
 
   @Expose()

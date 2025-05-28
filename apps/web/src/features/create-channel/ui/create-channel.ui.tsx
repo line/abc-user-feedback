@@ -44,7 +44,7 @@ const CreateChannel: React.FC<IProps> = () => {
           stepTitle={CREATE_CHANNEL_STEPPER_TEXT}
         />
       }
-      leftBottm={
+      leftBottom={
         <div className="flex justify-end">
           <Image
             src={`/assets/images/create-channel-${currentStep.key}.svg`}

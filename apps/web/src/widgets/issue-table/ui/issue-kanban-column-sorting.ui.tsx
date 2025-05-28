@@ -86,7 +86,10 @@ const IssueKanbanColumnSorting = (props: Props) => {
             {t('v2.button.cancel')}
           </Button>
           <Button
-            onClick={() => onSubmit({ key: currentKey, value: currentValue })}
+            onClick={() => {
+              onSubmit({ key: currentKey, value: currentValue });
+              setOpen(false);
+            }}
           >
             {t('v2.button.confirm')}
           </Button>

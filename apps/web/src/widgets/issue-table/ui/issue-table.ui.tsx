@@ -18,7 +18,15 @@ import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
 import { parseAsString, useQueryState } from 'nuqs';
 
-import { Button, Icon, ToggleGroup, ToggleGroupItem } from '@ufb/react';
+import {
+  Button,
+  Icon,
+  ToggleGroup,
+  ToggleGroupItem,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@ufb/react';
 
 import type { TableFilterField } from '@/shared';
 import {
@@ -143,12 +151,18 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           <Icon name="RiAddLine" /> {t('main.feedback.issue-cell.create-issue')}
         </Button>
         <div className="flex gap-2">
-          <DateRangePicker
-            onChange={updateDateRage}
-            value={dateRange}
-            maxDate={new Date()}
-            clearable
-          />
+          <Tooltip>
+            <TooltipTrigger>
+              <DateRangePicker
+                onChange={updateDateRage}
+                value={dateRange}
+                maxDate={new Date()}
+              />
+            </TooltipTrigger>
+            <TooltipContent>
+              {t('tooltip.issue-date-picker-button')}
+            </TooltipContent>
+          </Tooltip>
           <TableFilterPopover
             operator={operator}
             filterFields={filterFields}

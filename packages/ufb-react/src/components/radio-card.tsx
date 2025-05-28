@@ -13,38 +13,38 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { VariantProps } from "class-variance-authority";
-import * as React from "react";
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
-import type { Radius } from "../types";
-import type { IconNameType } from "./icon";
-import { cn } from "../lib/utils";
-import { Icon } from "./icon";
-import useTheme from "./use-theme";
+import { cn } from '../lib/utils';
+import type { Radius } from '../types';
+import type { IconNameType } from './icon';
+import { Icon } from './icon';
+import useTheme from './use-theme';
 
-const radioCardGroupVariants = cva("radio-card-group", {
+const radioCardGroupVariants = cva('radio-card-group', {
   variants: {
     orientation: {
-      horizontal: "radio-card-group-horizontal",
-      vertical: "radio-card-group-vertical",
+      horizontal: 'radio-card-group-horizontal',
+      vertical: 'radio-card-group-vertical',
     },
   },
   defaultVariants: {
-    orientation: "horizontal",
+    orientation: 'horizontal',
   },
 });
 
 const RadioGroupContext = React.createContext<RadioCardGroupProps>({
-  cardType: "vertical",
-  radius: "medium",
+  cardType: 'vertical',
+  radius: 'medium',
 });
 
 type RadioCardGroupProps = React.ComponentPropsWithoutRef<
   typeof RadioGroupPrimitive.Root
 > & {
-  cardType?: "horizontal" | "vertical";
+  cardType?: 'horizontal' | 'vertical';
   radius?: Radius;
 };
 
@@ -54,9 +54,9 @@ const RadioCardGroup = React.forwardRef<
 >(
   (
     {
-      orientation = "horizontal",
+      orientation = 'horizontal',
       radius,
-      cardType = "vertical",
+      cardType = 'vertical',
       children,
       className,
       ...props
@@ -81,20 +81,20 @@ const RadioCardGroup = React.forwardRef<
 );
 RadioCardGroup.displayName = RadioGroupPrimitive.Root.displayName;
 
-const radioCardVariants = cva("radio-card", {
+const radioCardVariants = cva('radio-card', {
   variants: {
     type: {
-      vertical: "radio-card-vertical",
-      horizontal: "radio-card-horizontal",
+      vertical: 'radio-card-vertical',
+      horizontal: 'radio-card-horizontal',
     },
     radius: {
-      small: "radio-card-radius-small",
-      medium: "radio-card-radius-medium",
-      large: "radio-card-radius-large",
+      small: 'radio-card-radius-small',
+      medium: 'radio-card-radius-medium',
+      large: 'radio-card-radius-large',
     },
   },
   defaultVariants: {
-    type: "vertical",
+    type: 'vertical',
     radius: undefined,
   },
 });

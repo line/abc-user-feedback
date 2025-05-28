@@ -27,16 +27,24 @@ interface Props {
   onChange: (value: TableFilterCondition) => void;
 }
 
+const ORDER = {
+  CONTAINS: 0,
+  BETWEEN: 1,
+  IS: 2,
+} as const;
+
 const TableFilterPopoverSelectCondition = (props: Props) => {
   const { field, onChange, filter } = props;
 
   return (
     <SelectInput
       value={filter.condition}
-      options={field.matchType.map((type) => ({
-        label: type,
-        value: type,
-      }))}
+      options={field.matchType
+        .sort((a, b) => ORDER[a] - ORDER[b])
+        .map((type) => ({
+          label: type,
+          value: type,
+        }))}
       onChange={(value) => onChange(value as TableFilterCondition)}
     />
   );

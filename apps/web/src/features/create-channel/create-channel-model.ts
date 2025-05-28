@@ -94,7 +94,7 @@ interface Action {
   setEditingStepIndex: (index: number) => void;
 }
 export const CREATE_CHANNEL_DEFAULT_INPUT: Input = {
-  channelInfo: { name: '', description: '' },
+  channelInfo: { name: '', description: '', feedbackSearchMaxDays: 365 },
   fields: DEFAULT_FIELDS,
   fieldPreview: null,
 };
@@ -106,7 +106,7 @@ const DEFAULT_STATE: State = {
     index: 0,
   },
   input: {
-    channelInfo: { name: '', description: '' },
+    channelInfo: { name: '', description: '', feedbackSearchMaxDays: 365 },
     fields: DEFAULT_FIELDS,
     fieldPreview: null,
   },
@@ -163,7 +163,7 @@ export const useCreateChannelStore = create<State & Action>()(
     }),
     {
       name: 'create-channel',
-      version: 2,
+      version: 3,
       migrate: () => DEFAULT_STATE,
     },
   ),

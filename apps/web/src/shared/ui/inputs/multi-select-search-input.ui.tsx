@@ -32,18 +32,16 @@ import {
   Tag,
 } from '@ufb/react';
 
-import InfiniteScrollArea from '../infinite-scroll-area.ui';
+import { commandFilter } from '@/shared/utils';
 
 interface Props {
   label?: string;
-  value: string[] | null;
-  onChange: (value: string[]) => void;
+  value?: string[];
+  onChange?: (value: string[]) => void;
   options: { label: string; value: string }[];
   required?: boolean;
   disabled?: boolean;
   error?: string;
-  fetchNextPage?: () => void;
-  hasNextPage?: boolean;
   inputValue?: string;
   setInputValue?: (value: string) => void;
 }
@@ -57,8 +55,6 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
     required,
     disabled = false,
     error,
-    fetchNextPage,
-    hasNextPage,
     inputValue,
     setInputValue,
   } = props;
@@ -66,6 +62,13 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
+
+  const currentOptions = options.filter(
+    (option) => !value?.some((v) => v === option.value),
+  );
+  const currentValues = options.filter((option) =>
+    value?.some((v) => v === option.value),
+  );
 
   return (
     <InputField>
@@ -75,17 +78,22 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
         </InputLabel>
       )}
       <Combobox open={open} onOpenChange={setOpen}>
-        <ComboboxTrigger disabled={disabled} className="font-normal">
-          {!!value && value.length > 0 ?
-            value.map((v) => (
-              <Tag key={v} variant="outline" size="small">
-                {v}
-              </Tag>
-            ))
+        <ComboboxTrigger
+          disabled={disabled}
+          className="scrollbar-hide overflow-auto font-normal"
+        >
+          {currentValues.length > 0 ?
+            currentValues
+              .sort((a, b) => a.value.localeCompare(b.value))
+              .map((v) => (
+                <Tag key={v.value} variant="outline" size="small">
+                  {v.label}
+                </Tag>
+              ))
           : t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
-        <ComboboxContent align="start">
+        <ComboboxContent align="start" commandProps={{ filter: commandFilter }}>
           <ComboboxInput
             placeholder={t('v2.placeholder.select')}
             value={inputValue}
@@ -93,32 +101,59 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
           />
           <ComboboxList maxHeight="200px">
             <ComboboxEmpty>No results found.</ComboboxEmpty>
-            <ComboboxGroup>
-              {options.map((option) => {
-                const isChecked = value?.some((v) => v === option.value);
-                return (
+            {currentValues.length > 0 && (
+              <ComboboxGroup
+                heading={
+                  <span className="text-neutral-tertiary text-base-normal">
+                    Selected
+                  </span>
+                }
+              >
+                {currentValues.map((currentValue) => (
                   <ComboboxSelectItem
-                    key={option.value}
-                    value={option.value}
-                    checked={isChecked}
-                    onSelect={() => {
-                      onChange(
-                        isChecked ?
-                          (value?.filter((v) => v !== option.value) ?? [])
-                        : [...(value ?? []), option.value],
+                    key={currentValue.value}
+                    value={currentValue.value}
+                    keywords={[currentValue.label]}
+                    onSelect={(input) => {
+                      onChange?.(
+                        currentValues
+                          .filter((v) => v.value !== input)
+                          .map((v) => v.value),
                       );
-                      setOpen(false);
                     }}
+                    checked
                   >
-                    {option.label}
+                    {currentValue.label}
                   </ComboboxSelectItem>
-                );
-              })}
-            </ComboboxGroup>
-            <InfiniteScrollArea
-              hasNextPage={hasNextPage}
-              fetchNextPage={fetchNextPage}
-            />
+                ))}
+              </ComboboxGroup>
+            )}
+            {currentOptions.length > 0 && (
+              <ComboboxGroup
+                heading={
+                  <span className="text-neutral-tertiary text-base-normal">
+                    List
+                  </span>
+                }
+              >
+                {options
+                  .filter((option) => !value?.some((v) => v === option.value))
+                  .map((option) => {
+                    return (
+                      <ComboboxSelectItem
+                        key={option.value}
+                        value={option.value}
+                        keywords={[option.label]}
+                        onSelect={() =>
+                          onChange?.([...(value ?? []), option.value])
+                        }
+                      >
+                        {option.label}
+                      </ComboboxSelectItem>
+                    );
+                  })}
+              </ComboboxGroup>
+            )}
           </ComboboxList>
         </ComboboxContent>
       </Combobox>

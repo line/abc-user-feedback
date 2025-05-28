@@ -88,3 +88,20 @@ export class FindFieldsResponseDto {
     });
   }
 }
+
+export class GetFieldsResponseDto {
+  @ApiProperty({ example: 1 })
+  id: number;
+
+  @ApiProperty({ example: 'fieldName' })
+  name: string;
+
+  @ApiProperty({ example: 'fieldKey' })
+  key: string;
+
+  @ApiProperty({ enum: FieldFormatEnum })
+  format: FieldFormatEnum;
+
+  @ApiProperty({ enum: FieldStatusEnum })
+  status: FieldStatusEnum;
+}

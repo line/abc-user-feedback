@@ -14,12 +14,13 @@
  * under the License.
  */
 
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import { Icon } from '@ufb/react';
 
-import { client } from '../lib';
+import { useCategorySearchInfinite } from '@/entities/category/lib';
+
 import type { SearchQuery } from '../types';
 import CategoryTableRow from './category-table-row.ui';
 import InfiniteScrollArea from './infinite-scroll-area.ui';
@@ -36,42 +37,32 @@ const CategoryTable = (props: Props) => {
   const { t } = useTranslation();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ['/api/admin/projects/{projectId}/categories', projectId],
-      queryFn: async ({ pageParam }) => {
-        const { data } = await client.get({
-          path: '/api/admin/projects/{projectId}/categories',
-          pathParams: { projectId, page: pageParam },
-        });
-        return data;
-      },
-      getNextPageParam: (lastPage) => {
-        if (lastPage.meta.currentPage < lastPage.meta.totalPages) {
-          return lastPage.meta.currentPage + 1;
-        }
-        return undefined;
-      },
-      initialPageParam: 1,
-      initialData: { pageParams: [], pages: [] },
-    });
+    useCategorySearchInfinite(projectId, {});
+
+  const allcategories = useMemo(() => {
+    return data.pages
+      .map((v) => v?.items)
+      .filter((v) => !!v)
+      .flat();
+  }, [data]);
 
   return (
     <div className="flex flex-col gap-3">
-      {[
-        { id: 0, name: t('v2.text.no-category') },
-        ...data.pages.flatMap((v) => v.items),
-      ].map((item) => (
-        <CategoryTableRow
-          key={item.id}
-          category={item}
-          projectId={projectId}
-          queries={queries}
-          operator={operator}
-        />
-      ))}
+      {[{ id: 0, name: t('v2.text.no-category') }, ...allcategories].map(
+        (item) => (
+          <CategoryTableRow
+            key={item.id}
+            category={item}
+            projectId={projectId}
+            queries={queries}
+            operator={operator}
+          />
+        ),
+      )}
       <InfiniteScrollArea
         fetchNextPage={fetchNextPage}
         hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
       />
       {isFetchingNextPage && (
         <div className="flex justify-center">

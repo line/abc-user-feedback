@@ -236,6 +236,7 @@ describe('AppController (e2e)', () => {
       name: faker.string.sample(),
       description: faker.string.sample(),
       fields: Array.from({ length: fieldCount }).map((_) => createFieldDto({})),
+      feedbackSearchMaxDays: faker.number.int({ min: 1, max: 30 }),
       imageConfig: null,
     });
 

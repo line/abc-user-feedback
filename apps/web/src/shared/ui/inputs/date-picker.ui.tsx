@@ -18,6 +18,7 @@ import dayjs from 'dayjs';
 import {
   Button,
   Calendar,
+  Divider,
   Icon,
   InputBox,
   InputField,
@@ -25,6 +26,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   TextInput,
+  TimePicker,
 } from '@ufb/react';
 
 import { cn } from '@/shared/utils';
@@ -33,10 +35,11 @@ interface Props {
   value?: string | null;
   onChange: (value?: string | null) => void;
   disabled?: boolean;
+  mode?: 'date' | 'datetime';
 }
 
 const DatePicker = (props: Props) => {
-  const { value, onChange, disabled } = props;
+  const { value, onChange, disabled, mode = 'date' } = props;
 
   return (
     <Popover>
@@ -51,7 +54,13 @@ const DatePicker = (props: Props) => {
             <TextInput
               placeholder="0000-00-00"
               className={cn('cursor-pointer pl-7', { 'pr-9': !!value })}
-              value={value ? dayjs(value).format('YYYY-MM-DD') : ''}
+              value={
+                value ?
+                  mode === 'date' ?
+                    dayjs(value).format('YYYY-MM-DD')
+                  : dayjs(value).format('YYYY-MM-DD HH:mm')
+                : ''
+              }
               readOnly
               disabled={disabled}
             />
@@ -76,6 +85,20 @@ const DatePicker = (props: Props) => {
           mode="single"
           onSelect={(date) => onChange(dayjs(date).toISOString())}
           selected={dayjs(value).toDate()}
+          footer={
+            mode === 'datetime' && (
+              <div className="border-neutral-transparent border-t-8">
+                <Divider variant="subtle" />
+                <div className="px-2 pt-2">
+                  <TimePicker
+                    date={dayjs(value).toDate()}
+                    onChange={(date) => onChange(dayjs(date).toISOString())}
+                    granularity="minute"
+                  />
+                </div>
+              </div>
+            )
+          }
         />
       </PopoverContent>
     </Popover>

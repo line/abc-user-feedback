@@ -17,7 +17,7 @@
 }
 
 .toast {
-  @apply !absolute;
+  @apply !absolute !left-0;
 }
 
 .toast-close {

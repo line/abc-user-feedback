@@ -34,6 +34,7 @@ import {
 import {
   client,
   cn,
+  commandFilter,
   InfiniteScrollArea,
   useOAIMutation,
   usePermissions,
@@ -90,12 +91,13 @@ const IssueCell: React.FC<IProps> = (props) => {
 
   const {
     data: allIssueData,
-    refetch: allIssuesRefetch,
     fetchNextPage,
     hasNextPage,
+    isFetchingNextPage,
   } = useIssueSearchInfinite(Number(projectId), {
-    limit: 10,
+    limit: 50,
     queries: [{ key: 'name', value: throttledvalue, condition: 'CONTAINS' }],
+    sort: { name: 'ASC' },
   });
 
   const allIssues = useMemo(() => {
@@ -149,7 +151,6 @@ const IssueCell: React.FC<IProps> = (props) => {
     queryOptions: {
       async onSuccess() {
         await refetch();
-        await allIssuesRefetch();
         setInputValue('');
         toast.success(t('v2.toast.success'));
       },
@@ -181,7 +182,7 @@ const IssueCell: React.FC<IProps> = (props) => {
             )}
           </button>
         </ComboboxTrigger>
-        <ComboboxContent>
+        <ComboboxContent commandProps={{ filter: commandFilter }}>
           <ComboboxInput
             onClick={(e) => e.stopPropagation()}
             onValueChange={(value) => setInputValue(value)}
@@ -245,6 +246,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                 <InfiniteScrollArea
                   fetchNextPage={fetchNextPage}
                   hasNextPage={hasNextPage}
+                  isFetchingNextPage={isFetchingNextPage}
                 />
               </ComboboxGroup>
             )}

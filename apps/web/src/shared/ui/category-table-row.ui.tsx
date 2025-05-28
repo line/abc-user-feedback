@@ -133,7 +133,7 @@ const CategoryTableRow = (props: Props) => {
             disableRound
             onClickRow={(_, row) => setOpenIssueId(row.id)}
             isLoading={isLoading}
-            emptyCaption="No issues found"
+            isFiltered={queries.length > 0}
           />
           <div className="border-neutral-tertiary flex h-12 w-full items-center rounded-b border border-t-0 px-4">
             <TablePagination table={table} disableRowSelect disableLimit />

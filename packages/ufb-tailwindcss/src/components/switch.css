@@ -14,21 +14,21 @@
  * under the License.
  */
 .switch {
-  --switch-text-default: var(--text-neutral-primary);
-  --switch-fg-handle: var(--fg-neutral-primary);
-  --switch-fg-disabled: var(--fg-neutral-disabled);
-  --switch-fg-default: var(--fg-neutral-inverse);
-  --switch-fg-blue: var(--fg-tint-blue-bold);
-  --switch-fg-orange: var(--fg-tint-orange-bold);
-  --switch-fg-red: var(--fg-tint-red-bold);
-  --switch-fg-green: var(--fg-tint-green-bold);
+  --switch-fg: var(--fg-neutral-primary);
+  --switch-handle-bg: var(--bg-neutral-primary);
+  --switch-bg: var(--bg-neutral-inverse);
+  --switch-bg-blue: var(--bg-tint-blue-bold);
+  --switch-bg-orange: var(--bg-tint-orange-bold);
+  --switch-bg-red: var(--bg-tint-red-bold);
+  --switch-bg-green: var(--bg-tint-green-bold);
+  --switch-bg-off: var(--bg-neutral-secondary);
 
-  @apply text-base-normal relative inline-flex h-6 cursor-pointer items-center gap-2 text-[var(--switch-text-default)] before:box-content before:flex before:h-5 before:w-10 before:rounded-full before:p-0.5 before:transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=unchecked]:before:bg-[var(--switch-fg-disabled)];
+  @apply text-base-normal relative inline-flex h-6 cursor-pointer items-center gap-2 text-[var(--switch-fg)] before:box-content before:flex before:h-5 before:w-10 before:rounded-full before:p-0.5 before:transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=unchecked]:before:bg-[var(--switch-bg-off)];
 
   /* default */
   @apply switch-default;
 }
 
 .switch-thumb {
-  @apply absolute left-0.5 top-0.5 flex h-5 w-5 translate-x-0 rounded-full bg-[var(--switch-fg-handle)] transition-transform data-[state=checked]:translate-x-full;
+  @apply absolute left-0.5 top-0.5 flex h-5 w-5 translate-x-0 rounded-full bg-[var(--switch-handle-bg)] transition-transform data-[state=checked]:translate-x-full;
 }

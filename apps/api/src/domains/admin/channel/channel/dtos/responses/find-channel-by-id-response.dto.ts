@@ -38,6 +38,10 @@ export class FindChannelByIdResponseDto {
 
   @Expose()
   @ApiProperty()
+  feedbackSearchMaxDays: number;
+
+  @Expose()
+  @ApiProperty()
   createdAt: Date;
 
   @Expose()

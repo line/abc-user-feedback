@@ -111,6 +111,10 @@ export class CreateChannelRequestDto {
   @IsObject()
   imageConfig: ImageConfigRequestDto | null;
 
+  @ApiProperty()
+  @IsNumber()
+  feedbackSearchMaxDays: number;
+
   @ApiProperty({ type: [CreateChannelRequestFieldDto] })
   @Type(() => CreateChannelRequestFieldDto)
   @ValidateNested({ each: true })

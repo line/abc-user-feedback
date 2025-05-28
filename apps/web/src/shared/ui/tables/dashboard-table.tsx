@@ -13,8 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import Image from 'next/image';
 import type { Table } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';
+import { useTranslation } from 'next-i18next';
 
 import { DescriptionTooltip, SelectInput, SortingTableHead } from '@/shared';
 
@@ -32,6 +34,7 @@ interface IProps<T> {
 
 function DashboardTable<T>(props: IProps<T>) {
   const { title, description, table, selectData, filterContent } = props;
+  const { t } = useTranslation();
 
   return (
     <div className="rounded-20 shadow-default border-neutral-tertiary bg-neutral-primary flex h-[462px] flex-col border">
@@ -76,22 +79,42 @@ function DashboardTable<T>(props: IProps<T>) {
             </tr>
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                className="border-neutral-tertiary h-14 border-b"
-                key={row.index}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={`${cell.id} ${cell.row.index}`}
-                    className="border-none px-3"
-                    style={{ width: cell.column.getSize() }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+            {table.getRowModel().rows.length > 0 ?
+              table.getRowModel().rows.map((row) => (
+                <tr
+                  className="border-neutral-tertiary h-14 border-b"
+                  key={row.index}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={`${cell.id} ${cell.row.index}`}
+                      className="border-none px-3"
+                      style={{ width: cell.column.getSize() }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            : <tr>
+                <td colSpan={table.getFlatHeaders().length}>
+                  <div className="my-10 flex flex-col items-center justify-center gap-4 [&>button]:min-w-[120px]">
+                    <Image
+                      width={200}
+                      height={200}
+                      src="/assets/images/empty-image.png"
+                      alt="empty image"
+                    />
+                    <p className="text-small text-neutral-tertiary">
+                      {t('v2.text.no-data.empty')}
+                    </p>
+                  </div>
+                </td>
               </tr>
-            ))}
+            }
           </tbody>
         </table>
       </div>

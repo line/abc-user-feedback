@@ -15,20 +15,23 @@
  */
 import dayjs from 'dayjs';
 import Linkify from 'linkify-react';
-import { useTranslation } from 'next-i18next';
 
 import type { IconNameType } from '@ufb/react';
 import { Badge, Icon, InputField, Tag, Textarea, TextInput } from '@ufb/react';
 
+import { CategoryCombobox } from '@/entities/category';
 import type { Category } from '@/entities/category';
 import IssueCell from '@/entities/feedback/ui/issue-cell';
 
 import { DATE_TIME_FORMAT } from '../constants';
 import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
-import CategoryCombobox from './category-combobox.ui';
 import ImagePreviewButton from './image-preview-button';
-import { DatePicker, SelectInput, SelectSearchInput } from './inputs';
+import {
+  DatePicker,
+  MultiSelectSearchInput,
+  SelectSearchInput,
+} from './inputs';
 
 interface PlainRow {
   format: 'text' | 'keyword' | 'number' | 'date' | 'images';
@@ -94,7 +97,6 @@ type RenderFieldMap<T extends SheetDetailTableRow> = Record<
 
 const SheetDetailTable = (props: Props) => {
   const { rows, data, mode = 'view', onChange } = props;
-  const { t } = useTranslation();
 
   const renderViewModeField: RenderFieldMap<SheetDetailTableRow> = {
     text: (value) =>
@@ -223,39 +225,30 @@ const SheetDetailTable = (props: Props) => {
         value={value as string | undefined | null}
         onChange={(date) => onChange?.(row.key, date ?? null)}
         disabled={row.disabled}
+        mode="datetime"
       />
     ),
     select: (value, row) => {
       return (
         <SelectSearchInput
           options={(row as SelectableRow).options.map((option) => ({
-            value: option.name,
+            value: option.key,
             label: option.name,
           }))}
-          value={
-            (row as SelectableRow).options.find((v) => v.key === value)?.name
-          }
-          onChange={(value) => {
-            onChange?.(
-              row.key,
-              (row as SelectableRow).options.find((v) => v.name === value)
-                ?.key ?? null,
-            );
-          }}
+          value={value as string | null}
+          onChange={(key) => onChange?.(row.key, key ?? null)}
           disabled={row.disabled}
         />
       );
     },
     multiSelect: (value, row) => (
-      <SelectInput
-        type="multiple"
+      <MultiSelectSearchInput
         options={(row as SelectableRow).options.map((option) => ({
           value: option.key,
           label: option.name,
         }))}
-        values={value as string[]}
-        onValuesChange={(value) => onChange?.(row.key, value)}
-        placeholder={t('v2.placeholder.select')}
+        value={value as string[]}
+        onChange={(value) => onChange?.(row.key, value)}
         disabled={row.disabled}
       />
     ),
