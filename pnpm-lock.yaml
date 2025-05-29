@@ -232,7 +232,7 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2
       '@types/jest':
-        specifier: ^29.5.12
+        specifier: ^29.5.14
         version: 29.5.14
       '@types/luxon':
         specifier: ^3.4.2
@@ -498,7 +498,7 @@ importers:
         specifier: ^14.5.2
         version: 14.6.1(@testing-library/dom@10.3.2)
       '@types/jest':
-        specifier: ^29.5.12
+        specifier: ^29.5.14
         version: 29.5.14
       '@types/node':
         specifier: 22.15.23
