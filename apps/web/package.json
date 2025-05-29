@@ -83,7 +83,7 @@
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
-    "autoprefixer": "^10.4.19",
+    "autoprefixer": "^10.4.21",
     "eslint": "catalog:",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
