@@ -90,7 +90,7 @@
     "jest-fixed-jsdom": "^0.0.9",
     "jiti": "1.21.7",
     "next-router-mock": "^1.0.2",
-    "openapi-typescript": "^7.0.0",
+    "openapi-typescript": "^7.8.0",
     "postcss": "^8.4.38",
     "prettier": "catalog:",
     "tailwindcss": "^3.4.3",
