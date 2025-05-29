@@ -229,7 +229,7 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2
       '@types/express':
-        specifier: ^5.0.0
+        specifier: ^5.0.2
         version: 5.0.2
       '@types/jest':
         specifier: ^29.5.12
