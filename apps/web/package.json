@@ -68,7 +68,7 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.27.3",
+    "@babel/core": "^7.27.4",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@svgr/webpack": "^8.1.0",
     "@swc/core": "^1.4.16",
