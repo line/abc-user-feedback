@@ -730,7 +730,7 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1(postcss@8.5.4)
       postcss-nesting:
-        specifier: ^13.0.0
+        specifier: ^13.0.1
         version: 13.0.1(postcss@8.5.4)
       prettier:
         specifier: 'catalog:'
