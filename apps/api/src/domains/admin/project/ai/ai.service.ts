@@ -20,12 +20,14 @@ import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
+import { getCurrentMonth, getCurrentYear } from '@/utils/date-utils';
 import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { FeedbackMySQLService } from '../../feedback/feedback.mysql.service';
 import { FeedbackOSService } from '../../feedback/feedback.os.service';
 import { AIIntegrationsEntity } from './ai-integrations.entity';
 import { AITemplatesEntity } from './ai-templates.entity';
+import { AIUsagesEntity, UsageCategoryEnum } from './ai-usages.entity';
 import { AIClient } from './ai.client';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import { CreateAITemplateDto } from './dtos/create-ai-template.dto';
@@ -45,6 +47,9 @@ export class AIService {
 
     @InjectRepository(AITemplatesEntity)
     private readonly aiTemplatesRepo: Repository<AITemplatesEntity>,
+
+    @InjectRepository(AIUsagesEntity)
+    private readonly aiUsagesRepo: Repository<AIUsagesEntity>,
   ) {}
 
   async validateAPIKey(provider: AIProvidersEnum, apiKey: string) {
@@ -249,8 +254,63 @@ export class AIService {
     return models;
   }
 
+  private async saveAIUsage(
+    usedTokens: number,
+    provider: AIProvidersEnum,
+    category: UsageCategoryEnum,
+    projectId: number,
+  ) {
+    const aiUsage = await this.aiUsagesRepo.findOne({
+      where: {
+        project: {
+          id: projectId,
+        },
+        year: getCurrentYear(),
+        month: getCurrentMonth(),
+        category,
+        provider,
+      },
+    });
+
+    if (aiUsage) {
+      aiUsage.usedTokens += usedTokens;
+      await this.aiUsagesRepo.save(aiUsage);
+      return;
+    }
+
+    const usage = AIUsagesEntity.from({
+      year: getCurrentYear(),
+      month: getCurrentMonth(),
+      category,
+      provider,
+      usedTokens,
+      projectId,
+    });
+    await this.aiUsagesRepo.save(usage);
+  }
+
+  private generatePromptTargetText(
+    feedback: FeedbackEntity,
+    aiTargetFields: FieldEntity[],
+  ): string {
+    return aiTargetFields.reduce((acc, field) => {
+      if (field.key === 'issues') {
+        const issues = feedback.issues
+          .map((issue) => `${issue.name}: ${issue.description}`)
+          .join(', ');
+        return `${acc}\n${field.key}: ${issues}`;
+      }
+      return `${acc}
+        fieldKey: ${field.key}
+        fieldFormat: ${field.format}
+        fieldDesc: ${field.description}
+        fieldValue: ${feedback.data[field.key]}
+        `;
+    }, '');
+  }
+
   @Transactional()
-  async executePrompt(
+  async executeAIFieldPrompt(
     feedback: FeedbackEntity,
     aiField: FieldEntity,
     aiTargetFields: FieldEntity[],
@@ -271,15 +331,10 @@ export class AIService {
       throw new BadRequestException('AI template not found');
     }
 
-    const promptTargetText = aiTargetFields.reduce((acc, field) => {
-      if (field.key === 'issues') {
-        const issues = feedback.issues
-          .map((issue) => `${issue.name}: ${issue.description}`)
-          .join(', ');
-        return `${acc}\n${field.key}: ${issues}`;
-      }
-      return `${acc}\n${field.key}: ${feedback.data[field.key]}`;
-    }, '');
+    const promptTargetText = this.generatePromptTargetText(
+      feedback,
+      aiTargetFields,
+    );
 
     const client = new AIClient({
       apiKey: integration.apiKey,
@@ -304,8 +359,15 @@ export class AIService {
       aiTargetFields.map((field) => field.key).join(', '),
       promptTargetText,
     );
-    this.logger.log(`Result: ${result}`);
-    feedback.data[aiField.key] = result;
+    this.logger.log(`Result: ${result.content}`);
+    feedback.data[aiField.key] = result.content;
+
+    this.saveAIUsage(
+      result.usedTokens,
+      integration.provider,
+      UsageCategoryEnum.AI_FIELD,
+      feedback.channel.project.id,
+    );
 
     await this.feedbackMySQLService.updateFeedback({
       feedbackId: feedback.id,

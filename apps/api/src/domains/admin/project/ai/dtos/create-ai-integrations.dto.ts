@@ -40,6 +40,12 @@ export class CreateAIIntegrationsDto {
   @Expose()
   systemPrompt: string;
 
+  @Expose()
+  tokenThreshold: number;
+
+  @Expose()
+  notificationThreshold: number;
+
   public static from(params: any): CreateAIIntegrationsDto {
     return plainToInstance(CreateAIIntegrationsDto, params, {
       excludeExtraneousValues: true,
@@ -55,6 +61,8 @@ export class CreateAIIntegrationsDto {
       projectId,
       temperature,
       systemPrompt,
+      tokenThreshold,
+      notificationThreshold,
     } = params;
 
     return AIIntegrationsEntity.from({
@@ -65,6 +73,8 @@ export class CreateAIIntegrationsDto {
       temperature,
       systemPrompt,
       projectId,
+      tokenThreshold,
+      notificationThreshold,
     });
   }
 }

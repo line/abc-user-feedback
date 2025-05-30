@@ -21,6 +21,7 @@ import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { FeedbackModule } from '../../feedback/feedback.module';
 import { AIIntegrationsEntity } from './ai-integrations.entity';
 import { AITemplatesEntity } from './ai-templates.entity';
+import { AIUsagesEntity } from './ai-usages.entity';
 import { AIController } from './ai.controller';
 import { AIListener } from './ai.listener';
 import { AIService } from './ai.service';
@@ -30,6 +31,7 @@ import { AIService } from './ai.service';
     TypeOrmModule.forFeature([
       AIIntegrationsEntity,
       AITemplatesEntity,
+      AIUsagesEntity,
       FeedbackEntity,
       FieldEntity,
     ]),

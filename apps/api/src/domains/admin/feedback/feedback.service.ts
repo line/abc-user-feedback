@@ -40,7 +40,7 @@ import {
   FieldStatusEnum,
   IssueStatusEnum,
 } from '@/common/enums';
-import calculateDaysBetweenDates from '@/utils/date-utils';
+import { calculateDaysBetweenDates } from '@/utils/date-utils';
 import { ChannelService } from '../channel/channel/channel.service';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import type { FieldEntity } from '../channel/field/field.entity';

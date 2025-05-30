@@ -60,7 +60,7 @@ export class AIListener {
           field.aiFieldTargetIds?.includes(f.id),
         );
 
-        void this.aiService.executePrompt(feedback, field, targetFields);
+        void this.aiService.executeAIFieldPrompt(feedback, field, targetFields);
       }
     });
   }

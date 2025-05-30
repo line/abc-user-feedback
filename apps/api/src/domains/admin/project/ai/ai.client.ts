@@ -41,7 +41,16 @@ interface ExecutePromptResponse {
   data: {
     choices: { message: { content: string } }[];
     candidates: { content: { parts: { text: string }[] } }[];
+    usage: { total_tokens: number };
+    usageMetadata: {
+      totalTokenCount: number;
+    };
   };
+}
+
+class PromptResult {
+  content: string;
+  usedTokens: number;
 }
 
 export class AIClient {
@@ -124,7 +133,7 @@ export class AIClient {
     prompt: string,
     targetFields: string,
     promptTargetText: string,
-  ) {
+  ): Promise<PromptResult> {
     try {
       let response: ExecutePromptResponse;
 
@@ -142,7 +151,11 @@ export class AIClient {
             },
           ],
         });
-        return response.data.choices[0].message.content;
+        const result = new PromptResult();
+        result.content = response.data.choices[0].message.content;
+        result.usedTokens = response.data.usage.total_tokens;
+
+        return result;
       } else {
         response = await this.axiosInstance.post(
           `/models/${model}:generateContent`,
@@ -176,9 +189,17 @@ export class AIClient {
         );
       }
 
-      return response.data.candidates[0].content.parts[0].text;
+      const result = new PromptResult();
+      result.content = response.data.candidates[0].content.parts[0].text;
+      result.usedTokens = response.data.usageMetadata.totalTokenCount;
+
+      return result;
     } catch (error) {
-      return `Error executing prompt: ${error}`;
+      const result = new PromptResult();
+      result.content = `Error executing prompt: ${error}`;
+      result.usedTokens = 0;
+
+      return result;
     }
   }
 }

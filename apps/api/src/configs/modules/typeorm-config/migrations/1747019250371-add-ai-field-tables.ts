@@ -60,9 +60,26 @@ export class AddAIFieldTables1747019250371 implements MigrationInterface {
        FOREIGN KEY (\`project_id\`) REFERENCES \`projects\`(\`id\`)
        ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
+    await queryRunner.query(
+      `CREATE TABLE \`ai_usages\` (
+        \`id\` int NOT NULL AUTO_INCREMENT,
+        \`created_at\` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+        \`updated_at\` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+        \`deleted_at\` DATETIME(6) DEFAULT NULL,
+        \`year\` int NOT NULL,
+        \`month\` int NOT NULL,
+        \`category\` enum('AI_FIELD', 'ISSUE_RECOMMEND') NOT NULL,
+        \`provider\` enum('OPEN_AI', 'GEMINI') NOT NULL,
+        \`used_tokens\` int NOT NULL,
+        \`project_id\` int NOT NULL,
+        PRIMARY KEY (\`id\`),
+        FOREIGN KEY (\`project_id\`) REFERENCES \`projects\`(\`id\`) ON DELETE CASCADE
+      ) ENGINE=InnoDB`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DROP TABLE \`ai_usages\``);
     await queryRunner.query(
       `ALTER TABLE \`ai_templates\` DROP FOREIGN KEY \`FK_ai_templates_project_id\``,
     );

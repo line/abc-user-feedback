@@ -32,6 +32,7 @@ import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { AIIntegrationsEntity } from '../ai/ai-integrations.entity';
 import { AITemplatesEntity } from '../ai/ai-templates.entity';
+import { AIUsagesEntity } from '../ai/ai-usages.entity';
 import { CategoryEntity } from '../category/category.entity';
 import { IssueEntity } from '../issue/issue.entity';
 import { RoleEntity } from '../role/role.entity';
@@ -124,6 +125,11 @@ export class ProjectEntity extends CommonEntity {
     cascade: true,
   })
   aiTemplates: Relation<AITemplatesEntity>[];
+
+  @OneToMany(() => AIUsagesEntity, (aiUsages) => aiUsages.project, {
+    cascade: true,
+  })
+  aiUsages: Relation<AIUsagesEntity>[];
 
   static from({
     tenantId,
