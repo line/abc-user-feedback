@@ -39,6 +39,12 @@ export class AIIntegrationsEntity extends CommonEntity {
   @Column('float', { default: 0.7 })
   temperature: number;
 
+  @Column('int', { nullable: true, default: null })
+  tokenThreshold: number | null;
+
+  @Column('float', { nullable: true, default: null })
+  notificationThreshold: number | null;
+
   @OneToOne(() => ProjectEntity, (project) => project.aiIntegrations, {
     onDelete: 'CASCADE',
   })
@@ -52,6 +58,8 @@ export class AIIntegrationsEntity extends CommonEntity {
     endpointUrl,
     systemPrompt,
     temperature,
+    tokenThreshold,
+    notificationThreshold,
     projectId,
   }: {
     provider: AIProvidersEnum;
@@ -60,6 +68,8 @@ export class AIIntegrationsEntity extends CommonEntity {
     endpointUrl: string;
     systemPrompt: string;
     temperature: number;
+    tokenThreshold?: number | null;
+    notificationThreshold?: number | null;
     projectId: number;
   }) {
     const aiIntegrations = new AIIntegrationsEntity();
@@ -70,6 +80,12 @@ export class AIIntegrationsEntity extends CommonEntity {
     aiIntegrations.endpointUrl = endpointUrl;
     aiIntegrations.systemPrompt = systemPrompt;
     aiIntegrations.temperature = temperature;
+    if (tokenThreshold) {
+      aiIntegrations.tokenThreshold = tokenThreshold;
+    }
+    if (notificationThreshold) {
+      aiIntegrations.notificationThreshold = notificationThreshold;
+    }
     aiIntegrations.project = new ProjectEntity();
     aiIntegrations.project.id = projectId;
 
