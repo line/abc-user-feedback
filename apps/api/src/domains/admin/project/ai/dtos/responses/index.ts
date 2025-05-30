@@ -18,3 +18,4 @@ export { CreateAITemplateResponseDto } from './create-ai-template-response.dto';
 export { GetAIIntegrationsModelsResponseDto } from './get-ai-integrations-models-response.dto';
 export { GetAITemplatesResponseDto } from './get-ai-templates-response.dto';
 export { GetAIIntegrationResponseDto } from './get-ai-integration-response.dto';
+export { ValidateAPIKeyResponseDto } from './validate-api-key-response.dto';

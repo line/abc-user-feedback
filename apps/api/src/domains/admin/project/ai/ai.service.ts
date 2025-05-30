@@ -19,6 +19,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
+import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { FeedbackMySQLService } from '../../feedback/feedback.mysql.service';
@@ -45,6 +46,21 @@ export class AIService {
     @InjectRepository(AITemplatesEntity)
     private readonly aiTemplatesRepo: Repository<AITemplatesEntity>,
   ) {}
+
+  async validateAPIKey(provider: AIProvidersEnum, apiKey: string) {
+    const client = new AIClient({
+      apiKey,
+      provider,
+    });
+
+    try {
+      await client.validateAPIKey();
+      return { valid: true };
+    } catch (error) {
+      this.logger.error(`API key validation failed for ${provider}`, error);
+      return { valid: false, error: error.message };
+    }
+  }
 
   async getOrCreateIntegration(projectId: number) {
     const integration = await this.aiIntegrationsRepo.findOne({

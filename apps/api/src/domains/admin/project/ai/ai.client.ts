@@ -21,7 +21,7 @@ import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 interface AIClientConfig {
   apiKey: string;
   provider: AIProvidersEnum;
-  baseUrl: string;
+  baseUrl?: string;
 }
 
 interface Model {
@@ -48,7 +48,7 @@ export class AIClient {
   private axiosInstance: AxiosInstance;
   private provider: AIProvidersEnum;
   private apiKey: string;
-  private baseUrl: string;
+  private baseUrl: string | undefined;
 
   constructor(config: AIClientConfig) {
     this.provider = config.provider;
@@ -73,6 +73,25 @@ export class AIClient {
       baseURL,
       headers,
     });
+  }
+
+  async validateAPIKey(): Promise<void> {
+    try {
+      let response;
+      if (this.provider === AIProvidersEnum.OPEN_AI) {
+        response = await this.axiosInstance.get('/models');
+      } else {
+        response = await this.axiosInstance.get('/models', {
+          params: { key: this.apiKey },
+        });
+      }
+
+      if (response.status !== 200) {
+        throw new Error(`Invalid API key for ${this.provider}`);
+      }
+    } catch (error) {
+      throw new Error(`Invalid API key for ${this.provider}: ${error}`);
+    }
   }
 
   async getModelList(): Promise<{ id: string }[]> {

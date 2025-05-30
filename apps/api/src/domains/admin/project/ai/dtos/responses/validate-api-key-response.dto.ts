@@ -14,6 +14,15 @@
  * under the License.
  */
 
-export { UpdateAIIntegrationsRequestDto } from './update-ai-integrations-request.dto';
-export { CreateAITemplateRequestDto } from './create-ai-template-request.dto';
-export { ValidteAPIKeyRequestDto } from './validate-api-key-request.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
+
+export class ValidateAPIKeyResponseDto {
+  @ApiProperty()
+  @Expose()
+  valid: boolean;
+
+  @ApiProperty()
+  @Expose()
+  error: string | undefined;
+}

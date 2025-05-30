@@ -22,6 +22,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -30,11 +31,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { JwtAuthGuard } from '../../auth/guards';
 import { AIService } from './ai.service';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import {
   CreateAITemplateRequestDto,
   UpdateAIIntegrationsRequestDto,
+  ValidteAPIKeyRequestDto,
 } from './dtos/requests';
 import {
   CreateAIIntegrationsResponseDto,
@@ -42,14 +45,22 @@ import {
   GetAIIntegrationResponseDto,
   GetAIIntegrationsModelsResponseDto,
   GetAITemplatesResponseDto,
+  ValidateAPIKeyResponseDto,
 } from './dtos/responses';
 
 @ApiTags('ai')
 @Controller('/admin/projects/:projectId/ai')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 export class AIController {
   constructor(private readonly aiService: AIService) {}
 
-  @ApiBearerAuth()
+  @ApiOkResponse({ type: ValidateAPIKeyResponseDto })
+  @Post('validate')
+  async validateAPIKey(@Body() body: ValidteAPIKeyRequestDto) {
+    return this.aiService.validateAPIKey(body.provider, body.apiKey);
+  }
+
   @ApiCreatedResponse({ type: GetAIIntegrationResponseDto })
   @Get('integrations')
   async getIntegration(@Param('projectId', ParseIntPipe) projectId: number) {
@@ -58,7 +69,6 @@ export class AIController {
     );
   }
 
-  @ApiBearerAuth()
   @ApiCreatedResponse({ type: CreateAIIntegrationsResponseDto })
   @Put('integrations')
   async updateIntegration(
@@ -72,7 +82,6 @@ export class AIController {
     );
   }
 
-  @ApiBearerAuth()
   @ApiOkResponse({ type: GetAIIntegrationsModelsResponseDto })
   @Get('integrations/models')
   async getModels(@Param('projectId', ParseIntPipe) projectId: number) {
@@ -90,7 +99,6 @@ export class AIController {
     );
   }
 
-  @ApiBearerAuth()
   @ApiOkResponse()
   @Post('templates/default')
   async createDefaultTemplates(
@@ -99,7 +107,6 @@ export class AIController {
     await this.aiService.createDefaultTemplates(projectId);
   }
 
-  @ApiBearerAuth()
   @ApiCreatedResponse({ type: CreateAITemplateResponseDto })
   @ApiOkResponse()
   @Post('templates/new')
@@ -112,7 +119,6 @@ export class AIController {
     );
   }
 
-  @ApiBearerAuth()
   @Put('templates/:templateId')
   async update(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -122,7 +128,6 @@ export class AIController {
     await this.aiService.updateTemplate({ ...body, projectId, templateId });
   }
 
-  @ApiBearerAuth()
   @Delete('templates/:templateId')
   async delete(
     @Param('projectId', ParseIntPipe) projectId: number,

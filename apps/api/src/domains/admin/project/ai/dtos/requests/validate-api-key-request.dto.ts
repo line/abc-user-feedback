@@ -13,7 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsString, MaxLength } from 'class-validator';
 
-export { UpdateAIIntegrationsRequestDto } from './update-ai-integrations-request.dto';
-export { CreateAITemplateRequestDto } from './create-ai-template-request.dto';
-export { ValidteAPIKeyRequestDto } from './validate-api-key-request.dto';
+import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
+
+export class ValidteAPIKeyRequestDto {
+  @ApiProperty({ enum: AIProvidersEnum, enumName: 'AIProvidersEnum' })
+  @IsEnum(AIProvidersEnum)
+  provider: AIProvidersEnum;
+
+  @ApiProperty({ nullable: false, type: String })
+  @IsString()
+  @MaxLength(255)
+  apiKey: string;
+}
