@@ -16,8 +16,8 @@
 
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddAIFieldTables1700795163535 implements MigrationInterface {
-  name = 'AddAIFieldTables1700795163535';
+export class AddAIFieldTables1747019250371 implements MigrationInterface {
+  name = 'AddAIFieldTables1747019250371';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
