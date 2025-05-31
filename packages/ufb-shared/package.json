@@ -22,7 +22,7 @@
     "eslint": "catalog:",
     "prettier": "catalog:",
     "react": "^19.0.0",
-    "tsup": "^8.0.2",
+    "tsup": "^8.5.0",
     "typescript": "catalog:"
   }
 }
