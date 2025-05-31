@@ -16,7 +16,7 @@ catalogs:
       specifier: ^3.4.17
       version: 3.4.17
     typescript:
-      specifier: ^5.7.3
+      specifier: ^5.8.3
       version: 5.8.3
 
 importers:
