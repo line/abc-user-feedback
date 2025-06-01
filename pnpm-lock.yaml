@@ -202,7 +202,7 @@ importers:
         version: 11.1.0
     devDependencies:
       '@faker-js/faker':
-        specifier: ^9.0.0
+        specifier: ^9.8.0
         version: 9.8.0
       '@nestjs/cli':
         specifier: ^11.0.0
@@ -344,7 +344,7 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2(react@19.1.0)
       '@faker-js/faker':
-        specifier: ^9.0.0
+        specifier: ^9.8.0
         version: 9.8.0
       '@hookform/resolvers':
         specifier: ^5.0.0
