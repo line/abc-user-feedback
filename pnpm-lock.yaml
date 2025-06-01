@@ -45,7 +45,7 @@ importers:
         specifier: ^3.750.0
         version: 3.817.0
       '@fastify/multipart':
-        specifier: ^9.0.0
+        specifier: ^9.0.3
         version: 9.0.3
       '@fastify/static':
         specifier: ^8.0.0
@@ -2134,9 +2134,6 @@ packages:
 
   '@fastify/deepmerge@2.0.2':
     resolution: {integrity: sha512-3wuLdX5iiiYeZWP6bQrjqhrcvBIf0NHbQH1Ur1WbHvoiuTYUEItgygea3zs8aHpiitn0lOB8gX20u1qO+FDm7Q==}
-
-  '@fastify/error@4.0.0':
-    resolution: {integrity: sha512-OO/SA8As24JtT1usTUTKgGH7uLvhfwZPwlptRi2Dp5P4KKmJI3gvsZ8MIHnNwDs4sLf/aai5LzTyl66xr7qMxA==}
 
   '@fastify/error@4.1.0':
     resolution: {integrity: sha512-KeFcciOr1eo/YvIXHP65S94jfEEqn1RxTRBT1aJaHxY5FK0/GDXYozsQMMWlZoHgi8i0s+YtrLsgj/JkUUjSkQ==}
@@ -12002,8 +11999,6 @@ snapshots:
 
   '@fastify/deepmerge@2.0.2': {}
 
-  '@fastify/error@4.0.0': {}
-
   '@fastify/error@4.1.0': {}
 
   '@fastify/fast-json-stringify-compiler@5.0.2':
@@ -12032,7 +12027,7 @@ snapshots:
     dependencies:
       '@fastify/busboy': 3.1.1
       '@fastify/deepmerge': 2.0.2
-      '@fastify/error': 4.0.0
+      '@fastify/error': 4.1.0
       fastify-plugin: 5.0.1
       secure-json-parse: 3.0.2
 
