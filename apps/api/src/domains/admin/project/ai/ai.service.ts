@@ -305,7 +305,7 @@ export class AIService {
         return `${acc}\n${field.key}: ${issues}`;
       }
 
-      let fieldValue = feedback.data[field.key];
+      let fieldValue = feedback.data[field.key] as string;
 
       if (field.key === 'createdAt') {
         fieldValue = feedback.createdAt.toISOString();
