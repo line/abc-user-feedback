@@ -24,5 +24,5 @@ export class ValidateAPIKeyResponseDto {
 
   @ApiProperty()
   @Expose()
-  error: string | undefined;
+  error?: string | undefined;
 }

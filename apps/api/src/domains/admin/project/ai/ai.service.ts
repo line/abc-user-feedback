@@ -31,6 +31,7 @@ import { AIUsagesEntity, UsageCategoryEnum } from './ai-usages.entity';
 import { AIClient } from './ai.client';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import { CreateAITemplateDto } from './dtos/create-ai-template.dto';
+import { ValidateAPIKeyResponseDto } from './dtos/responses';
 import { UpdateAITemplateDto } from './dtos/update-ai-template.dto';
 
 @Injectable()
@@ -52,7 +53,10 @@ export class AIService {
     private readonly aiUsagesRepo: Repository<AIUsagesEntity>,
   ) {}
 
-  async validateAPIKey(provider: AIProvidersEnum, apiKey: string) {
+  async validateAPIKey(
+    provider: AIProvidersEnum,
+    apiKey: string,
+  ): Promise<ValidateAPIKeyResponseDto> {
     const client = new AIClient({
       apiKey,
       provider,
@@ -63,7 +67,7 @@ export class AIService {
       return { valid: true };
     } catch (error) {
       this.logger.error(`API key validation failed for ${provider}`, error);
-      return { valid: false, error: error.message };
+      return { valid: false, error: (error as Error).message };
     }
   }
 
@@ -362,7 +366,7 @@ export class AIService {
     this.logger.log(`Result: ${result.content}`);
     feedback.data[aiField.key] = result.content;
 
-    this.saveAIUsage(
+    void this.saveAIUsage(
       result.usedTokens,
       integration.provider,
       UsageCategoryEnum.AI_FIELD,

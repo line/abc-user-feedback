@@ -14,7 +14,7 @@
  * under the License.
  */
 import axios from 'axios';
-import type { AxiosInstance } from 'axios';
+import type { AxiosInstance, AxiosResponse } from 'axios';
 
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 
@@ -76,7 +76,7 @@ export class AIClient {
     } else {
       baseURL = 'https://generativelanguage.googleapis.com/v1beta';
     }
-    baseURL = this.baseUrl || baseURL;
+    baseURL = this.baseUrl ?? baseURL;
 
     this.axiosInstance = axios.create({
       baseURL,
@@ -86,7 +86,7 @@ export class AIClient {
 
   async validateAPIKey(): Promise<void> {
     try {
-      let response;
+      let response: AxiosResponse;
       if (this.provider === AIProvidersEnum.OPEN_AI) {
         response = await this.axiosInstance.get('/models');
       } else {
