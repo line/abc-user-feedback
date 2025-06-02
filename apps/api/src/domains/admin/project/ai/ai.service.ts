@@ -304,11 +304,20 @@ export class AIService {
           .join(', ');
         return `${acc}\n${field.key}: ${issues}`;
       }
+
+      let fieldValue = feedback.data[field.key];
+
+      if (field.key === 'createdAt') {
+        fieldValue = feedback.createdAt.toISOString();
+      } else if (field.key === 'updatedAt') {
+        fieldValue = feedback.updatedAt.toISOString();
+      }
+
       return `${acc}
         fieldKey: ${field.key}
         fieldFormat: ${field.format}
         fieldDesc: ${field.description}
-        fieldValue: ${feedback.data[field.key]}
+        fieldValue: ${fieldValue}
         `;
     }, '');
   }
