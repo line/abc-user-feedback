@@ -76,7 +76,8 @@ export class AIClient {
     } else {
       baseURL = 'https://generativelanguage.googleapis.com/v1beta';
     }
-    baseURL = this.baseUrl ?? baseURL;
+
+    if (this.baseUrl) baseURL = this.baseUrl;
 
     this.axiosInstance = axios.create({
       baseURL,
