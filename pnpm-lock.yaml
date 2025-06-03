@@ -365,7 +365,7 @@ importers:
         specifier: ^8.21.3
         version: 8.21.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@toss/use-overlay':
-        specifier: ^1.4.0
+        specifier: ^1.4.2
         version: 1.4.2(react@19.1.0)
       '@ufb/react':
         specifier: workspace:*
