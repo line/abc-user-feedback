@@ -273,7 +273,7 @@ const FeedbackTable = (props: Props) => {
                 value={dateRange}
                 maxDate={new Date()}
                 maxDays={currentChannel.feedbackSearchMaxDays}
-                clearable={currentChannel.feedbackSearchMaxDays === -1}
+                allowEntirePeriod={currentChannel.feedbackSearchMaxDays === -1}
               />
             </TooltipTrigger>
             <TooltipContent>

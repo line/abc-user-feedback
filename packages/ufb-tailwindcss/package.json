@@ -19,13 +19,13 @@
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:^",
-    "autoprefixer": "^10.4.19",
+    "autoprefixer": "^10.4.21",
     "eslint": "catalog:",
-    "glob": "^11.0.1",
-    "postcss": "^8.4.38",
+    "glob": "^11.0.2",
+    "postcss": "^8.5.4",
     "postcss-import": "^16.1.0",
     "postcss-js": "^4.0.1",
-    "postcss-nesting": "^13.0.0",
+    "postcss-nesting": "^13.0.1",
     "prettier": "catalog:",
     "tailwindcss": "catalog:"
   }

@@ -93,6 +93,7 @@ const Select = ({
   );
 
   const handleSingleValueChange = (value: string) => {
+    if (value === '') return;
     setSingleValue(value);
     onValueChange?.(value);
   };
@@ -115,6 +116,7 @@ const Select = ({
       return;
     setMultipleValues(values);
   }, [values]);
+
   return (
     <SelectContext.Provider
       value={{

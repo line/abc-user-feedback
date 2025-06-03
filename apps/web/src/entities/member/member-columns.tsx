@@ -31,7 +31,9 @@ export const memberColumns = [
     header: ({ table }) => (
       <TableCheckbox
         checked={table.getIsAllRowsSelected()}
-        indeterminate={table.getIsSomeRowsSelected()}
+        indeterminate={
+          table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+        }
         onCheckedChange={(checked) => table.toggleAllRowsSelected(checked)}
       />
     ),

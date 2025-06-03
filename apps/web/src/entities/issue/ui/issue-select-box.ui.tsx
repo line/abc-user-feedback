@@ -18,19 +18,22 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useThrottle } from 'react-use';
 
-import { client, MultiSelectSearchInput } from '@/shared';
+import { client } from '@/shared';
+import AsyncMultiSelectSearchInput from '@/shared/ui/inputs/async-multi-select-search-input.ui';
 
 import { useIssueSearchInfinite } from '../lib';
 
 interface Props {
-  onChange: (value?: string[]) => void;
-  value?: string[];
+  onChange: (value?: number[]) => void;
+  value?: number[];
 }
 
 const IssueSelectBox = ({ onChange, value }: Props) => {
   const router = useRouter();
   const projectId = Number(router.query.projectId as string);
-  const [issueNames, setIssueNames] = useState(value ?? []);
+  const [selectedIssues, setSelectedIssues] = useState<
+    { label: string; value: string }[]
+  >([]);
 
   const [inputValue, setInputValue] = useState('');
   const throttedValue = useThrottle(inputValue, 500);
@@ -43,32 +46,39 @@ const IssueSelectBox = ({ onChange, value }: Props) => {
 
   useEffect(() => {
     if (!value) {
-      setIssueNames([]);
+      setSelectedIssues([]);
       return;
     }
-
-    void Promise.all(
-      value.map(async (v) => {
-        const issueId = parseInt(v);
-        if (isNaN(issueId)) return v;
-        const { data } = await client.get({
-          path: '/api/admin/projects/{projectId}/issues/{issueId}',
-          pathParams: { projectId, issueId },
-        });
-        return data.name;
+    void Promise.allSettled(
+      value.map(async (issueId) => {
+        try {
+          const { data } = await client.get({
+            path: '/api/admin/projects/{projectId}/issues/{issueId}',
+            pathParams: { projectId, issueId },
+          });
+          return { label: data.name, value: String(issueId) };
+        } catch (error) {
+          console.warn(`Failed to fetch issue ${issueId}:`, error);
+          return { label: `Issue ${issueId}`, value: String(issueId) };
+        }
       }),
-    ).then((v) => setIssueNames(v));
+    ).then((results) => {
+      const successfulResults = results
+        .filter((result) => result.status === 'fulfilled')
+        .map((result) => result.value);
+      setSelectedIssues(successfulResults);
+    });
   }, [value]);
 
   return (
-    <MultiSelectSearchInput
+    <AsyncMultiSelectSearchInput
       options={data.pages.flatMap((page) =>
         page ?
-          page.items.map(({ name }) => ({ label: name, value: name }))
+          page.items.map(({ name, id }) => ({ label: name, value: String(id) }))
         : [],
       )}
-      value={issueNames}
-      onChange={(v) => onChange(v)}
+      value={selectedIssues}
+      onChange={(input) => onChange(input.map((v) => Number(v.value)))}
       fetchNextPage={fetchNextPage}
       hasNextPage={hasNextPage}
       inputValue={inputValue}
