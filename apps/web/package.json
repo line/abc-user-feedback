@@ -30,7 +30,7 @@
     "@tanstack/react-query": "^5.45.1",
     "@tanstack/react-query-devtools": "^5.45.1",
     "@tanstack/react-table": "^8.21.3",
-    "@toss/use-overlay": "^1.4.0",
+    "@toss/use-overlay": "^1.4.2",
     "@ufb/react": "workspace:*",
     "@ufb/shared": "workspace:*",
     "@ufb/tailwindcss": "workspace:*",
