@@ -353,7 +353,7 @@ importers:
         specifier: ^0.5.9
         version: 0.5.9(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@t3-oss/env-nextjs':
-        specifier: ^0.13.0
+        specifier: ^0.13.6
         version: 0.13.6(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.32)
       '@tanstack/react-query':
         specifier: ^5.45.1
