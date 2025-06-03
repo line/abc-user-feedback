@@ -44,7 +44,7 @@
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/terminus": "^11.0.0",
     "@nestjs/typeorm": "^11.0.0",
-    "@opensearch-project/opensearch": "^3.0.0",
+    "@opensearch-project/opensearch": "^3.5.1",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
     "@ufb/shared": "workspace:*",
