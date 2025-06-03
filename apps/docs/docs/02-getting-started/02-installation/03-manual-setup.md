@@ -112,19 +112,9 @@ cd apps/api
 npm run migration:run
 ```
 
-## UI 패키지 빌드
+## 개발 모드 실행
 
-웹 애플리케이션을 실행하기 전에 UI 패키지를 빌드해야 합니다:
-
-```bash
-# 프로젝트 루트 디렉토리에서
-pnpm build:ui
-
-# 또는
-pnpm turbo run @ufb/ui#build
-```
-
-## 개발 모드에서 실행
+### 단일 명령어로 실행
 
 개발 모드에서 API 서버와 웹 서버를 실행하려면:
 
@@ -134,6 +124,35 @@ pnpm dev
 ```
 
 이 명령은 API 서버와 웹 서버를 동시에 시작합니다. API 서버는 기본적으로 포트 4000에서, 웹 서버는 포트 3000에서 실행됩니다.
+
+### 개별 패키지 실행
+
+#### 공통 패키지 빌드
+
+웹 애플리케이션을 실행하기 전에 shared 패키지를 빌드해야 합니다:
+
+```bash
+# 프로젝트 루트 디렉토리에서
+cd packages/ufb-shared
+pnpm build
+
+```
+
+#### UI 패키지 빌드
+
+웹 애플리케이션을 실행하기 전에 UI 패키지를 빌드해야 합니다:
+
+```bash
+# 프로젝트 루트 디렉토리에서
+cd packages/ufb-tailwindcss
+pnpm build
+
+# 프로젝트 루트 디렉토리에서
+cd packages/ufb-react
+pnpm build
+```
+
+#### 각 서버 실행
 
 각 서버를 개별적으로 실행하려면:
 
@@ -165,11 +184,11 @@ pnpm build
 ```bash
 # API 서버 실행
 cd apps/api
-node dist/main.js
+pnpm start
 
 # 웹 서버 실행
 cd apps/web
-npm run start
+pnpm start
 ```
 
 ## API 타입 생성
@@ -190,14 +209,6 @@ pnpm generate-api-type
 코드 린팅을 실행하려면:
 
 ```bash
-# 프로젝트 루트 디렉토리에서
-pnpm lint
-
-# 또는 특정 앱에 대해서만
-cd apps/api
-pnpm lint
-
-cd apps/web
 pnpm lint
 ```
 
@@ -206,8 +217,6 @@ pnpm lint
 코드 포맷팅을 실행하려면:
 
 ```bash
-# 웹 앱에서
-cd apps/web
 pnpm format
 ```
 
@@ -216,13 +225,7 @@ pnpm format
 테스트를 실행하려면:
 
 ```bash
-# API 서버 테스트
-cd apps/api
 pnpm test
-
-# API 서버 E2E 테스트
-cd apps/api
-pnpm test:e2e
 ```
 
 ## 대시보드 통계 데이터 마이그레이션

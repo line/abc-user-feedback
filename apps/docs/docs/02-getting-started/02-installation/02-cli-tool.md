@@ -163,16 +163,6 @@ CLI 도구는 내부적으로 Docker Compose 파일을 생성하여 사용합니
    - Docker에 할당된 메모리를 늘리세요.
    - OpenSearch는 최소 2GB의 메모리를 필요로 합니다.
 
-### 로그 확인
-
-서버 실행 중 문제가 발생하면 Docker 로그를 확인하여 원인을 파악할 수 있습니다:
-
-```bash
-# API 서버 로그 확인
-docker logs abc-user-feedback-api
-
-# 웹 서버 로그 확인
-docker logs abc-user-feedback-web
 ```
 
 ## 제한 사항
@@ -188,3 +178,4 @@ CLI 도구는 개발 및 테스트 환경에서 사용하기에 적합합니다.
 CLI 도구를 사용하여 ABC User Feedback을 성공적으로 설치했다면, 다음 단계로 [초기 설정](../03-initial-setup.md)을 진행하여 시스템을 구성하고 사용자를 추가하세요.
 
 자세한 API 및 웹 서버 구성 옵션은 [환경 변수 구성](./04-configuration.md) 문서를 참조하세요.
+```

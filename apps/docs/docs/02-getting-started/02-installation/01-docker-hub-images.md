@@ -222,7 +222,6 @@ services:
     volumes:
       - mysql:/var/lib/mysql
 
-  # optional for email verification on creating user
   smtp4dev:
     image: rnwood/smtp4dev:v3
     restart: always
@@ -233,7 +232,6 @@ services:
     volumes:
       - smtp4dev:/smtp4dev
 
-  # optional for better performance on searching feedbacks
   opensearch-node:
     image: opensearchproject/opensearch:2.16.0
     restart: always
@@ -258,7 +256,6 @@ services:
       - 9200:9200
       - 9600:9600
 
-  # optional for opensearch
   opensearch-dashboards:
     image: opensearchproject/opensearch-dashboards:2.16.0
     restart: always
@@ -270,8 +267,6 @@ services:
     depends_on:
       - opensearch-node
 
-
-  # 애플리케이션 서비스
   web:
     hostname: web
     image: line/abc-user-feedback-web:latest
@@ -307,37 +302,6 @@ services:
       mysql:
         condition: service_healthy
 
-  web:
-    hostname: web
-    image: line/abc-user-feedback-web:latest
-    restart: always
-    ports:
-      - 3000:3000
-    environment:
-      - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
-    depends_on:
-      - api
-
-  api:
-    hostname: api
-    image: line/abc-user-feedback-api:latest
-    restart: always
-    ports:
-      - 4000:4000
-    environment:
-      - JWT_SECRET=jwtsecretjwtsecretjwtsecret
-      - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
-      - BASE_URL=http://api:3000
-      - ACCESS_TOKEN_EXPIRED_TIME=10m
-      - REFRESH_TOKEN_EXPIRED_TIME=1h
-      - APP_PORT=4000
-      - APP_ADDRESS=api
-      - AUTO_MIGRATION=true
-      - NODE_OPTIONS="--max_old_space_size=3072"
-      - SMTP_HOST=smtp4dev
-      - SMTP_PORT=25
-      - SMTP_SENDER=user@feedback.com
-      - SMTP_BASE_URL=http://localhost:3000
 volumes:
   mysql:
   smtp4dev:
