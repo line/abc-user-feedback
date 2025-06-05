@@ -398,7 +398,7 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       dayjs:
-        specifier: ^1.11.10
+        specifier: ^1.11.13
         version: 1.11.13
       framer-motion:
         specifier: ^12.0.0
