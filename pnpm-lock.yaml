@@ -135,7 +135,7 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
       joi:
-        specifier: ^17.12.3
+        specifier: ^17.13.3
         version: 17.13.3
       luxon:
         specifier: ^3.4.4
