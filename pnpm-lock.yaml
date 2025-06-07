@@ -407,7 +407,7 @@ importers:
         specifier: ^25.2.1
         version: 25.2.1(typescript@5.8.3)
       immer:
-        specifier: ^10.0.4
+        specifier: ^10.1.1
         version: 10.1.1
       jwt-decode:
         specifier: ^4.0.0
