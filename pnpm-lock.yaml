@@ -301,7 +301,7 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0
       js-toml:
-        specifier: ^1.0.0
+        specifier: ^1.0.1
         version: 1.0.1
     devDependencies:
       '@ufb/eslint-config':
