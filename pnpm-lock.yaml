@@ -138,7 +138,7 @@ importers:
         specifier: ^17.13.3
         version: 17.13.3
       luxon:
-        specifier: ^3.4.4
+        specifier: ^3.6.1
         version: 3.6.1
       magic-bytes.js:
         specifier: ^1.10.0
@@ -235,7 +235,7 @@ importers:
         specifier: ^29.5.14
         version: 29.5.14
       '@types/luxon':
-        specifier: ^3.4.2
+        specifier: ^3.6.2
         version: 3.6.2
       '@types/node':
         specifier: 22.15.23
