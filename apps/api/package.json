@@ -60,7 +60,7 @@
     "fastify": "^5.3.3",
     "joi": "^17.13.3",
     "luxon": "^3.6.1",
-    "magic-bytes.js": "^1.10.0",
+    "magic-bytes.js": "^1.12.1",
     "mysql2": "^3.9.7",
     "nestjs-cls": "^5.0.0",
     "nestjs-pino": "^4.0.0",

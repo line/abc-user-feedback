@@ -141,7 +141,7 @@ importers:
         specifier: ^3.6.1
         version: 3.6.1
       magic-bytes.js:
-        specifier: ^1.10.0
+        specifier: ^1.12.1
         version: 1.12.1
       mysql2:
         specifier: ^3.9.7
