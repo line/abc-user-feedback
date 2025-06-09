@@ -50,7 +50,7 @@ export class ReplaceFieldDto {
   aiTemplateId?: number | null;
 
   @Expose()
-  aiFieldTargetIds?: number[] | null;
+  aiFieldTargetKeys?: string[] | null;
 
   @Expose()
   @Type(() => Option)

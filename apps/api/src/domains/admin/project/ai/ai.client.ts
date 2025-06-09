@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Logger } from '@nestjs/common';
 import axios from 'axios';
 import type { AxiosInstance, AxiosResponse } from 'axios';
 
@@ -55,6 +56,7 @@ class PromptResult {
 }
 
 export class AIClient {
+  private logger = new Logger(AIClient.name);
   private axiosInstance: AxiosInstance;
   private provider: AIProvidersEnum;
   private apiKey: string;
@@ -138,6 +140,14 @@ export class AIClient {
   ): Promise<PromptResult> {
     try {
       let response: ExecutePromptResponse;
+
+      this.logger.log(
+        `──────────────────── AI Prompt Execution ────────────────────`,
+      );
+      this.logger.log(getRefinedSystemPrompt(systemPrompt));
+      this.logger.log(
+        getRefinedUserPrompt(prompt, targetFields, promptTargetText),
+      );
 
       if (this.provider === AIProvidersEnum.OPEN_AI) {
         response = await this.axiosInstance.post('/chat/completions', {

@@ -57,7 +57,7 @@ export class AIListener {
     fields.forEach((field) => {
       if (field.format === FieldFormatEnum.aiField) {
         const targetFields = fields.filter((f) =>
-          field.aiFieldTargetIds?.includes(f.id),
+          field.aiFieldTargetKeys?.includes(f.key),
         );
 
         void this.aiService.executeAIFieldPrompt(feedback, field, targetFields);

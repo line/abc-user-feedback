@@ -67,7 +67,7 @@ export class FieldEntity extends CommonEntity {
   aiTemplate: Relation<AITemplatesEntity> | null;
 
   @Column('json', { nullable: true })
-  aiFieldTargetIds: number[] | null;
+  aiFieldTargetKeys: string[] | null;
 
   @ManyToOne(() => ChannelEntity, (channel) => channel.fields, {
     onDelete: 'CASCADE',
@@ -91,7 +91,7 @@ export class FieldEntity extends CommonEntity {
     status,
     order,
     aiTemplateId,
-    aiFieldTargetIds,
+    aiFieldTargetKeys,
   }: {
     channelId: number;
     name: string;
@@ -102,7 +102,7 @@ export class FieldEntity extends CommonEntity {
     status: FieldStatusEnum;
     order?: number | null;
     aiTemplateId?: number | null;
-    aiFieldTargetIds?: number[] | null;
+    aiFieldTargetKeys?: string[] | null;
   }) {
     const field = new FieldEntity();
     field.channel = new ChannelEntity();
@@ -118,7 +118,7 @@ export class FieldEntity extends CommonEntity {
       field.aiTemplate = new AITemplatesEntity();
       field.aiTemplate.id = aiTemplateId;
     }
-    field.aiFieldTargetIds = aiFieldTargetIds ?? null;
+    field.aiFieldTargetKeys = aiFieldTargetKeys ?? null;
 
     return field;
   }

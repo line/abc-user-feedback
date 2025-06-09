@@ -30,13 +30,13 @@ export class AddAiFieldType1747717939594 implements MigrationInterface {
       `ALTER TABLE \`fields\` ADD CONSTRAINT \`FK_fields_ai_template_id\` FOREIGN KEY (\`ai_template_id\`) REFERENCES \`ai_templates\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
-      `ALTER TABLE \`fields\` ADD \`ai_field_target_ids\` json NULL DEFAULT NULL AFTER \`ai_template_id\``,
+      `ALTER TABLE \`fields\` ADD \`ai_field_target_keys\` json NULL DEFAULT NULL AFTER \`ai_template_id\``,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE \`fields\` DROP COLUMN \`ai_field_target_ids\``,
+      `ALTER TABLE \`fields\` DROP COLUMN \`ai_field_target_keys\``,
     );
     await queryRunner.query(
       `ALTER TABLE \`fields\` DROP FOREIGN KEY \`FK_fields_ai_template_id\``,

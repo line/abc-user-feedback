@@ -355,15 +355,6 @@ export class AIService {
       baseUrl: integration.endpointUrl,
     });
 
-    this.logger.log(
-      `Executing prompt for field ${aiField.key} with target fields: ${aiTargetFields
-        .map((field) => field.key)
-        .join(', ')}`,
-    );
-    this.logger.log(`Prompt target text: ${promptTargetText}`);
-    this.logger.log(`Prompt: ${aiField.aiTemplate.prompt}`);
-    this.logger.log(`System prompt: ${integration.systemPrompt}`);
-
     const result = await client.executePrompt(
       integration.model,
       integration.temperature,
