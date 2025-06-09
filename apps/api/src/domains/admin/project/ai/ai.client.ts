@@ -17,6 +17,7 @@ import axios from 'axios';
 import type { AxiosInstance, AxiosResponse } from 'axios';
 
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
+import { getRefinedSystemPrompt, getRefinedUserPrompt } from './ai.prompt';
 
 interface AIClientConfig {
   apiKey: string;
@@ -142,13 +143,17 @@ export class AIClient {
         response = await this.axiosInstance.post('/chat/completions', {
           model,
           messages: [
-            { role: 'developer', content: systemPrompt },
+            {
+              role: 'developer',
+              content: getRefinedSystemPrompt(systemPrompt),
+            },
             {
               role: 'user',
-              content: ` ${prompt}
-                Please refer to the following data for the ${targetFields} 
-                fields: ${promptTargetText}
-              `,
+              content: getRefinedUserPrompt(
+                prompt,
+                targetFields,
+                promptTargetText,
+              ),
             },
           ],
         });
@@ -164,7 +169,7 @@ export class AIClient {
             systemInstruction: {
               parts: [
                 {
-                  text: systemPrompt,
+                  text: getRefinedSystemPrompt(systemPrompt),
                 },
               ],
             },
@@ -172,10 +177,11 @@ export class AIClient {
               {
                 parts: [
                   {
-                    text: ` ${prompt}
-                      Please refer to the following data for the ${targetFields} 
-                      fields: ${promptTargetText}
-                    `,
+                    text: getRefinedUserPrompt(
+                      prompt,
+                      targetFields,
+                      promptTargetText,
+                    ),
                   },
                 ],
               },
