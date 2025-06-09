@@ -15,11 +15,13 @@
  */
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
+import { EventTypeEnum } from '@/common/enums/event-type.enum';
 import { getCurrentMonth, getCurrentYear } from '@/utils/date-utils';
 import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
@@ -42,6 +44,7 @@ export class AIService {
     private readonly feedbackMySQLService: FeedbackMySQLService,
     private readonly feedbackOSService: FeedbackOSService,
     private readonly configService: ConfigService,
+    private readonly eventEmitter: EventEmitter2,
 
     @InjectRepository(AIIntegrationsEntity)
     private readonly aiIntegrationsRepo: Repository<AIIntegrationsEntity>,
@@ -383,6 +386,16 @@ export class AIService {
         feedbackId: feedback.id,
         data: feedback.data,
         channelId: feedback.channel.id,
+      });
+    }
+  }
+
+  async processAIFields(feedbackIds: number[]) {
+    this.logger.log(`Processing AI Field for feedback IDs: ${feedbackIds}`);
+    for (const feedbackId of feedbackIds) {
+      this.eventEmitter.emit(EventTypeEnum.FEEDBACK_CREATION, {
+        feedbackId: feedbackId,
+        manual: true,
       });
     }
   }

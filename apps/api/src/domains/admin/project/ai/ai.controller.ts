@@ -135,4 +135,13 @@ export class AIController {
   ) {
     await this.aiService.deleteTemplateById(projectId, templateId);
   }
+
+  @ApiOkResponse()
+  @Post('process')
+  async processAIFields(@Body() body: { feedbackIds: number[] }) {
+    if (!body.feedbackIds || body.feedbackIds.length === 0) {
+      return;
+    }
+    await this.aiService.processAIFields(body.feedbackIds);
+  }
 }

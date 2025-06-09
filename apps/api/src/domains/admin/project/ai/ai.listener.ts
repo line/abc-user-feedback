@@ -35,7 +35,13 @@ export class AIListener {
   ) {}
 
   @OnEvent(EventTypeEnum.FEEDBACK_CREATION)
-  async handleFeedbackCreation({ feedbackId }: { feedbackId: number }) {
+  async handleFeedbackCreation({
+    feedbackId,
+    manual,
+  }: {
+    feedbackId: number;
+    manual?: boolean | undefined;
+  }) {
     const feedback = await this.feedbackRepo.findOne({
       where: { id: feedbackId },
       relations: {
@@ -56,11 +62,17 @@ export class AIListener {
 
     fields.forEach((field) => {
       if (field.format === FieldFormatEnum.aiField) {
-        const targetFields = fields.filter((f) =>
-          field.aiFieldTargetKeys?.includes(f.key),
-        );
+        if (field.aiTemplate?.autoProcessing || manual) {
+          const targetFields = fields.filter((f) =>
+            field.aiFieldTargetKeys?.includes(f.key),
+          );
 
-        void this.aiService.executeAIFieldPrompt(feedback, field, targetFields);
+          void this.aiService.executeAIFieldPrompt(
+            feedback,
+            field,
+            targetFields,
+          );
+        }
       }
     });
   }
