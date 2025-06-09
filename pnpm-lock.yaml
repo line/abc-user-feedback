@@ -144,7 +144,7 @@ importers:
         specifier: ^1.12.1
         version: 1.12.1
       mysql2:
-        specifier: ^3.9.7
+        specifier: ^3.14.1
         version: 3.14.1
       nestjs-cls:
         specifier: ^5.0.0
@@ -326,7 +326,7 @@ importers:
         specifier: ^1.9.0
         version: 1.9.0
       mysql2:
-        specifier: ^3.9.7
+        specifier: ^3.14.1
         version: 3.14.1
 
   apps/web:

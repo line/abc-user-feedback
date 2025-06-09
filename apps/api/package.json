@@ -61,7 +61,7 @@
     "joi": "^17.13.3",
     "luxon": "^3.6.1",
     "magic-bytes.js": "^1.12.1",
-    "mysql2": "^3.9.7",
+    "mysql2": "^3.14.1",
     "nestjs-cls": "^5.0.0",
     "nestjs-pino": "^4.0.0",
     "nestjs-typeorm-paginate": "^4.0.4",
