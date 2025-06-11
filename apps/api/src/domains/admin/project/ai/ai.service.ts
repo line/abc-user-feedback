@@ -390,8 +390,10 @@ export class AIService {
     }
   }
 
-  async processAIFields(feedbackIds: number[]) {
-    this.logger.log(`Processing AI Field for feedback IDs: ${feedbackIds}`);
+  processAIFields(feedbackIds: number[]) {
+    this.logger.log(
+      `Processing AI Field for feedback IDs: ${feedbackIds.toString()}`,
+    );
     for (const feedbackId of feedbackIds) {
       this.eventEmitter.emit(EventTypeEnum.FEEDBACK_CREATION, {
         feedbackId: feedbackId,

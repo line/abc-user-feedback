@@ -138,10 +138,7 @@ export class AIController {
 
   @ApiOkResponse()
   @Post('process')
-  async processAIFields(@Body() body: { feedbackIds: number[] }) {
-    if (!body.feedbackIds || body.feedbackIds.length === 0) {
-      return;
-    }
-    await this.aiService.processAIFields(body.feedbackIds);
+  processAIFields(@Body() body: { feedbackIds: number[] }) {
+    this.aiService.processAIFields(body.feedbackIds);
   }
 }
