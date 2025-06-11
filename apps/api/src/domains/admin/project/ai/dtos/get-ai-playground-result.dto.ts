@@ -13,10 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { CreateAIIntegrationsResponseDto } from './create-ai-integrations-response.dto';
-export { CreateAITemplateResponseDto } from './create-ai-template-response.dto';
-export { GetAIIntegrationsModelsResponseDto } from './get-ai-integrations-models-response.dto';
-export { GetAITemplatesResponseDto } from './get-ai-templates-response.dto';
-export { GetAIIntegrationResponseDto } from './get-ai-integration-response.dto';
-export { ValidateAPIKeyResponseDto } from './validate-api-key-response.dto';
-export { GetAIPlaygroundResultResponseDto } from './get-ai-playground-result-response.dto';
+import { Expose } from 'class-transformer';
+
+import { TemporaryField } from './requests/get-ai-playground-result-request.dto';
+
+export class GetAIPlaygroundResultDto {
+  @Expose()
+  projectId: number;
+
+  @Expose()
+  templatePrompt: string;
+
+  @Expose()
+  temporaryFields: TemporaryField[];
+}

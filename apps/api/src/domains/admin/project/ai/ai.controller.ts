@@ -36,6 +36,7 @@ import { AIService } from './ai.service';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import {
   CreateAITemplateRequestDto,
+  GetAIPlaygroundResultRequestDto,
   UpdateAIIntegrationsRequestDto,
   ValidteAPIKeyRequestDto,
 } from './dtos/requests';
@@ -44,6 +45,7 @@ import {
   CreateAITemplateResponseDto,
   GetAIIntegrationResponseDto,
   GetAIIntegrationsModelsResponseDto,
+  GetAIPlaygroundResultResponseDto,
   GetAITemplatesResponseDto,
   ValidateAPIKeyResponseDto,
 } from './dtos/responses';
@@ -90,7 +92,6 @@ export class AIController {
     });
   }
 
-  @ApiBearerAuth()
   @ApiOkResponse({ type: GetAITemplatesResponseDto })
   @Get('templates')
   async getTemplates(@Param('projectId', ParseIntPipe) projectId: number) {
@@ -140,5 +141,19 @@ export class AIController {
   @Post('process')
   processAIFields(@Body() body: { feedbackIds: number[] }) {
     this.aiService.processAIFields(body.feedbackIds);
+  }
+
+  @ApiOkResponse({ type: GetAIPlaygroundResultResponseDto })
+  @Post('playground/test')
+  async getPlaygroundResult(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Body() body: GetAIPlaygroundResultRequestDto,
+  ) {
+    return GetAIPlaygroundResultResponseDto.transform({
+      result: await this.aiService.getPlaygroundPromptResult({
+        ...body,
+        projectId,
+      }),
+    });
   }
 }
