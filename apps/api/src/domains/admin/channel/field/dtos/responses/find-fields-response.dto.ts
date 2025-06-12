@@ -82,6 +82,14 @@ export class FindFieldsResponseDto {
   @Type(() => FindFieldsResponseSelectOptionDto)
   options: FindFieldsResponseSelectOptionDto[];
 
+  @Expose()
+  @ApiProperty({ type: Number, nullable: true })
+  aiTemplateId: number | null;
+
+  @Expose()
+  @ApiProperty({ type: Object })
+  aiFieldTargetKeys: string[] | null;
+
   public static transform(params: any): FindFieldsResponseDto {
     return plainToInstance(FindFieldsResponseDto, params, {
       excludeExtraneousValues: true,
