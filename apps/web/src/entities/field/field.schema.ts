@@ -61,6 +61,8 @@ export const fieldSchema = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
   order: z.number(),
+  aiTemplateId: z.number().nullable(),
+  aiFieldTargetKeys: z.array(z.string()).nullable(),
 });
 
 export const fieldInfoSchema = fieldSchema
@@ -73,6 +75,8 @@ export const fieldInfoSchema = fieldSchema
     status: true,
     options: true,
     order: true,
+    aiTemplateId: true,
+    aiFieldTargetKeys: true,
   })
   .merge(
     z.object({

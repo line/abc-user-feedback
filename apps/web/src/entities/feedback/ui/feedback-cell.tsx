@@ -85,6 +85,7 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
           )}
           {field.format === 'keyword' && value}
           {field.format === 'number' && value}
+          {field.format === 'aiField' && value}
         </>
       }
     </ExpandableText>

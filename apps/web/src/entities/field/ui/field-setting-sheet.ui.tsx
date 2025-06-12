@@ -272,6 +272,31 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                   )}
                 </div>
               )}
+            {watch('format') === 'aiField' && (
+              <>
+                <SelectInput
+                  label="AI Field Template"
+                  options={[
+                    { label: 'Text', value: 'text' },
+                    { label: 'Image', value: 'image' },
+                    { label: 'File', value: 'file' },
+                  ]}
+                  disabled={isDefaultField}
+                  required
+                />
+                <SelectInput
+                  type="multiple"
+                  label="AI Field Target"
+                  options={[
+                    { label: 'Text', value: 'text' },
+                    { label: 'Image', value: 'image' },
+                    { label: 'File', value: 'file' },
+                  ]}
+                  disabled={isDefaultField}
+                  required
+                />
+              </>
+            )}
             <SelectInput
               label="Property"
               options={[

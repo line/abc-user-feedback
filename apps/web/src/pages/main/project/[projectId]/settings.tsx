@@ -27,6 +27,7 @@ import {
 import { Layout } from '@/widgets/layout';
 import {
   ApiKeySetting,
+  GenerativeAiSetting,
   IssueTrackerSetting,
   MemberSetting,
   ProjectInfoSetting,
@@ -74,7 +75,7 @@ const SettingsPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         <IssueTrackerSetting projectId={projectId} />
       )}
       {currentMenu === 'webhook' && <WebhookSetting projectId={projectId} />}
-
+      {currentMenu === 'generative-ai' && <GenerativeAiSetting />}
       {currentChannelId && (
         <>
           {currentMenu === 'channel-info' && (
