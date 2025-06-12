@@ -33,6 +33,7 @@ import { AIUsagesEntity, UsageCategoryEnum } from './ai-usages.entity';
 import { AIClient } from './ai.client';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import { CreateAITemplateDto } from './dtos/create-ai-template.dto';
+import { GetAIPlaygroundResultDto } from './dtos/get-ai-playground-result.dto';
 import { ValidateAPIKeyResponseDto } from './dtos/responses';
 import { UpdateAITemplateDto } from './dtos/update-ai-template.dto';
 
@@ -317,8 +318,7 @@ export class AIService {
       }
 
       return `${acc}
-        fieldKey: ${field.key}
-        fieldFormat: ${field.format}
+        fieldName: ${field.name}
         fieldDesc: ${field.description}
         fieldValue: ${fieldValue}
         `;
@@ -390,13 +390,63 @@ export class AIService {
     }
   }
 
-  async processAIFields(feedbackIds: number[]) {
-    this.logger.log(`Processing AI Field for feedback IDs: ${feedbackIds}`);
+  processAIFields(feedbackIds: number[]) {
+    this.logger.log(
+      `Processing AI Field for feedback IDs: ${feedbackIds.toString()}`,
+    );
     for (const feedbackId of feedbackIds) {
       this.eventEmitter.emit(EventTypeEnum.FEEDBACK_CREATION, {
         feedbackId: feedbackId,
         manual: true,
       });
     }
+  }
+
+  @Transactional()
+  async getPlaygroundPromptResult(dto: GetAIPlaygroundResultDto) {
+    const integration = await this.aiIntegrationsRepo.findOne({
+      where: {
+        project: {
+          id: dto.projectId,
+        },
+      },
+    });
+
+    if (!integration) {
+      throw new BadRequestException('Integration not found');
+    }
+
+    const promptTargetText = dto.temporaryFields.reduce((acc, field) => {
+      return `${acc}
+        fieldName: ${field.name}
+        fieldDesc: ${field.description}
+        fieldValue: ${field.value}
+        `;
+    }, '');
+
+    const client = new AIClient({
+      apiKey: integration.apiKey,
+      provider: integration.provider,
+      baseUrl: integration.endpointUrl,
+    });
+
+    const result = await client.executePrompt(
+      integration.model,
+      integration.temperature,
+      integration.systemPrompt,
+      dto.templatePrompt,
+      dto.temporaryFields.map((field) => field.name).join(', '),
+      promptTargetText,
+    );
+    this.logger.log(`Result: ${result.content}`);
+
+    void this.saveAIUsage(
+      result.usedTokens,
+      integration.provider,
+      UsageCategoryEnum.AI_FIELD,
+      dto.projectId,
+    );
+
+    return result.content;
   }
 }
