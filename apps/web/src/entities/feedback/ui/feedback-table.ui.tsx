@@ -253,18 +253,23 @@ const FeedbackTable = (props: Props) => {
         />
         <div className="flex flex-shrink-0 gap-2 [&>button]:min-w-20 [&>button]:flex-shrink-0">
           {selectedRowIds.length > 0 && (
-            <Button
-              variant="outline"
-              className="!text-tint-red"
-              onClick={openDeleteFeedbacksDialog}
-              disabled={!perms.includes('feedback_delete')}
-            >
-              <Icon name="RiDeleteBin6Line" />
-              {t('v2.button.name.delete', { name: 'Feedback' })}
-              <Badge variant="subtle" className="!text-tint-red">
-                {selectedRowIds.length}
-              </Badge>
-            </Button>
+            <>
+              <Button
+                variant="outline"
+                className="!text-tint-red"
+                onClick={openDeleteFeedbacksDialog}
+                disabled={!perms.includes('feedback_delete')}
+              >
+                <Icon name="RiDeleteBin6Line" />
+                {t('v2.button.name.delete', { name: 'Feedback' })}
+                <Badge variant="subtle" className="!text-tint-red">
+                  {selectedRowIds.length}
+                </Badge>
+              </Button>
+              <Button variant="outline">
+                AI 실행 <Badge variant="subtle">{selectedRowIds.length}</Badge>
+              </Button>
+            </>
           )}
           <Tooltip>
             <TooltipTrigger>

@@ -1108,6 +1108,22 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/admin/projects/{projectId}/ai/playground/test': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AIController_getPlaygroundResult'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2177,6 +2193,18 @@ export interface components {
     };
     CreateAITemplateResponseDto: {
       id: number;
+    };
+    TemporaryField: {
+      name: string;
+      description: string;
+      value: string;
+    };
+    GetAIPlaygroundResultRequestDto: {
+      templatePrompt: string;
+      temporaryFields: components['schemas']['TemporaryField'][];
+    };
+    GetAIPlaygroundResultResponseDto: {
+      result: string;
     };
   };
   responses: never;
@@ -4410,6 +4438,31 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+    };
+  };
+  AIController_getPlaygroundResult: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['GetAIPlaygroundResultRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['GetAIPlaygroundResultResponseDto'];
+        };
       };
     };
   };

@@ -31,7 +31,7 @@ import ImagePreviewButton from './image-preview-button';
 import { DatePicker, SelectInput, SelectSearchInput } from './inputs';
 
 interface PlainRow {
-  format: 'text' | 'keyword' | 'number' | 'date' | 'images';
+  format: 'text' | 'keyword' | 'number' | 'date' | 'images' | 'aiField';
 }
 
 interface ImageRow {
@@ -78,6 +78,7 @@ const FIELD_FORMAT_ICON_MAP: Record<Format, IconNameType> = {
   images: 'RiImageLine',
   ticket: 'RiTicketLine',
   cateogry: 'RiListOrdered2',
+  aiField: 'RiSparklingFill',
 };
 
 interface Props {
@@ -188,6 +189,20 @@ const SheetDetailTable = (props: Props) => {
         </div>
       );
     },
+    aiField: (v) => (
+      <div>
+        <Tag
+          size="small"
+          style={{
+            background: 'linear-gradient(95.64deg, #62A5F5 0%, #6ED2C3 100%)',
+          }}
+        >
+          <Icon name="RiAiGenerate" />
+          AI 실행
+        </Tag>
+        <p>{v ? String(v) : '-'}</p>
+      </div>
+    ),
   };
 
   const renderEditModeField: RenderFieldMap<SheetDetailTableRow> = {
@@ -286,6 +301,7 @@ const SheetDetailTable = (props: Props) => {
     images: () => <></>,
     issue: () => <></>,
     cateogry: () => <></>,
+    aiField: () => <></>,
   };
 
   return (

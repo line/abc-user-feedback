@@ -48,6 +48,8 @@ const defaultValues: FieldInfo = {
   status: 'ACTIVE',
   property: 'READ_ONLY',
   order: 0,
+  aiFieldTargetKeys: null,
+  aiTemplateId: null,
 };
 
 interface IProps extends FormOverlayProps<FieldInfo> {

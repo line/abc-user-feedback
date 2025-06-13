@@ -39,8 +39,6 @@ export class CreateAITemplateDto {
   static toAITemplateEntity(params: CreateAITemplateDto) {
     const { title, prompt, autoProcessing, projectId } = params;
 
-    console.log('params', params);
-
     return AITemplatesEntity.from({
       title,
       prompt,

@@ -47,7 +47,6 @@ import {
   CardTitle,
   DescriptionTooltip,
   HelpCardDocs,
-  SelectInput,
   SettingAlert,
   SettingTemplate,
   SimpleLineChart,
@@ -140,15 +139,7 @@ const AISettingForm = () => {
         placeholder={t('v2.placeholder.text')}
         required
       />
-      <SelectInput
-        options={[{ value: 'openai', label: 'OpenAI' }]}
-        label="Model"
-      />
-      <TextInput
-        label="Endpoint URL"
-        placeholder={t('v2.placeholder.text')}
-        required
-      />
+      <TextInput label="Endpoint URL" placeholder={t('v2.placeholder.text')} />
       <InputField>
         <InputLabel>System Prompt</InputLabel>
         <Textarea placeholder={t('v2.placeholder.text')} />
@@ -157,7 +148,7 @@ const AISettingForm = () => {
   );
 };
 
-const chartData = { data: 0.1, fill: 'var(--fg-tint-blue)' };
+const chartData = { data: 0.1, fill: '#38BDF8' };
 const AIUsageForm = () => {
   return (
     <>
@@ -274,7 +265,7 @@ const AIUsageForm = () => {
       </div>
       <div className="flex gap-4">
         <Card className="min-h-30 flex-[1]" size="md">
-          <CardHeader>
+          <CardHeader action={<Switch />}>
             <CardTitle>Token Threshold</CardTitle>
             <CardDescription>
               토큰 사용량 상한을 설정하여 AI 기능에 대한 사용량을 제어할 수
@@ -286,7 +277,7 @@ const AIUsageForm = () => {
           </CardBody>
         </Card>
         <Card className="min-h-30 flex-[1]" size="md">
-          <CardHeader action={<Switch checked={true} />}>
+          <CardHeader action={<Switch />}>
             <CardTitle>Pre-limit notification</CardTitle>
             <CardDescription>
               토큰 사용량 상한을 기준으로 사용량에 대한 노티를 미리 안내 받을 수
@@ -500,7 +491,7 @@ const AIFieldTemplateForm = () => {
             </CardDescription>
           </CardHeader>
           <CardBody className="flex min-h-0 flex-1 flex-col gap-4">
-            <Card size="sm" className="flex min-h-0 flex-1 flex-col">
+            <Card size="sm" className="flex min-h-0 flex-[2] flex-col">
               <CardHeader
                 action={
                   <Button
@@ -525,7 +516,7 @@ const AIFieldTemplateForm = () => {
                 ))}
               </CardBody>
             </Card>
-            <Card size="sm" className="flex-1">
+            <Card size="sm" className="flex-[1]">
               <CardHeader
                 action={
                   <Button variant="outline">
@@ -614,7 +605,7 @@ const AIPlaygroundInputDataItemForm = ({
   return (
     <Card size="sm">
       <CardBody>
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-1" onSubmit={handleSubmit(onSubmit)}>
           <TextInput label="Field Title" {...register('title')} />
           <TextInput label="Field Description" {...register('description')} />
           <TextInput label="Field Value" {...register('value')} />

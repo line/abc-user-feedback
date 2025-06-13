@@ -106,7 +106,9 @@ const FeedbackTableChannelSelection = (props: Props) => {
                 <TabsTrigger key={channel.id} value={String(channel.id)}>
                   {channel.name}
                   {currentChannelId === channel.id && (
-                    <span className="ml-1 font-bold">{totalItems}</span>
+                    <span className="ml-1 font-bold">
+                      {totalItems?.toLocaleString()}
+                    </span>
                   )}
                 </TabsTrigger>
               ))

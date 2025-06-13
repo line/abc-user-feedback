@@ -82,12 +82,12 @@ const Menu = React.forwardRef<
 );
 Menu.displayName = ToggleGroupPrimitive.Root.displayName;
 
-const menuItemVariants = cva('!menu-item', {
+const menuItemVariants = cva('menu-item', {
   variants: {
     size: {
-      small: '!menu-item-small',
-      medium: '!menu-item-medium',
-      large: '!menu-item-large',
+      small: 'menu-item-small',
+      medium: 'menu-item-medium',
+      large: 'menu-item-large',
     },
     defaultVariants: {
       size: DefaultValue.size,
