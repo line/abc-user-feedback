@@ -367,7 +367,8 @@ export class AIService {
       promptTargetText,
     );
     this.logger.log(`Result: ${result.content}`);
-    feedback.data[aiField.key] = result.content;
+    feedback.data[aiField.key] =
+      `{\'status\': \'${result.status}\', \'message\': \'${result.content}\'}`;
 
     void this.saveAIUsage(
       result.usedTokens,
