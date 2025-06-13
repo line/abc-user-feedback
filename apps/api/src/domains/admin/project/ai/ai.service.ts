@@ -158,33 +158,50 @@ export class AIService {
 
   @Transactional()
   async createDefaultTemplates(projectId: number) {
+    const existingIntegration = await this.aiIntegrationsRepo.findOne({
+      where: {
+        project: {
+          id: projectId,
+        },
+      },
+    });
+
+    if (!existingIntegration) {
+      throw new BadRequestException('Integration not found');
+    }
+
+    const model =
+      existingIntegration.provider === AIProvidersEnum.OPEN_AI ?
+        'gpt-4o'
+      : 'gemini-2.0-flash';
+
     const templates = [
       {
         title: 'Feedback Summary',
         prompt: 'Summarize the following feedback within 2 sentences',
         autoProcessing: false,
-        model: null,
+        model: model,
         temperature: 0.7,
       },
       {
         title: 'Feedback Sentiment Analysis',
         prompt: 'Analyze the sentiment of the following feedback',
         autoProcessing: false,
-        model: null,
+        model: model,
         temperature: 0.7,
       },
       {
         title: 'Feedback Translation',
         prompt: 'Translate the following feedback to English',
         autoProcessing: false,
-        model: null,
+        model: model,
         temperature: 0.7,
       },
       {
         title: 'Feedback Keyword Extraction',
         prompt: 'Extract the keywords from the following feedback',
         autoProcessing: false,
-        model: null,
+        model: model,
         temperature: 0.7,
       },
     ];
