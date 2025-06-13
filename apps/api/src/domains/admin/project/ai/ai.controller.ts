@@ -22,6 +22,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -47,6 +48,7 @@ import {
   GetAIIntegrationsModelsResponseDto,
   GetAIPlaygroundResultResponseDto,
   GetAITemplatesResponseDto,
+  GetAIUsagesResponseDto,
   ValidateAPIKeyResponseDto,
 } from './dtos/responses';
 
@@ -155,5 +157,17 @@ export class AIController {
         projectId,
       }),
     });
+  }
+
+  @ApiOkResponse({ type: GetAIUsagesResponseDto })
+  @Get('usages')
+  async getUsages(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Query('from') from: Date,
+    @Query('to') to: Date,
+  ) {
+    return GetAIUsagesResponseDto.transform(
+      await this.aiService.getUsages(projectId, from, to),
+    );
   }
 }

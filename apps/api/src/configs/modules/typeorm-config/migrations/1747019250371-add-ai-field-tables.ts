@@ -68,6 +68,7 @@ export class AddAIFieldTables1747019250371 implements MigrationInterface {
         \`deleted_at\` DATETIME(6) DEFAULT NULL,
         \`year\` int NOT NULL,
         \`month\` int NOT NULL,
+        \`day\` int NOT NULL,
         \`category\` enum('AI_FIELD', 'ISSUE_RECOMMEND') NOT NULL,
         \`provider\` enum('OPEN_AI', 'GEMINI') NOT NULL,
         \`used_tokens\` int NOT NULL,

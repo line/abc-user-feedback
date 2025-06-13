@@ -17,12 +17,16 @@ import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 import { EventTypeEnum } from '@/common/enums/event-type.enum';
-import { getCurrentMonth, getCurrentYear } from '@/utils/date-utils';
+import {
+  getCurrentDay,
+  getCurrentMonth,
+  getCurrentYear,
+} from '@/utils/date-utils';
 import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { FeedbackMySQLService } from '../../feedback/feedback.mysql.service';
@@ -279,6 +283,7 @@ export class AIService {
         },
         year: getCurrentYear(),
         month: getCurrentMonth(),
+        day: getCurrentDay(),
         category,
         provider,
       },
@@ -293,6 +298,7 @@ export class AIService {
     const usage = AIUsagesEntity.from({
       year: getCurrentYear(),
       month: getCurrentMonth(),
+      day: getCurrentDay(),
       category,
       provider,
       usedTokens,
@@ -457,5 +463,27 @@ export class AIService {
     );
 
     return result.content;
+  }
+
+  async getUsages(projectId: number, from: Date, to: Date) {
+    const usages = await this.aiUsagesRepo.find({
+      where: {
+        project: {
+          id: projectId,
+        },
+        createdAt: Between(from, to),
+      },
+    });
+
+    return usages.map((usage) => {
+      return {
+        year: usage.year,
+        month: usage.month,
+        day: usage.day,
+        category: usage.category,
+        provider: usage.provider,
+        usedTokens: usage.usedTokens,
+      };
+    });
   }
 }

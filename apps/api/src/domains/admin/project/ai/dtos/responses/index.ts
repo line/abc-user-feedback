@@ -20,3 +20,4 @@ export { GetAITemplatesResponseDto } from './get-ai-templates-response.dto';
 export { GetAIIntegrationResponseDto } from './get-ai-integration-response.dto';
 export { ValidateAPIKeyResponseDto } from './validate-api-key-response.dto';
 export { GetAIPlaygroundResultResponseDto } from './get-ai-playground-result-response.dto';
+export { GetAIUsagesResponseDto } from './get-ai-usages-response.dto';
