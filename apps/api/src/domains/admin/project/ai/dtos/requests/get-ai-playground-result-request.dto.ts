@@ -14,7 +14,7 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsString } from 'class-validator';
 
 export class TemporaryField {
   @ApiProperty({ nullable: false, type: String })
@@ -34,6 +34,14 @@ export class GetAIPlaygroundResultRequestDto {
   @ApiProperty({ nullable: false, type: String })
   @IsString()
   templatePrompt: string;
+
+  @ApiProperty({ nullable: false, type: String })
+  @IsString()
+  model: string;
+
+  @ApiProperty({ nullable: false, type: Number })
+  @IsNumber()
+  temperature: number;
 
   @ApiProperty({ nullable: false, type: [TemporaryField] })
   @IsArray()

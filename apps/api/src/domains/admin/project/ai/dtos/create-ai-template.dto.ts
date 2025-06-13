@@ -30,6 +30,12 @@ export class CreateAITemplateDto {
   @Expose()
   projectId: number;
 
+  @Expose()
+  model: string | null;
+
+  @Expose()
+  temperature: number;
+
   public static from(params: any): CreateAITemplateDto {
     return plainToInstance(CreateAITemplateDto, params, {
       excludeExtraneousValues: true,
@@ -37,15 +43,16 @@ export class CreateAITemplateDto {
   }
 
   static toAITemplateEntity(params: CreateAITemplateDto) {
-    const { title, prompt, autoProcessing, projectId } = params;
-
-    console.log('params', params);
+    const { title, prompt, autoProcessing, projectId, model, temperature } =
+      params;
 
     return AITemplatesEntity.from({
       title,
       prompt,
       autoProcessing,
       projectId,
+      model,
+      temperature,
     });
   }
 }

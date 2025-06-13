@@ -22,6 +22,12 @@ export class GetAIPlaygroundResultDto {
   projectId: number;
 
   @Expose()
+  model: string;
+
+  @Expose()
+  temperature: number;
+
+  @Expose()
   templatePrompt: string;
 
   @Expose()

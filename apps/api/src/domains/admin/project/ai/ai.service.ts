@@ -89,11 +89,9 @@ export class AIService {
         CreateAIIntegrationsDto.from({
           projectId,
           provider: 'OPEN_AI',
-          model: '',
           apiKey: '',
           endpointUrl: '',
           systemPrompt: '',
-          temperature: 0.7,
         }),
       );
     }
@@ -101,11 +99,9 @@ export class AIService {
     return {
       id: integration.id,
       provider: integration.provider,
-      model: integration.model,
       apiKey: integration.apiKey,
       endpointUrl: integration.endpointUrl,
       systemPrompt: integration.systemPrompt,
-      temperature: integration.temperature,
     };
   }
 
@@ -163,21 +159,29 @@ export class AIService {
         title: 'Feedback Summary',
         prompt: 'Summarize the following feedback within 2 sentences',
         autoProcessing: false,
+        model: null,
+        temperature: 0.7,
       },
       {
         title: 'Feedback Sentiment Analysis',
         prompt: 'Analyze the sentiment of the following feedback',
         autoProcessing: false,
+        model: null,
+        temperature: 0.7,
       },
       {
         title: 'Feedback Translation',
         prompt: 'Translate the following feedback to English',
         autoProcessing: false,
+        model: null,
+        temperature: 0.7,
       },
       {
         title: 'Feedback Keyword Extraction',
         prompt: 'Extract the keywords from the following feedback',
         autoProcessing: false,
+        model: null,
+        temperature: 0.7,
       },
     ];
 
@@ -347,6 +351,10 @@ export class AIService {
       throw new BadRequestException('AI template not found');
     }
 
+    if (!aiField.aiTemplate.model) {
+      throw new BadRequestException('The model is not set for the AI template');
+    }
+
     const promptTargetText = this.generatePromptTargetText(
       feedback,
       aiTargetFields,
@@ -359,8 +367,8 @@ export class AIService {
     });
 
     const result = await client.executePrompt(
-      integration.model,
-      integration.temperature,
+      aiField.aiTemplate.model,
+      aiField.aiTemplate.temperature,
       integration.systemPrompt,
       aiField.aiTemplate.prompt,
       aiTargetFields.map((field) => field.key).join(', '),
@@ -432,8 +440,8 @@ export class AIService {
     });
 
     const result = await client.executePrompt(
-      integration.model,
-      integration.temperature,
+      dto.model,
+      dto.temperature,
       integration.systemPrompt,
       dto.templatePrompt,
       dto.temporaryFields.map((field) => field.name).join(', '),
