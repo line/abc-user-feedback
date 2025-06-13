@@ -32,11 +32,6 @@ export class GetAIIntegrationResponseDto {
   @ApiProperty()
   @IsString()
   @Expose()
-  model: string;
-
-  @ApiProperty()
-  @IsString()
-  @Expose()
   apiKey: string;
 
   @ApiProperty()
@@ -52,7 +47,12 @@ export class GetAIIntegrationResponseDto {
   @ApiProperty()
   @IsNumber()
   @Expose()
-  temperature: number;
+  tokenThreshold: number | null;
+
+  @ApiProperty()
+  @IsNumber()
+  @Expose()
+  notificationThreshold: number | null;
 
   public static transform(params: any): GetAIIntegrationResponseDto {
     return plainToInstance(GetAIIntegrationResponseDto, params, {

@@ -36,6 +36,14 @@ export class GetAITemplatesResponseDto {
 
   @ApiProperty()
   @Expose()
+  model: string | null;
+
+  @ApiProperty()
+  @Expose()
+  temperature: number;
+
+  @ApiProperty()
+  @Expose()
   createdAt: Date;
 
   @ApiProperty()
