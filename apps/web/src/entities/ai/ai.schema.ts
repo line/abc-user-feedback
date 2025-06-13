@@ -18,7 +18,6 @@ import { z } from 'zod';
 
 export const aiSchema = z.object({
   provider: z.enum(['OPEN_AI', 'GEMINI']),
-  model: z.string().trim().min(1, { message: 'Model is required' }),
   apiKey: z.string().trim().min(1, { message: 'API Key is required' }),
   endpointUrl: z.string().trim().url({ message: 'Invalid URL format' }),
   temperature: z.string().trim().min(1, { message: 'Temperature is required' }),
@@ -26,11 +25,14 @@ export const aiSchema = z.object({
     .string()
     .trim()
     .min(1, { message: 'System prompt is required' }),
-  tokenThreshold: z
-    .number()
-    .int()
-    .min(0, { message: 'Token threshold must be a non-negative integer' }),
-  notificationThreshold: z.number().int().min(0, {
-    message: 'Notification threshold must be a non-negative integer',
-  }),
+  tokenThreshold: z.number().nullable(),
+  notificationThreshold: z.number().nullable(),
+});
+
+export const aiTemplateSchema = z.object({
+  title: z.string().trim().min(1, { message: 'Title is required' }),
+  prompt: z.string().trim().min(1, { message: 'Prompt is required' }),
+  autoProcessing: z.boolean(),
+  model: z.string(),
+  temperature: z.number(),
 });

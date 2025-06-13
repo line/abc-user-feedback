@@ -13,12 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { FormState } from 'react-hook-form';
 
 export type AISettingStore = {
   isPending: boolean;
   formId: string;
   setIsPending: (isPending: boolean) => void;
-  formState?: FormState<{}>;
-  setFormState: (formState: FormState<{}>) => void;
+  isDirty: boolean;
+  setIsDirty: (isDirty: boolean) => void;
 };

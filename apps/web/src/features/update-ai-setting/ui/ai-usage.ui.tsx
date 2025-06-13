@@ -14,7 +14,8 @@
  * under the License.
  */
 
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 import {
   Label,
@@ -25,37 +26,45 @@ import {
 } from 'recharts';
 import { create } from 'zustand';
 
-import { Button, Switch, toast } from '@ufb/react';
+import { Button, Calendar, Switch, toast } from '@ufb/react';
 
+import type { DateRangeType } from '@/shared';
 import {
   Card,
   CardBody,
   CardDescription,
   CardHeader,
   CardTitle,
+  DateRangePicker,
   DescriptionTooltip,
   HelpCardDocs,
   SettingAlert,
   SimpleLineChart,
   TextInput,
   useOAIMutation,
+  useOAIQuery,
 } from '@/shared';
 import type { AI } from '@/entities/ai';
 
 import type { AISettingStore } from '../ai-setting-form.type';
 
 const useAIUsageFormStore = create<AISettingStore>((set) => ({
-  isPending: false,
   formId: 'ai-usage-form',
+  isPending: false,
   setIsPending: (isPending) => set({ isPending }),
-  setFormState: (formState) => set({ formState }),
+  isDirty: false,
+  setIsDirty: (isDirty) => set({ isDirty }),
 }));
 
 const chartData = { data: 0.1, fill: '#38BDF8' };
 
 export const AIUsageForm = ({ projectId }: { projectId: number }) => {
-  const methods = useForm<AI>();
-  const { setIsPending, formId, setFormState } = useAIUsageFormStore();
+  const { register, formState, setValue, watch, handleSubmit } = useForm<AI>();
+  const { formId, setIsPending, setIsDirty } = useAIUsageFormStore();
+  const [dateRange, setDateRange] = useState<DateRangeType>({
+    startDate: new Date(new Date().setDate(1)),
+    endDate: new Date(new Date().setMonth(new Date().getMonth() + 1, 0)),
+  });
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
@@ -71,48 +80,101 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
     },
   });
 
+  const { data: integrationData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/integrations',
+    variables: { projectId },
+  });
+
+  const { data: dailyData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/usages',
+    variables: {
+      projectId,
+      from: dateRange?.startDate?.toISOString() ?? '',
+      to: dateRange?.endDate?.toISOString() ?? '',
+    },
+  });
+
+  const { data: monthlyData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/usages',
+    variables: {
+      projectId,
+      from: dayjs().startOf('month').toISOString(),
+      to: dayjs().endOf('month').toISOString(),
+    },
+  });
+
   useEffect(() => {
     setIsPending(isPending);
   }, [isPending]);
 
   useEffect(() => {
-    setFormState(methods.formState);
-  }, [methods.formState]);
+    setIsDirty(formState.isDirty);
+  }, [formState.isDirty]);
+
+  const montlyTotalUsage = useMemo(
+    () => monthlyData?.reduce((acc, usage) => acc + usage.usedTokens, 0) ?? 0,
+    [monthlyData],
+  );
+  const chartData = useMemo(() => {
+    const result: Record<
+      string,
+      {
+        date: string;
+        Total: number;
+        'AI Field': number;
+        'AI Issue': number;
+      }
+    > = {};
+
+    dailyData?.forEach((entry) => {
+      const dateKey = `${entry.year}-${String(entry.month).padStart(2, '0')}-${String(entry.day).padStart(2, '0')}`;
+      if (!result[dateKey]) {
+        result[dateKey] = {
+          date: dateKey,
+          Total: 0,
+          'AI Field': 0,
+          'AI Issue': 0,
+        };
+      }
+
+      result[dateKey].Total += entry.usedTokens;
+
+      if (entry.category === 'AI_FIELD') {
+        result[dateKey]['AI Field'] += entry.usedTokens;
+      } else if (entry.category === 'ISSUE_RECOMMEND') {
+        result[dateKey]['AI Issue'] += entry.usedTokens;
+      }
+    });
+
+    return Object.values(result);
+  }, [dailyData]);
 
   return (
     <>
       <SettingAlert
         description={<HelpCardDocs i18nKey="help-card.api-key" />}
       />
-      <div className="flex gap-4">
+      <form
+        className="flex flex-row gap-4"
+        id={formId}
+        onSubmit={handleSubmit((v) => mutate(v))}
+      >
         <div className="flex-[2]">
           <SimpleLineChart
+            filterContent={
+              <DateRangePicker
+                onChange={setDateRange}
+                value={dateRange}
+                maxDate={new Date()}
+              />
+            }
             dataKeys={[
               { name: 'Total', color: '#4A90E2' },
               { name: 'AI Field', color: '#50E3C2' },
               { name: 'AI Issue', color: '#F5A623' },
             ]}
             title="사용 토큰량"
-            data={[
-              {
-                name: '2024-01-01',
-                Total: 1000,
-                'AI Field': 800,
-                'AI Issue': 200,
-              },
-              {
-                name: '2024-01-02',
-                Total: 1200,
-                'AI Field': 900,
-                'AI Issue': 300,
-              },
-              {
-                name: '2024-01-03',
-                Total: 1500,
-                'AI Field': 1000,
-                'AI Issue': 500,
-              },
-            ]}
+            data={chartData}
             showLegend
             description=""
             height={334}
@@ -139,7 +201,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
                 gridType="circle"
                 radialLines={false}
                 stroke="none"
-                className="last:fill-neutral-inverse first:fill-[var(--bg-neutral-tertiary)]"
+                className="first:fill-[var(--bg-neutral-tertiary)] last:fill-[var(--bg-neutral-primary)]"
                 polarRadius={[86, 74]}
               />
               <RadialBar dataKey="data" background />
@@ -178,7 +240,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
             <div className="flex w-full flex-col gap-4">
               <div className="flex justify-between">
                 <div>Used Tokens</div>
-                <div>{(900000).toLocaleString()}</div>
+                <div>{montlyTotalUsage.toLocaleString()}</div>
               </div>
               <div className="flex justify-between">
                 <div>Remaining Tokens</div>
@@ -191,10 +253,26 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
             </div>
           </CardBody>
         </Card>
-      </div>
+      </form>
       <div className="flex gap-4">
         <Card className="min-h-30 flex-[1]" size="md">
-          <CardHeader action={<Switch />}>
+          <CardHeader
+            action={
+              <Switch
+                checked={watch('tokenThreshold') !== null}
+                onCheckedChange={(checked) => {
+                  setValue('tokenThreshold', checked ? 1000000 : null, {
+                    shouldDirty: true,
+                  });
+                  if (!checked) {
+                    setValue('notificationThreshold', null, {
+                      shouldDirty: true,
+                    });
+                  }
+                }}
+              />
+            }
+          >
             <CardTitle>Token Threshold</CardTitle>
             <CardDescription>
               토큰 사용량 상한을 설정하여 AI 기능에 대한 사용량을 제어할 수
@@ -202,11 +280,23 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
             </CardDescription>
           </CardHeader>
           <CardBody>
-            <TextInput />
+            <TextInput type="number" {...register('tokenThreshold')} />
           </CardBody>
         </Card>
         <Card className="min-h-30 flex-[1]" size="md">
-          <CardHeader action={<Switch />}>
+          <CardHeader
+            action={
+              <Switch
+                disabled={watch('tokenThreshold') === null}
+                checked={watch('notificationThreshold') !== null}
+                onCheckedChange={(checked) => {
+                  setValue('notificationThreshold', checked ? 1000000 : null, {
+                    shouldDirty: true,
+                  });
+                }}
+              />
+            }
+          >
             <CardTitle>Pre-limit notification</CardTitle>
             <CardDescription>
               토큰 사용량 상한을 기준으로 사용량에 대한 노티를 미리 안내 받을 수
@@ -223,14 +313,9 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
 };
 
 export const AIUsageFormButton = () => {
-  const { formId, isPending, formState } = useAIUsageFormStore();
+  const { formId, isPending, isDirty } = useAIUsageFormStore();
   return (
-    <Button
-      form={formId}
-      type="submit"
-      disabled={!formState?.isDirty}
-      loading={isPending}
-    >
+    <Button form={formId} type="submit" disabled={!isDirty} loading={isPending}>
       저장
     </Button>
   );

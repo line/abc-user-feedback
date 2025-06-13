@@ -26,15 +26,16 @@ import type { AI } from '@/entities/ai';
 import type { AISettingStore } from '../ai-setting-form.type';
 
 const useAISettingFormStore = create<AISettingStore>((set) => ({
-  isPending: false,
   formId: 'ai-setting-form',
+  isPending: false,
   setIsPending: (isPending) => set({ isPending }),
-  setFormState: (formState) => set({ formState }),
+  isDirty: false,
+  setIsDirty: (isDirty) => set({ isDirty }),
 }));
 
 export const AISettingForm = ({ projectId }: { projectId: number }) => {
   const methods = useForm<AI>();
-  const { setIsPending, formId, setFormState } = useAISettingFormStore();
+  const { formId, setIsPending, setIsDirty } = useAISettingFormStore();
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
@@ -55,8 +56,8 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
   }, [isPending]);
 
   useEffect(() => {
-    setFormState(methods.formState);
-  }, [methods.formState]);
+    setIsDirty(methods.formState.isDirty);
+  }, [methods.formState.isDirty]);
 
   return (
     <>
@@ -64,12 +65,7 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
         description={<HelpCardDocs i18nKey="help-card.api-key" />}
       />
       <FormProvider {...methods}>
-        <form
-          id={formId}
-          onSubmit={methods.handleSubmit((data) => {
-            mutate(data);
-          })}
-        >
+        <form id={formId} onSubmit={methods.handleSubmit((v) => mutate(v))}>
           <AiSettingForm />
         </form>
       </FormProvider>
@@ -78,14 +74,9 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
 };
 
 export const AISettingFormButton = () => {
-  const { formId, isPending, formState } = useAISettingFormStore();
+  const { formId, isPending, isDirty } = useAISettingFormStore();
   return (
-    <Button
-      form={formId}
-      type="submit"
-      disabled={!formState?.isDirty}
-      loading={isPending}
-    >
+    <Button form={formId} type="submit" loading={isPending} disabled={!isDirty}>
       저장
     </Button>
   );

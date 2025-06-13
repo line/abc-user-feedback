@@ -65,7 +65,7 @@ export class AIController {
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)
-  @ApiCreatedResponse({ type: GetAIIntegrationResponseDto })
+  @ApiOkResponse({ type: GetAIIntegrationResponseDto })
   @Get('integrations')
   async getIntegration(@Param('projectId', ParseIntPipe) projectId: number) {
     return GetAIIntegrationResponseDto.transform(
@@ -97,7 +97,7 @@ export class AIController {
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)
-  @ApiOkResponse({ type: GetAITemplatesResponseDto })
+  @ApiOkResponse({ type: [GetAITemplatesResponseDto] })
   @Get('templates')
   async getTemplates(@Param('projectId', ParseIntPipe) projectId: number) {
     return GetAITemplatesResponseDto.transform(
@@ -169,7 +169,7 @@ export class AIController {
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)
-  @ApiOkResponse({ type: GetAIUsagesResponseDto })
+  @ApiOkResponse({ type: [GetAIUsagesResponseDto] })
   @Get('usages')
   async getUsages(
     @Param('projectId', ParseIntPipe) projectId: number,

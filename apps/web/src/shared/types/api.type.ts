@@ -1294,7 +1294,9 @@ export interface components {
       | 'channel_field_read'
       | 'channel_field_update'
       | 'channel_image_read'
-      | 'channel_image_update';
+      | 'channel_image_update'
+      | 'generative_ai_read'
+      | 'generative_ai_update';
     RoleProjectDto: {
       id: number;
       createdAt: string;
@@ -2180,10 +2182,8 @@ export interface components {
     };
     UpdateAIIntegrationsRequestDto: {
       provider: components['schemas']['AIProvidersEnum'];
-      model: string;
       apiKey: string;
       endpointUrl: string;
-      temperature: string;
       systemPrompt: string;
       tokenThreshold: number | null;
       notificationThreshold: number | null;
@@ -4285,7 +4285,7 @@ export interface operations {
     };
     requestBody?: never;
     responses: {
-      201: {
+      200: {
         headers: {
           [name: string]: unknown;
         };
@@ -4357,7 +4357,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['GetAITemplatesResponseDto'];
+          'application/json': components['schemas']['GetAITemplatesResponseDto'][];
         };
       };
     };
@@ -4517,7 +4517,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['GetAIUsagesResponseDto'];
+          'application/json': components['schemas']['GetAIUsagesResponseDto'][];
         };
       };
     };

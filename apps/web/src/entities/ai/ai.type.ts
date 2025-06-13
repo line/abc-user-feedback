@@ -15,6 +15,7 @@
  */
 import type { z } from 'zod';
 
-import type { aiSchema } from './ai.schema';
+import type { aiSchema, aiTemplateSchema } from './ai.schema';
 
 export type AI = z.infer<typeof aiSchema>;
+export type AITemplate = z.infer<typeof aiTemplateSchema>;

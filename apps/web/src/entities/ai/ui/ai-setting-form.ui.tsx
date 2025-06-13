@@ -35,7 +35,9 @@ const AiSettingForm = () => {
     <div className="flex flex-col gap-4">
       <RadioCardGroup
         value={watch('provider')}
-        onValueChange={(v: 'OPEN_AI' | 'GEMINI') => setValue('provider', v)}
+        onValueChange={(v: 'OPEN_AI' | 'GEMINI') =>
+          setValue('provider', v, { shouldDirty: true })
+        }
       >
         <RadioCard value="OPEN_AI" icon="RiGoogleFill" title="Open AI" />
         <RadioCard value="GEMINI" icon="RiToolsFill" title="Gemini" />
