@@ -106,6 +106,8 @@ export class AIService {
       apiKey: integration.apiKey,
       endpointUrl: integration.endpointUrl,
       systemPrompt: integration.systemPrompt,
+      tokenThreshold: integration.tokenThreshold,
+      notificationThreshold: integration.notificationThreshold,
     };
   }
 
@@ -151,6 +153,8 @@ export class AIService {
       title: template.title,
       prompt: template.prompt,
       autoProcessing: template.autoProcessing,
+      model: template.model,
+      temperature: template.temperature,
       createdAt: template.createdAt,
       updatedAt: template.updatedAt,
     }));
