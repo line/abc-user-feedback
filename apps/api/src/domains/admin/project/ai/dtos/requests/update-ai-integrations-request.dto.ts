@@ -26,21 +26,12 @@ export class UpdateAIIntegrationsRequestDto {
   @ApiProperty({ nullable: false, type: String })
   @IsString()
   @MaxLength(255)
-  model: string;
-
-  @ApiProperty({ nullable: false, type: String })
-  @IsString()
-  @MaxLength(255)
   apiKey: string;
 
   @ApiProperty({ nullable: false, type: String })
   @IsString()
   @MaxLength(255)
   endpointUrl: string;
-
-  @ApiProperty({ nullable: false, type: String })
-  @IsNumber()
-  temperature: number;
 
   @ApiProperty({ nullable: false, type: String })
   @IsString()

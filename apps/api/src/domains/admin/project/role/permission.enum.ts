@@ -57,6 +57,9 @@ export enum PermissionEnum {
   channel_field_update = 'channel_field_update',
   channel_image_read = 'channel_image_read',
   channel_image_update = 'channel_image_update',
+
+  generative_ai_read = 'generative_ai_read',
+  generative_ai_update = 'generative_ai_update',
 }
 
 export const AllPermissions = Object.values(PermissionEnum);

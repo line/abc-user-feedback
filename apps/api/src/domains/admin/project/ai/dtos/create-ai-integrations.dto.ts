@@ -26,16 +26,10 @@ export class CreateAIIntegrationsDto {
   provider: AIProvidersEnum;
 
   @Expose()
-  model: string;
-
-  @Expose()
   apiKey: string;
 
   @Expose()
   endpointUrl: string;
-
-  @Expose()
-  temperature: number;
 
   @Expose()
   systemPrompt: string;
