@@ -25,9 +25,6 @@ export class AIIntegrationsEntity extends CommonEntity {
   provider: AIProvidersEnum;
 
   @Column('varchar')
-  model: string;
-
-  @Column('varchar')
   apiKey: string;
 
   @Column('varchar', { default: '' })
@@ -35,9 +32,6 @@ export class AIIntegrationsEntity extends CommonEntity {
 
   @Column('text')
   systemPrompt: string;
-
-  @Column('float', { default: 0.7 })
-  temperature: number;
 
   @Column('int', { nullable: true, default: null })
   tokenThreshold: number | null;
@@ -53,21 +47,17 @@ export class AIIntegrationsEntity extends CommonEntity {
 
   static from({
     provider,
-    model,
     apiKey,
     endpointUrl,
     systemPrompt,
-    temperature,
     tokenThreshold,
     notificationThreshold,
     projectId,
   }: {
     provider: AIProvidersEnum;
-    model: string;
     apiKey: string;
     endpointUrl: string;
     systemPrompt: string;
-    temperature: number;
     tokenThreshold?: number | null;
     notificationThreshold?: number | null;
     projectId: number;
@@ -75,11 +65,9 @@ export class AIIntegrationsEntity extends CommonEntity {
     const aiIntegrations = new AIIntegrationsEntity();
 
     aiIntegrations.provider = provider;
-    aiIntegrations.model = model;
     aiIntegrations.apiKey = apiKey;
     aiIntegrations.endpointUrl = endpointUrl;
     aiIntegrations.systemPrompt = systemPrompt;
-    aiIntegrations.temperature = temperature;
     if (tokenThreshold) {
       aiIntegrations.tokenThreshold = tokenThreshold;
     }

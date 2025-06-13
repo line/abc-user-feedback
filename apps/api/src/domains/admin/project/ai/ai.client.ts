@@ -51,6 +51,7 @@ interface ExecutePromptResponse {
 }
 
 class PromptResult {
+  status: 'success' | 'error' = 'success';
   content: string;
   usedTokens: number;
 }
@@ -213,6 +214,7 @@ export class AIClient {
       return result;
     } catch (error) {
       const result = new PromptResult();
+      result.status = 'error';
       result.content = `Error executing prompt: ${error}`;
       result.usedTokens = 0;
 

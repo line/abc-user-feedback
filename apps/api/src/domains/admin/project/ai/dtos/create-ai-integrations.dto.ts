@@ -41,10 +41,10 @@ export class CreateAIIntegrationsDto {
   systemPrompt: string;
 
   @Expose()
-  tokenThreshold: number;
+  tokenThreshold: number | null;
 
   @Expose()
-  notificationThreshold: number;
+  notificationThreshold: number | null;
 
   public static from(params: any): CreateAIIntegrationsDto {
     return plainToInstance(CreateAIIntegrationsDto, params, {
@@ -55,11 +55,9 @@ export class CreateAIIntegrationsDto {
   static toAIIntegrationsEntity(params: CreateAIIntegrationsDto) {
     const {
       provider,
-      model,
       apiKey,
       endpointUrl,
       projectId,
-      temperature,
       systemPrompt,
       tokenThreshold,
       notificationThreshold,
@@ -67,10 +65,8 @@ export class CreateAIIntegrationsDto {
 
     return AIIntegrationsEntity.from({
       provider,
-      model,
       apiKey,
       endpointUrl,
-      temperature,
       systemPrompt,
       projectId,
       tokenThreshold,

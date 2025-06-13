@@ -32,3 +32,7 @@ export function getCurrentYear(): number {
 export function getCurrentMonth(): number {
   return DateTime.now().month;
 }
+
+export function getCurrentDay(): number {
+  return DateTime.now().day;
+}

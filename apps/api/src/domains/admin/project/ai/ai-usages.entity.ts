@@ -32,6 +32,9 @@ export class AIUsagesEntity extends CommonEntity {
   @Column('int')
   month: number;
 
+  @Column('int')
+  day: number;
+
   @Column('enum', { enum: UsageCategoryEnum })
   category: UsageCategoryEnum;
 
@@ -49,6 +52,7 @@ export class AIUsagesEntity extends CommonEntity {
   static from({
     year,
     month,
+    day,
     category,
     provider,
     usedTokens,
@@ -56,6 +60,7 @@ export class AIUsagesEntity extends CommonEntity {
   }: {
     year: number;
     month: number;
+    day: number;
     category: UsageCategoryEnum;
     provider: AIProvidersEnum;
     usedTokens: number;
@@ -65,6 +70,7 @@ export class AIUsagesEntity extends CommonEntity {
 
     aiUsages.year = year;
     aiUsages.month = month;
+    aiUsages.day = day;
     aiUsages.category = category;
     aiUsages.provider = provider;
     aiUsages.usedTokens = usedTokens;

@@ -13,46 +13,49 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
+import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance } from 'class-transformer';
 
-import { AITemplatesEntity } from '../ai-templates.entity';
+import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
+import { UsageCategoryEnum } from '../../ai-usages.entity';
 
-export class CreateAITemplateDto {
+export class GetAIUsagesResponseDto {
+  @ApiProperty()
   @Expose()
-  title: string;
+  year: number;
 
+  @ApiProperty()
   @Expose()
-  prompt: string;
+  month: number;
 
+  @ApiProperty()
   @Expose()
-  autoProcessing: boolean;
+  day: number;
 
+  @ApiProperty({
+    type: UsageCategoryEnum,
+    enum: UsageCategoryEnum,
+    enumName: 'UsageCategoryEnum',
+  })
   @Expose()
-  projectId: number;
+  category: UsageCategoryEnum;
 
+  @ApiProperty({
+    type: AIProvidersEnum,
+    enum: AIProvidersEnum,
+    enumName: 'AIProvidersEnum',
+  })
   @Expose()
-  model: string | null;
+  provider: AIProvidersEnum;
 
+  @ApiProperty()
   @Expose()
-  temperature: number;
+  usedTokens: number;
 
-  public static from(params: any): CreateAITemplateDto {
-    return plainToInstance(CreateAITemplateDto, params, {
+  public static transform(params: any): GetAIUsagesResponseDto {
+    return plainToInstance(GetAIUsagesResponseDto, params, {
       excludeExtraneousValues: true,
-    });
-  }
-
-  static toAITemplateEntity(params: CreateAITemplateDto) {
-    const { title, prompt, autoProcessing, projectId, model, temperature } =
-      params;
-
-    return AITemplatesEntity.from({
-      title,
-      prompt,
-      autoProcessing,
-      projectId,
-      model,
-      temperature,
     });
   }
 }

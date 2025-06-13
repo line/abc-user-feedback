@@ -14,13 +14,21 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString, MaxLength } from 'class-validator';
+import { IsBoolean, IsNumber, IsString, MaxLength } from 'class-validator';
 
 export class CreateAITemplateRequestDto {
   @ApiProperty({ nullable: false, type: String })
   @IsString()
   @MaxLength(255)
   title: string;
+
+  @ApiProperty({ nullable: false, type: String })
+  @IsString()
+  model: string;
+
+  @ApiProperty({ nullable: false, type: Number })
+  @IsNumber()
+  temperature: number;
 
   @ApiProperty({ nullable: false, type: String })
   @IsString()

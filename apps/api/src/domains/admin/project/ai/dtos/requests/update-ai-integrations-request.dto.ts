@@ -46,11 +46,11 @@ export class UpdateAIIntegrationsRequestDto {
   @IsString()
   systemPrompt: string;
 
-  @ApiProperty({ nullable: false, type: Number })
+  @ApiProperty({ nullable: true, type: Number })
   @IsNumber()
-  tokenThreshold: number;
+  tokenThreshold: number | null;
 
-  @ApiProperty({ nullable: false, type: Number })
+  @ApiProperty({ nullable: true, type: Number })
   @IsNumber()
-  notificationThreshold: number;
+  notificationThreshold: number | null;
 }

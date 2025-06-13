@@ -17,12 +17,16 @@ import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 import { EventTypeEnum } from '@/common/enums/event-type.enum';
-import { getCurrentMonth, getCurrentYear } from '@/utils/date-utils';
+import {
+  getCurrentDay,
+  getCurrentMonth,
+  getCurrentYear,
+} from '@/utils/date-utils';
 import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { FeedbackMySQLService } from '../../feedback/feedback.mysql.service';
@@ -89,11 +93,9 @@ export class AIService {
         CreateAIIntegrationsDto.from({
           projectId,
           provider: 'OPEN_AI',
-          model: '',
           apiKey: '',
           endpointUrl: '',
           systemPrompt: '',
-          temperature: 0.7,
         }),
       );
     }
@@ -101,11 +103,9 @@ export class AIService {
     return {
       id: integration.id,
       provider: integration.provider,
-      model: integration.model,
       apiKey: integration.apiKey,
       endpointUrl: integration.endpointUrl,
       systemPrompt: integration.systemPrompt,
-      temperature: integration.temperature,
     };
   }
 
@@ -158,26 +158,51 @@ export class AIService {
 
   @Transactional()
   async createDefaultTemplates(projectId: number) {
+    const existingIntegration = await this.aiIntegrationsRepo.findOne({
+      where: {
+        project: {
+          id: projectId,
+        },
+      },
+    });
+
+    if (!existingIntegration) {
+      throw new BadRequestException('Integration not found');
+    }
+
+    const model =
+      existingIntegration.provider === AIProvidersEnum.OPEN_AI ?
+        'gpt-4o'
+      : 'gemini-2.0-flash';
+
     const templates = [
       {
         title: 'Feedback Summary',
         prompt: 'Summarize the following feedback within 2 sentences',
         autoProcessing: false,
+        model: model,
+        temperature: 0.7,
       },
       {
         title: 'Feedback Sentiment Analysis',
         prompt: 'Analyze the sentiment of the following feedback',
         autoProcessing: false,
+        model: model,
+        temperature: 0.7,
       },
       {
         title: 'Feedback Translation',
         prompt: 'Translate the following feedback to English',
         autoProcessing: false,
+        model: model,
+        temperature: 0.7,
       },
       {
         title: 'Feedback Keyword Extraction',
         prompt: 'Extract the keywords from the following feedback',
         autoProcessing: false,
+        model: model,
+        temperature: 0.7,
       },
     ];
 
@@ -275,6 +300,7 @@ export class AIService {
         },
         year: getCurrentYear(),
         month: getCurrentMonth(),
+        day: getCurrentDay(),
         category,
         provider,
       },
@@ -289,6 +315,7 @@ export class AIService {
     const usage = AIUsagesEntity.from({
       year: getCurrentYear(),
       month: getCurrentMonth(),
+      day: getCurrentDay(),
       category,
       provider,
       usedTokens,
@@ -347,6 +374,10 @@ export class AIService {
       throw new BadRequestException('AI template not found');
     }
 
+    if (!aiField.aiTemplate.model) {
+      throw new BadRequestException('The model is not set for the AI template');
+    }
+
     const promptTargetText = this.generatePromptTargetText(
       feedback,
       aiTargetFields,
@@ -359,15 +390,16 @@ export class AIService {
     });
 
     const result = await client.executePrompt(
-      integration.model,
-      integration.temperature,
+      aiField.aiTemplate.model,
+      aiField.aiTemplate.temperature,
       integration.systemPrompt,
       aiField.aiTemplate.prompt,
       aiTargetFields.map((field) => field.key).join(', '),
       promptTargetText,
     );
     this.logger.log(`Result: ${result.content}`);
-    feedback.data[aiField.key] = result.content;
+    feedback.data[aiField.key] =
+      `{'status': '${result.status}', 'message': '${result.content}'}`;
 
     void this.saveAIUsage(
       result.usedTokens,
@@ -431,8 +463,8 @@ export class AIService {
     });
 
     const result = await client.executePrompt(
-      integration.model,
-      integration.temperature,
+      dto.model,
+      dto.temperature,
       integration.systemPrompt,
       dto.templatePrompt,
       dto.temporaryFields.map((field) => field.name).join(', '),
@@ -448,5 +480,27 @@ export class AIService {
     );
 
     return result.content;
+  }
+
+  async getUsages(projectId: number, from: Date, to: Date) {
+    const usages = await this.aiUsagesRepo.find({
+      where: {
+        project: {
+          id: projectId,
+        },
+        createdAt: Between(from, to),
+      },
+    });
+
+    return usages.map((usage) => {
+      return {
+        year: usage.year,
+        month: usage.month,
+        day: usage.day,
+        category: usage.category,
+        provider: usage.provider,
+        usedTokens: usage.usedTokens,
+      };
+    });
   }
 }
