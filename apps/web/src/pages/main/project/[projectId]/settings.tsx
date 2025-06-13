@@ -75,7 +75,9 @@ const SettingsPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         <IssueTrackerSetting projectId={projectId} />
       )}
       {currentMenu === 'webhook' && <WebhookSetting projectId={projectId} />}
-      {currentMenu === 'generative-ai' && <GenerativeAiSetting />}
+      {currentMenu === 'generative-ai' && (
+        <GenerativeAiSetting projectId={projectId} />
+      )}
       {currentChannelId && (
         <>
           {currentMenu === 'channel-info' && (

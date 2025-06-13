@@ -1124,6 +1124,22 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/admin/projects/{projectId}/ai/usages': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['AIController_getUsages'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1734,6 +1750,8 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
       options: components['schemas']['FindFieldsResponseSelectOptionDto'][];
+      aiTemplateId: number | null;
+      aiFieldTargetKeys: Record<string, unknown>;
     };
     FindChannelByIdResponseDto: {
       id: number;
@@ -2167,8 +2185,8 @@ export interface components {
       endpointUrl: string;
       temperature: string;
       systemPrompt: string;
-      tokenThreshold: number;
-      notificationThreshold: number;
+      tokenThreshold: number | null;
+      notificationThreshold: number | null;
     };
     CreateAIIntegrationsResponseDto: {
       id: number;
@@ -2188,6 +2206,8 @@ export interface components {
     };
     CreateAITemplateRequestDto: {
       title: string;
+      model: string;
+      temperature: number;
       prompt: string;
       autoProcessing: boolean;
     };
@@ -2201,10 +2221,22 @@ export interface components {
     };
     GetAIPlaygroundResultRequestDto: {
       templatePrompt: string;
+      model: string;
+      temperature: number;
       temporaryFields: components['schemas']['TemporaryField'][];
     };
     GetAIPlaygroundResultResponseDto: {
       result: string;
+    };
+    /** @enum {string} */
+    UsageCategoryEnum: 'AI_FIELD' | 'ISSUE_RECOMMEND';
+    GetAIUsagesResponseDto: {
+      year: number;
+      month: number;
+      day: number;
+      category: components['schemas']['UsageCategoryEnum'];
+      provider: components['schemas']['AIProvidersEnum'];
+      usedTokens: number;
     };
   };
   responses: never;
@@ -4462,6 +4494,30 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['GetAIPlaygroundResultResponseDto'];
+        };
+      };
+    };
+  };
+  AIController_getUsages: {
+    parameters: {
+      query: {
+        from: string;
+        to: string;
+      };
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['GetAIUsagesResponseDto'];
         };
       };
     };

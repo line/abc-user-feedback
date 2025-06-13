@@ -14,10 +14,10 @@
  * under the License.
  */
 
-import React, { useState } from 'react';
-import { useTranslation } from 'next-i18next';
+import React, { useEffect, useState } from 'react';
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
-import { useForm } from 'react-hook-form';
+import type { FormState } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import {
   Label,
   PolarGrid,
@@ -25,6 +25,7 @@ import {
   RadialBar,
   RadialBarChart,
 } from 'recharts';
+import { create } from 'zustand';
 
 import {
   Button,
@@ -33,10 +34,9 @@ import {
   InputLabel,
   Menu,
   MenuItem,
-  RadioCard,
-  RadioCardGroup,
   Switch,
   Textarea,
+  toast,
 } from '@ufb/react';
 
 import {
@@ -51,7 +51,10 @@ import {
   SettingTemplate,
   SimpleLineChart,
   TextInput,
+  useOAIMutation,
 } from '@/shared';
+import type { AI } from '@/entities/ai';
+import { AiSettingForm } from '@/entities/ai';
 
 const SUB_MENU_ITEMS = [
   { value: 'setting', label: 'AI Setting' },
@@ -61,7 +64,7 @@ const SUB_MENU_ITEMS = [
   { value: 'issue-recommend', label: 'AI Issue Recommend' },
 ] as const;
 
-const GenerativeAiSetting = () => {
+const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
   const [subMenu, setSubMenu] = useQueryState(
     'sub-menu',
     parseAsStringLiteral(SUB_MENU_ITEMS.map((item) => item.value)).withDefault(
@@ -78,11 +81,7 @@ const GenerativeAiSetting = () => {
           )
         }
         action={
-          <Button
-          // disabled={!perms.includes('project_webhook_create')}
-          >
-            저장
-          </Button>
+          subMenu === 'field-template-form' ? <AISettingFormButton /> : <></>
         }
         onClickBack={
           subMenu === 'field-template-form' ?
@@ -108,7 +107,7 @@ const GenerativeAiSetting = () => {
             </MenuItem>
           </Menu>
         )}
-        {subMenu === 'setting' && <AISettingForm />}
+        {subMenu === 'setting' && <AISettingForm projectId={projectId} />}
         {subMenu === 'usage' && <AIUsageForm />}
         {subMenu === 'field-template' && (
           <AIFieldTemplate onClick={() => setSubMenu('field-template-form')} />
@@ -119,34 +118,83 @@ const GenerativeAiSetting = () => {
     </>
   );
 };
-const AISettingForm = () => {
-  const [provider, setProvider] = useState('openai');
-  const { t } = useTranslation();
+
+type AIForm = {
+  isPending: boolean;
+  formId: string;
+  setIsPending: (isPending: boolean) => void;
+  formState?: FormState<Record<string, unknown>>;
+  setFormState: (formState: FormState<Record<string, unknown>>) => void;
+};
+
+const useAISettingFormStore = create<AIForm>((set) => ({
+  isPending: false,
+  formId: 'ai-setting-form',
+  setIsPending: (isPending) => set({ isPending }),
+  setFormState: (formState) => set({ formState }),
+}));
+
+const AISettingForm = ({ projectId }: { projectId: number }) => {
+  const methods = useForm<AI>();
+  const { setIsPending, formId } = useAISettingFormStore();
+
+  const { mutate, isPending } = useOAIMutation({
+    method: 'put',
+    path: '/api/admin/projects/{projectId}/ai/integrations',
+    pathParams: { projectId },
+    queryOptions: {
+      onSuccess: () => {
+        toast.success('AI 설정이 저장되었습니다.');
+      },
+      onError(error) {
+        toast.error(error.message);
+      },
+    },
+  });
+
+  useEffect(() => {
+    setIsPending(isPending);
+  }, [isPending]);
+
   return (
     <>
       <SettingAlert
         description={<HelpCardDocs i18nKey="help-card.api-key" />}
       />
-      <RadioCardGroup
-        value={provider}
-        onValueChange={(v: 'GOOGLE' | 'CUSTOM') => setProvider(v)}
-      >
-        <RadioCard value="GOOGLE" icon="RiGoogleFill" title="Google Login" />
-        <RadioCard value="CUSTOM" icon="RiToolsFill" title="Custom Login" />
-      </RadioCardGroup>
-      <TextInput
-        label="API Key"
-        placeholder={t('v2.placeholder.text')}
-        required
-      />
-      <TextInput label="Endpoint URL" placeholder={t('v2.placeholder.text')} />
-      <InputField>
-        <InputLabel>System Prompt</InputLabel>
-        <Textarea placeholder={t('v2.placeholder.text')} />
-      </InputField>
+      <FormProvider {...methods}>
+        <form
+          id={formId}
+          onSubmit={methods.handleSubmit((data) => {
+            mutate(data);
+          })}
+        >
+          <AiSettingForm />
+        </form>
+      </FormProvider>
     </>
   );
 };
+
+const AISettingFormButton = () => {
+  const { formId, isPending, formState } = useAISettingFormStore();
+  return (
+    <Button
+      form={formId}
+      type="submit"
+      disabled={!formState?.isDirty}
+      loading={isPending}
+    >
+      저장
+    </Button>
+  );
+};
+
+const useAIUseageFormStore = create<AIForm>((set) => ({
+  isPending: false,
+  formId: 'ai-usage-form',
+  setIsPending: (isPending) => set({ isPending }),
+  setFormState: (formState) => set({ formState }),
+}));
 
 const chartData = { data: 0.1, fill: '#38BDF8' };
 const AIUsageForm = () => {
@@ -290,6 +338,20 @@ const AIUsageForm = () => {
         </Card>
       </div>
     </>
+  );
+};
+
+const AIUsageFormButton = () => {
+  const { formId, isPending, formState } = useAIUseageFormStore();
+  return (
+    <Button
+      form={formId}
+      type="submit"
+      disabled={!formState?.isDirty}
+      loading={isPending}
+    >
+      저장
+    </Button>
   );
 };
 
