@@ -23,7 +23,6 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -32,7 +31,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '../../auth/guards';
+import { PermissionEnum } from '../role/permission.enum';
+import { RequirePermission } from '../role/require-permission.decorator';
 import { AIService } from './ai.service';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import {
@@ -54,7 +54,6 @@ import {
 
 @ApiTags('ai')
 @Controller('/admin/projects/:projectId/ai')
-@UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class AIController {
   constructor(private readonly aiService: AIService) {}
@@ -65,6 +64,7 @@ export class AIController {
     return this.aiService.validateAPIKey(body.provider, body.apiKey);
   }
 
+  @RequirePermission(PermissionEnum.generative_ai_read)
   @ApiCreatedResponse({ type: GetAIIntegrationResponseDto })
   @Get('integrations')
   async getIntegration(@Param('projectId', ParseIntPipe) projectId: number) {
@@ -73,6 +73,7 @@ export class AIController {
     );
   }
 
+  @RequirePermission(PermissionEnum.generative_ai_update)
   @ApiCreatedResponse({ type: CreateAIIntegrationsResponseDto })
   @Put('integrations')
   async updateIntegration(
@@ -86,6 +87,7 @@ export class AIController {
     );
   }
 
+  @RequirePermission(PermissionEnum.generative_ai_read)
   @ApiOkResponse({ type: GetAIIntegrationsModelsResponseDto })
   @Get('integrations/models')
   async getModels(@Param('projectId', ParseIntPipe) projectId: number) {
@@ -94,6 +96,7 @@ export class AIController {
     });
   }
 
+  @RequirePermission(PermissionEnum.generative_ai_read)
   @ApiOkResponse({ type: GetAITemplatesResponseDto })
   @Get('templates')
   async getTemplates(@Param('projectId', ParseIntPipe) projectId: number) {
@@ -102,6 +105,7 @@ export class AIController {
     );
   }
 
+  @RequirePermission(PermissionEnum.generative_ai_update)
   @ApiOkResponse()
   @Post('templates/default')
   async createDefaultTemplates(
@@ -110,6 +114,7 @@ export class AIController {
     await this.aiService.createDefaultTemplates(projectId);
   }
 
+  @RequirePermission(PermissionEnum.generative_ai_update)
   @ApiCreatedResponse({ type: CreateAITemplateResponseDto })
   @ApiOkResponse()
   @Post('templates/new')
@@ -122,6 +127,7 @@ export class AIController {
     );
   }
 
+  @RequirePermission(PermissionEnum.generative_ai_update)
   @Put('templates/:templateId')
   async update(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -131,6 +137,7 @@ export class AIController {
     await this.aiService.updateTemplate({ ...body, projectId, templateId });
   }
 
+  @RequirePermission(PermissionEnum.generative_ai_update)
   @Delete('templates/:templateId')
   async delete(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -139,12 +146,14 @@ export class AIController {
     await this.aiService.deleteTemplateById(projectId, templateId);
   }
 
+  @RequirePermission(PermissionEnum.generative_ai_read)
   @ApiOkResponse()
   @Post('process')
   processAIFields(@Body() body: { feedbackIds: number[] }) {
     this.aiService.processAIFields(body.feedbackIds);
   }
 
+  @RequirePermission(PermissionEnum.generative_ai_read)
   @ApiOkResponse({ type: GetAIPlaygroundResultResponseDto })
   @Post('playground/test')
   async getPlaygroundResult(
@@ -159,6 +168,7 @@ export class AIController {
     });
   }
 
+  @RequirePermission(PermissionEnum.generative_ai_read)
   @ApiOkResponse({ type: GetAIUsagesResponseDto })
   @Get('usages')
   async getUsages(
