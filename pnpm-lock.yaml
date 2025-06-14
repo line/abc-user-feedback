@@ -458,7 +458,7 @@ importers:
         specifier: ^0.34.2
         version: 0.34.2
       swiper:
-        specifier: ^11.2.1
+        specifier: ^11.2.8
         version: 11.2.8
       tailwind-merge:
         specifier: ^3.0.0
