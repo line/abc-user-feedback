@@ -65,7 +65,7 @@
     "tailwind-merge": "^3.3.1",
     "tailwind-scrollbar-hide": "^2.0.0",
     "zod": "^3.25.64",
-    "zustand": "^5.0.0"
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.27.4",

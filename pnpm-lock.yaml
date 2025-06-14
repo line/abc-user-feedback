@@ -470,7 +470,7 @@ importers:
         specifier: ^3.25.64
         version: 3.25.64
       zustand:
-        specifier: ^5.0.0
+        specifier: ^5.0.5
         version: 5.0.5(@types/react@19.1.8)(immer@10.1.1)(react@19.1.0)(use-sync-external-store@1.4.0(react@19.1.0))
     devDependencies:
       '@babel/core':
