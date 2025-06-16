@@ -22,7 +22,7 @@ export class ValidateAPIKeyResponseDto {
   @Expose()
   valid: boolean;
 
-  @ApiProperty()
+  @ApiProperty({ required: false, type: String })
   @Expose()
   error?: string | undefined;
 }

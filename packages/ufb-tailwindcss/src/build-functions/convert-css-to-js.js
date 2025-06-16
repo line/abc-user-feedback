@@ -64,6 +64,8 @@ async function convertCssToJs(type = 'base') {
 
     // Write the JS file
     await fs.writeFile(outputPath, jsOutput);
+
+    // console.log(`Successfully converted ${inputPath} to ${outputPath}`);
   } catch (error) {
     console.error(`Error generating JS from CSS: ${error.message}`);
     throw error;

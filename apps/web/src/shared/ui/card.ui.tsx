@@ -35,7 +35,7 @@ export const Card = (props: Props) => {
     <CardContext.Provider value={{ size }}>
       <div
         className={cn(
-          'rounded-20 border-neutral-tertiary bg-neutral-primary flex flex-col gap-6 border py-6', // shadow-default
+          'rounded-20 border-neutral-tertiary bg-neutral-primary flex flex-col gap-4 border py-6', // shadow-default
           className,
           { 'rounded-8 gap-4 py-4': size === 'sm' },
         )}

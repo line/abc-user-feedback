@@ -14,13 +14,21 @@
  * under the License.
  */
 import { useEffect } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { create } from 'zustand';
 
 import { Button, toast } from '@ufb/react';
 
-import { HelpCardDocs, SettingAlert, useOAIMutation } from '@/shared';
-import { AiSettingForm } from '@/entities/ai';
+import {
+  HelpCardDocs,
+  SettingAlert,
+  useOAIMutation,
+  useOAIQuery,
+  useWarnIfUnsavedChanges,
+} from '@/shared';
+import { aiSchema, AiSettingForm } from '@/entities/ai';
 import type { AI } from '@/entities/ai';
 
 import type { AISettingStore } from '../ai-setting-form.type';
@@ -34,15 +42,44 @@ const useAISettingFormStore = create<AISettingStore>((set) => ({
 }));
 
 export const AISettingForm = ({ projectId }: { projectId: number }) => {
-  const methods = useForm<AI>();
-  const { formId, setIsPending, setIsDirty } = useAISettingFormStore();
+  const methods = useForm<AI>({
+    resolver: zodResolver(aiSchema),
+    defaultValues: {
+      systemPrompt: '',
+    },
+  });
 
-  const { mutate, isPending } = useOAIMutation({
+  const { formId, setIsPending, setIsDirty } = useAISettingFormStore();
+  const queryClient = useQueryClient();
+
+  const { data } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/integrations',
+    variables: { projectId },
+  });
+
+  const { mutateAsync: validateApiKey } = useOAIMutation({
+    method: 'post',
+    path: '/api/admin/projects/{projectId}/ai/validate',
+    queryOptions: {
+      onSuccess(data, variables, context) {},
+      onError(error) {
+        toast.error(error.message);
+      },
+    },
+  });
+
+  const { mutateAsync: update, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/admin/projects/{projectId}/ai/integrations',
     pathParams: { projectId },
     queryOptions: {
-      onSuccess: () => {
+      async onSuccess() {
+        await queryClient.invalidateQueries({
+          queryKey: [
+            '/api/admin/projects/{projectId}/ai/integrations',
+            { projectId },
+          ],
+        });
         toast.success('AI 설정이 저장되었습니다.');
       },
       onError(error) {
@@ -59,13 +96,29 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
     setIsDirty(methods.formState.isDirty);
   }, [methods.formState.isDirty]);
 
+  useEffect(() => {
+    if (data) methods.reset(data);
+  }, [data]);
+  const onSubmit = async (values: AI) => {
+    // const data = await validateApiKey({
+    //   apiKey: values.apiKey,
+    //   provider: values.provider,
+    // });
+    // if (!data?.valid) {
+    //   toast.error(data?.error);
+    //   return;
+    // }
+    await update(values);
+  };
+  useWarnIfUnsavedChanges(methods.formState.isDirty);
+
   return (
     <>
       <SettingAlert
         description={<HelpCardDocs i18nKey="help-card.api-key" />}
       />
       <FormProvider {...methods}>
-        <form id={formId} onSubmit={methods.handleSubmit((v) => mutate(v))}>
+        <form id={formId} onSubmit={methods.handleSubmit(onSubmit)}>
           <AiSettingForm />
         </form>
       </FormProvider>

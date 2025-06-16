@@ -2169,11 +2169,11 @@ export interface components {
     };
     ValidateAPIKeyResponseDto: {
       valid: boolean;
-      error: Record<string, unknown>;
+      error?: string;
     };
     GetAIIntegrationResponseDto: {
       id: number;
-      provider: string;
+      provider: components['schemas']['AIProvidersEnum'];
       apiKey: string;
       endpointUrl: string;
       systemPrompt: string;
@@ -2202,7 +2202,7 @@ export interface components {
       title: string;
       prompt: string;
       autoProcessing: boolean;
-      model: Record<string, unknown>;
+      model: string;
       temperature: number;
       /** Format: date-time */
       createdAt: string;

@@ -33,13 +33,15 @@ const SliderInput = (props: Props) => {
   return (
     <InputField>
       <InputLabel>{label}</InputLabel>
-      <Slider
-        value={value}
-        min={min}
-        max={max}
-        step={step}
-        onValueChange={onValueChange}
-      />
+      <div>
+        <Slider
+          value={value}
+          min={min}
+          max={max}
+          step={step}
+          onValueChange={onValueChange}
+        />
+      </div>
     </InputField>
   );
 };

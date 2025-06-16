@@ -280,7 +280,6 @@ export class AIService {
       return [];
     }
 
-    console.log('integration: ', integration);
     const client = new AIClient({
       apiKey: integration.apiKey,
       provider: integration.provider,

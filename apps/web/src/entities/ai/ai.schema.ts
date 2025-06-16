@@ -19,12 +19,11 @@ import { z } from 'zod';
 export const aiSchema = z.object({
   provider: z.enum(['OPEN_AI', 'GEMINI']),
   apiKey: z.string().trim().min(1, { message: 'API Key is required' }),
-  endpointUrl: z.string().trim().url({ message: 'Invalid URL format' }),
-  temperature: z.string().trim().min(1, { message: 'Temperature is required' }),
+  endpointUrl: z.string().trim(),
   systemPrompt: z
     .string()
     .trim()
-    .min(1, { message: 'System prompt is required' }),
+    .max(1000, { message: 'System prompt must be less than 1000 characters' }),
   tokenThreshold: z.number().nullable(),
   notificationThreshold: z.number().nullable(),
 });

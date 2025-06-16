@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import { parseAsInteger, useQueryState } from 'nuqs';
+
 import { Icon } from '@ufb/react';
 
 import {
@@ -31,6 +33,8 @@ export const AIFieldTemplateSetting = ({
   onClick: () => void;
   projectId: number;
 }) => {
+  const [_, setTemplateId] = useQueryState('templateId', parseAsInteger);
+
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/templates',
     variables: { projectId },
@@ -49,7 +53,10 @@ export const AIFieldTemplateSetting = ({
             type="update"
             title={title}
             description={prompt}
-            onClick={onClick}
+            onClick={async () => {
+              await setTemplateId(id);
+              onClick();
+            }}
           />
         ))}
       </div>

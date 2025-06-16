@@ -17,9 +17,9 @@
 import React from 'react';
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
 
-import { Menu, MenuItem } from '@ufb/react';
+import { Menu, MenuItem, toast } from '@ufb/react';
 
-import { SettingTemplate } from '@/shared';
+import { SettingTemplate, useOAIQuery } from '@/shared';
 import {
   AIFieldTemplateForm,
   AIFieldTemplateSetting,
@@ -41,10 +41,15 @@ const SUB_MENU_ITEMS = [
 const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
   const [subMenu, setSubMenu] = useQueryState(
     'sub-menu',
-    parseAsStringLiteral(SUB_MENU_ITEMS.map((item) => item.value)).withDefault(
-      'setting',
-    ),
+    parseAsStringLiteral(SUB_MENU_ITEMS.map((item) => item.value))
+      .withDefault('setting')
+      .withOptions({ history: 'push', shallow: false }),
   );
+  const { data } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/integrations',
+    variables: { projectId },
+  });
+  const isSettingsEmpty = !data || data.apiKey === '';
 
   return (
     <>
@@ -72,7 +77,13 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
             type="single"
             orientation="horizontal"
             value={subMenu}
-            onValueChange={(v) => setSubMenu(v as typeof subMenu)}
+            onValueChange={async (v) => {
+              if (isSettingsEmpty && v !== 'setting') {
+                toast.warning('AI Settings 저장 후에 이용할 수 있습니다.');
+                return;
+              }
+              await setSubMenu(v as typeof subMenu, { shallow: false });
+            }}
           >
             <MenuItem className="w-fit shrink-0" value="setting">
               AI Setting
