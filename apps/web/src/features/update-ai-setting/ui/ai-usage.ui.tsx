@@ -110,11 +110,23 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
   useEffect(() => {
     setIsDirty(formState.isDirty);
   }, [formState.isDirty]);
-
+  // integrationData.tokenThreshold = 100000;
   const montlyTotalUsage = useMemo(
     () => monthlyData?.reduce((acc, usage) => acc + usage.usedTokens, 0) ?? 0,
     [monthlyData],
   );
+  const remainingTokens = useMemo(
+    () => (integrationData?.tokenThreshold ?? 0) - montlyTotalUsage,
+    [integrationData, montlyTotalUsage],
+  );
+  const percentageUsed = useMemo(
+    () =>
+      integrationData?.tokenThreshold ?
+        remainingTokens / integrationData.tokenThreshold
+      : 0,
+    [montlyTotalUsage, integrationData, remainingTokens],
+  );
+
   const chartData = useMemo(() => {
     const result: Record<
       string,
@@ -189,9 +201,9 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
           </CardHeader>
           <CardBody className="flex flex-col items-center gap-8">
             <RadialBarChart
-              data={[chartData]}
-              endAngle={90 - chartData.data * 360}
+              data={[{ data: 1, fill: '#38BDF8' }]}
               startAngle={90}
+              endAngle={90 + 360 * percentageUsed}
               innerRadius={80}
               outerRadius={110}
               width={180}
@@ -221,7 +233,10 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
                             y={(viewBox.cy ?? 0) - 12}
                             className="text-title-h4 fill-neutral-primary"
                           >
-                            {(chartData.data * 100 || '-').toLocaleString()} %
+                            {percentageUsed ?
+                              (percentageUsed * 100).toFixed(1)
+                            : '-'}
+                            %
                           </tspan>
                           <tspan
                             x={viewBox.cx}
@@ -244,11 +259,11 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
               </div>
               <div className="flex justify-between">
                 <div>Remaining Tokens</div>
-                <div>{(900000).toLocaleString()}</div>
+                <div>{remainingTokens.toLocaleString()}</div>
               </div>
               <div className="flex justify-between">
                 <div>Monthly tokens reset in</div>
-                <div>{(900000).toLocaleString()}</div>
+                <div>매월 1일</div>
               </div>
             </div>
           </CardBody>

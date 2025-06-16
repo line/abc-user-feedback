@@ -2174,11 +2174,11 @@ export interface components {
     GetAIIntegrationResponseDto: {
       id: number;
       provider: string;
-      model: string;
       apiKey: string;
       endpointUrl: string;
       systemPrompt: string;
-      temperature: number;
+      tokenThreshold: number | null;
+      notificationThreshold: number | null;
     };
     UpdateAIIntegrationsRequestDto: {
       provider: components['schemas']['AIProvidersEnum'];
@@ -2191,14 +2191,19 @@ export interface components {
     CreateAIIntegrationsResponseDto: {
       id: number;
     };
+    AIModel: {
+      id: string;
+    };
     GetAIIntegrationsModelsResponseDto: {
-      models: string[];
+      models: components['schemas']['AIModel'][];
     };
     GetAITemplatesResponseDto: {
       id: number;
       title: string;
       prompt: string;
       autoProcessing: boolean;
+      model: Record<string, unknown>;
+      temperature: number;
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */

@@ -89,7 +89,7 @@ const SelectInput: React.FC<Props> = (props) => {
           </Button>
         )}
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="max-h-[200px]">
         {options.map(({ label, value, icon }) => (
           <SelectItem key={value} value={value} icon={icon}>
             {label}

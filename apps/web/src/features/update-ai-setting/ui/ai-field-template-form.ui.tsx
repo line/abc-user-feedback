@@ -35,6 +35,7 @@ import {
   CardHeader,
   CardTitle,
   SelectInput,
+  SliderInput,
   TextInput,
   useOAIMutation,
   useOAIQuery,
@@ -79,6 +80,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
     path: '/api/admin/projects/{projectId}/ai/integrations/models',
     variables: { projectId },
   });
+  console.log('modelData: ', modelData);
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
@@ -146,9 +148,9 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
               <p>description</p>
               <SelectInput
                 options={
-                  modelData?.models.map((model) => ({
-                    value: model,
-                    label: model,
+                  modelData?.models.map(({ id }) => ({
+                    value: id,
+                    label: id,
                   })) ?? []
                 }
                 label="Model"
@@ -158,19 +160,15 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
                 }
                 value={watch('model')}
               />
-              <SelectInput
-                options={
-                  modelData?.models.map((model) => ({
-                    value: model,
-                    label: model,
-                  })) ?? []
-                }
-                label="Model"
-                placeholder="Select a model"
-                onChange={(value) =>
-                  setValue('model', value ?? '', { shouldDirty: true })
-                }
-                value={watch('model')}
+              <SliderInput
+                label="Temperature"
+                min={0}
+                max={1}
+                value={[watch('temperature')]}
+                onValueChange={(value) => {
+                  console.log('value: ', value);
+                  setValue('temperature', value[0] ?? 0, { shouldDirty: true });
+                }}
               />
             </div>
           </form>
@@ -225,9 +223,9 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
                 <CardTitle>Input Data</CardTitle>
               </CardHeader>
               <CardBody className="flex min-h-0 flex-1 flex-col gap-4 overflow-auto">
-                {inputItems.map((_, key) => (
+                {/* {inputItems.map((_, key) => (
                   <AIPlaygroundInputDataItem key={key} index={key} />
-                ))}
+                ))} */}
               </CardBody>
             </Card>
             <Card size="sm" className="flex-[1]">

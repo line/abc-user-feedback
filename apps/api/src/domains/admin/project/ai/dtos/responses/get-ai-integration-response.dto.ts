@@ -44,12 +44,12 @@ export class GetAIIntegrationResponseDto {
   @Expose()
   systemPrompt: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, nullable: true })
   @IsNumber()
   @Expose()
   tokenThreshold: number | null;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, nullable: true })
   @IsNumber()
   @Expose()
   notificationThreshold: number | null;
