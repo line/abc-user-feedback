@@ -14,7 +14,7 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsString, MaxLength } from 'class-validator';
+import { IsEnum, IsOptional, IsString, MaxLength } from 'class-validator';
 
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 
@@ -27,4 +27,10 @@ export class ValidteAPIKeyRequestDto {
   @IsString()
   @MaxLength(255)
   apiKey: string;
+
+  @ApiProperty({ nullable: true, type: String })
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  endpointUrl?: string;
 }

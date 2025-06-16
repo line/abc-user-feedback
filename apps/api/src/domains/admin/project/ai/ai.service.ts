@@ -64,10 +64,12 @@ export class AIService {
   async validateAPIKey(
     provider: AIProvidersEnum,
     apiKey: string,
+    endpointUrl: string | undefined,
   ): Promise<ValidateAPIKeyResponseDto> {
     const client = new AIClient({
       apiKey,
       provider,
+      baseUrl: endpointUrl,
     });
 
     try {
