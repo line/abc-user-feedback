@@ -38,6 +38,7 @@ import {
   IssuePermissionList,
   IssuePermissionText,
   ProjectApiKeyPermissionList,
+  ProjectGenerativeAIPermissionList,
   ProjectInfoPermissionList,
   ProjectMemberPermissionList,
   ProjectPermissionText,
@@ -122,6 +123,12 @@ const RoleTable: React.FC<IProps> = (props) => {
         <PermissionRows
           permText={ProjectPermissionText}
           permissions={ProjectWebhookPermissionList}
+          roles={roles}
+        />
+        <RoleTitleRow title="Generative AI" colspan={colSpan} sub />
+        <PermissionRows
+          permText={ProjectPermissionText}
+          permissions={ProjectGenerativeAIPermissionList}
           roles={roles}
         />
 

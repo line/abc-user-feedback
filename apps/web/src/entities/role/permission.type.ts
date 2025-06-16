@@ -61,6 +61,8 @@ export const ProjectPermissionList = [
   'project_webhook_create',
   'project_webhook_update',
   'project_webhook_delete',
+  'generative_ai_read',
+  'generative_ai_update',
 ] as const;
 
 export const ProjectInfoPermissionList = [
@@ -101,6 +103,11 @@ export const ProjectWebhookPermissionList = [
   'project_webhook_delete',
 ] as const;
 
+export const ProjectGenerativeAIPermissionList = [
+  'generative_ai_read',
+  'generative_ai_update',
+] as const;
+
 export const ProjectPermissionText: Record<ProjectPermissionType, string> = {
   project_update: 'Edit Project Info',
   project_delete: 'Delete Project',
@@ -122,6 +129,8 @@ export const ProjectPermissionText: Record<ProjectPermissionType, string> = {
   project_webhook_create: 'Create Webhook',
   project_webhook_update: 'Edit Webhook',
   project_webhook_delete: 'Delete Webhook',
+  generative_ai_read: 'Read Generative AI Settings',
+  generative_ai_update: 'Edit Generative AI Settings',
 };
 
 export const ChannelInfoPermissionList = [

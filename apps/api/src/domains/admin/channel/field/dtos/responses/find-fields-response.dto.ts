@@ -87,7 +87,7 @@ export class FindFieldsResponseDto {
   aiTemplateId: number | null;
 
   @Expose()
-  @ApiProperty({ type: Object })
+  @ApiProperty({ type: Array<string>, nullable: true })
   aiFieldTargetKeys: string[] | null;
 
   public static transform(params: any): FindFieldsResponseDto {

@@ -36,6 +36,8 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     key: 'id',
     description: '',
     order: 0,
+    aiFieldTargetKeys: null,
+    aiTemplateId: null,
   },
   {
     format: 'date',
@@ -45,6 +47,8 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     key: 'createdAt',
     description: '',
     order: 1,
+    aiFieldTargetKeys: null,
+    aiTemplateId: null,
   },
   {
     format: 'date',
@@ -54,6 +58,8 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     key: 'updatedAt',
     description: '',
     order: 2,
+    aiFieldTargetKeys: null,
+    aiTemplateId: null,
   },
   {
     format: 'multiSelect',
@@ -64,6 +70,8 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     description: '',
     options: [],
     order: 3,
+    aiFieldTargetKeys: null,
+    aiTemplateId: null,
   },
 ];
 

@@ -1753,7 +1753,7 @@ export interface components {
       updatedAt: string;
       options: components['schemas']['FindFieldsResponseSelectOptionDto'][];
       aiTemplateId: number | null;
-      aiFieldTargetKeys: Record<string, unknown>;
+      aiFieldTargetKeys: string[] | null;
     };
     FindChannelByIdResponseDto: {
       id: number;
