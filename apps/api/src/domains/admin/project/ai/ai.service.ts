@@ -405,7 +405,7 @@ export class AIService {
     );
     this.logger.log(`Result: ${result.content}`);
     feedback.data[aiField.key] =
-      `{'status': '${result.status}', 'message': '${result.content}'}`;
+      `{"status": "${result.status}", "message": "${result.content}"}`;
 
     void this.saveAIUsage(
       result.usedTokens,
