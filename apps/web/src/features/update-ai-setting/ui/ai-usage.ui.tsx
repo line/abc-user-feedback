@@ -23,6 +23,7 @@ import {
   PolarRadiusAxis,
   RadialBar,
   RadialBarChart,
+  Tooltip,
 } from 'recharts';
 import { create } from 'zustand';
 
@@ -44,6 +45,7 @@ import {
   TextInput,
   useOAIMutation,
   useOAIQuery,
+  useWarnIfUnsavedChanges,
 } from '@/shared';
 
 import type { AISettingStore } from '../ai-setting-form.type';
@@ -62,6 +64,7 @@ type UsageForm = {
 export const AIUsageForm = ({ projectId }: { projectId: number }) => {
   const { register, formState, setValue, watch, handleSubmit, reset } =
     useForm<UsageForm>();
+
   const { formId, setIsPending, setIsDirty } = useAIUsageFormStore();
 
   const { mutate, isPending } = useOAIMutation({
@@ -83,7 +86,6 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
     path: '/api/admin/projects/{projectId}/ai/integrations',
     variables: { projectId },
   });
-  console.log('integrationData: ', integrationData);
 
   useEffect(() => {
     setIsPending(isPending);
@@ -92,6 +94,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
   useEffect(() => {
     setIsDirty(formState.isDirty);
   }, [formState.isDirty]);
+  useWarnIfUnsavedChanges(formState.isDirty);
 
   useEffect(() => {
     if (integrationData) {
@@ -248,20 +251,18 @@ const AIChartCard = ({ projectId }: { projectId: number }) => {
 
     dailyData?.forEach((entry) => {
       const dateKey = `${entry.year}-${String(entry.month).padStart(2, '0')}-${String(entry.day).padStart(2, '0')}`;
-      if (!result[dateKey]) {
-        result[dateKey] = {
-          date: dateKey,
-          Total: 0,
-          'AI Field': 0,
-          'AI Issue': 0,
-        };
-      }
+      result[dateKey] ??= {
+        date: dateKey,
+        Total: 0,
+        'AI Field': 0,
+        'AI Issue': 0,
+      };
 
       result[dateKey].Total += entry.usedTokens;
 
       if (entry.category === 'AI_FIELD') {
         result[dateKey]['AI Field'] += entry.usedTokens;
-      } else if (entry.category === 'ISSUE_RECOMMEND') {
+      } else {
         result[dateKey]['AI Issue'] += entry.usedTokens;
       }
     });
@@ -276,6 +277,7 @@ const AIChartCard = ({ projectId }: { projectId: number }) => {
           onChange={setDateRange}
           value={dateRange}
           maxDate={new Date()}
+          numberOfMonths={1}
         />
       }
       dataKeys={[
@@ -305,22 +307,29 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
     },
   });
 
-  const montlyTotalUsage = useMemo(
+  const usedTokens = useMemo(
     () => monthlyData?.reduce((acc, usage) => acc + usage.usedTokens, 0) ?? 0,
     [monthlyData],
   );
 
   const remainingTokens = useMemo(
-    () => (integrationData?.tokenThreshold ?? 0) - montlyTotalUsage,
-    [integrationData, montlyTotalUsage],
+    () => (integrationData?.tokenThreshold ?? 0) - usedTokens,
+    [integrationData, usedTokens],
   );
 
-  const percentageUsed = useMemo(
+  const usedPercentage = useMemo(
     () =>
       integrationData?.tokenThreshold ?
-        remainingTokens / integrationData.tokenThreshold
+        (remainingTokens / integrationData.tokenThreshold) * 100
       : 0,
-    [montlyTotalUsage, integrationData, remainingTokens],
+    [usedTokens, integrationData, remainingTokens],
+  );
+  const remainingPercentage = useMemo(
+    () =>
+      integrationData?.tokenThreshold ?
+        (remainingTokens / integrationData.tokenThreshold) * 100
+      : 0,
+    [integrationData, usedTokens],
   );
 
   return (
@@ -333,14 +342,49 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
       </CardHeader>
       <CardBody className="flex flex-col items-center gap-8">
         <RadialBarChart
-          data={[{ data: 1, fill: '#38BDF8' }]}
+          data={[
+            {
+              remainingTokens,
+              fill: '#38BDF8',
+              name: 'Remaining Tokens',
+            },
+          ]}
           startAngle={90}
-          endAngle={90 + 360 * percentageUsed}
+          endAngle={Math.max(90 + 360 * (usedPercentage / 100), 90)}
           innerRadius={80}
           outerRadius={110}
           width={180}
           height={180}
         >
+          <Tooltip
+            formatter={(value) => value.toLocaleString()}
+            cursor={{ fill: 'var(--bg-neutral-tertiary)' }}
+            content={({ payload }) => {
+              return (
+                <div className="bg-neutral-primary border-neutral-tertiary max-w-[240px] rounded border px-4 py-3 shadow-lg">
+                  {payload?.map(({ value, payload }, i) => (
+                    <div
+                      key={i}
+                      className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div
+                          style={{
+                            backgroundColor: (payload as { fill: string }).fill,
+                          }}
+                          className="h-2 w-2 flex-shrink-0 rounded-full"
+                        />
+                        <p className="text-small-normal break-all">
+                          {(payload as { name: string | undefined }).name}
+                        </p>
+                      </div>
+                      <p>{value?.toLocaleString()}</p>
+                    </div>
+                  ))}
+                </div>
+              );
+            }}
+          />
           <PolarGrid
             gridType="circle"
             radialLines={false}
@@ -348,7 +392,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
             className="first:fill-[var(--bg-neutral-tertiary)] last:fill-[var(--bg-neutral-primary)]"
             polarRadius={[86, 74]}
           />
-          <RadialBar dataKey="data" background />
+          <RadialBar dataKey="remainingTokens" background />
           <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
             <Label
               content={({ viewBox }) => {
@@ -365,10 +409,9 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
                         y={(viewBox.cy ?? 0) - 12}
                         className="text-title-h4 fill-neutral-primary"
                       >
-                        {percentageUsed ?
-                          (percentageUsed * 100).toFixed(1)
+                        {integrationData?.tokenThreshold ?
+                          `${usedPercentage.toFixed(1)}%`
                         : '-'}
-                        %
                       </tspan>
                       <tspan
                         x={viewBox.cx}
@@ -388,11 +431,16 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
           <div className="flex w-full flex-col gap-4">
             <div className="flex justify-between">
               <div>Used Tokens</div>
-              <div>{montlyTotalUsage.toLocaleString()}</div>
+              <div>
+                {usedTokens.toLocaleString()} ({usedPercentage.toFixed(1)}%)
+              </div>
             </div>
             <div className="flex justify-between">
               <div>Remaining Tokens</div>
-              <div>{remainingTokens.toLocaleString()}</div>
+              <div>
+                {remainingTokens.toLocaleString()} (
+                {remainingPercentage.toFixed(1)}%)
+              </div>
             </div>
             <div className="flex justify-between">
               <div>Monthly tokens reset in</div>
@@ -407,53 +455,3 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
     </Card>
   );
 };
-
-// const AILimitNotification = ({ projectId }: { projectId: number }) => {
-//   const [percentage, setPercentage] = useState("50");
-//   return (
-//     <Card className="min-h-30 flex-[1]" size="md">
-//       <CardHeader
-//         action={
-//           <Switch
-//             disabled={watch('tokenThreshold') === null}
-//             checked={watch('notificationThreshold') !== null}
-//             onCheckedChange={(checked) => {
-//               const tokenThreshold = watch('tokenThreshold');
-//               if (!tokenThreshold) return;
-//               setValue(
-//                 'notificationThreshold',
-//                 checked ? tokenThreshold * 50 : null,
-//                 {
-//                   shouldDirty: true,
-//                 },
-//               );
-//             }}
-//           />
-//         }
-//       >
-//         <CardTitle>Pre-limit notification</CardTitle>
-//         <CardDescription>
-//           토큰 사용량 상한을 기준으로 사용량에 대한 노티를 미리 안내 받을 수
-//           있습니다.
-//         </CardDescription>
-//       </CardHeader>
-//       <CardBody>
-//         <SelectInput
-//           disabled={watch('notificationThreshold') === null}
-//           value={percentage}
-//           onChange={(value) => {
-//             setPercentage(value);
-//           }}
-//           options={[
-//             { value: '50', label: '상한값의 50% 도달' },
-//             { value: '60', label: '상한값의 60% 도달' },
-//             { value: '70', label: '상한값의 70% 도달' },
-//             { value: '80', label: '상한값의 80% 도달' },
-//             { value: '90', label: '상한값의 90% 도달' },
-//             { value: '95', label: '상한값의 95% 도달' },
-//           ]}
-//         />
-//       </CardBody>
-//     </Card>
-//   );
-// };

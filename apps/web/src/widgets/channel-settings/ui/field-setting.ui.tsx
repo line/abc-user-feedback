@@ -129,6 +129,7 @@ const FieldSetting: React.FC<IProps> = (props) => {
   const openCreateFieldFormSheet = () => {
     overlay.open(({ close, isOpen }) => (
       <FieldSettingSheet
+        projectId={projectId}
         isOpen={isOpen}
         close={close}
         onSubmit={addField}
@@ -143,6 +144,7 @@ const FieldSetting: React.FC<IProps> = (props) => {
   }) => {
     overlay.open(({ close, isOpen }) => (
       <FieldSettingSheet
+        projectId={projectId}
         isOpen={isOpen}
         close={close}
         onSubmit={(newField) =>

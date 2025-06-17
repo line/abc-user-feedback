@@ -57,6 +57,7 @@ interface IProps {
     dateRange: DateRangeType;
   }[];
   children?: React.ReactNode;
+  numberOfMonths?: number;
 }
 
 const DateRangePicker: React.FC<IProps> = (props) => {
@@ -69,6 +70,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
     options,
     children,
     clearable,
+    numberOfMonths = 2,
   } = props;
 
   const { t, i18n } = useTranslation();
@@ -336,34 +338,38 @@ const DateRangePicker: React.FC<IProps> = (props) => {
       </PopoverTrigger>
       <PopoverContent className="p-2">
         <div className="flex">
-          <ul className="pr-2">
-            {(options ?? items).map(({ label, dateRange }, index) => (
-              <li
-                className={cn([
-                  'hover:bg-neutral-tertiary text-neutral-tertiary w-[184px] rounded-sm px-3 py-2 hover:cursor-pointer',
-                  {
-                    'bg-neutral-tertiary text-neutral-primary':
-                      activeIdx === index,
-                  },
-                ])}
-                key={index}
-                onClick={handleChangeDateRange(index, dateRange)}
-              >
-                <p className="h-5">{label}</p>
-              </li>
-            ))}
-          </ul>
+          {numberOfMonths === 2 && (
+            <ul className="pr-2">
+              {(options ?? items).map(({ label, dateRange }, index) => (
+                <li
+                  className={cn([
+                    'hover:bg-neutral-tertiary text-neutral-tertiary w-[184px] rounded-sm px-3 py-2 hover:cursor-pointer',
+                    {
+                      'bg-neutral-tertiary text-neutral-primary':
+                        activeIdx === index,
+                    },
+                  ])}
+                  key={index}
+                  onClick={handleChangeDateRange(index, dateRange)}
+                >
+                  <p className="h-5">{label}</p>
+                </li>
+              ))}
+            </ul>
+          )}
           <div>
-            <div className="flex gap-2">
-              <TextInput
-                value={currentInput.startDate}
-                onChange={handleChange('startDate')}
-              />
-              <TextInput
-                value={currentInput.endDate}
-                onChange={handleChange('endDate')}
-              />
-            </div>
+            {numberOfMonths === 2 && (
+              <div className="flex gap-2">
+                <TextInput
+                  value={currentInput.startDate}
+                  onChange={handleChange('startDate')}
+                />
+                <TextInput
+                  value={currentInput.endDate}
+                  onChange={handleChange('endDate')}
+                />
+              </div>
+            )}
             <Calendar
               locale={locales[i18n.language]}
               className="border-none shadow-none"
@@ -382,7 +388,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
                 from: currentValue?.startDate ?? undefined,
                 to: currentValue?.endDate ?? undefined,
               }}
-              numberOfMonths={2}
+              numberOfMonths={numberOfMonths}
               defaultMonth={dayjs()
                 .set('month', dayjs().get('month') - 1)
                 .toDate()}

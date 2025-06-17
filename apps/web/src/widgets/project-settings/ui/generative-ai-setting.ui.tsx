@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { parseAsStringLiteral, useQueryState } from 'nuqs';
+import { useRouter } from 'next/router';
 
 import { Menu, MenuItem, toast } from '@ufb/react';
 
@@ -30,21 +30,21 @@ import {
   AIUsageFormButton,
 } from '@/features/update-ai-setting';
 
-const SUB_MENU_ITEMS = [
-  { value: 'setting', label: 'AI Setting' },
-  { value: 'usage', label: 'AI Usage' },
-  { value: 'field-template', label: 'AI Field Template' },
-  { value: 'field-template-form', label: 'AI Issue Recommend' },
-  { value: 'issue-recommend', label: 'AI Issue Recommend' },
-] as const;
-
+type SubMenuType =
+  | 'setting'
+  | 'usage'
+  | 'field-template'
+  | 'field-template-form';
 const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
-  const [subMenu, setSubMenu] = useQueryState(
-    'sub-menu',
-    parseAsStringLiteral(SUB_MENU_ITEMS.map((item) => item.value))
-      .withDefault('setting')
-      .withOptions({ history: 'push', shallow: false }),
-  );
+  const router = useRouter();
+  const subMenu = (router.query.subMenu ?? 'setting') as SubMenuType;
+
+  const setSubMenu = async (subMenu: SubMenuType, templateId?: number) => {
+    await router.push({
+      pathname: router.pathname,
+      query: { ...router.query, subMenu, templateId },
+    });
+  };
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/integrations',
     variables: { projectId },
@@ -63,7 +63,9 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
           <>
             {subMenu === 'setting' && <AISettingFormButton />}
             {subMenu === 'usage' && <AIUsageFormButton />}
-            {subMenu === 'field-template-form' && <AITemplateFormButton />}
+            {subMenu === 'field-template-form' && (
+              <AITemplateFormButton projectId={projectId} />
+            )}
           </>
         }
         onClickBack={
@@ -82,7 +84,7 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
                 toast.warning('AI Settings 저장 후에 이용할 수 있습니다.');
                 return;
               }
-              await setSubMenu(v as typeof subMenu, { shallow: false });
+              await setSubMenu(v as SubMenuType);
             }}
           >
             <MenuItem className="w-fit shrink-0" value="setting">
@@ -101,20 +103,15 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
         {subMenu === 'field-template' && (
           <AIFieldTemplateSetting
             projectId={projectId}
-            onClick={() => setSubMenu('field-template-form')}
+            onClick={(id) => setSubMenu('field-template-form', id)}
           />
         )}
         {subMenu === 'field-template-form' && (
           <AIFieldTemplateForm projectId={projectId} />
         )}
-        {subMenu === 'issue-recommend' && <AIIssueRecommendForm />}
       </SettingTemplate>
     </>
   );
-};
-
-const AIIssueRecommendForm = () => {
-  return <>AIFieldTemplateForm</>;
 };
 
 export default GenerativeAiSetting;

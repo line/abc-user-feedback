@@ -125,7 +125,7 @@ export const CardDescription = (
   return (
     <p
       className={cn(
-        'text-neutral-secondary',
+        'text-neutral-tertiary',
         {
           'text-large-h4': size === 'lg',
           'text-base-normal': size === 'md',

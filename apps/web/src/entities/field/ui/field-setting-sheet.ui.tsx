@@ -34,7 +34,7 @@ import {
 } from '@ufb/react';
 
 import type { FormOverlayProps } from '@/shared';
-import { DeleteDialog, SelectInput, TextInput } from '@/shared';
+import { DeleteDialog, SelectInput, TextInput, useOAIQuery } from '@/shared';
 
 import { FIELD_FORMAT_ICON_MAP, FIELD_FORMAT_LIST } from '../field.constant';
 import { fieldInfoSchema } from '../field.schema';
@@ -54,6 +54,7 @@ const defaultValues: FieldInfo = {
 
 interface IProps extends FormOverlayProps<FieldInfo> {
   fieldRows: FieldInfo[];
+  projectId: number;
 }
 
 const FieldSettingSheet: React.FC<IProps> = (props) => {
@@ -66,6 +67,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     onClickDelete,
     disabledUpdate,
     disabledDelete,
+    projectId,
   } = props;
 
   const { t } = useTranslation();
@@ -171,6 +173,11 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     reset(defaultValues);
     close();
   };
+
+  const { data: templates } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/templates',
+    variables: { projectId },
+  });
 
   return (
     <Sheet open={isOpen} onOpenChange={close}>
@@ -278,22 +285,35 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
               <>
                 <SelectInput
                   label="AI Field Template"
-                  options={[
-                    { label: 'Text', value: 'text' },
-                    { label: 'Image', value: 'image' },
-                    { label: 'File', value: 'file' },
-                  ]}
+                  options={
+                    templates?.map(({ title, id }) => ({
+                      label: title,
+                      value: id.toString(),
+                    })) ?? []
+                  }
                   disabled={isDefaultField}
+                  value={watch('aiTemplateId')?.toString()}
+                  onChange={(value) =>
+                    setValue('aiTemplateId', value ? parseInt(value) : null, {
+                      shouldDirty: true,
+                    })
+                  }
                   required
                 />
                 <SelectInput
                   type="multiple"
                   label="AI Field Target"
-                  options={[
-                    { label: 'Text', value: 'text' },
-                    { label: 'Image', value: 'image' },
-                    { label: 'File', value: 'file' },
-                  ]}
+                  options={fieldRows.map(({ key, name }) => ({
+                    label: name,
+                    value: key,
+                  }))}
+                  values={watch('aiFieldTargetKeys') ?? []}
+                  onValuesChange={(values) =>
+                    values &&
+                    setValue('aiFieldTargetKeys', values, {
+                      shouldDirty: true,
+                    })
+                  }
                   disabled={isDefaultField}
                   required
                 />

@@ -15,7 +15,10 @@
  */
 
 import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { useOverlay } from '@toss/use-overlay';
 import { parseAsInteger, useQueryState } from 'nuqs';
 import { FormProvider, useForm } from 'react-hook-form';
 import { create } from 'zustand';
@@ -23,6 +26,7 @@ import { create } from 'zustand';
 import {
   Button,
   Divider,
+  InputCaption,
   InputField,
   InputLabel,
   Switch,
@@ -37,12 +41,14 @@ import {
   CardHeader,
   CardTitle,
   client,
+  DeleteDialog,
   SelectInput,
   Slider,
   TextInput,
   useOAIMutation,
   useOAIQuery,
 } from '@/shared';
+import { aiTemplateSchema } from '@/entities/ai';
 import type { AITemplate } from '@/entities/ai';
 
 import type { AISettingStore } from '../ai-setting-form.type';
@@ -55,16 +61,21 @@ const useAITemplateFormStore = create<AISettingStore>((set) => ({
   isDirty: false,
   setIsDirty: (isDirty) => set({ isDirty }),
 }));
-
+const defaultValues: Partial<AITemplate> = {
+  temperature: 0.5,
+  autoProcessing: true,
+  title: '',
+  prompt: '',
+};
 export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
   const methods = useForm<AITemplate>({
-    defaultValues: {
-      temperature: 0.5,
-      autoProcessing: true,
-    },
+    defaultValues,
+    resolver: zodResolver(aiTemplateSchema),
   });
+
   const { register, formState, setValue, watch, handleSubmit } = methods;
-  const [templateId] = useQueryState('templateId', parseAsInteger);
+  const router = useRouter();
+  const templateId = router.query.templateId ? +router.query.templateId : null;
 
   const { formId, setIsPending, setIsDirty } = useAITemplateFormStore();
   const { data, refetch } = useOAIQuery({
@@ -78,13 +89,17 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
     variables: { projectId },
   });
 
-  const { mutate: create, isPending } = useOAIMutation({
+  const { mutate: createTemplate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/templates/new',
     pathParams: { projectId },
     queryOptions: {
-      onSuccess: () => {
+      async onSuccess(data) {
         toast.success('AI 설정이 저장되었습니다.');
+        await router.push({
+          pathname: router.pathname,
+          query: { ...router.query, templateId: data?.id },
+        });
       },
       onError(error) {
         toast.error(error.message);
@@ -92,7 +107,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
     },
   });
 
-  const { mutate: update } = useMutation({
+  const { mutate: updateTemplate } = useMutation({
     mutationFn: async (body: AITemplate & { templateId: number }) => {
       const { data } = await client.put({
         path: '/api/admin/projects/{projectId}/ai/templates/{templateId}',
@@ -119,15 +134,13 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
   }, [formState.isDirty]);
 
   useEffect(() => {
-    if (templateId && data) {
-      const original = data.find((v) => v.id === templateId);
-      methods.reset(original);
-    }
+    const original = data?.find((v) => v.id === templateId);
+    methods.reset(original ?? defaultValues);
   }, [data, templateId]);
 
   const onSubmit = (values: AITemplate) => {
-    if (templateId) update({ ...values, templateId });
-    else create(values);
+    if (templateId) updateTemplate({ ...values, templateId });
+    else createTemplate(values);
   };
 
   return (
@@ -146,10 +159,18 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
               className="flex flex-col gap-4"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <TextInput label="Title" {...register('title')} />
+              <TextInput label="Title" {...register('title')} required />
               <InputField>
                 <InputLabel>Prompt</InputLabel>
                 <Textarea {...register('prompt')} />
+                <div className="flex flex-row-reverse items-center justify-between">
+                  <InputCaption>{watch('prompt').length} / 1000</InputCaption>
+                  {formState.errors.prompt?.message && (
+                    <InputCaption variant="error">
+                      {formState.errors.prompt.message}
+                    </InputCaption>
+                  )}
+                </div>
               </InputField>
               <Card size="sm">
                 <CardHeader
@@ -188,9 +209,10 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
                     }
                     label="Model"
                     placeholder="Select a model"
-                    onChange={(value) =>
-                      setValue('model', value ?? '', { shouldDirty: true })
-                    }
+                    onChange={(value) => {
+                      if (!value) return;
+                      setValue('model', value, { shouldDirty: true });
+                    }}
                     value={watch('model')}
                   />
                   <InputField>
@@ -222,11 +244,60 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
   );
 };
 
-export const AITemplateFormButton = () => {
+export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
   const { formId, isPending, isDirty } = useAITemplateFormStore();
+  const [templateId] = useQueryState('templateId', parseAsInteger);
+  const overlay = useOverlay();
+  const router = useRouter();
+
+  const { mutate: deleteTemplate } = useMutation({
+    mutationFn: async (body: { templateId: number }) => {
+      const { data } = await client.delete({
+        path: '/api/admin/projects/{projectId}/ai/templates/{templateId}',
+        pathParams: { projectId, templateId: body.templateId },
+      });
+      return data;
+    },
+    onSuccess() {
+      router.back();
+      toast.success('AI 설정이 저장되었습니다.');
+    },
+    onError(error) {
+      toast.error(error.message);
+    },
+  });
+  const openDeleteTemplateConfirm = () => {
+    if (!templateId) return;
+    overlay.open(({ close, isOpen }) => (
+      <DeleteDialog
+        close={close}
+        isOpen={isOpen}
+        onClickDelete={() => {
+          deleteTemplate({ templateId });
+        }}
+      />
+    ));
+  };
+
   return (
-    <Button form={formId} type="submit" loading={isPending} disabled={!isDirty}>
-      저장
-    </Button>
+    <div className="flex items-center gap-2">
+      {templateId && (
+        <Button
+          variant="outline"
+          className="!text-tint-red"
+          onClick={openDeleteTemplateConfirm}
+        >
+          Template 삭제
+        </Button>
+      )}
+      <Button
+        form={formId}
+        type="submit"
+        loading={isPending}
+        disabled={!isDirty}
+      >
+        저장
+      </Button>
+    </div>
   );
 };

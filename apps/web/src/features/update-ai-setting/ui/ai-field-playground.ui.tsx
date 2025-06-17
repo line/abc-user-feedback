@@ -58,7 +58,8 @@ interface Props {
 const AiFieldPlayground = ({ projectId }: Props) => {
   const [inputItems, setInputItems] = useState<InputItem[]>([]);
   const [result, setResult] = useState('');
-  const { getValues } = useFormContext<AITemplate>();
+  // const { getValues } = useFormContext<AITemplate>();
+
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/playground/test',
@@ -72,18 +73,19 @@ const AiFieldPlayground = ({ projectId }: Props) => {
       },
     },
   });
+
   const onTestAI = () => {
     if (inputItems.length === 0) {
       alert('테스트 케이스를 추가해주세요.');
       return;
     }
-    const { model, temperature, prompt } = getValues();
-    mutate({
-      model,
-      temperature,
-      templatePrompt: prompt,
-      temporaryFields: inputItems,
-    });
+    // const { model, temperature, prompt } = getValues();
+    // mutate({
+    //   model,
+    //   temperature,
+    //   templatePrompt: prompt,
+    //   temporaryFields: inputItems,
+    // });
   };
 
   return (
@@ -127,7 +129,7 @@ const AiFieldPlayground = ({ projectId }: Props) => {
                 </Button>
               }
             >
-              <CardTitle>Input Data</CardTitle>
+              <CardTitle>Test Data (Input)</CardTitle>
             </CardHeader>
             <CardBody className="flex min-h-0 flex-1 flex-col gap-4 overflow-auto">
               {inputItems.map((_, key) => (
@@ -144,19 +146,21 @@ const AiFieldPlayground = ({ projectId }: Props) => {
                   loading={isPending}
                 >
                   <Icon name="RiSparklingFill" />
-                  AI 테스트
+                  AI 테스트 실행
                 </Button>
               }
             >
-              <CardTitle>Output</CardTitle>
+              <CardTitle>AI Result (Output)</CardTitle>
             </CardHeader>
-            <CardBody>
-              <div className="bg-neutral-tertiary rounded-8 overflow-auto p-3">
-                <p className="text-small-normal text-neutral-secondary">
-                  {result}
-                </p>
-              </div>
-            </CardBody>
+            {result && (
+              <CardBody>
+                <div className="bg-neutral-tertiary rounded-8 overflow-auto p-3">
+                  <p className="text-small-normal text-neutral-secondary">
+                    {result}
+                  </p>
+                </div>
+              </CardBody>
+            )}
           </Card>
         </CardBody>
       </Card>

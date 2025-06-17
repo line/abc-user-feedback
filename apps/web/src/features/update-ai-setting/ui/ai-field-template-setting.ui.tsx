@@ -14,8 +14,6 @@
  * under the License.
  */
 
-import { parseAsInteger, useQueryState } from 'nuqs';
-
 import { Icon } from '@ufb/react';
 
 import {
@@ -30,11 +28,9 @@ export const AIFieldTemplateSetting = ({
   onClick,
   projectId,
 }: {
-  onClick: () => void;
+  onClick: (templateId?: number) => void;
   projectId: number;
 }) => {
-  const [_, setTemplateId] = useQueryState('templateId', parseAsInteger);
-
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/templates',
     variables: { projectId },
@@ -46,17 +42,18 @@ export const AIFieldTemplateSetting = ({
         description={<HelpCardDocs i18nKey="help-card.api-key" />}
       />
       <div className="grid grid-cols-4 gap-4">
-        <TemplateCard type="create" title="New Template" onClick={onClick} />
+        <TemplateCard
+          type="create"
+          title="New Template"
+          onClick={() => onClick()}
+        />
         {data?.map(({ id, title, prompt }) => (
           <TemplateCard
             key={id}
             type="update"
             title={title}
             description={prompt}
-            onClick={async () => {
-              await setTemplateId(id);
-              onClick();
-            }}
+            onClick={() => onClick(id)}
           />
         ))}
       </div>
@@ -85,8 +82,17 @@ const TemplateCard = (props: {
         {description && (
           <div>
             <p className="text-small-normal">Prompt Preview</p>
-            <div className="bg-neutral-tertiary rounded-12 p-3">
-              <p className="text-small-normal line-clamp-2">{description}</p>
+            <div className="bg-neutral-tertiary rounded-12 relative p-3">
+              <p className="text-small-normal line-clamp-2 break-all">
+                {description}
+              </p>
+              <div
+                className="rounded-12 absolute inset-0"
+                style={{
+                  background:
+                    'linear-gradient(180deg, rgba(239, 239, 239, 0) 0%, var(--bg-tertiary) 100%)',
+                }}
+              />
             </div>
           </div>
         )}
@@ -105,29 +111,29 @@ const StarIcon = () => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M18.1973 14.5996C18.4547 16.2456 19.7544 17.5453 21.4004 17.8027V18.1963C19.7543 18.4537 18.4547 19.7543 18.1973 21.4004H17.8027C17.5453 19.7543 16.2457 18.4537 14.5996 18.1963V17.8027C16.2456 17.5453 17.5453 16.2456 17.8027 14.5996H18.1973ZM8.42773 5.59961C8.71293 8.76612 11.2339 11.286 14.4004 11.5713V12.4277C11.2339 12.7129 8.71294 15.2339 8.42773 18.4004H7.57227C7.28706 15.2339 4.76614 12.7129 1.59961 12.4277V11.5713C4.7661 11.2861 7.28707 8.76612 7.57227 5.59961H8.42773ZM17.0225 2.59961C17.2621 3.79603 18.204 4.73793 19.4004 4.97754V5.02148C18.2039 5.26103 17.2621 6.2039 17.0225 7.40039H16.9775C16.7379 6.2039 15.7961 5.26103 14.5996 5.02148V4.97754C15.796 4.73793 16.7379 3.79603 16.9775 2.59961H17.0225Z"
-        fill="url(#paint0_linear_12816_270031)"
-        stroke="url(#paint1_linear_12816_270031)"
+        d="M6 3.59961H12.4004V4.40039H6C4.56406 4.40039 3.40039 5.56406 3.40039 7V17C3.40039 18.436 4.56406 19.5996 6 19.5996H18C19.436 19.5996 20.5996 18.436 20.5996 17V12.5996H21.4004V17C21.4004 18.8777 19.8777 20.4004 18 20.4004H6C4.12223 20.4004 2.59961 18.8777 2.59961 17V7C2.59961 5.12223 4.12223 3.59961 6 3.59961ZM19.1973 2.59961C19.4547 4.24564 20.7544 5.54527 22.4004 5.80273V6.19629C20.7543 6.4537 19.4547 7.75432 19.1973 9.40039H18.8027C18.5453 7.75432 17.2457 6.4537 15.5996 6.19629V5.80273C17.2456 5.54527 18.5453 4.24564 18.8027 2.59961H19.1973Z"
+        fill="url(#paint0_linear_12996_14077)"
+        stroke="url(#paint1_linear_12996_14077)"
         stroke-width="1.2"
       />
       <defs>
         <linearGradient
-          id="paint0_linear_12816_270031"
-          x1="11.5"
+          id="paint0_linear_12996_14077"
+          x1="12.5"
           y1="2"
-          x2="11.5"
-          y2="22"
+          x2="12.5"
+          y2="21"
           gradientUnits="userSpaceOnUse"
         >
           <stop stop-color="#2DD4BF" />
           <stop offset="1" stop-color="#0EA5E9" />
         </linearGradient>
         <linearGradient
-          id="paint1_linear_12816_270031"
-          x1="11.5"
+          id="paint1_linear_12996_14077"
+          x1="12.5"
           y1="2"
-          x2="11.5"
-          y2="22"
+          x2="12.5"
+          y2="21"
           gradientUnits="userSpaceOnUse"
         >
           <stop stop-color="#2DD4BF" />

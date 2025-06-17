@@ -111,6 +111,7 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
     await update(values);
   };
   useWarnIfUnsavedChanges(methods.formState.isDirty);
+  console.log('methods.formState.isDirty: ', methods.formState.isDirty);
 
   return (
     <>

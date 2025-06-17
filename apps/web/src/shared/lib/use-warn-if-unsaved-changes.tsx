@@ -42,7 +42,7 @@ const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
     ));
   };
 
-  // 닫기, 새로고침
+  // close and refresh page
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (hasUnsavedChanges) {
@@ -58,7 +58,7 @@ const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
     };
   }, [hasUnsavedChanges]);
 
-  // Browser 뒤로가기, 나가기 버튼
+  // back button and route change
   useEffect(() => {
     const handleBeforeChangeRoute = (url: string) => {
       if (!hasUnsavedChanges || isLoading) return;
