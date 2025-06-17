@@ -685,8 +685,12 @@ export class FeedbackService {
       fields.forEach((field) => {
         if (field.format === FieldFormatEnum.aiField) {
           try {
-            feedback[field.key] = JSON.parse(feedback[field.key] as string);
-          } catch (e) {}
+            feedback[field.key] = JSON.parse(
+              feedback[field.key] as string,
+            ) as object;
+          } catch {
+            // do nothing when JSON parsing fails
+          }
         }
       });
     });
@@ -730,8 +734,12 @@ export class FeedbackService {
       fields.forEach((field) => {
         if (field.format === FieldFormatEnum.aiField) {
           try {
-            feedback[field.key] = JSON.parse(feedback[field.key] as string);
-          } catch (e) {}
+            feedback[field.key] = JSON.parse(
+              feedback[field.key] as string,
+            ) as object;
+          } catch {
+            // do nothing when JSON parsing fails
+          }
         }
       });
     });
