@@ -64,10 +64,12 @@ export class AIService {
   async validateAPIKey(
     provider: AIProvidersEnum,
     apiKey: string,
+    endpointUrl: string | undefined,
   ): Promise<ValidateAPIKeyResponseDto> {
     const client = new AIClient({
       apiKey,
       provider,
+      baseUrl: endpointUrl,
     });
 
     try {
@@ -403,7 +405,7 @@ export class AIService {
     );
     this.logger.log(`Result: ${result.content}`);
     feedback.data[aiField.key] =
-      `{'status': '${result.status}', 'message': '${result.content}'}`;
+      `{"status": "${result.status}", "message": "${result.content}"}`;
 
     void this.saveAIUsage(
       result.usedTokens,

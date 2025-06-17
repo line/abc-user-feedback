@@ -61,7 +61,11 @@ export class AIController {
   @ApiOkResponse({ type: ValidateAPIKeyResponseDto })
   @Post('validate')
   async validateAPIKey(@Body() body: ValidteAPIKeyRequestDto) {
-    return this.aiService.validateAPIKey(body.provider, body.apiKey);
+    return this.aiService.validateAPIKey(
+      body.provider,
+      body.apiKey,
+      body.endpointUrl,
+    );
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)

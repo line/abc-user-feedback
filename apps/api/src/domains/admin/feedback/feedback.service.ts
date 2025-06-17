@@ -682,6 +682,17 @@ export class FeedbackService {
 
     feedbacksByPagination.items.forEach((feedback: Feedback) => {
       feedback.issues = issuesByFeedbackIds[feedback.id as number];
+      fields.forEach((field) => {
+        if (field.format === FieldFormatEnum.aiField) {
+          try {
+            feedback[field.key] = JSON.parse(
+              feedback[field.key] as string,
+            ) as object;
+          } catch {
+            // do nothing when JSON parsing fails
+          }
+        }
+      });
     });
 
     return feedbacksByPagination;
@@ -720,6 +731,17 @@ export class FeedbackService {
 
     feedbacksByPagination.items.forEach((feedback: Feedback) => {
       feedback.issues = issuesByFeedbackIds[feedback.id as number];
+      fields.forEach((field) => {
+        if (field.format === FieldFormatEnum.aiField) {
+          try {
+            feedback[field.key] = JSON.parse(
+              feedback[field.key] as string,
+            ) as object;
+          } catch {
+            // do nothing when JSON parsing fails
+          }
+        }
+      });
     });
 
     return feedbacksByPagination;
