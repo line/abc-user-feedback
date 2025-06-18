@@ -14,7 +14,7 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, IsString, MaxLength } from 'class-validator';
+import { IsNumber, IsString, MaxLength } from 'class-validator';
 
 export class CreateAITemplateRequestDto {
   @ApiProperty({ nullable: false, type: String })
