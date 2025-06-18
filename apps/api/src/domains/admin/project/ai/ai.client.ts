@@ -17,6 +17,7 @@ import { Logger } from '@nestjs/common';
 import axios from 'axios';
 import type { AxiosInstance, AxiosResponse } from 'axios';
 
+import { AIPromptStatusEnum } from '@/common/enums/ai-prompt-status.enum';
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 import { getRefinedSystemPrompt, getRefinedUserPrompt } from './ai.prompt';
 
@@ -51,7 +52,7 @@ interface ExecutePromptResponse {
 }
 
 class PromptResult {
-  status: 'success' | 'error' = 'success';
+  status: AIPromptStatusEnum = AIPromptStatusEnum.success;
   content: string;
   usedTokens: number;
 }
@@ -214,7 +215,7 @@ export class AIClient {
       return result;
     } catch (error) {
       const result = new PromptResult();
-      result.status = 'error';
+      result.status = AIPromptStatusEnum.error;
       result.content = `Error executing prompt: ${error}`;
       result.usedTokens = 0;
 
