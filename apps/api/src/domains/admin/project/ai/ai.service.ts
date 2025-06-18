@@ -28,7 +28,6 @@ import { Transactional } from 'typeorm-transactional';
 import { FieldFormatEnum } from '@/common/enums';
 import { AIPromptStatusEnum } from '@/common/enums/ai-prompt-status.enum';
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
-import { EventTypeEnum } from '@/common/enums/event-type.enum';
 import {
   getCurrentDay,
   getCurrentMonth,
@@ -455,11 +454,11 @@ export class AIService {
     this.logger.log(
       `Processing AI Field for feedback IDs: ${feedbackIds.toString()}`,
     );
-    feedbackIds.map((feedbackId) => {
-      this.processFeedbackAIFields(feedbackId);
+    const tasks = feedbackIds.map((feedbackId) => {
+      return this.processFeedbackAIFields(feedbackId);
     });
 
-    await Promise.all(feedbackIds);
+    await Promise.all(tasks);
   }
 
   async processFeedbackAIFields(feedbackId: number) {
