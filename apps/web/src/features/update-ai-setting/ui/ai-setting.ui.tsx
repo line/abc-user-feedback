@@ -59,10 +59,12 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
     variables: { projectId },
   });
 
-  const { mutateAsync: validateApiKey } = useOAIMutation({
-    method: 'post',
-    path: '/api/admin/projects/{projectId}/ai/validate',
-  });
+  const { mutateAsync: validateApiKey, isPending: isValidatingApiKey } =
+    useOAIMutation({
+      method: 'post',
+      path: '/api/admin/projects/{projectId}/ai/validate',
+      pathParams: { projectId },
+    });
 
   const { mutateAsync: update, isPending } = useOAIMutation({
     method: 'put',
@@ -91,8 +93,8 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
   });
 
   useEffect(() => {
-    setIsPending(isPending);
-  }, [isPending]);
+    setIsPending(isPending || isValidatingApiKey);
+  }, [isPending, isValidatingApiKey]);
 
   useEffect(() => {
     setIsDirty(methods.formState.isDirty);

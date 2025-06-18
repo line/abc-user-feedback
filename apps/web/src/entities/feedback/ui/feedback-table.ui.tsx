@@ -241,17 +241,17 @@ const FeedbackTable = (props: Props) => {
       },
     },
   });
-  const { mutate: processAI } = useOAIMutation({
+  const { mutateAsync: processAI } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/process',
     pathParams: { projectId },
     queryOptions: {
-      async onSuccess() {
-        await refetch();
+      onSuccess() {
         toast.success(t('v2.toast.success'));
       },
-      onError: (error) => {
-        toast.error(error.message);
+      async onSettled() {
+        table.resetRowSelection();
+        await refetch();
       },
     },
   });
@@ -283,7 +283,11 @@ const FeedbackTable = (props: Props) => {
               <Button
                 variant="outline"
                 onClick={() => {
-                  processAI({ feedbackIds: selectedRowIds });
+                  toast.promise(processAI({ feedbackIds: selectedRowIds }), {
+                    loading: 'Loading',
+                    success: () => 'Success',
+                    error: () => 'Error',
+                  });
                 }}
               >
                 AI 실행 <Badge variant="subtle">{selectedRowIds.length}</Badge>

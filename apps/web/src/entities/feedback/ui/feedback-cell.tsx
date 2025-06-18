@@ -17,7 +17,7 @@ import { memo } from 'react';
 import dayjs from 'dayjs';
 import Linkify from 'linkify-react';
 
-import { Badge } from '@ufb/react';
+import { Badge, Icon } from '@ufb/react';
 
 import { DATE_TIME_FORMAT, ExpandableText, ImagePreviewButton } from '@/shared';
 import type { FieldInfo } from '@/entities/field';
@@ -85,11 +85,54 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
           )}
           {field.format === 'keyword' && value}
           {field.format === 'number' && value}
-          {field.format === 'aiField' && <>{JSON.stringify(value)}</>}
+          {field.format === 'aiField' && (
+            <AICell
+              value={
+                value as
+                  | { status: 'loading' | 'success' | 'error'; message: string }
+                  | undefined
+              }
+            />
+          )}
         </>
       }
     </ExpandableText>
   );
 });
+
+const AICell = memo(
+  (props: {
+    value:
+      | { status: 'loading' | 'success' | 'error'; message: string }
+      | undefined;
+  }) => {
+    const { value } = props;
+
+    if (!value) return null;
+
+    return (
+      <>
+        {value.status === 'loading' && (
+          <div className="flex flex-col gap-2">
+            <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
+            <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
+            <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
+          </div>
+        )}
+        {value.status === 'error' && (
+          <div className="flex items-center gap-1">
+            <Icon
+              name="RiErrorWarningFill"
+              className="text-tint-red shrink-0"
+              size={16}
+            />
+            <span>{value.message}</span>
+          </div>
+        )}
+        {value.status === 'success' && <p>{value.message}</p>}
+      </>
+    );
+  },
+);
 
 export default FeedbackCell;

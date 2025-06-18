@@ -28,6 +28,7 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -61,6 +62,7 @@ export class AIController {
   constructor(private readonly aiService: AIService) {}
 
   @ApiOkResponse({ type: ValidateAPIKeyResponseDto })
+  @ApiParam({ name: 'projectId', type: Number })
   @Post('validate')
   async validateAPIKey(@Body() body: ValidteAPIKeyRequestDto) {
     return this.aiService.validateAPIKey(
@@ -154,6 +156,7 @@ export class AIController {
 
   @RequirePermission(PermissionEnum.generative_ai_read)
   @ApiOkResponse()
+  @ApiParam({ name: 'projectId', type: Number })
   @Post('process')
   async processAIFields(@Body() body: ProcessAIFieldRequestDto) {
     await this.aiService.processFeedbacksAIFields(body.feedbackIds);
@@ -161,6 +164,7 @@ export class AIController {
 
   @RequirePermission(PermissionEnum.generative_ai_read)
   @ApiOkResponse()
+  @ApiParam({ name: 'projectId', type: Number })
   @Post('process/field')
   async processAIField(@Body() body: ProcessSingleAIFieldRequestDto) {
     await this.aiService.processAIField(body.feedbackId, body.aiFieldId);

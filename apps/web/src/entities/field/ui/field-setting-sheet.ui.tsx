@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
@@ -54,7 +55,6 @@ const defaultValues: FieldInfo = {
 
 interface IProps extends FormOverlayProps<FieldInfo> {
   fieldRows: FieldInfo[];
-  projectId: number;
 }
 
 const FieldSettingSheet: React.FC<IProps> = (props) => {
@@ -67,9 +67,9 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     onClickDelete,
     disabledUpdate,
     disabledDelete,
-    projectId,
   } = props;
-
+  const router = useRouter();
+  const projectId = parseInt(router.query.projectId as string, 10);
   const { t } = useTranslation();
 
   const [isSameKey, setIsSameKey] = useState(

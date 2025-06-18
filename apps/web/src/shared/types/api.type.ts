@@ -1108,6 +1108,22 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/admin/projects/{projectId}/ai/process/field': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AIController_processAIField'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/admin/projects/{projectId}/ai/playground/test': {
     parameters: {
       query?: never;
@@ -1687,6 +1703,7 @@ export interface components {
       order: number | null;
       aiTemplateId: number | null;
       aiFieldTargetKeys: string[] | null;
+      aiFieldAutoProcessing: boolean | null;
       options?: components['schemas']['CreateChannelRequestFieldSelectOptionDto'][];
     };
     CreateChannelRequestDto: {
@@ -1754,6 +1771,7 @@ export interface components {
       options: components['schemas']['FindFieldsResponseSelectOptionDto'][];
       aiTemplateId: number | null;
       aiFieldTargetKeys: string[] | null;
+      aiFieldAutoProcessing: boolean;
     };
     FindChannelByIdResponseDto: {
       id: number;
@@ -1783,6 +1801,7 @@ export interface components {
       order: number | null;
       aiTemplateId: number | null;
       aiFieldTargetKeys: string[] | null;
+      aiFieldAutoProcessing: boolean | null;
       options?: components['schemas']['CreateChannelRequestFieldSelectOptionDto'][];
       id?: number;
     };
@@ -2202,7 +2221,6 @@ export interface components {
       id: number;
       title: string;
       prompt: string;
-      autoProcessing: boolean;
       model: string;
       temperature: number;
       /** Format: date-time */
@@ -2215,13 +2233,16 @@ export interface components {
       model: string;
       temperature: number;
       prompt: string;
-      autoProcessing: boolean;
     };
     CreateAITemplateResponseDto: {
       id: number;
     };
     ProcessAIFieldRequestDto: {
       feedbackIds: number[];
+    };
+    ProcessSingleAIFieldRequestDto: {
+      feedbackId: number;
+      aiFieldId: number;
     };
     TemporaryField: {
       name: string;
@@ -4264,7 +4285,9 @@ export interface operations {
     parameters: {
       query?: never;
       header?: never;
-      path?: never;
+      path: {
+        projectId: number;
+      };
       cookie?: never;
     };
     requestBody: {
@@ -4477,6 +4500,29 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['ProcessAIFieldRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AIController_processAIField: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ProcessSingleAIFieldRequestDto'];
       };
     };
     responses: {
