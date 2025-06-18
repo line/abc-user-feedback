@@ -42,27 +42,20 @@ const AiSettingForm = () => {
       }
     >
   >({
-    GEMINI: {
-      apiKey: '',
-      endpointUrl: '',
-    },
-    OPEN_AI: {
-      apiKey: '',
-      endpointUrl: '',
-    },
+    GEMINI: { apiKey: '', endpointUrl: '' },
+    OPEN_AI: { apiKey: '', endpointUrl: '' },
   });
   return (
     <div className="flex flex-col gap-4">
       <RadioCardGroup
         value={watch('provider')}
         onValueChange={(currentProvider: 'OPEN_AI' | 'GEMINI') => {
-          // Update previous values when provider changes
-
           const {
             apiKey: previousApiKey,
             provider: previousProvider,
             endpointUrl: previousEndpointUrl,
           } = watch();
+
           setPreviousValues((prev) => ({
             ...prev,
             [previousProvider]: {
@@ -74,26 +67,6 @@ const AiSettingForm = () => {
           setValue('provider', currentProvider, { shouldDirty: true });
           setValue('apiKey', previousValues[currentProvider].apiKey);
           setValue('endpointUrl', previousValues[currentProvider].endpointUrl);
-
-          // const currentProvider = watch('provider');
-          // const currentValues = previousValues[watch('provider')];
-          // if (currentProvider && currentValues) {
-          //   setPreviousValues((prev) => ({
-          //     ...prev,
-          //     [currentProvider]: {
-          //       apiKey: watch('apiKey') || '',
-          //       endpointUrl: watch('endpointUrl') || '',
-          //     },
-          //   }));
-          // }
-          // setValue('provider', v);
-          // if (previousValues[v]) {
-          //   setValue('apiKey', previousValues[v].apiKey);
-          //   setValue('endpointUrl', previousValues[v].endpointUrl);
-          // } else {
-          //   setValue('apiKey', '');
-          //   setValue('endpointUrl', '');
-          // }
         }}
       >
         <RadioCard value="OPEN_AI" icon="RiGoogleFill" title="Open AI" />
@@ -118,13 +91,13 @@ const AiSettingForm = () => {
           placeholder={t('v2.placeholder.text')}
           {...register('systemPrompt')}
         />
-        <div className="flex items-center justify-between">
-          {!!formState.errors.systemPrompt?.message && (
+        <div className="flex flex-row-reverse items-center justify-between">
+          <InputCaption>{watch('systemPrompt').length} / 1000</InputCaption>
+          {formState.errors.systemPrompt?.message && (
             <InputCaption variant="error">
               {formState.errors.systemPrompt.message}
             </InputCaption>
           )}
-          <InputCaption>{watch('systemPrompt')?.length} / 1000</InputCaption>
         </div>
       </InputField>
     </div>

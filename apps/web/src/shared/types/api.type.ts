@@ -2166,6 +2166,7 @@ export interface components {
     ValidteAPIKeyRequestDto: {
       provider: components['schemas']['AIProvidersEnum'];
       apiKey: string;
+      endpointUrl: string | null;
     };
     ValidateAPIKeyResponseDto: {
       valid: boolean;
@@ -2218,6 +2219,9 @@ export interface components {
     };
     CreateAITemplateResponseDto: {
       id: number;
+    };
+    ProcessAIFieldRequestDto: {
+      feedbackIds: number[];
     };
     TemporaryField: {
       name: string;
@@ -4465,10 +4469,16 @@ export interface operations {
     parameters: {
       query?: never;
       header?: never;
-      path?: never;
+      path: {
+        projectId: number;
+      };
       cookie?: never;
     };
-    requestBody?: never;
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ProcessAIFieldRequestDto'];
+      };
+    };
     responses: {
       200: {
         headers: {

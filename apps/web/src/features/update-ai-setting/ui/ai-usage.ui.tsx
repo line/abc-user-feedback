@@ -328,16 +328,17 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
   const usedPercentage = useMemo(
     () =>
       integrationData?.tokenThreshold ?
-        (remainingTokens / integrationData.tokenThreshold) * 100
+        (usedTokens / integrationData.tokenThreshold) * 100
       : 0,
-    [usedTokens, integrationData, remainingTokens],
+    [usedTokens, integrationData],
   );
+
   const remainingPercentage = useMemo(
     () =>
       integrationData?.tokenThreshold ?
         (remainingTokens / integrationData.tokenThreshold) * 100
       : 0,
-    [integrationData, usedTokens],
+    [integrationData, remainingTokens],
   );
 
   return (
@@ -358,7 +359,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
             },
           ]}
           startAngle={90}
-          endAngle={Math.max(90 + 360 * (usedPercentage / 100), 90)}
+          endAngle={Math.max(90 + 360 * (remainingPercentage / 100), 90)}
           innerRadius={80}
           outerRadius={110}
           width={180}
@@ -418,7 +419,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
                         className="text-title-h4 fill-neutral-primary"
                       >
                         {integrationData?.tokenThreshold ?
-                          `${usedPercentage.toFixed(1)}%`
+                          `${remainingPercentage.toFixed(1)}%`
                         : '-'}
                       </tspan>
                       <tspan

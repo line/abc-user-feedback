@@ -75,7 +75,9 @@ const TemplateCard = (props: {
     >
       <CardBody className="flex h-full flex-col justify-between">
         <div className="flex flex-col gap-1">
-          {type === 'create' && <Icon name="RiAddCircleFill" />}
+          {type === 'create' && (
+            <Icon name="RiAddCircleFill" className="text-neutral-tertiary" />
+          )}
           {type === 'update' && <StarIcon />}
           <h4 className="text-title-h4">{title}</h4>
         </div>

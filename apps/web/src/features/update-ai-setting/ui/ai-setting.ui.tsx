@@ -22,6 +22,7 @@ import { create } from 'zustand';
 import { Button, toast } from '@ufb/react';
 
 import {
+  client,
   HelpCardDocs,
   SettingAlert,
   useOAIMutation,
@@ -45,6 +46,7 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
   const methods = useForm<AI>({
     resolver: zodResolver(aiSchema),
     defaultValues: {
+      endpointUrl: '',
       systemPrompt: '',
     },
   });
@@ -60,12 +62,6 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
   const { mutateAsync: validateApiKey } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/validate',
-    queryOptions: {
-      onSuccess(data, variables, context) {},
-      onError(error) {
-        toast.error(error.message);
-      },
-    },
   });
 
   const { mutateAsync: update, isPending } = useOAIMutation({
@@ -74,6 +70,12 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
+        if (!data?.apiKey) {
+          await client.post({
+            path: '/api/admin/projects/{projectId}/ai/templates/default',
+            pathParams: { projectId },
+          });
+        }
         await queryClient.invalidateQueries({
           queryKey: [
             '/api/admin/projects/{projectId}/ai/integrations',
@@ -99,19 +101,17 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
   useEffect(() => {
     if (data) methods.reset(data);
   }, [data]);
+
   const onSubmit = async (values: AI) => {
-    // const data = await validateApiKey({
-    //   apiKey: values.apiKey,
-    //   provider: values.provider,
-    // });
-    // if (!data?.valid) {
-    //   toast.error(data?.error);
-    //   return;
-    // }
+    const data = await validateApiKey(values);
+    if (!data?.valid) {
+      toast.error(data?.error);
+      return;
+    }
     await update(values);
   };
+
   useWarnIfUnsavedChanges(methods.formState.isDirty);
-  console.log('methods.formState.isDirty: ', methods.formState.isDirty);
 
   return (
     <>

@@ -15,7 +15,9 @@
  */
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { useForm, useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -58,9 +60,8 @@ interface Props {
 const AiFieldPlayground = ({ projectId }: Props) => {
   const [inputItems, setInputItems] = useState<InputItem[]>([]);
   const [result, setResult] = useState('');
-  const { getValues } = useFormContext<AITemplate>();
-
-  const { mutate, isPending } = useOAIMutation({
+  const { getValues, watch } = useFormContext<AITemplate>();
+  const { mutateAsync, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/playground/test',
     pathParams: { projectId },
@@ -80,12 +81,19 @@ const AiFieldPlayground = ({ projectId }: Props) => {
       return;
     }
     const { model, temperature, prompt } = getValues();
-    mutate({
-      model,
-      temperature,
-      templatePrompt: prompt,
-      temporaryFields: inputItems,
-    });
+    toast.promise(
+      mutateAsync({
+        model,
+        temperature,
+        templatePrompt: prompt,
+        temporaryFields: inputItems,
+      }),
+      {
+        success: () => '성공',
+        error: () => '실패',
+        loading: '로딩 중입니다',
+      },
+    );
   };
 
   return (
@@ -144,6 +152,11 @@ const AiFieldPlayground = ({ projectId }: Props) => {
                   variant="outline"
                   onClick={onTestAI}
                   loading={isPending}
+                  disabled={
+                    inputItems.length === 0 ||
+                    watch('prompt') === '' ||
+                    watch('model') === ''
+                  }
                 >
                   <Icon name="RiSparklingFill" />
                   AI 테스트 실행
@@ -152,15 +165,26 @@ const AiFieldPlayground = ({ projectId }: Props) => {
             >
               <CardTitle>AI Result (Output)</CardTitle>
             </CardHeader>
-            {result && (
-              <CardBody>
+            <CardBody>
+              {result ?
                 <div className="bg-neutral-tertiary rounded-8 overflow-auto p-3">
                   <p className="text-small-normal text-neutral-secondary">
                     {result}
                   </p>
                 </div>
-              </CardBody>
-            )}
+              : <div className="flex h-full flex-col items-center justify-center gap-4">
+                  <Image
+                    src="/assets/images/waiting.svg"
+                    alt="Placeholder"
+                    width={120}
+                    height={120}
+                  />
+                  <p className="text-small-normal text-neutral-tertiary">
+                    아직 테스트를 실행하지 않은 상태입니다.
+                  </p>
+                </div>
+              }
+            </CardBody>
           </Card>
         </CardBody>
       </Card>
@@ -177,24 +201,56 @@ const AIPlaygroundInputDataItemForm = ({
   onClose: () => void;
   initialValues?: InputItem;
 }) => {
-  const { register, handleSubmit, reset } = useForm<InputItem>({
-    defaultValues: initialValues ?? { name: '', description: '', value: '' },
-    resolver: zodResolver(
-      z.object({
-        name: z.string().trim().min(1).max(20),
-        description: z.string().trim().max(50),
-        value: z.string(),
-      }),
-    ),
-  });
+  const { t } = useTranslation();
+  const { inputItems } = React.useContext(AIPlaygroundContext);
+  const { register, handleSubmit, reset, formState, setError } =
+    useForm<InputItem>({
+      defaultValues: initialValues ?? { name: '', description: '', value: '' },
+      resolver: zodResolver(
+        z.object({
+          name: z.string().trim().min(1).max(20),
+          description: z.string().trim().max(50),
+          value: z.string().min(1),
+        }),
+      ),
+    });
 
   return (
     <Card size="sm">
       <CardBody>
-        <form className="flex flex-col gap-1" onSubmit={handleSubmit(onSubmit)}>
-          <TextInput label="Field Title" {...register('name')} />
-          <TextInput label="Field Description" {...register('description')} />
-          <TextInput label="Field Value" {...register('value')} />
+        <form
+          className="flex flex-col gap-1"
+          onSubmit={handleSubmit((data) => {
+            if (inputItems.some((item) => item.name === data.name)) {
+              setError('name', {
+                type: 'manual',
+                message: '이미 존재하는 필드 이름입니다.',
+              });
+              return;
+            }
+            onSubmit(data);
+          })}
+        >
+          <TextInput
+            label="Field Name"
+            {...register('name')}
+            required
+            placeholder={t('v2.placeholder.text')}
+            error={formState.errors.name?.message}
+          />
+          <TextInput
+            label="Field Description"
+            {...register('description')}
+            placeholder={t('v2.placeholder.text')}
+            error={formState.errors.description?.message}
+          />
+          <TextInput
+            label="Field Value"
+            {...register('value')}
+            required
+            placeholder={t('v2.placeholder.text')}
+            error={formState.errors.value?.message}
+          />
           <div className="flex justify-end gap-2">
             <Button
               onClick={() => {
@@ -205,7 +261,9 @@ const AIPlaygroundInputDataItemForm = ({
             >
               Cancel
             </Button>
-            <Button type="submit">Confirm</Button>
+            <Button type="submit" disabled={!formState.isDirty}>
+              Confirm
+            </Button>
           </div>
         </form>
       </CardBody>
@@ -248,7 +306,11 @@ const AIPlaygroundInputDataItem = ({ index }: { index: number }) => {
             <Button variant="outline" onClick={() => setIsEditing(true)}>
               <Icon name="RiEditBoxLine" />
             </Button>
-            <Button onClick={() => deleteInputItem(index)} variant="outline">
+            <Button
+              onClick={() => deleteInputItem(index)}
+              variant="outline"
+              className="!text-tint-red"
+            >
               <Icon name="RiDeleteBinLine" />
             </Button>
           </div>

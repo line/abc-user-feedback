@@ -241,6 +241,20 @@ const FeedbackTable = (props: Props) => {
       },
     },
   });
+  const { mutate: processAI } = useOAIMutation({
+    method: 'post',
+    path: '/api/admin/projects/{projectId}/ai/process',
+    pathParams: { projectId },
+    queryOptions: {
+      async onSuccess() {
+        await refetch();
+        toast.success(t('v2.toast.success'));
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    },
+  });
 
   return (
     <div className="flex h-full flex-col gap-4">
@@ -266,7 +280,12 @@ const FeedbackTable = (props: Props) => {
                   {selectedRowIds.length}
                 </Badge>
               </Button>
-              <Button variant="outline">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  processAI({ feedbackIds: selectedRowIds });
+                }}
+              >
                 AI 실행 <Badge variant="subtle">{selectedRowIds.length}</Badge>
               </Button>
             </>

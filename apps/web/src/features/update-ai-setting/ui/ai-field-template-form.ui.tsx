@@ -47,6 +47,7 @@ import {
   TextInput,
   useOAIMutation,
   useOAIQuery,
+  useWarnIfUnsavedChanges,
 } from '@/shared';
 import { aiTemplateSchema } from '@/entities/ai';
 import type { AITemplate } from '@/entities/ai';
@@ -61,12 +62,14 @@ const useAITemplateFormStore = create<AISettingStore>((set) => ({
   isDirty: false,
   setIsDirty: (isDirty) => set({ isDirty }),
 }));
+
 const defaultValues: Partial<AITemplate> = {
   temperature: 0.5,
-  autoProcessing: true,
+  autoProcessing: false,
   title: '',
   prompt: '',
 };
+
 export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
   const methods = useForm<AITemplate>({
     defaultValues,
@@ -142,6 +145,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
     const original = data?.find((v) => v.id === templateId);
     methods.reset(original ?? defaultValues);
   }, [data, templateId]);
+  useWarnIfUnsavedChanges(methods.formState.isDirty);
 
   const onSubmit = (values: AITemplate) => {
     if (templateId)
@@ -179,9 +183,16 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
               className="flex flex-col gap-4"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <TextInput label="Title" {...register('title')} required />
+              <TextInput
+                label="Title"
+                {...register('title')}
+                required
+                error={formState.errors.title?.message}
+              />
               <InputField>
-                <InputLabel>Prompt</InputLabel>
+                <InputLabel>
+                  Prompt <span className="text-tint-red">*</span>
+                </InputLabel>
                 <Textarea {...register('prompt')} />
                 <div className="flex flex-row-reverse items-center justify-between">
                   <InputCaption>{watch('prompt').length} / 1000</InputCaption>
@@ -234,6 +245,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
                       setValue('model', value, { shouldDirty: true });
                     }}
                     value={watch('model')}
+                    error={formState.errors.model?.message}
                   />
                   <InputField>
                     <InputLabel>Temperature</InputLabel>
@@ -301,15 +313,14 @@ export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
 
   return (
     <div className="flex items-center gap-2">
-      {templateId && (
-        <Button
-          variant="outline"
-          className="!text-tint-red"
-          onClick={openDeleteTemplateConfirm}
-        >
-          Template 삭제
-        </Button>
-      )}
+      <Button
+        variant="outline"
+        className="!text-tint-red"
+        onClick={openDeleteTemplateConfirm}
+        disabled={!templateId}
+      >
+        Template 삭제
+      </Button>
       <Button
         form={formId}
         type="submit"
