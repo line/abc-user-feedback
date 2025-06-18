@@ -107,7 +107,7 @@ export class FieldEntity extends CommonEntity {
     order?: number | null;
     aiTemplateId?: number | null;
     aiFieldTargetKeys?: string[] | null;
-    aiFieldAutoProcessing: boolean | null;
+    aiFieldAutoProcessing?: boolean | null;
   }) {
     const field = new FieldEntity();
     field.channel = new ChannelEntity();
@@ -124,7 +124,7 @@ export class FieldEntity extends CommonEntity {
       field.aiTemplate.id = aiTemplateId;
     }
     field.aiFieldTargetKeys = aiFieldTargetKeys ?? null;
-    field.aiFieldAutoProcessing = aiFieldAutoProcessing;
+    field.aiFieldAutoProcessing = aiFieldAutoProcessing ?? null;
 
     return field;
   }
