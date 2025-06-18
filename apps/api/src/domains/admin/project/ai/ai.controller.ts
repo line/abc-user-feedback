@@ -38,6 +38,7 @@ import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import {
   CreateAITemplateRequestDto,
   GetAIPlaygroundResultRequestDto,
+  ProcessAIFieldRequestDto,
   UpdateAIIntegrationsRequestDto,
   ValidteAPIKeyRequestDto,
 } from './dtos/requests';
@@ -153,7 +154,7 @@ export class AIController {
   @RequirePermission(PermissionEnum.generative_ai_read)
   @ApiOkResponse()
   @Post('process')
-  processAIFields(@Body() body: { feedbackIds: number[] }) {
+  processAIFields(@Body() body: ProcessAIFieldRequestDto) {
     this.aiService.processAIFields(body.feedbackIds);
   }
 

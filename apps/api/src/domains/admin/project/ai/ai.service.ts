@@ -20,6 +20,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
+import { AIPromptStatusEnum } from '@/common/enums/ai-prompt-status.enum';
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 import { EventTypeEnum } from '@/common/enums/event-type.enum';
 import {
@@ -358,7 +359,6 @@ export class AIService {
     }, '');
   }
 
-  @Transactional()
   async executeAIFieldPrompt(
     feedback: FeedbackEntity,
     aiField: FieldEntity,
@@ -395,6 +395,22 @@ export class AIService {
       baseUrl: integration.endpointUrl,
     });
 
+    feedback.data[aiField.key] =
+      `{"status": "${AIPromptStatusEnum.loading}", "message": "Processing..."}`;
+
+    await this.feedbackMySQLService.updateFeedback({
+      feedbackId: feedback.id,
+      data: feedback.data,
+    });
+
+    if (this.configService.get('opensearch.use')) {
+      await this.feedbackOSService.upsertFeedbackItem({
+        feedbackId: feedback.id,
+        data: feedback.data,
+        channelId: feedback.channel.id,
+      });
+    }
+
     const result = await client.executePrompt(
       aiField.aiTemplate.model,
       aiField.aiTemplate.temperature,
@@ -405,7 +421,7 @@ export class AIService {
     );
     this.logger.log(`Result: ${result.content}`);
     feedback.data[aiField.key] =
-      `{"status": "${result.status}", "message": "${result.content}"}`;
+      `{"status": "${result.status}", "message": "${result.content.replace(/"/g, "'")}"}`;
 
     void this.saveAIUsage(
       result.usedTokens,
