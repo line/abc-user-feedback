@@ -13,10 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber } from 'class-validator';
 
-export { UpdateAIIntegrationsRequestDto } from './update-ai-integrations-request.dto';
-export { CreateAITemplateRequestDto } from './create-ai-template-request.dto';
-export { ValidteAPIKeyRequestDto } from './validate-api-key-request.dto';
-export { GetAIPlaygroundResultRequestDto } from './get-ai-playground-result-request.dto';
-export { ProcessAIFieldRequestDto } from './process-ai-field-request.dto';
-export { ProcessSingleAIFieldRequestDto } from './process-single-ai-field-request.dto';
+export class ProcessSingleAIFieldRequestDto {
+  @ApiProperty({ type: Number })
+  @IsNumber()
+  feedbackId: number;
+
+  @ApiProperty({ type: Number })
+  @IsNumber()
+  aiFieldId: number;
+}

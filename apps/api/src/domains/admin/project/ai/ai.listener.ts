@@ -48,7 +48,6 @@ export class AIListener {
         channel: {
           project: true,
         },
-        issues: true,
       },
     });
 

@@ -13,13 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
+import { FieldFormatEnum } from '@/common/enums';
 import { AIPromptStatusEnum } from '@/common/enums/ai-prompt-status.enum';
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 import { EventTypeEnum } from '@/common/enums/event-type.enum';
@@ -57,6 +63,12 @@ export class AIService {
 
     @InjectRepository(AITemplatesEntity)
     private readonly aiTemplatesRepo: Repository<AITemplatesEntity>,
+
+    @InjectRepository(FeedbackEntity)
+    private readonly feedbackRepo: Repository<FeedbackEntity>,
+
+    @InjectRepository(FieldEntity)
+    private readonly fieldRepo: Repository<FieldEntity>,
 
     @InjectRepository(AIUsagesEntity)
     private readonly aiUsagesRepo: Repository<AIUsagesEntity>,
@@ -439,16 +451,77 @@ export class AIService {
     }
   }
 
-  processAIFields(feedbackIds: number[]) {
+  async processFeedbacksAIFields(feedbackIds: number[]) {
     this.logger.log(
       `Processing AI Field for feedback IDs: ${feedbackIds.toString()}`,
     );
-    for (const feedbackId of feedbackIds) {
-      this.eventEmitter.emit(EventTypeEnum.FEEDBACK_CREATION, {
-        feedbackId: feedbackId,
-        manual: true,
-      });
+    feedbackIds.map((feedbackId) => {
+      this.processFeedbackAIFields(feedbackId);
+    });
+
+    await Promise.all(feedbackIds);
+  }
+
+  async processFeedbackAIFields(feedbackId: number) {
+    const feedback = await this.feedbackRepo.findOne({
+      where: { id: feedbackId },
+      relations: {
+        channel: {
+          project: true,
+        },
+      },
+    });
+
+    if (!feedback)
+      throw new NotFoundException(`Feedback ${feedbackId} not found`);
+
+    const fields = await this.fieldRepo.find({
+      where: { channel: { id: feedback.channel.id } },
+      relations: { options: true, aiTemplate: true },
+    });
+
+    for (const field of fields) {
+      if (field.format === FieldFormatEnum.aiField) {
+        const targetFields = fields.filter((f) =>
+          field.aiFieldTargetKeys?.includes(f.key),
+        );
+
+        await this.executeAIFieldPrompt(feedback, field, targetFields);
+      }
     }
+  }
+
+  async processAIField(feedbackId: number, fieldId: number) {
+    const feedback = await this.feedbackRepo.findOne({
+      where: { id: feedbackId },
+      relations: {
+        channel: {
+          project: true,
+        },
+      },
+    });
+
+    if (!feedback)
+      throw new NotFoundException(`Feedback ${feedbackId} not found`);
+
+    const fields = await this.fieldRepo.find({
+      where: { channel: { id: feedback.channel.id } },
+    });
+
+    const aiField = fields.find(
+      (field) =>
+        field.id === fieldId && field.format === FieldFormatEnum.aiField,
+    );
+
+    if (!aiField) {
+      throw new NotFoundException(`AI Field for fieldId ${fieldId} not found`);
+    }
+
+    const targetFields = fields.filter((f) =>
+      aiField.aiFieldTargetKeys?.includes(f.key),
+    );
+
+    await this.executeAIFieldPrompt(feedback, aiField, targetFields);
   }
 
   @Transactional()
