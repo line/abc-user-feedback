@@ -33,8 +33,4 @@ export class CreateAITemplateRequestDto {
   @ApiProperty({ nullable: false, type: String })
   @IsString()
   prompt: string;
-
-  @ApiProperty({ nullable: false, type: Boolean })
-  @IsBoolean()
-  autoProcessing: boolean;
 }

@@ -62,7 +62,7 @@ export class AIListener {
 
     fields.forEach((field) => {
       if (field.format === FieldFormatEnum.aiField) {
-        if (field.aiTemplate?.autoProcessing || manual) {
+        if (field.aiFieldAutoProcessing || manual) {
           const targetFields = fields.filter((f) =>
             field.aiFieldTargetKeys?.includes(f.key),
           );

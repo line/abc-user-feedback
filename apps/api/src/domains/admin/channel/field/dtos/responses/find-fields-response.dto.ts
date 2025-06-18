@@ -90,6 +90,10 @@ export class FindFieldsResponseDto {
   @ApiProperty({ type: Object })
   aiFieldTargetKeys: string[] | null;
 
+  @Expose()
+  @ApiProperty({ type: Boolean })
+  aiFieldAutoProcessing: boolean | null;
+
   public static transform(params: any): FindFieldsResponseDto {
     return plainToInstance(FindFieldsResponseDto, params, {
       excludeExtraneousValues: true,

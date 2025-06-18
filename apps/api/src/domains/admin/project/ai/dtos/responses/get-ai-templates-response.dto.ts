@@ -32,10 +32,6 @@ export class GetAITemplatesResponseDto {
 
   @ApiProperty()
   @Expose()
-  autoProcessing: boolean;
-
-  @ApiProperty()
-  @Expose()
   model: string | null;
 
   @ApiProperty()

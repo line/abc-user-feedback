@@ -27,9 +27,6 @@ export class AITemplatesEntity extends CommonEntity {
   @Column('varchar')
   prompt: string;
 
-  @Column('boolean', { default: true })
-  autoProcessing: boolean;
-
   @Column('varchar')
   model: string | null;
 
@@ -50,14 +47,12 @@ export class AITemplatesEntity extends CommonEntity {
   static from({
     title,
     prompt,
-    autoProcessing,
     model,
     temperature,
     projectId,
   }: {
     title: string;
     prompt: string;
-    autoProcessing: boolean;
     model: string | null;
     temperature: number;
     projectId: number;
@@ -66,7 +61,6 @@ export class AITemplatesEntity extends CommonEntity {
 
     aiTemplate.title = title;
     aiTemplate.prompt = prompt;
-    aiTemplate.autoProcessing = autoProcessing;
     aiTemplate.model = model;
     aiTemplate.temperature = temperature;
     aiTemplate.project = new ProjectEntity();

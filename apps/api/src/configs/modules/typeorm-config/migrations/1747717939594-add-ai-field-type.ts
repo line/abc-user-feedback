@@ -32,9 +32,15 @@ export class AddAiFieldType1747717939594 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE \`fields\` ADD \`ai_field_target_keys\` json NULL DEFAULT NULL AFTER \`ai_template_id\``,
     );
+    await queryRunner.query(
+      `ALTER TABLE \`fields\` ADD \`ai_field_auto_processing\` boolean NULL DEFAULT NULL AFTER \`ai_field_target_keys\``,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`fields\` DROP COLUMN \`ai_field_auto_processing\``,
+    );
     await queryRunner.query(
       `ALTER TABLE \`fields\` DROP COLUMN \`ai_field_target_keys\``,
     );

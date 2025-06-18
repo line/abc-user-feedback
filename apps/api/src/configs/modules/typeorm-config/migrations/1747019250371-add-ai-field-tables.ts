@@ -45,7 +45,6 @@ export class AddAIFieldTables1747019250371 implements MigrationInterface {
         \`project_id\` int NOT NULL,
         \`title\` varchar(255) NOT NULL DEFAULT '',
         \`prompt\` text NOT NULL,
-        \`auto_processing\` boolean NOT NULL DEFAULT true,
         \`model\` varchar(255) NULL DEFAULT NULL, 
         \`temperature\` float NOT NULL DEFAULT 0.7,
         \`created_at\` DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),

@@ -53,6 +53,9 @@ export class ReplaceFieldDto {
   aiFieldTargetKeys?: string[] | null;
 
   @Expose()
+  aiFieldAutoProcessing?: boolean | null;
+
+  @Expose()
   @Type(() => Option)
   options?: Option[];
 }

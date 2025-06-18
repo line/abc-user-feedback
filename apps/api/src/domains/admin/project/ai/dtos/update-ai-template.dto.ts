@@ -23,9 +23,6 @@ export class UpdateAITemplateDto {
   prompt: string;
 
   @Expose()
-  autoProcessing: boolean;
-
-  @Expose()
   projectId: number;
 
   @Expose()

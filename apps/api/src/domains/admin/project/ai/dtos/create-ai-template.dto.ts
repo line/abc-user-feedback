@@ -25,9 +25,6 @@ export class CreateAITemplateDto {
   prompt: string;
 
   @Expose()
-  autoProcessing: boolean;
-
-  @Expose()
   projectId: number;
 
   @Expose()
@@ -43,13 +40,11 @@ export class CreateAITemplateDto {
   }
 
   static toAITemplateEntity(params: CreateAITemplateDto) {
-    const { title, prompt, autoProcessing, projectId, model, temperature } =
-      params;
+    const { title, prompt, projectId, model, temperature } = params;
 
     return AITemplatesEntity.from({
       title,
       prompt,
-      autoProcessing,
       projectId,
       model,
       temperature,
