@@ -505,6 +505,7 @@ export class AIService {
 
     const fields = await this.fieldRepo.find({
       where: { channel: { id: feedback.channel.id } },
+      relations: { aiTemplate: true },
     });
 
     const aiField = fields.find(
