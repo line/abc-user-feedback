@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { memo } from 'react';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import Linkify from 'linkify-react';
@@ -22,6 +21,7 @@ import { useTranslation } from 'next-i18next';
 import type { IconNameType } from '@ufb/react';
 import { Badge, Icon, InputField, Tag, Textarea, TextInput } from '@ufb/react';
 
+import { AICell } from '@/entities/ai';
 import { CategoryCombobox } from '@/entities/category';
 import type { Category } from '@/entities/category';
 import IssueCell from '@/entities/feedback/ui/issue-cell';
@@ -62,7 +62,7 @@ interface CategoryRow {
 }
 
 export type SheetDetailTableRow = {
-  id: number;
+  id?: number;
   key: string;
   name: string;
   editable?: boolean;
@@ -197,41 +197,17 @@ const SheetDetailTable = (props: Props) => {
       );
     },
     aiField: (value, row) => {
-      const router = useRouter();
-      const projectId = +(router.query.projectId as string);
-
-      const { mutate, isPending } = useOAIMutation({
-        method: 'post',
-        path: '/api/admin/projects/{projectId}/ai/process/field',
-        pathParams: { projectId },
-      });
-
+      if (!row.id) return <></>;
       return (
-        <div>
-          <Tag
-            size="small"
-            style={{
-              background: 'linear-gradient(95.64deg, #62A5F5 0%, #6ED2C3 100%)',
-            }}
-            onClick={() => {
-              if (isPending) return;
-              mutate({ feedbackId: data.id as number, aiFieldId: row.id });
-            }}
-            className="cursor-pointer"
-          >
-            <Icon name="RiAiGenerate" />
-            AI 실행
-          </Tag>
-          <div className="py-2">
-            <AICell
-              value={
-                value as
-                  | { status: 'loading' | 'success' | 'error'; message: string }
-                  | undefined
-              }
-            />
-          </div>
-        </div>
+        <AISheetDetailCell
+          value={
+            value as
+              | { status: 'loading' | 'success' | 'error'; message: string }
+              | undefined
+          }
+          feedbackId={data.id as number}
+          fieldId={row.id}
+        />
       );
     },
   };
@@ -362,35 +338,53 @@ const SheetDetailTable = (props: Props) => {
   );
 };
 
-const AICell = memo(
-  (props: {
-    value:
-      | { status: 'loading' | 'success' | 'error'; message: string }
-      | undefined;
-  }) => {
-    const { value } = props;
+const AISheetDetailCell = ({
+  value,
+  feedbackId,
+  fieldId,
+}: {
+  value:
+    | { status: 'loading' | 'success' | 'error'; message: string }
+    | undefined;
+  feedbackId: number;
+  fieldId: number;
+}) => {
+  const router = useRouter();
+  const projectId = +(router.query.projectId as string);
 
-    if (!value) return null;
+  const { mutate, isPending } = useOAIMutation({
+    method: 'post',
+    path: '/api/admin/projects/{projectId}/ai/process/field',
+    pathParams: { projectId },
+  });
 
-    return (
-      <>
-        {value.status === 'loading' && (
-          <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
-        )}
-        {value.status === 'error' && (
-          <div className="flex items-center gap-1">
-            <Icon
-              name="RiErrorWarningFill"
-              className="text-tint-red shrink-0"
-              size={16}
-            />
-            <span>{value.message}</span>
-          </div>
-        )}
-        {value.status === 'success' && <p>{value.message}</p>}
-      </>
-    );
-  },
-);
+  return (
+    <div>
+      <Tag
+        size="small"
+        style={{
+          background: 'linear-gradient(95.64deg, #62A5F5 0%, #6ED2C3 100%)',
+        }}
+        onClick={() => {
+          if (isPending) return;
+          mutate({ feedbackId, aiFieldId: fieldId });
+        }}
+        className="cursor-pointer"
+      >
+        <Icon name="RiAiGenerate" />
+        AI 실행
+      </Tag>
+      <div className="py-2">
+        <AICell
+          value={
+            value as
+              | { status: 'loading' | 'success' | 'error'; message: string }
+              | undefined
+          }
+        />
+      </div>
+    </div>
+  );
+};
 
 export default SheetDetailTable;

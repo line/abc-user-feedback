@@ -321,7 +321,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
   );
 
   const remainingTokens = useMemo(
-    () => (integrationData?.tokenThreshold ?? 0) - usedTokens,
+    () => Math.max((integrationData?.tokenThreshold ?? 0) - usedTokens, 0),
     [integrationData, usedTokens],
   );
 

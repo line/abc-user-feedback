@@ -14,3 +14,4 @@
  * under the License.
  */
 export { default as AiSettingForm } from './ai-setting-form.ui';
+export { default as AICell } from './ai-feedback-cell.ui';

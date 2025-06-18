@@ -51,6 +51,7 @@ const defaultValues: FieldInfo = {
   order: 0,
   aiFieldTargetKeys: null,
   aiTemplateId: null,
+  aiFieldAutoProcessing: null,
 };
 
 interface IProps extends FormOverlayProps<FieldInfo> {

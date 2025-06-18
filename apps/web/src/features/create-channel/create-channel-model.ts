@@ -38,6 +38,7 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     order: 0,
     aiFieldTargetKeys: null,
     aiTemplateId: null,
+    aiFieldAutoProcessing: null,
   },
   {
     format: 'date',
@@ -49,6 +50,7 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     order: 1,
     aiFieldTargetKeys: null,
     aiTemplateId: null,
+    aiFieldAutoProcessing: null,
   },
   {
     format: 'date',
@@ -60,6 +62,7 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     order: 2,
     aiFieldTargetKeys: null,
     aiTemplateId: null,
+    aiFieldAutoProcessing: null,
   },
   {
     format: 'multiSelect',
@@ -72,6 +75,7 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     order: 3,
     aiFieldTargetKeys: null,
     aiTemplateId: null,
+    aiFieldAutoProcessing: null,
   },
 ];
 
