@@ -69,6 +69,9 @@ export class FieldEntity extends CommonEntity {
   @Column('json', { nullable: true })
   aiFieldTargetKeys: string[] | null;
 
+  @Column('boolean', { nullable: true })
+  aiFieldAutoProcessing: boolean | null;
+
   @ManyToOne(() => ChannelEntity, (channel) => channel.fields, {
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',
@@ -92,6 +95,7 @@ export class FieldEntity extends CommonEntity {
     order,
     aiTemplateId,
     aiFieldTargetKeys,
+    aiFieldAutoProcessing,
   }: {
     channelId: number;
     name: string;
@@ -103,6 +107,7 @@ export class FieldEntity extends CommonEntity {
     order?: number | null;
     aiTemplateId?: number | null;
     aiFieldTargetKeys?: string[] | null;
+    aiFieldAutoProcessing?: boolean | null;
   }) {
     const field = new FieldEntity();
     field.channel = new ChannelEntity();
@@ -119,6 +124,7 @@ export class FieldEntity extends CommonEntity {
       field.aiTemplate.id = aiTemplateId;
     }
     field.aiFieldTargetKeys = aiFieldTargetKeys ?? null;
+    field.aiFieldAutoProcessing = aiFieldAutoProcessing ?? null;
 
     return field;
   }

@@ -39,6 +39,7 @@ import {
   CreateAITemplateRequestDto,
   GetAIPlaygroundResultRequestDto,
   ProcessAIFieldRequestDto,
+  ProcessSingleAIFieldRequestDto,
   UpdateAIIntegrationsRequestDto,
   ValidteAPIKeyRequestDto,
 } from './dtos/requests';
@@ -154,8 +155,15 @@ export class AIController {
   @RequirePermission(PermissionEnum.generative_ai_read)
   @ApiOkResponse()
   @Post('process')
-  processAIFields(@Body() body: ProcessAIFieldRequestDto) {
-    this.aiService.processAIFields(body.feedbackIds);
+  async processAIFields(@Body() body: ProcessAIFieldRequestDto) {
+    await this.aiService.processFeedbacksAIFields(body.feedbackIds);
+  }
+
+  @RequirePermission(PermissionEnum.generative_ai_read)
+  @ApiOkResponse()
+  @Post('process/field')
+  async processAIField(@Body() body: ProcessSingleAIFieldRequestDto) {
+    await this.aiService.processAIField(body.feedbackId, body.aiFieldId);
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)

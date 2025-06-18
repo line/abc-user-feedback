@@ -19,3 +19,4 @@ export { CreateAITemplateRequestDto } from './create-ai-template-request.dto';
 export { ValidteAPIKeyRequestDto } from './validate-api-key-request.dto';
 export { GetAIPlaygroundResultRequestDto } from './get-ai-playground-result-request.dto';
 export { ProcessAIFieldRequestDto } from './process-ai-field-request.dto';
+export { ProcessSingleAIFieldRequestDto } from './process-single-ai-field-request.dto';

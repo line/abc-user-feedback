@@ -91,6 +91,10 @@ export class CreateChannelRequestFieldDto {
   @IsOptional()
   aiFieldTargetKeys?: string[] | null;
 
+  @ApiProperty({ nullable: true, type: Boolean })
+  @IsOptional()
+  aiFieldAutoProcessing?: boolean | null;
+
   @ApiProperty({
     type: [CreateChannelRequestFieldSelectOptionDto],
     required: false,

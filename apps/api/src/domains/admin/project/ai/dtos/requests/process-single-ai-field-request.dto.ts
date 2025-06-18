@@ -13,18 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber } from 'class-validator';
 
-export class UpdateAITemplateDto {
-  @Expose()
-  title: string;
+export class ProcessSingleAIFieldRequestDto {
+  @ApiProperty({ type: Number })
+  @IsNumber()
+  feedbackId: number;
 
-  @Expose()
-  prompt: string;
-
-  @Expose()
-  projectId: number;
-
-  @Expose()
-  templateId: number;
+  @ApiProperty({ type: Number })
+  @IsNumber()
+  aiFieldId: number;
 }
