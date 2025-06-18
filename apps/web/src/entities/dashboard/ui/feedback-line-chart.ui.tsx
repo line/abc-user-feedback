@@ -71,7 +71,6 @@ const FeedbackLineChartWrapper: React.FC<IProps> = (props) => {
     currentChannels,
     data?.channels ?? [],
   );
-  console.log('chartData, dataKeys: ', chartData, dataKeys);
 
   return (
     <SimpleLineChart

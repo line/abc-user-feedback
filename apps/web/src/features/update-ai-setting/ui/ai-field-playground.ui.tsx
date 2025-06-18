@@ -58,7 +58,7 @@ interface Props {
 const AiFieldPlayground = ({ projectId }: Props) => {
   const [inputItems, setInputItems] = useState<InputItem[]>([]);
   const [result, setResult] = useState('');
-  // const { getValues } = useFormContext<AITemplate>();
+  const { getValues } = useFormContext<AITemplate>();
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
@@ -79,13 +79,13 @@ const AiFieldPlayground = ({ projectId }: Props) => {
       alert('테스트 케이스를 추가해주세요.');
       return;
     }
-    // const { model, temperature, prompt } = getValues();
-    // mutate({
-    //   model,
-    //   temperature,
-    //   templatePrompt: prompt,
-    //   temporaryFields: inputItems,
-    // });
+    const { model, temperature, prompt } = getValues();
+    mutate({
+      model,
+      temperature,
+      templatePrompt: prompt,
+      temporaryFields: inputItems,
+    });
   };
 
   return (
@@ -181,9 +181,9 @@ const AIPlaygroundInputDataItemForm = ({
     defaultValues: initialValues ?? { name: '', description: '', value: '' },
     resolver: zodResolver(
       z.object({
-        name: z.string().min(1, 'Field title is required'),
-        description: z.string(),
-        value: z.string().min(1, 'Field value is required'),
+        name: z.string().trim().min(1).max(20),
+        description: z.string().trim().max(50),
+        value: z.string(),
       }),
     ),
   });

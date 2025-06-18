@@ -57,10 +57,12 @@ const useAIUsageFormStore = create<AISettingStore>((set) => ({
   isDirty: false,
   setIsDirty: (isDirty) => set({ isDirty }),
 }));
+
 type UsageForm = {
   tokenThreshold: number | null;
   percentage: string | undefined;
 };
+
 export const AIUsageForm = ({ projectId }: { projectId: number }) => {
   const { register, formState, setValue, watch, handleSubmit, reset } =
     useForm<UsageForm>();
@@ -225,8 +227,8 @@ export const AIUsageFormButton = () => {
 
 const AIChartCard = ({ projectId }: { projectId: number }) => {
   const [dateRange, setDateRange] = useState<DateRangeType>({
-    startDate: new Date(new Date().setDate(1)),
-    endDate: new Date(new Date().setMonth(new Date().getMonth() + 1, 0)),
+    startDate: dayjs().startOf('month').toDate(),
+    endDate: dayjs().toDate(),
   });
 
   const { data: dailyData } = useOAIQuery({
@@ -248,27 +250,33 @@ const AIChartCard = ({ projectId }: { projectId: number }) => {
         'AI Issue': number;
       }
     > = {};
-
-    dailyData?.forEach((entry) => {
-      const dateKey = `${entry.year}-${String(entry.month).padStart(2, '0')}-${String(entry.day).padStart(2, '0')}`;
+    const endDate = dayjs(dateRange?.endDate).endOf('day');
+    let currentDate = dayjs(dateRange?.startDate).startOf('day');
+    while (currentDate.isBefore(endDate)) {
+      const dateKey = currentDate.format('YYYY-MM-DD');
       result[dateKey] ??= {
         date: dateKey,
         Total: 0,
         'AI Field': 0,
         'AI Issue': 0,
       };
+      currentDate = currentDate.add(1, 'day');
+    }
 
-      result[dateKey].Total += entry.usedTokens;
-
-      if (entry.category === 'AI_FIELD') {
-        result[dateKey]['AI Field'] += entry.usedTokens;
-      } else {
-        result[dateKey]['AI Issue'] += entry.usedTokens;
+    dailyData?.forEach((entry) => {
+      const dateKey = `${entry.year}-${String(entry.month).padStart(2, '0')}-${String(entry.day).padStart(2, '0')}`;
+      if (result[dateKey]) {
+        result[dateKey].Total += entry.usedTokens;
+        if (entry.category === 'AI_FIELD') {
+          result[dateKey]['AI Field'] += entry.usedTokens;
+        } else {
+          result[dateKey]['AI Issue'] += entry.usedTokens;
+        }
       }
     });
 
     return Object.values(result);
-  }, [dailyData]);
+  }, [dailyData, dateRange]);
 
   return (
     <SimpleLineChart

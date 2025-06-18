@@ -78,6 +78,11 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
   const templateId = router.query.templateId ? +router.query.templateId : null;
 
   const { formId, setIsPending, setIsDirty } = useAITemplateFormStore();
+  const { data: integrationData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/integrations',
+    variables: { projectId },
+    queryOptions: { enabled: !!templateId },
+  });
   const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/templates',
     variables: { projectId },
@@ -139,8 +144,23 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
   }, [data, templateId]);
 
   const onSubmit = (values: AITemplate) => {
-    if (templateId) updateTemplate({ ...values, templateId });
-    else createTemplate(values);
+    if (templateId)
+      updateTemplate({
+        ...values,
+        templateId,
+        temperature:
+          integrationData?.provider === 'GEMINI' ?
+            values.temperature * 2
+          : values.temperature,
+      });
+    else
+      createTemplate({
+        ...values,
+        temperature:
+          integrationData?.provider === 'GEMINI' ?
+            values.temperature * 2
+          : values.temperature,
+      });
   };
 
   return (

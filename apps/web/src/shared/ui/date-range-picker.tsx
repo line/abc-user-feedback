@@ -389,9 +389,6 @@ const DateRangePicker: React.FC<IProps> = (props) => {
                 to: currentValue?.endDate ?? undefined,
               }}
               numberOfMonths={numberOfMonths}
-              defaultMonth={dayjs()
-                .set('month', dayjs().get('month') - 1)
-                .toDate()}
               disabled={{ before: minDate, after: maxDate } as Matcher}
             />
           </div>

@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import Linkify from 'linkify-react';
 import { useTranslation } from 'next-i18next';
@@ -27,6 +28,7 @@ import IssueCell from '@/entities/feedback/ui/issue-cell';
 import { DATE_TIME_FORMAT } from '../constants';
 import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
+import { useOAIMutation } from '../lib';
 import ImagePreviewButton from './image-preview-button';
 import { DatePicker, SelectInput, SelectSearchInput } from './inputs';
 
@@ -158,7 +160,10 @@ const SheetDetailTable = (props: Props) => {
         }
       </div>
     ),
-    images: (value) => <ImagePreviewButton urls={value as string[]} />,
+    images: (value) =>
+      value && (value as string[]).length > 0 ?
+        <ImagePreviewButton urls={value as string[]} />
+      : '-',
     ticket: (value, row) => {
       const { issueTracker } = row as TicketRow;
       return issueTracker?.ticketDomain && issueTracker.ticketKey && value ?
@@ -189,20 +194,48 @@ const SheetDetailTable = (props: Props) => {
         </div>
       );
     },
-    aiField: (v) => (
-      <div>
-        <Tag
-          size="small"
-          style={{
-            background: 'linear-gradient(95.64deg, #62A5F5 0%, #6ED2C3 100%)',
-          }}
-        >
-          <Icon name="RiAiGenerate" />
-          AI 실행
-        </Tag>
-        <p>{v ? String(v) : '-'}</p>
-      </div>
-    ),
+    aiField: (value, row) => {
+      console.log('value: ', value);
+      console.log('row: ', row);
+      const router = useRouter();
+      const projectId = +(router.query.projectId as string);
+
+      const { mutate, isPending } = useOAIMutation({
+        method: 'post',
+        path: '/api/admin/projects/{projectId}/ai/process',
+        pathParams: { projectId },
+      });
+
+      return (
+        <div>
+          <Tag
+            size="small"
+            style={{
+              background: 'linear-gradient(95.64deg, #62A5F5 0%, #6ED2C3 100%)',
+            }}
+            onClick={() => {
+              if (isPending) return;
+              mutate({ feedbackIds: [data.id] });
+            }}
+            className="cursor-pointer"
+          >
+            <Icon name="RiAiGenerate" />
+            AI 실행
+          </Tag>
+          <div className="py-2">
+            {isPending ?
+              <div className="flex flex-col gap-2">
+                <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
+                <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
+                <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
+              </div>
+            : value ?
+              String(value)
+            : '-'}
+          </div>
+        </div>
+      );
+    },
   };
 
   const renderEditModeField: RenderFieldMap<SheetDetailTableRow> = {
@@ -321,8 +354,6 @@ const SheetDetailTable = (props: Props) => {
               <td className="w-3/4 whitespace-normal break-words py-2.5">
                 {mode === 'edit' && row.editable ?
                   renderEditModeField[format](value, row)
-                : typeof value === 'undefined' ?
-                  '-'
                 : renderViewModeField[format](value, row)}
               </td>
             </tr>

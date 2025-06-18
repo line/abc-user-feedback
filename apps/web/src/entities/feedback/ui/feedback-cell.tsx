@@ -30,7 +30,6 @@ interface IProps {
 
 const FeedbackCell: React.FC<IProps> = memo((props) => {
   const { isExpanded, field, value } = props;
-  console.log('value: ', value);
 
   return (
     <ExpandableText isExpanded={isExpanded}>
@@ -86,32 +85,8 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
           )}
           {field.format === 'keyword' && value}
           {field.format === 'number' && value}
-          {field.format === 'aiField' && (
-            <AIFieldCell
-              field={field}
-              isExpanded={isExpanded}
-              value={value as { status: string; message: string } | undefined}
-            />
-          )}
+          {field.format === 'aiField' && value}
         </>
-      }
-    </ExpandableText>
-  );
-});
-
-const AIFieldCell: React.FC<
-  IProps & { value: { status: string; message: string } | undefined }
-> = memo((props) => {
-  const { isExpanded, value } = props;
-
-  return (
-    <ExpandableText isExpanded={isExpanded}>
-      {typeof value === 'undefined' ?
-        undefined
-      : <div className="flex flex-col gap-2">
-          <div className="text-sm font-semibold">{value.message}</div>
-          <Badge variant="subtle">{value.status}</Badge>
-        </div>
       }
     </ExpandableText>
   );
