@@ -20,9 +20,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { FieldFormatEnum } from '@/common/enums';
@@ -37,6 +36,8 @@ import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { FeedbackMySQLService } from '../../feedback/feedback.mysql.service';
 import { FeedbackOSService } from '../../feedback/feedback.os.service';
+import { PermissionEnum } from '../role/permission.enum';
+import { RoleEntity } from '../role/role.entity';
 import { AIIntegrationsEntity } from './ai-integrations.entity';
 import { AITemplatesEntity } from './ai-templates.entity';
 import { AIUsagesEntity, UsageCategoryEnum } from './ai-usages.entity';
@@ -55,7 +56,6 @@ export class AIService {
     private readonly feedbackMySQLService: FeedbackMySQLService,
     private readonly feedbackOSService: FeedbackOSService,
     private readonly configService: ConfigService,
-    private readonly eventEmitter: EventEmitter2,
 
     @InjectRepository(AIIntegrationsEntity)
     private readonly aiIntegrationsRepo: Repository<AIIntegrationsEntity>,
@@ -68,6 +68,9 @@ export class AIService {
 
     @InjectRepository(FieldEntity)
     private readonly fieldRepo: Repository<FieldEntity>,
+
+    @InjectRepository(RoleEntity)
+    private readonly roleRepo: Repository<RoleEntity>,
 
     @InjectRepository(AIUsagesEntity)
     private readonly aiUsagesRepo: Repository<AIUsagesEntity>,
@@ -592,5 +595,35 @@ export class AIService {
         usedTokens: usage.usedTokens,
       };
     });
+  }
+
+  async addPermissions() {
+    const permissions = {
+      Admin: [
+        PermissionEnum.generative_ai_read,
+        PermissionEnum.generative_ai_update,
+      ],
+      Editor: [PermissionEnum.generative_ai_read],
+      Viewer: [PermissionEnum.generative_ai_read],
+    };
+
+    const existingRoles = await this.roleRepo.find({
+      where: {
+        name: In(Object.keys(permissions)),
+      },
+    });
+
+    for (const role of existingRoles) {
+      const existingPermissions = role.permissions || [];
+      const newPermissions = permissions[role.name].filter(
+        (perm) => !existingPermissions.includes(perm),
+      );
+
+      if (newPermissions.length > 0) {
+        role.permissions = [...existingPermissions, ...newPermissions];
+        await this.roleRepo.save(role);
+      }
+    }
+    this.logger.log('Permissions added successfully to roles');
   }
 }
