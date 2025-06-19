@@ -55,7 +55,7 @@
     "pino": "^9.7.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-hook-form": "^7.51.3",
+    "react-hook-form": "^7.58.1",
     "react-i18next": "^15.5.3",
     "react-select": "^5.10.1",
     "react-use": "^17.6.0",
