@@ -31,12 +31,9 @@ interface Props {
   options: { label: string; value: string; icon?: IconNameType }[];
   label?: string;
   value?: string;
-  values?: string[];
   onChange?: (value?: string) => void;
-  onValuesChange?: (value?: string[]) => void;
   disabled?: boolean;
   required?: boolean;
-  type?: 'single' | 'multiple';
   error?: string;
   size?: Size;
   clearable?: boolean;
@@ -48,12 +45,9 @@ const SelectInput: React.FC<Props> = (props) => {
     options,
     label,
     value,
-    values,
     onChange,
-    onValuesChange,
     disabled,
     required,
-    type = 'single',
     error,
     size,
     clearable = false,
@@ -62,11 +56,8 @@ const SelectInput: React.FC<Props> = (props) => {
   return (
     <Select
       value={value}
-      values={values}
       onValueChange={onChange}
-      onValuesChange={onValuesChange}
       disabled={disabled}
-      type={type}
       size={size}
     >
       {label && (
@@ -76,14 +67,13 @@ const SelectInput: React.FC<Props> = (props) => {
       )}
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
-        {clearable && (!!value || (!!values && values.length > 0)) && (
+        {clearable && !!value && (
           <Button variant="ghost" onClick={(e) => e.stopPropagation()}>
             <Icon
               name="RiCloseCircleFill"
               className="z-20"
               onClick={() => {
                 onChange?.(undefined);
-                onValuesChange?.([]);
               }}
             />
           </Button>
@@ -91,7 +81,8 @@ const SelectInput: React.FC<Props> = (props) => {
       </SelectTrigger>
       <SelectContent className="max-h-[200px]">
         {options.map(({ label, value, icon }) => (
-          <SelectItem key={value} value={value} icon={icon}>
+          <SelectItem key={value} value={value}>
+            {icon && <Icon name={icon} size={16} className="mr-2" />}
             {label}
           </SelectItem>
         ))}

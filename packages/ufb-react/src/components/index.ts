@@ -32,6 +32,7 @@ export * from './radio';
 export * from './select';
 export * from './spinner';
 export * from './scroll-area';
+export * from './multi-select';
 export * from './switch';
 export * from './sheet';
 export * from './toast';

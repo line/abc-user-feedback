@@ -14,15 +14,15 @@
  * under the License.
  */
 .select-trigger-small {
-  @apply text-base-normal min-h-9 space-x-2 px-3 [&>span>svg]:mr-2;
+  @apply text-base-normal min-h-9 space-x-2 px-3;
 }
 
 .select-trigger-medium {
-  @apply text-large-normal min-h-11 space-x-2.5 px-3.5 [&>span>svg]:mr-2.5;
+  @apply text-large-normal min-h-11 space-x-2.5 px-3.5;
 }
 
 .select-trigger-large {
-  @apply text-xlarge-normal min-h-13 space-x-3 px-4 [&>span>svg]:mr-3;
+  @apply text-xlarge-normal min-h-13 space-x-3 px-4;
 }
 
 .select-small {

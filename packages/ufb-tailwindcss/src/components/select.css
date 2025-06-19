@@ -57,7 +57,7 @@
   @apply data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95;
   @apply data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
   @apply data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[side=bottom]:mt-1 data-[side=top]:mb-1;
-  @apply rounded-8 relative z-50 min-w-[--radix-select-trigger-width] overflow-hidden border border-[var(--select-border)] bg-[var(--select-bg)] p-1 text-[var(--select-fg-filled)] shadow-md;
+  @apply rounded-8 relative z-50 !min-w-[var(--radix-select-trigger-width,_var(--radix-popper-anchor-width))] overflow-hidden border border-[var(--select-border)] bg-[var(--select-bg)] p-1 text-[var(--select-fg-filled)] shadow-md;
 }
 
 .select-viewport {
@@ -69,14 +69,10 @@
 }
 
 .select-item {
-  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center py-2 outline-none transition-colors focus:bg-[var(--select-bg-pressed)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center py-2 outline-none transition-colors hover:bg-[var(--select-bg-pressed)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 
   /* default */
   @apply [&:not(.select-item-right)]:select-item-left;
-}
-
-.select-item-icon {
-  @apply mr-1;
 }
 
 .select-item-check {
@@ -91,7 +87,7 @@
 }
 
 .select-tag {
-  @apply mr-2.5;
+  @apply mr-2.5 !gap-0;
 }
 
 .select-label {

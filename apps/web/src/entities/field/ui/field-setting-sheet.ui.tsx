@@ -35,7 +35,13 @@ import {
 } from '@ufb/react';
 
 import type { FormOverlayProps } from '@/shared';
-import { DeleteDialog, SelectInput, TextInput, useOAIQuery } from '@/shared';
+import {
+  DeleteDialog,
+  MultiSelectInput,
+  SelectInput,
+  TextInput,
+  useOAIQuery,
+} from '@/shared';
 
 import { FIELD_FORMAT_ICON_MAP, FIELD_FORMAT_LIST } from '../field.constant';
 import { fieldInfoSchema } from '../field.schema';
@@ -301,16 +307,14 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                   }
                   required
                 />
-                <SelectInput
-                  type="multiple"
+                <MultiSelectInput
                   label="AI Field Target"
                   options={fieldRows.map(({ key, name }) => ({
                     label: name,
                     value: key,
                   }))}
-                  values={watch('aiFieldTargetKeys') ?? []}
-                  onValuesChange={(values) =>
-                    values &&
+                  value={watch('aiFieldTargetKeys') ?? []}
+                  onChange={(values) =>
                     setValue('aiFieldTargetKeys', values, {
                       shouldDirty: true,
                     })
