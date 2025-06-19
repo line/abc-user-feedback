@@ -598,7 +598,7 @@ export class AIService {
   }
 
   async addPermissions() {
-    const permissions = {
+    const permissions: Record<string, PermissionEnum[]> = {
       Admin: [
         PermissionEnum.generative_ai_read,
         PermissionEnum.generative_ai_update,
@@ -614,7 +614,7 @@ export class AIService {
     });
 
     for (const role of existingRoles) {
-      const existingPermissions = role.permissions || [];
+      const existingPermissions = role.permissions;
       const newPermissions = permissions[role.name].filter(
         (perm) => !existingPermissions.includes(perm),
       );
