@@ -41,6 +41,7 @@ interface ModelListResponse {
 }
 
 interface ExecutePromptResponse {
+  status: number;
   data: {
     choices: { message: { content: string } }[];
     candidates: { content: { parts: { text: string }[] } }[];
@@ -53,9 +54,12 @@ interface ExecutePromptResponse {
 
 class PromptResult {
   status: AIPromptStatusEnum = AIPromptStatusEnum.success;
+  statusCode: number;
   content: string;
   usedTokens: number;
 }
+
+const MAX_RETRY_COUNT = 3;
 
 export class AIClient {
   private logger = new Logger(AIClient.name);
@@ -140,6 +144,44 @@ export class AIClient {
     targetFields: string,
     promptTargetText: string,
   ): Promise<PromptResult> {
+    for (let retryCount = 0; retryCount < MAX_RETRY_COUNT; retryCount++) {
+      const result = await this.executePromptInternal(
+        model,
+        temperature,
+        systemPrompt,
+        prompt,
+        targetFields,
+        promptTargetText,
+      );
+
+      if (result.status === AIPromptStatusEnum.success) {
+        return result;
+      } else if (result.statusCode === 429) {
+        this.logger.log(
+          `Rate limit exceeded. Retrying... (${retryCount + 1}/${MAX_RETRY_COUNT})`,
+        );
+        await new Promise((resolve) =>
+          setTimeout(resolve, 1000 * (retryCount + 1)),
+        );
+      }
+    }
+
+    const result = new PromptResult();
+    result.status = AIPromptStatusEnum.error;
+    result.content = `Failed to execute prompt after ${MAX_RETRY_COUNT} attempts.`;
+    result.usedTokens = 0;
+    result.statusCode = 500;
+    return result;
+  }
+
+  async executePromptInternal(
+    model: string,
+    temperature: number,
+    systemPrompt: string,
+    prompt: string,
+    targetFields: string,
+    promptTargetText: string,
+  ): Promise<PromptResult> {
     try {
       let response: ExecutePromptResponse;
 
@@ -172,6 +214,7 @@ export class AIClient {
         const result = new PromptResult();
         result.content = response.data.choices[0].message.content;
         result.usedTokens = response.data.usage.total_tokens;
+        result.statusCode = response.status;
 
         return result;
       } else {
@@ -211,6 +254,7 @@ export class AIClient {
       const result = new PromptResult();
       result.content = response.data.candidates[0].content.parts[0].text;
       result.usedTokens = response.data.usageMetadata.totalTokenCount;
+      result.statusCode = response.status;
 
       return result;
     } catch (error) {
@@ -218,6 +262,7 @@ export class AIClient {
       result.status = AIPromptStatusEnum.error;
       result.content = `Error executing prompt: ${error}`;
       result.usedTokens = 0;
+      result.statusCode = error.status;
 
       return result;
     }
