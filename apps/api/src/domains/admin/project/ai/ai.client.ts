@@ -52,6 +52,10 @@ interface ExecutePromptResponse {
   };
 }
 
+interface ErrorResponse {
+  status: number;
+}
+
 class PromptResult {
   status: AIPromptStatusEnum = AIPromptStatusEnum.success;
   statusCode: number;
@@ -262,7 +266,7 @@ export class AIClient {
       result.status = AIPromptStatusEnum.error;
       result.content = `Error executing prompt: ${error}`;
       result.usedTokens = 0;
-      result.statusCode = error.status;
+      result.statusCode = (error as ErrorResponse).status;
 
       return result;
     }
