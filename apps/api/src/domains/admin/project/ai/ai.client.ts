@@ -56,6 +56,43 @@ interface ErrorResponse {
   status: number;
 }
 
+export class PromptParameters {
+  model: string;
+  temperature: number;
+  systemPrompt: string;
+  prompt: string;
+  targetFields: string;
+  promptTargetText: string;
+  projectName: string;
+  projectDesc: string;
+  channelName: string;
+  channelDesc: string;
+
+  constructor(
+    model: string,
+    temperature: number,
+    systemPrompt: string,
+    prompt: string,
+    targetFields: string,
+    promptTargetText: string,
+    projectName: string,
+    projectDesc: string,
+    channelName: string,
+    channelDesc: string,
+  ) {
+    this.model = model;
+    this.temperature = temperature;
+    this.systemPrompt = systemPrompt;
+    this.prompt = prompt;
+    this.targetFields = targetFields;
+    this.promptTargetText = promptTargetText;
+    this.projectName = projectName;
+    this.projectDesc = projectDesc;
+    this.channelName = channelName;
+    this.channelDesc = channelDesc;
+  }
+}
+
 class PromptResult {
   status: AIPromptStatusEnum = AIPromptStatusEnum.success;
   statusCode: number;
@@ -140,33 +177,19 @@ export class AIClient {
     }
   }
 
-  async executePrompt(
-    model: string,
-    temperature: number,
-    systemPrompt: string,
-    prompt: string,
-    targetFields: string,
-    promptTargetText: string,
-  ): Promise<PromptResult> {
+  async executePrompt(params: PromptParameters): Promise<PromptResult> {
     for (let retryCount = 0; retryCount < MAX_RETRY_COUNT; retryCount++) {
-      const result = await this.executePromptInternal(
-        model,
-        temperature,
-        systemPrompt,
-        prompt,
-        targetFields,
-        promptTargetText,
-      );
+      const result = await this.executePromptInternal(params);
 
-      if (result.status === AIPromptStatusEnum.success) {
-        return result;
-      } else if (result.statusCode === 429) {
+      if (result.statusCode === 429) {
         this.logger.log(
           `Rate limit exceeded. Retrying... (${retryCount + 1}/${MAX_RETRY_COUNT})`,
         );
         await new Promise((resolve) =>
           setTimeout(resolve, 1000 * (retryCount + 1)),
         );
+      } else {
+        return result;
       }
     }
 
@@ -178,42 +201,46 @@ export class AIClient {
     return result;
   }
 
-  async executePromptInternal(
-    model: string,
-    temperature: number,
-    systemPrompt: string,
-    prompt: string,
-    targetFields: string,
-    promptTargetText: string,
-  ): Promise<PromptResult> {
+  async executePromptInternal(params: PromptParameters): Promise<PromptResult> {
     try {
       let response: ExecutePromptResponse;
+
+      const systemPrompt = getRefinedSystemPrompt(
+        params.systemPrompt,
+        params.projectName,
+        params.projectDesc,
+        params.channelName,
+        params.channelDesc,
+      );
+
+      const userPrompt = getRefinedUserPrompt(
+        params.prompt,
+        params.targetFields,
+        params.promptTargetText,
+      );
 
       this.logger.log(
         `──────────────────── AI Prompt Execution ────────────────────`,
       );
-      this.logger.log(getRefinedSystemPrompt(systemPrompt));
-      this.logger.log(
-        getRefinedUserPrompt(prompt, targetFields, promptTargetText),
-      );
+      this.logger.log('System Prompt');
+      this.logger.log(systemPrompt);
+      this.logger.log('User Prompt');
+      this.logger.log(userPrompt);
 
       if (this.provider === AIProvidersEnum.OPEN_AI) {
         response = await this.axiosInstance.post('/chat/completions', {
-          model,
+          model: params.model,
           messages: [
             {
               role: 'developer',
-              content: getRefinedSystemPrompt(systemPrompt),
+              content: systemPrompt,
             },
             {
               role: 'user',
-              content: getRefinedUserPrompt(
-                prompt,
-                targetFields,
-                promptTargetText,
-              ),
+              content: userPrompt,
             },
           ],
+          temperature: params.temperature,
         });
         const result = new PromptResult();
         result.content = response.data.choices[0].message.content;
@@ -223,12 +250,12 @@ export class AIClient {
         return result;
       } else {
         response = await this.axiosInstance.post(
-          `/models/${model}:generateContent`,
+          `/models/${params.model}:generateContent`,
           {
             systemInstruction: {
               parts: [
                 {
-                  text: getRefinedSystemPrompt(systemPrompt),
+                  text: systemPrompt,
                 },
               ],
             },
@@ -236,17 +263,13 @@ export class AIClient {
               {
                 parts: [
                   {
-                    text: getRefinedUserPrompt(
-                      prompt,
-                      targetFields,
-                      promptTargetText,
-                    ),
+                    text: userPrompt,
                   },
                 ],
               },
             ],
             generationConfig: {
-              temperature: temperature,
+              temperature: params.temperature,
             },
           },
           {

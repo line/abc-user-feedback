@@ -36,12 +36,13 @@ import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { FeedbackMySQLService } from '../../feedback/feedback.mysql.service';
 import { FeedbackOSService } from '../../feedback/feedback.os.service';
+import { ProjectEntity } from '../project/project.entity';
 import { PermissionEnum } from '../role/permission.enum';
 import { RoleEntity } from '../role/role.entity';
 import { AIIntegrationsEntity } from './ai-integrations.entity';
 import { AITemplatesEntity } from './ai-templates.entity';
 import { AIUsagesEntity, UsageCategoryEnum } from './ai-usages.entity';
-import { AIClient } from './ai.client';
+import { AIClient, PromptParameters } from './ai.client';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import { CreateAITemplateDto } from './dtos/create-ai-template.dto';
 import { GetAIPlaygroundResultDto } from './dtos/get-ai-playground-result.dto';
@@ -68,6 +69,9 @@ export class AIService {
 
     @InjectRepository(FieldEntity)
     private readonly fieldRepo: Repository<FieldEntity>,
+
+    @InjectRepository(ProjectEntity)
+    private readonly projectRepo: Repository<ProjectEntity>,
 
     @InjectRepository(RoleEntity)
     private readonly roleRepo: Repository<RoleEntity>,
@@ -421,12 +425,18 @@ export class AIService {
     }
 
     const result = await client.executePrompt(
-      aiField.aiTemplate.model,
-      aiField.aiTemplate.temperature,
-      integration.systemPrompt,
-      aiField.aiTemplate.prompt,
-      aiTargetFields.map((field) => field.key).join(', '),
-      promptTargetText,
+      new PromptParameters(
+        aiField.aiTemplate.model,
+        aiField.aiTemplate.temperature,
+        integration.systemPrompt,
+        aiField.aiTemplate.prompt,
+        aiTargetFields.map((field) => field.key).join(', '),
+        promptTargetText,
+        feedback.channel.project.name,
+        feedback.channel.project.description ?? '',
+        feedback.channel.name,
+        feedback.channel.description ?? '',
+      ),
     );
     this.logger.log(`Result: ${result.content}`);
     feedback.data[aiField.key] =
@@ -541,6 +551,12 @@ export class AIService {
       throw new BadRequestException('Integration not found');
     }
 
+    const project = await this.projectRepo.findOneBy({ id: dto.projectId });
+
+    if (!project) {
+      throw new NotFoundException(`Project with ID ${dto.projectId} not found`);
+    }
+
     const promptTargetText = dto.temporaryFields.reduce((acc, field) => {
       return `${acc}
         fieldName: ${field.name}
@@ -556,12 +572,18 @@ export class AIService {
     });
 
     const result = await client.executePrompt(
-      dto.model,
-      dto.temperature,
-      integration.systemPrompt,
-      dto.templatePrompt,
-      dto.temporaryFields.map((field) => field.name).join(', '),
-      promptTargetText,
+      new PromptParameters(
+        dto.model,
+        dto.temperature,
+        integration.systemPrompt,
+        dto.templatePrompt,
+        dto.temporaryFields.map((field) => field.name).join(', '),
+        promptTargetText,
+        project.name,
+        project.description ?? '',
+        '',
+        '',
+      ),
     );
     this.logger.log(`Result: ${result.content}`);
 
