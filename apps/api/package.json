@@ -62,7 +62,7 @@
     "luxon": "^3.6.1",
     "magic-bytes.js": "^1.12.1",
     "mysql2": "^3.14.1",
-    "nestjs-cls": "^5.4.3",
+    "nestjs-cls": "^6.0.1",
     "nestjs-pino": "^4.4.0",
     "nestjs-typeorm-paginate": "^4.1.0",
     "nodemailer": "^7.0.3",
