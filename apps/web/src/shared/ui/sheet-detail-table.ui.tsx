@@ -19,7 +19,15 @@ import Linkify from 'linkify-react';
 import { useTranslation } from 'next-i18next';
 
 import type { IconNameType } from '@ufb/react';
-import { Badge, Icon, InputField, Tag, Textarea, TextInput } from '@ufb/react';
+import {
+  Badge,
+  Icon,
+  InputField,
+  Tag,
+  Textarea,
+  TextInput,
+  toast,
+} from '@ufb/react';
 
 import { AICell } from '@/entities/ai';
 import { CategoryCombobox } from '@/entities/category';
@@ -31,10 +39,10 @@ import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
 import { useOAIMutation } from '../lib';
 import ImagePreviewButton from './image-preview-button';
-import { DatePicker, SelectInput, SelectSearchInput } from './inputs';
+import { DatePicker, MultiSelectInput, SelectInput } from './inputs';
 
 interface PlainRow {
-  format: 'text' | 'keyword' | 'number' | 'date' | 'images' | 'aiField';
+  format: 'text' | 'keyword' | 'number' | 'date' | 'images';
 }
 
 interface ImageRow {
@@ -51,14 +59,21 @@ interface TicketRow {
   format: 'ticket';
   issueTracker?: { ticketDomain: string | null; ticketKey: string | null };
 }
+
 interface IssueRow {
   format: 'issue';
   feedbackId: number;
   editable?: false;
 }
+
 interface CategoryRow {
   format: 'cateogry';
   issueId: number;
+}
+interface AIFieldRow {
+  format: 'aiField';
+  refetch?: () => Promise<void>;
+  status: 'ACTIVE' | 'INACTIVE';
 }
 
 export type SheetDetailTableRow = {
@@ -67,7 +82,15 @@ export type SheetDetailTableRow = {
   name: string;
   editable?: boolean;
   disabled?: boolean;
-} & (PlainRow | SelectableRow | TicketRow | ImageRow | IssueRow | CategoryRow);
+} & (
+  | PlainRow
+  | SelectableRow
+  | TicketRow
+  | ImageRow
+  | IssueRow
+  | CategoryRow
+  | AIFieldRow
+);
 
 type Format = SheetDetailTableRow['format'];
 
@@ -197,7 +220,7 @@ const SheetDetailTable = (props: Props) => {
       );
     },
     aiField: (value, row) => {
-      if (!row.id) return <></>;
+      if (!row.id || row.format !== 'aiField') return <></>;
       return (
         <AISheetDetailCell
           value={
@@ -207,6 +230,8 @@ const SheetDetailTable = (props: Props) => {
           }
           feedbackId={data.id as number}
           fieldId={row.id}
+          refetch={row.refetch}
+          showButton={row.status === 'ACTIVE'}
         />
       );
     },
@@ -250,7 +275,7 @@ const SheetDetailTable = (props: Props) => {
     ),
     select: (value, row) => {
       return (
-        <SelectSearchInput
+        <SelectInput
           options={(row as SelectableRow).options.map((option) => ({
             value: option.name,
             label: option.name,
@@ -270,14 +295,13 @@ const SheetDetailTable = (props: Props) => {
       );
     },
     multiSelect: (value, row) => (
-      <SelectInput
-        type="multiple"
+      <MultiSelectInput
         options={(row as SelectableRow).options.map((option) => ({
           value: option.key,
           label: option.name,
         }))}
-        values={value as string[]}
-        onValuesChange={(value) => onChange?.(row.key, value)}
+        value={value as string[]}
+        onChange={(value) => onChange?.(row.key, value)}
         placeholder={t('v2.placeholder.select')}
         disabled={row.disabled}
       />
@@ -342,38 +366,53 @@ const AISheetDetailCell = ({
   value,
   feedbackId,
   fieldId,
+  refetch,
+  showButton,
 }: {
   value:
     | { status: 'loading' | 'success' | 'error'; message: string }
     | undefined;
   feedbackId: number;
   fieldId: number;
+  refetch?: () => Promise<void>;
+  showButton?: boolean;
 }) => {
   const router = useRouter();
   const projectId = +(router.query.projectId as string);
 
-  const { mutate, isPending } = useOAIMutation({
+  const { mutateAsync: processAI, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/process/field',
     pathParams: { projectId },
+    queryOptions: {
+      async onSuccess() {
+        await refetch?.();
+      },
+    },
   });
 
   return (
     <div>
-      <Tag
-        size="small"
-        style={{
-          background: 'linear-gradient(95.64deg, #62A5F5 0%, #6ED2C3 100%)',
-        }}
-        onClick={() => {
-          if (isPending) return;
-          mutate({ feedbackId, aiFieldId: fieldId });
-        }}
-        className="cursor-pointer"
-      >
-        <Icon name="RiAiGenerate" />
-        AI 실행
-      </Tag>
+      {showButton && (
+        <Tag
+          size="small"
+          style={{
+            background: 'linear-gradient(95.64deg, #62A5F5 0%, #6ED2C3 100%)',
+          }}
+          onClick={() => {
+            if (isPending) return;
+            toast.promise(processAI({ feedbackId, aiFieldId: fieldId }), {
+              loading: 'Loading',
+              success: () => 'Success',
+              error: () => 'Error',
+            });
+          }}
+          className="cursor-pointer"
+        >
+          <Icon name="RiAiGenerate" />
+          AI 실행
+        </Tag>
+      )}
       <div className="py-2">
         <AICell
           value={
@@ -381,6 +420,7 @@ const AISheetDetailCell = ({
               | { status: 'loading' | 'success' | 'error'; message: string }
               | undefined
           }
+          isLoading={isPending}
         />
       </div>
     </div>

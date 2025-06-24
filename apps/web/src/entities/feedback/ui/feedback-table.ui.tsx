@@ -241,20 +241,21 @@ const FeedbackTable = (props: Props) => {
       },
     },
   });
-  const { mutateAsync: processAI } = useOAIMutation({
-    method: 'post',
-    path: '/api/admin/projects/{projectId}/ai/process',
-    pathParams: { projectId },
-    queryOptions: {
-      onSuccess() {
-        toast.success(t('v2.toast.success'));
+  const { mutateAsync: processAI, isPending: isPendingAIProcess } =
+    useOAIMutation({
+      method: 'post',
+      path: '/api/admin/projects/{projectId}/ai/process',
+      pathParams: { projectId },
+      queryOptions: {
+        onSuccess() {
+          toast.success(t('v2.toast.success'));
+        },
+        async onSettled() {
+          table.resetRowSelection();
+          await refetch();
+        },
       },
-      async onSettled() {
-        table.resetRowSelection();
-        await refetch();
-      },
-    },
-  });
+    });
 
   return (
     <div className="flex h-full flex-col gap-4">
@@ -266,34 +267,39 @@ const FeedbackTable = (props: Props) => {
           totalItems={feedbackData?.meta.totalItems ?? 0}
         />
         <div className="flex flex-shrink-0 gap-2 [&>button]:min-w-20 [&>button]:flex-shrink-0">
-          {selectedRowIds.length > 0 && (
-            <>
-              <Button
-                variant="outline"
-                className="!text-tint-red"
-                onClick={openDeleteFeedbacksDialog}
-                disabled={!perms.includes('feedback_delete')}
-              >
-                <Icon name="RiDeleteBin6Line" />
-                {t('v2.button.name.delete', { name: 'Feedback' })}
-                <Badge variant="subtle" className="!text-tint-red">
-                  {selectedRowIds.length}
-                </Badge>
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  toast.promise(processAI({ feedbackIds: selectedRowIds }), {
-                    loading: 'Loading',
-                    success: () => 'Success',
-                    error: () => 'Error',
-                  });
-                }}
-              >
-                AI 실행 <Badge variant="subtle">{selectedRowIds.length}</Badge>
-              </Button>
-            </>
-          )}
+          {selectedRowIds.length > 0 &&
+            fields.filter(
+              (v) => v.format === 'aiField' && v.status === 'ACTIVE',
+            ).length > 0 && (
+              <>
+                <Button
+                  variant="outline"
+                  className="!text-tint-red"
+                  onClick={openDeleteFeedbacksDialog}
+                  disabled={!perms.includes('feedback_delete')}
+                >
+                  <Icon name="RiDeleteBin6Line" />
+                  {t('v2.button.name.delete', { name: 'Feedback' })}
+                  <Badge variant="subtle" className="!text-tint-red">
+                    {selectedRowIds.length}
+                  </Badge>
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    toast.promise(processAI({ feedbackIds: selectedRowIds }), {
+                      loading: 'Loading',
+                      success: () => 'Success',
+                      error: () => 'Error',
+                    });
+                  }}
+                  disabled={isPendingAIProcess}
+                >
+                  AI 실행{' '}
+                  <Badge variant="subtle">{selectedRowIds.length}</Badge>
+                </Button>
+              </>
+            )}
           <Tooltip>
             <TooltipTrigger>
               <DateRangePicker
@@ -351,6 +357,7 @@ const FeedbackTable = (props: Props) => {
           feedback={currentFeedback}
           fields={fields}
           channelId={currentChannel.id}
+          refetchFeedback={refetch}
         />
       )}
     </div>

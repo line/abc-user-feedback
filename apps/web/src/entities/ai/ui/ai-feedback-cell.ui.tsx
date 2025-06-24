@@ -22,28 +22,27 @@ interface Props {
   value:
     | { status: 'loading' | 'success' | 'error'; message: string }
     | undefined;
+  isLoading?: boolean;
 }
 const AICell = memo((props: Props) => {
-  const { value } = props;
+  const { value, isLoading } = props;
 
   if (!value) return null;
 
   return (
     <>
-      {value.status === 'loading' && (
+      {value.status === 'loading' || isLoading ?
         <div className="flex flex-col gap-2">
           <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
           <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
           <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
         </div>
-      )}
-      {value.status === 'error' && (
+      : value.status === 'error' ?
         <div className="text-tint-red">
           <Icon name="RiErrorWarningFill" className="mr-2" size={16} />
           <span>{value.message}</span>
         </div>
-      )}
-      {value.status === 'success' && <p>{value.message}</p>}
+      : <p>{value.message}</p>}
     </>
   );
 });

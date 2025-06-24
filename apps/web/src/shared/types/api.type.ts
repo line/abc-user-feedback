@@ -1701,9 +1701,9 @@ export interface components {
       property: components['schemas']['FieldPropertyEnum'];
       status: components['schemas']['FieldStatusEnum'];
       order: number | null;
-      aiTemplateId: number | null;
-      aiFieldTargetKeys: string[] | null;
-      aiFieldAutoProcessing: boolean | null;
+      aiTemplateId?: number | null;
+      aiFieldTargetKeys?: string[] | null;
+      aiFieldAutoProcessing?: boolean | null;
       options?: components['schemas']['CreateChannelRequestFieldSelectOptionDto'][];
     };
     CreateChannelRequestDto: {
@@ -1799,9 +1799,9 @@ export interface components {
       property: components['schemas']['FieldPropertyEnum'];
       status: components['schemas']['FieldStatusEnum'];
       order: number | null;
-      aiTemplateId: number | null;
-      aiFieldTargetKeys: string[] | null;
-      aiFieldAutoProcessing: boolean | null;
+      aiTemplateId?: number | null;
+      aiFieldTargetKeys?: string[] | null;
+      aiFieldAutoProcessing?: boolean | null;
       options?: components['schemas']['CreateChannelRequestFieldSelectOptionDto'][];
       id?: number;
     };

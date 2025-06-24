@@ -61,9 +61,9 @@ export const fieldSchema = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
   order: z.number(),
-  aiTemplateId: z.number().nullable(),
-  aiFieldTargetKeys: z.array(z.string()).nullable(),
-  aiFieldAutoProcessing: z.boolean().nullable(),
+  aiTemplateId: z.number().nullable().optional(),
+  aiFieldTargetKeys: z.array(z.string()).nullable().optional(),
+  aiFieldAutoProcessing: z.boolean().nullable().optional(),
 });
 
 export const fieldInfoSchema = fieldSchema

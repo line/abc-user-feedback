@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 
 import {
   Dropdown,
@@ -25,30 +25,38 @@ import {
   Tag,
 } from '@ufb/react';
 
-import type { FieldOptionInfo } from '../field.type';
+import { useOAIQuery } from '@/shared';
 
-interface IProps {
-  options: FieldOptionInfo[];
+interface Props {
+  aiTemplateId: number | null;
 }
 
-const OptionListPopover: React.FC<IProps> = ({ options }) => {
-  const { t } = useTranslation();
+const AiFieldOptionPopover = ({ aiTemplateId }: Props) => {
+  const router = useRouter();
+  const projectId = +(router.query.projectId as string);
+  const { data } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/templates',
+    variables: { projectId },
+  });
 
+  const aiFieldTemplate = data?.find((v) => v.id === aiTemplateId);
+
+  if (!aiFieldTemplate) {
+    return null;
+  }
   return (
     <Dropdown>
       <DropdownTrigger asChild data-state="close">
         <Tag onClick={(e) => e.stopPropagation()}>
-          {t('main.setting.option-info')}
+          AI Template Option
           <Icon name="RiInformation2Line" />
         </Tag>
       </DropdownTrigger>
       <DropdownContent>
-        {options.map((v) => (
-          <DropdownItem key={v.key}>{v.name}</DropdownItem>
-        ))}
+        <DropdownItem>{aiFieldTemplate.title}</DropdownItem>
       </DropdownContent>
     </Dropdown>
   );
 };
 
-export default OptionListPopover;
+export default AiFieldOptionPopover;

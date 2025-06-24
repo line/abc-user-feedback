@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
@@ -54,6 +54,7 @@ interface Props {
   onClickDelete?: () => Promise<unknown>;
   updateFeedback?: (feedback: Feedback) => Promise<unknown>;
   channelId: number;
+  refetchFeedback?: () => Promise<unknown>;
 }
 
 const FeedbackDetailSheet = (props: Props) => {
@@ -65,6 +66,7 @@ const FeedbackDetailSheet = (props: Props) => {
     onClickDelete,
     updateFeedback,
     channelId,
+    refetchFeedback,
   } = props;
   const { t } = useTranslation();
 
@@ -73,6 +75,9 @@ const FeedbackDetailSheet = (props: Props) => {
   const [mode, setMode] = useState<'edit' | 'view'>('view');
   const overlay = useOverlay();
   const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    setCurrentFeedback(feedback);
+  }, [feedback]);
 
   const onClickCancel = () => {
     setMode('view');
@@ -167,6 +172,8 @@ const FeedbackDetailSheet = (props: Props) => {
                 .map((v) =>
                   v.key === 'issues' ?
                     { ...v, format: 'issue', feedbackId: feedback.id }
+                  : v.format === 'aiField' ?
+                    { ...v, format: 'aiField', refetch: refetchFeedback }
                   : v,
                 ) as SheetDetailTableRow[]
             }
@@ -181,6 +188,7 @@ const FeedbackDetailSheet = (props: Props) => {
                   editable: v.property === 'EDITABLE',
                   disabled:
                     v.property === 'EDITABLE' && v.status === 'INACTIVE',
+                  refetch: v.format === 'aiField' ? refetchFeedback : undefined,
                 })) as SheetDetailTableRow[]
             }
             mode={mode}
