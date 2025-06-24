@@ -84,7 +84,6 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
     <Tooltip open={!projectId}>
       <TooltipTrigger asChild>
         <Select
-          type="single"
           value={projectId ? String(projectId) : ''}
           onValueChange={(value) => onChangeProject(value)}
         >
