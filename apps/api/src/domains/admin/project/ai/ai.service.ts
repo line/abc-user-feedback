@@ -24,7 +24,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Between, In, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { FieldFormatEnum } from '@/common/enums';
+import { FieldFormatEnum, FieldStatusEnum } from '@/common/enums';
 import { AIPromptStatusEnum } from '@/common/enums/ai-prompt-status.enum';
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 import {
@@ -110,6 +110,8 @@ export class AIService {
     });
 
     if (!integration) {
+      await this.createDefaultTemplates(projectId);
+
       return await this.upsertIntegration(
         CreateAIIntegrationsDto.from({
           projectId,
@@ -493,7 +495,10 @@ export class AIService {
     });
 
     for (const field of fields) {
-      if (field.format === FieldFormatEnum.aiField) {
+      if (
+        field.format === FieldFormatEnum.aiField &&
+        field.status === FieldStatusEnum.ACTIVE
+      ) {
         const targetFields = fields.filter((f) =>
           field.aiFieldTargetKeys?.includes(f.key),
         );
@@ -523,7 +528,9 @@ export class AIService {
 
     const aiField = fields.find(
       (field) =>
-        field.id === fieldId && field.format === FieldFormatEnum.aiField,
+        field.id === fieldId &&
+        field.format === FieldFormatEnum.aiField &&
+        field.status === FieldStatusEnum.ACTIVE,
     );
 
     if (!aiField) {
