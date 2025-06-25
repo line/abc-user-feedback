@@ -18,7 +18,11 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { EventTypeEnum, FieldFormatEnum } from '@/common/enums';
+import {
+  EventTypeEnum,
+  FieldFormatEnum,
+  FieldStatusEnum,
+} from '@/common/enums';
 import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { AIService } from './ai.service';
@@ -60,7 +64,10 @@ export class AIListener {
     });
 
     fields.forEach((field) => {
-      if (field.format === FieldFormatEnum.aiField) {
+      if (
+        field.format === FieldFormatEnum.aiField &&
+        field.status === FieldStatusEnum.ACTIVE
+      ) {
         if (field.aiFieldAutoProcessing || manual) {
           const targetFields = fields.filter((f) =>
             field.aiFieldTargetKeys?.includes(f.key),
