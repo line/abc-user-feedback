@@ -110,6 +110,8 @@ export class AIService {
     });
 
     if (!integration) {
+      await this.createDefaultTemplates(projectId);
+
       return await this.upsertIntegration(
         CreateAIIntegrationsDto.from({
           projectId,
