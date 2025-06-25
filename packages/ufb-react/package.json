@@ -47,7 +47,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
-    "lucide-react": "^0.522.0",
+    "lucide-react": "^0.523.0",
     "react-day-picker": "8.10.1",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.1"
