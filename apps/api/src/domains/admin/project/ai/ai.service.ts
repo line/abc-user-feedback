@@ -347,6 +347,37 @@ export class AIService {
     await this.aiUsagesRepo.save(usage);
   }
 
+  private async hasTokenThresholdExceeded(
+    projectId: number,
+    provider: AIProvidersEnum,
+  ): Promise<boolean> {
+    const integration = await this.aiIntegrationsRepo.findOne({
+      where: {
+        project: {
+          id: projectId,
+        },
+        provider,
+      },
+    });
+
+    if (!integration || !integration.tokenThreshold) {
+      return false;
+    }
+
+    const totalUsedTokens = await this.aiUsagesRepo
+      .createQueryBuilder('usage')
+      .select('SUM(usage.usedTokens)', 'total')
+      .where('usage.project.id = :projectId', { projectId })
+      .andWhere('usage.provider = :provider', { provider })
+      .andWhere('usage.year = :year AND usage.month = :month', {
+        year: getCurrentYear(),
+        month: getCurrentMonth(),
+      })
+      .getRawOne();
+
+    return totalUsedTokens.total >= integration.tokenThreshold;
+  }
+
   private generatePromptTargetText(
     feedback: FeedbackEntity,
     aiTargetFields: FieldEntity[],
@@ -410,6 +441,14 @@ export class AIService {
       provider: integration.provider,
       baseUrl: integration.endpointUrl,
     });
+
+    if (
+      await this.hasTokenThresholdExceeded(
+        feedback.channel.project.id,
+        integration.provider,
+      )
+    )
+      return;
 
     feedback.data[aiField.key] =
       `{"status": "${AIPromptStatusEnum.loading}", "message": "Processing..."}`;
@@ -580,6 +619,11 @@ export class AIService {
         fieldValue: ${field.value}
         `;
     }, '');
+
+    if (
+      await this.hasTokenThresholdExceeded(dto.projectId, integration.provider)
+    )
+      return '';
 
     const client = new AIClient({
       apiKey: integration.apiKey,
