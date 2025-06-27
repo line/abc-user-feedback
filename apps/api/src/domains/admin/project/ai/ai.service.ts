@@ -360,22 +360,25 @@ export class AIService {
       },
     });
 
-    if (!integration || !integration.tokenThreshold) {
+    if (!integration?.tokenThreshold) {
       return false;
     }
 
-    const totalUsedTokens = await this.aiUsagesRepo
-      .createQueryBuilder('usage')
-      .select('SUM(usage.usedTokens)', 'total')
-      .where('usage.project.id = :projectId', { projectId })
-      .andWhere('usage.provider = :provider', { provider })
-      .andWhere('usage.year = :year AND usage.month = :month', {
-        year: getCurrentYear(),
-        month: getCurrentMonth(),
-      })
-      .getRawOne();
+    const totalUsedTokens: { total: number } | undefined =
+      await this.aiUsagesRepo
+        .createQueryBuilder('usage')
+        .select('SUM(usage.usedTokens)', 'total')
+        .where('usage.project.id = :projectId', { projectId })
+        .andWhere('usage.provider = :provider', { provider })
+        .andWhere('usage.year = :year AND usage.month = :month', {
+          year: getCurrentYear(),
+          month: getCurrentMonth(),
+        })
+        .getRawOne();
 
-    return totalUsedTokens.total >= integration.tokenThreshold;
+    return (
+      !!totalUsedTokens && totalUsedTokens.total >= integration.tokenThreshold
+    );
   }
 
   private generatePromptTargetText(
