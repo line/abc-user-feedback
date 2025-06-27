@@ -528,7 +528,7 @@ export class AIService {
 
     try {
       await Promise.all(tasks);
-    } catch (error) {
+    } catch {
       throw new BadRequestException('Error processing AI fields');
     }
   }
