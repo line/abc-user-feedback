@@ -204,13 +204,14 @@ export class AIService {
     const templates = [
       {
         title: 'Feedback Summary',
-        prompt: 'Summarize the following feedback within 2 sentences',
+        prompt: 'Summarize the following feedback within a sentences',
         model: model,
         temperature: 0.7,
       },
       {
         title: 'Feedback Sentiment Analysis',
-        prompt: 'Analyze the sentiment of the following feedback',
+        prompt:
+          'Analyze the sentiment of the following feedback and express it both as a sentiment label (e.g., positive, negative, neutral) and as a number from 0 to 10.',
         model: model,
         temperature: 0.7,
       },
@@ -346,6 +347,40 @@ export class AIService {
     await this.aiUsagesRepo.save(usage);
   }
 
+  private async hasTokenThresholdExceeded(
+    projectId: number,
+    provider: AIProvidersEnum,
+  ): Promise<boolean> {
+    const integration = await this.aiIntegrationsRepo.findOne({
+      where: {
+        project: {
+          id: projectId,
+        },
+        provider,
+      },
+    });
+
+    if (!integration?.tokenThreshold) {
+      return false;
+    }
+
+    const totalUsedTokens: { total: number } | undefined =
+      await this.aiUsagesRepo
+        .createQueryBuilder('usage')
+        .select('SUM(usage.usedTokens)', 'total')
+        .where('usage.project.id = :projectId', { projectId })
+        .andWhere('usage.provider = :provider', { provider })
+        .andWhere('usage.year = :year AND usage.month = :month', {
+          year: getCurrentYear(),
+          month: getCurrentMonth(),
+        })
+        .getRawOne();
+
+    return (
+      !!totalUsedTokens && totalUsedTokens.total >= integration.tokenThreshold
+    );
+  }
+
   private generatePromptTargetText(
     feedback: FeedbackEntity,
     aiTargetFields: FieldEntity[],
@@ -409,6 +444,14 @@ export class AIService {
       provider: integration.provider,
       baseUrl: integration.endpointUrl,
     });
+
+    if (
+      await this.hasTokenThresholdExceeded(
+        feedback.channel.project.id,
+        integration.provider,
+      )
+    )
+      return;
 
     feedback.data[aiField.key] =
       `{"status": "${AIPromptStatusEnum.loading}", "message": "Processing..."}`;
@@ -579,6 +622,11 @@ export class AIService {
         fieldValue: ${field.value}
         `;
     }, '');
+
+    if (
+      await this.hasTokenThresholdExceeded(dto.projectId, integration.provider)
+    )
+      return '';
 
     const client = new AIClient({
       apiKey: integration.apiKey,
