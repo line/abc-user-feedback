@@ -29,7 +29,6 @@ import {
   InputCaption,
   InputField,
   InputLabel,
-  Switch,
   Textarea,
   toast,
 } from '@ufb/react';
@@ -65,7 +64,6 @@ const useAITemplateFormStore = create<AISettingStore>((set) => ({
 
 const defaultValues: Partial<AITemplate> = {
   temperature: 0.5,
-  autoProcessing: false,
   title: '',
   prompt: '',
 };
@@ -203,25 +201,6 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
                   )}
                 </div>
               </InputField>
-              <Card size="sm">
-                <CardHeader
-                  action={
-                    <Switch
-                      checked={watch('autoProcessing')}
-                      onCheckedChange={(checked) =>
-                        setValue('autoProcessing', checked, {
-                          shouldDirty: true,
-                        })
-                      }
-                    />
-                  }
-                >
-                  <CardTitle>Auto Processing</CardTitle>
-                  <CardDescription>
-                    자동으로 AI Prompt를 적용합니다.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
               <Divider variant="subtle" />
               <div className="flex flex-col gap-4">
                 <div>

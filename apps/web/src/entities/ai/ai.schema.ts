@@ -31,7 +31,6 @@ export const aiSchema = z.object({
 export const aiTemplateSchema = z.object({
   title: z.string().trim().min(1).max(20),
   prompt: z.string().trim().min(1).max(1000),
-  autoProcessing: z.boolean(),
   model: z.string(),
   temperature: z.number(),
 });

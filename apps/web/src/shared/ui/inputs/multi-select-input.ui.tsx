@@ -77,7 +77,7 @@ const MultiSelectInput: React.FC<Props> = (props) => {
           </Button>
         )}
       </MultiSelectTrigger>
-      <MultiSelectContent className="max-h-[200px]">
+      <MultiSelectContent className="max-h-[200px] overflow-auto">
         {options.map(({ label, value, icon }) => (
           <MultiSelectItem key={value} value={value}>
             {icon && <Icon name={icon} size={16} className="mr-2" />}

@@ -15,7 +15,6 @@
  */
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { useForm, useFormContext } from 'react-hook-form';
@@ -33,6 +32,8 @@ import {
   useOAIMutation,
 } from '@/shared';
 import type { AITemplate } from '@/entities/ai';
+
+import { NodataImage, WatingImage } from '@/assets';
 
 type InputItem = {
   name: string;
@@ -140,9 +141,17 @@ const AiFieldPlayground = ({ projectId }: Props) => {
               <CardTitle>Test Data (Input)</CardTitle>
             </CardHeader>
             <CardBody className="flex min-h-0 flex-1 flex-col gap-4 overflow-auto">
-              {inputItems.map((_, key) => (
-                <AIPlaygroundInputDataItem key={key} index={key} />
-              ))}
+              {inputItems.length === 0 ?
+                <div className="flex h-full flex-col items-center justify-center gap-4">
+                  <NodataImage width={120} height={120} />
+                  <p className="text-small-normal text-neutral-tertiary">
+                    등록된 데이터가 없습니다.
+                  </p>
+                </div>
+              : inputItems.map((_, key) => (
+                  <AIPlaygroundInputDataItem key={key} index={key} />
+                ))
+              }
             </CardBody>
           </Card>
           <Card size="sm" className="flex-[1]">
@@ -173,12 +182,7 @@ const AiFieldPlayground = ({ projectId }: Props) => {
                   </p>
                 </div>
               : <div className="flex h-full flex-col items-center justify-center gap-4">
-                  <Image
-                    src="/assets/images/waiting.svg"
-                    alt="Placeholder"
-                    width={120}
-                    height={120}
-                  />
+                  <WatingImage width={120} height={120} />
                   <p className="text-small-normal text-neutral-tertiary">
                     아직 테스트를 실행하지 않은 상태입니다.
                   </p>

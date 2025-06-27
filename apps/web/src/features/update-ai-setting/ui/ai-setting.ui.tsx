@@ -48,6 +48,9 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
     defaultValues: {
       endpointUrl: '',
       systemPrompt: '',
+      provider: 'OPEN_AI',
+      notificationThreshold: null,
+      tokenThreshold: null,
     },
   });
 
@@ -57,6 +60,7 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/integrations',
     variables: { projectId },
+    queryOptions: { retry: 0 },
   });
 
   const { mutateAsync: validateApiKey, isPending: isValidatingApiKey } =

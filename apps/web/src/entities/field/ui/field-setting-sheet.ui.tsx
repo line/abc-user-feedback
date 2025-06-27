@@ -31,11 +31,16 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
+  Switch,
   Tag,
 } from '@ufb/react';
 
 import type { FormOverlayProps } from '@/shared';
 import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
   DeleteDialog,
   MultiSelectInput,
   SelectInput,
@@ -322,6 +327,25 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                   disabled={isDefaultField}
                   required
                 />
+                <Card size="sm">
+                  <CardHeader
+                    action={
+                      <Switch
+                        checked={watch('aiFieldAutoProcessing') ?? false}
+                        onCheckedChange={(checked) =>
+                          setValue('aiFieldAutoProcessing', checked, {
+                            shouldDirty: true,
+                          })
+                        }
+                      />
+                    }
+                  >
+                    <CardTitle>Auto Processing</CardTitle>
+                    <CardDescription>
+                      자동으로 AI Prompt를 적용합니다.
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
               </>
             )}
             <SelectInput
