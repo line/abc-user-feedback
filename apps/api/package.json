@@ -54,7 +54,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "cron": "^4.3.0",
-    "dotenv": "^16.6.0",
+    "dotenv": "^16.6.1",
     "exceljs": "^4.4.0",
     "fast-csv": "^5.0.2",
     "fastify": "^5.4.0",
