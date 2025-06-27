@@ -217,15 +217,6 @@
     "sign-up-mgmt": "Anmeldungs- und Registrierungsverwaltung",
     "user-mgmt": "Benutzer-Verwaltung"
   },
-  "project-setting-menu": {
-    "project-info": "Projekt-Informationen",
-    "member-mgmt": "Mitglieder-Verwaltung",
-    "role-mgmt": "Rollen-Verwaltung",
-    "api-key-mgmt": "API-Schlüsselverwaltung",
-    "issue-tracker-mgmt": "Problem-Verfolgungs-Verwaltung",
-    "webhook-integration": "Webhook-Integration",
-    "generative-ai-setting": "Generative AI-Integration"
-  },
   "channel-setting-menu": {
     "channel-info": "Kanal-Informationen",
     "field-mgmt": "Feld-Verwaltung",
@@ -306,7 +297,8 @@
       "role-mgmt": "Role-Verwaltung",
       "api-key-mgmt": "API Key-Verwaltung",
       "issue-tracker-mgmt": "Issue Tracker-Verwaltung",
-      "webhook-integration": "Webhook-Integration"
+      "webhook-integration": "Webhook-Integration",
+      "generative-ai-setting": "Generative AI-Integration"
     },
     "channel-setting-menu": {
       "channel-info": "Channel-Informationen",

@@ -217,14 +217,6 @@
     "sign-up-mgmt": "注册与登录管理",
     "user-mgmt": "用户管理"
   },
-  "project-setting-menu": {
-    "project-info": "项目信息",
-    "member-mgmt": "成员管理",
-    "role-mgmt": "角色管理",
-    "api-key-mgmt": "API密钥管理",
-    "issue-tracker-mgmt": "问题跟踪管理",
-    "webhook-integration": "Webhook集成"
-  },
   "channel-setting-menu": {
     "channel-info": "频道信息",
     "field-mgmt": "字段管理",
