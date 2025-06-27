@@ -303,7 +303,6 @@ const FeedbackTable = (props: Props) => {
                     toast.promise(processAI({ feedbackIds: selectedRowIds }), {
                       loading: 'Loading',
                       success: () => 'Success',
-                      error: () => 'Error',
                     });
                   }}
                   disabled={isPendingAIProcess}

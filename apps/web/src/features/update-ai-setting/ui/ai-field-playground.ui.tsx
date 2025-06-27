@@ -88,7 +88,6 @@ const AiFieldPlayground = ({ projectId }: Props) => {
       }),
       {
         success: () => '성공',
-        error: () => '실패',
         loading: '로딩 중입니다',
       },
     );

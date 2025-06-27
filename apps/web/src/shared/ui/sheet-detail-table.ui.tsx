@@ -404,7 +404,6 @@ const AISheetDetailCell = ({
             toast.promise(processAI({ feedbackId, aiFieldId: fieldId }), {
               loading: 'Loading',
               success: () => 'Success',
-              error: () => 'Error',
             });
           }}
           className="cursor-pointer"
