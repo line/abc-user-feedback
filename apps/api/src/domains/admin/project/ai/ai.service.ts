@@ -204,13 +204,14 @@ export class AIService {
     const templates = [
       {
         title: 'Feedback Summary',
-        prompt: 'Summarize the following feedback within 2 sentences',
+        prompt: 'Summarize the following feedback within a sentences',
         model: model,
         temperature: 0.7,
       },
       {
         title: 'Feedback Sentiment Analysis',
-        prompt: 'Analyze the sentiment of the following feedback',
+        prompt:
+          'Analyze the sentiment of the following feedback and express it both as a sentiment label (e.g., positive, negative, neutral) and as a number from 0 to 10.',
         model: model,
         temperature: 0.7,
       },
