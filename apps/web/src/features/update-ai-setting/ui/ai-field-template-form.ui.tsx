@@ -204,14 +204,11 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
                   Prompt <span className="text-tint-red">*</span>
                 </InputLabel>
                 <Textarea {...register('prompt')} />
-                <div className="flex flex-row-reverse items-center justify-between">
-                  <InputCaption>{watch('prompt').length} / 1000</InputCaption>
-                  {formState.errors.prompt?.message && (
-                    <InputCaption variant="error">
-                      {formState.errors.prompt.message}
-                    </InputCaption>
-                  )}
-                </div>
+                {formState.errors.prompt?.message && (
+                  <InputCaption variant="error">
+                    {formState.errors.prompt.message}
+                  </InputCaption>
+                )}
               </InputField>
               <Divider variant="subtle" />
               <div className="flex flex-col gap-4">

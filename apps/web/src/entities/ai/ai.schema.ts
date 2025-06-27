@@ -30,7 +30,7 @@ export const aiSchema = z.object({
 
 export const aiTemplateSchema = z.object({
   title: z.string().trim().min(1).max(30),
-  prompt: z.string().trim().min(1).max(1000),
+  prompt: z.string().trim().min(1),
   model: z.string(),
   temperature: z.number(),
 });
