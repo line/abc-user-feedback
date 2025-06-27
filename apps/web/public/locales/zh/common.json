@@ -223,8 +223,7 @@
     "role-mgmt": "角色管理",
     "api-key-mgmt": "API密钥管理",
     "issue-tracker-mgmt": "问题跟踪管理",
-    "webhook-integration": "Webhook集成",
-    "delete-project": "删除项目"
+    "webhook-integration": "Webhook集成"
   },
   "channel-setting-menu": {
     "channel-info": "频道信息",
@@ -307,7 +306,7 @@
       "api-key-mgmt": "API Key管理",
       "issue-tracker-mgmt": "Issue Tracker管理",
       "webhook-integration": "Webhook集成",
-      "delete-project": "删除Project"
+      "generative-ai-setting": "Generative AI 集成"
     },
     "channel-setting-menu": {
       "channel-info": "Channel信息",

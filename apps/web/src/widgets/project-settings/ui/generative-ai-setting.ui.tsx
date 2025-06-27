@@ -16,6 +16,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 
 import { Menu, MenuItem, toast } from '@ufb/react';
 
@@ -36,6 +37,7 @@ type SubMenuType =
   | 'field-template'
   | 'field-template-form';
 const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const subMenu = (router.query.subMenu ?? 'setting') as SubMenuType;
 
@@ -56,7 +58,7 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
       <SettingTemplate
         title={
           subMenu === 'field-template-form' ? 'Template Details' : (
-            '생성형 AI 연동'
+            t('v2.project-setting-menu.generative-ai-setting')
           )
         }
         action={

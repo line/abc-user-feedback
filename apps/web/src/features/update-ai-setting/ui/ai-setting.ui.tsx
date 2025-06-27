@@ -122,9 +122,7 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
 
   return (
     <>
-      <SettingAlert
-        description={<HelpCardDocs i18nKey="help-card.api-key" />}
-      />
+      <SettingAlert description={<HelpCardDocs />} />
       <FormProvider {...methods}>
         <form id={formId} onSubmit={methods.handleSubmit(onSubmit)}>
           <AiSettingForm />

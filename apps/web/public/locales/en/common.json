@@ -224,7 +224,7 @@
     "api-key-mgmt": "API Key Management",
     "issue-tracker-mgmt": "Issue Tracker Management",
     "webhook-integration": "Webhook Integration",
-    "delete-project": "Delete Project"
+    "generative-ai-setting": "Generative AI Integration"
   },
   "channel-setting-menu": {
     "channel-info": "Channel Information",
@@ -308,7 +308,7 @@
       "api-key-mgmt": "API Key Management",
       "issue-tracker-mgmt": "Issue Tracker Management",
       "webhook-integration": "Webhook Integration",
-      "delete-project": "Delete Project"
+      "": "Delete Project"
     },
     "channel-setting-menu": {
       "channel-info": "Channel Information",

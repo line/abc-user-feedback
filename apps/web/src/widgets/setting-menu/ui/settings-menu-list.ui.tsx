@@ -85,7 +85,7 @@ const SettingsMenuList: React.FC<Props> = (props) => {
       value: 'webhook',
     },
     {
-      label: '생성형 AI 연동',
+      label: t('v2.project-setting-menu.generative-ai-setting'),
       disabled: !perms.includes('project_webhook_read'),
       value: 'generative-ai',
     },
