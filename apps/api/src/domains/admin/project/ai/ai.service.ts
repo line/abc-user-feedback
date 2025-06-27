@@ -413,7 +413,7 @@ export class AIService {
     feedback: FeedbackEntity,
     aiField: FieldEntity,
     aiTargetFields: FieldEntity[],
-  ) {
+  ): Promise<boolean> {
     const integration = await this.aiIntegrationsRepo.findOne({
       where: {
         project: {
@@ -451,7 +451,7 @@ export class AIService {
         integration.provider,
       )
     )
-      return;
+      return false;
 
     feedback.data[aiField.key] =
       `{"status": "${AIPromptStatusEnum.loading}", "message": "Processing..."}`;
@@ -514,6 +514,8 @@ export class AIService {
         channelId: feedback.channel.id,
       });
     }
+
+    return true;
   }
 
   async processFeedbacksAIFields(feedbackIds: number[]) {
@@ -524,7 +526,11 @@ export class AIService {
       return this.processFeedbackAIFields(feedbackId);
     });
 
-    await Promise.all(tasks);
+    try {
+      await Promise.all(tasks);
+    } catch {
+      throw new BadRequestException('Error processing AI fields');
+    }
   }
 
   async processFeedbackAIFields(feedbackId: number) {
@@ -554,7 +560,11 @@ export class AIService {
           field.aiFieldTargetKeys?.includes(f.key),
         );
 
-        await this.executeAIFieldPrompt(feedback, field, targetFields);
+        if (!(await this.executeAIFieldPrompt(feedback, field, targetFields))) {
+          throw new BadRequestException(
+            'Token threshold exceeded, cannot process AI field',
+          );
+        }
       }
     }
   }
@@ -592,7 +602,11 @@ export class AIService {
       aiField.aiFieldTargetKeys?.includes(f.key),
     );
 
-    await this.executeAIFieldPrompt(feedback, aiField, targetFields);
+    if (!(await this.executeAIFieldPrompt(feedback, aiField, targetFields))) {
+      throw new BadRequestException(
+        'Token threshold exceeded, cannot process AI field',
+      );
+    }
   }
 
   @Transactional()
@@ -626,7 +640,7 @@ export class AIService {
     if (
       await this.hasTokenThresholdExceeded(dto.projectId, integration.provider)
     )
-      return '';
+      return 'Token threshold exceeded.';
 
     const client = new AIClient({
       apiKey: integration.apiKey,
