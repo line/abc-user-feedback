@@ -54,7 +54,11 @@ import type { Channel } from '@/entities/channel';
 import type { Field } from '@/entities/field';
 
 import { getColumns } from '../feedback-table-columns';
-import { useFeedbackQueryConverter, useFeedbackSearch } from '../lib';
+import {
+  useAIFIeldFeedbackCellLoading,
+  useFeedbackQueryConverter,
+  useFeedbackSearch,
+} from '../lib';
 import FeedbackDetailSheet from './feedback-detail-sheet.ui';
 import FeedbackTableChannelSelection from './feedback-table-channel-selection.ui';
 import FeedbackTableDownload from './feedback-table-download.ui';
@@ -84,6 +88,9 @@ const FeedbackTable = (props: Props) => {
   const perms = usePermissions();
   const overlay = useOverlay();
 
+  const setLoadingFeedbackIds = useAIFIeldFeedbackCellLoading(
+    (state) => state.setLoadingFeedbackIds,
+  );
   const [openFeedbackId, setOpenFeedbackId] = useState<number | null>(null);
 
   const [rows, setRows] = useState<Record<string, unknown>[]>([]);
@@ -241,6 +248,7 @@ const FeedbackTable = (props: Props) => {
       },
     },
   });
+
   const { mutateAsync: processAI, isPending: isPendingAIProcess } =
     useOAIMutation({
       method: 'post',
@@ -253,6 +261,10 @@ const FeedbackTable = (props: Props) => {
         async onSettled() {
           table.resetRowSelection();
           await refetch();
+          setLoadingFeedbackIds([]);
+        },
+        onError(error) {
+          toast.error(error.message);
         },
       },
     });
@@ -287,6 +299,7 @@ const FeedbackTable = (props: Props) => {
                 <Button
                   variant="outline"
                   onClick={() => {
+                    setLoadingFeedbackIds(selectedRowIds);
                     toast.promise(processAI({ feedbackIds: selectedRowIds }), {
                       loading: 'Loading',
                       success: () => 'Success',

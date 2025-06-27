@@ -70,9 +70,6 @@ const AiFieldPlayground = ({ projectId }: Props) => {
       onSuccess: (data) => {
         setResult(data?.result ?? '');
       },
-      onError: (error) => {
-        toast.error(`AI 테스트 중 오류가 발생했습니다: ${error.message}`);
-      },
     },
   });
 

@@ -110,6 +110,7 @@ export const getColumns = (
               field={field}
               isExpanded={info.row.getIsExpanded()}
               value={info.getValue()}
+              feedbackId={Number(info.row.id)}
             />
           ),
           meta: {

@@ -92,4 +92,28 @@ export const fieldInfoSchema = fieldSchema
         )
         .optional(),
     }),
+  )
+  .refine(
+    (data) =>
+      data.format === 'select' || data.format === 'multiSelect' ?
+        !!data.options && data.options.length > 0
+      : true,
+    {
+      path: ['options'],
+      message: 'Option is required.',
+    },
+  )
+  .refine((data) => (data.format === 'aiField' ? !!data.aiTemplateId : true), {
+    path: ['aiTemplateId'],
+    message: 'AI Template is required for AI Field format.',
+  })
+  .refine(
+    (data) =>
+      data.format === 'aiField' ?
+        !!data.aiFieldTargetKeys && data.aiFieldTargetKeys.length > 0
+      : true,
+    {
+      path: ['aiFieldTargetKeys'],
+      message: 'AI Field Targets are required for AI Field format.',
+    },
   );

@@ -186,6 +186,10 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     close();
   };
 
+  const { data: aiIntegration } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/integrations',
+    variables: { projectId },
+  });
   const { data: templates } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/templates',
     variables: { projectId },
@@ -235,15 +239,20 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
             <div>
               <SelectInput
                 label="Format"
-                onChange={(value) =>
+                onChange={(value) => {
                   setValue('format', value as FieldInfo['format'], {
                     shouldDirty: true,
-                  })
-                }
+                  });
+                  setValue('options', undefined);
+                  setValue('aiTemplateId', undefined);
+                  setValue('aiFieldTargetKeys', undefined);
+                  setValue('aiFieldAutoProcessing', undefined);
+                }}
                 options={FIELD_FORMAT_LIST.map((v) => ({
                   label: v,
                   value: v,
                   icon: FIELD_FORMAT_ICON_MAP[v],
+                  disabled: v === 'aiField' && !aiIntegration?.apiKey,
                 }))}
                 value={watch('format')}
                 disabled={isOriginalData || isDefaultField}
@@ -310,6 +319,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                       shouldDirty: true,
                     })
                   }
+                  error={formState.errors.aiTemplateId?.message}
                   required
                 />
                 <MultiSelectInput
@@ -324,6 +334,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                       shouldDirty: true,
                     })
                   }
+                  error={formState.errors.aiFieldTargetKeys?.message}
                   disabled={isDefaultField}
                   required
                 />

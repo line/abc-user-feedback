@@ -419,6 +419,10 @@ export class AIService {
     });
 
     if (this.configService.get('opensearch.use')) {
+      feedback.data[aiField.key] = {
+        status: AIPromptStatusEnum.loading,
+        message: 'Processing...',
+      };
       await this.feedbackOSService.upsertFeedbackItem({
         feedbackId: feedback.id,
         data: feedback.data,
@@ -442,7 +446,7 @@ export class AIService {
     );
     this.logger.log(`Result: ${result.content}`);
     feedback.data[aiField.key] =
-      `{"status": "${result.status}", "message": "${result.content.replace(/"/g, "'")}"}`;
+      `{"status": "${result.status}", "message": "${result.content.replace(/"/g, "'").replace(/\n/g, '')}"}`;
 
     void this.saveAIUsage(
       result.usedTokens,
@@ -457,6 +461,10 @@ export class AIService {
     });
 
     if (this.configService.get('opensearch.use')) {
+      feedback.data[aiField.key] = {
+        status: result.status,
+        message: result.content,
+      };
       await this.feedbackOSService.upsertFeedbackItem({
         feedbackId: feedback.id,
         data: feedback.data,

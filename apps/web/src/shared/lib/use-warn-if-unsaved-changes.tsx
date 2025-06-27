@@ -19,7 +19,10 @@ import { useOverlay } from '@toss/use-overlay';
 
 import { WarnIfUnsavedChangesDialog } from '../ui';
 
-const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
+const useWarnIfUnsavedChanges = (
+  hasUnsavedChanges: boolean,
+  excludePath?: string,
+) => {
   const router = useRouter();
   const overlay = useOverlay();
   const [isLoading, setIsLoading] = useState(false);
@@ -61,6 +64,8 @@ const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
   // back button and route change
   useEffect(() => {
     const handleBeforeChangeRoute = (url: string) => {
+      if (excludePath && url.includes(excludePath)) return;
+
       if (!hasUnsavedChanges || isLoading) return;
       openWarnIfUnsavedChangesDialog(url);
 

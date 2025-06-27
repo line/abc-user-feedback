@@ -131,6 +131,14 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             matchType: ['CONTAINS', 'IS'],
           };
         }
+        if (field.format === 'aiField') {
+          return {
+            key: field.key,
+            name: field.name,
+            format: 'string',
+            matchType: ['CONTAINS'],
+          };
+        }
       })
       .filter((v) => !!v?.key) as TableFilterField[];
   }, [channelData]);

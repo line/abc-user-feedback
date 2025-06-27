@@ -27,6 +27,7 @@ import {
   SettingAlert,
   useOAIMutation,
   useOAIQuery,
+  usePermissions,
   useWarnIfUnsavedChanges,
 } from '@/shared';
 import { aiSchema, AiSettingForm } from '@/entities/ai';
@@ -46,9 +47,9 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
   const methods = useForm<AI>({
     resolver: zodResolver(aiSchema),
     defaultValues: {
+      provider: 'OPEN_AI',
       endpointUrl: '',
       systemPrompt: '',
-      provider: 'OPEN_AI',
       notificationThreshold: null,
       tokenThreshold: null,
     },
@@ -135,8 +136,14 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
 
 export const AISettingFormButton = () => {
   const { formId, isPending, isDirty } = useAISettingFormStore();
+  const perms = usePermissions();
   return (
-    <Button form={formId} type="submit" loading={isPending} disabled={!isDirty}>
+    <Button
+      form={formId}
+      type="submit"
+      loading={isPending}
+      disabled={!isDirty || !perms.includes('generative_ai_update')}
+    >
       저장
     </Button>
   );

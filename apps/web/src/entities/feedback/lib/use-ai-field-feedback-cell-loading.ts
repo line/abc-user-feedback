@@ -13,24 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { create } from 'zustand';
 
-import { z } from 'zod';
-
-export const aiSchema = z.object({
-  provider: z.enum(['OPEN_AI', 'GEMINI']),
-  apiKey: z.string().trim().min(1, { message: 'API Key is required' }),
-  endpointUrl: z.string().trim(),
-  systemPrompt: z
-    .string()
-    .trim()
-    .max(1000, { message: 'System prompt must be less than 1000 characters' }),
-  tokenThreshold: z.number().nullable(),
-  notificationThreshold: z.number().nullable(),
-});
-
-export const aiTemplateSchema = z.object({
-  title: z.string().trim().min(1).max(30),
-  prompt: z.string().trim().min(1).max(1000),
-  model: z.string(),
-  temperature: z.number(),
-});
+const useAIFIeldFeedbackCellLoading = create<{
+  loadingFeedbackIds: Set<number>;
+  setLoadingFeedbackIds: (ids: number[]) => void;
+}>((set) => ({
+  loadingFeedbackIds: new Set(),
+  setLoadingFeedbackIds: (ids) => set({ loadingFeedbackIds: new Set(ids) }),
+}));
+export default useAIFIeldFeedbackCellLoading;

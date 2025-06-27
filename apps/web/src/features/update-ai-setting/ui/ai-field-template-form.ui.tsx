@@ -79,11 +79,17 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
   const templateId = router.query.templateId ? +router.query.templateId : null;
 
   const { formId, setIsPending, setIsDirty } = useAITemplateFormStore();
+
+  const { data: templateData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/templates',
+    variables: { projectId },
+  });
   const { data: integrationData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/integrations',
     variables: { projectId },
     queryOptions: { enabled: !!templateId },
   });
+
   const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/templates',
     variables: { projectId },
@@ -108,6 +114,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
         });
       },
       onError(error) {
+        console.log('error: ', error);
         toast.error(error.message);
       },
     },
@@ -143,26 +150,31 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
     const original = data?.find((v) => v.id === templateId);
     methods.reset(original ?? defaultValues);
   }, [data, templateId]);
-  useWarnIfUnsavedChanges(methods.formState.isDirty);
+
+  useWarnIfUnsavedChanges(
+    methods.formState.isDirty,
+    '/settings?menu=generative-ai&subMenu=field-template-form',
+  );
 
   const onSubmit = (values: AITemplate) => {
-    if (templateId)
-      updateTemplate({
-        ...values,
-        templateId,
-        temperature:
-          integrationData?.provider === 'GEMINI' ?
-            values.temperature * 2
-          : values.temperature,
+    if (
+      templateData?.some((v) => v.title === values.title && v.id !== templateId)
+    ) {
+      methods.setError('title', {
+        type: 'manual',
+        message: '이미 존재하는 템플릿 이름입니다.',
       });
-    else
-      createTemplate({
-        ...values,
-        temperature:
-          integrationData?.provider === 'GEMINI' ?
-            values.temperature * 2
-          : values.temperature,
-      });
+      return;
+    }
+    const input = {
+      ...values,
+      temperature:
+        integrationData?.provider === 'GEMINI' ?
+          values.temperature * 2
+        : values.temperature,
+    };
+    if (templateId) updateTemplate({ ...input, templateId });
+    else createTemplate(input);
   };
 
   return (

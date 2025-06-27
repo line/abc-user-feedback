@@ -28,7 +28,12 @@ import {
 
 interface Props {
   placeholder?: string;
-  options: { label: string; value: string; icon?: IconNameType }[];
+  options: {
+    label: string;
+    value: string;
+    icon?: IconNameType;
+    disabled?: boolean;
+  }[];
   label?: string;
   value?: string;
   onChange?: (value?: string) => void;
@@ -80,8 +85,8 @@ const SelectInput: React.FC<Props> = (props) => {
         )}
       </SelectTrigger>
       <SelectContent className="max-h-[200px]">
-        {options.map(({ label, value, icon }) => (
-          <SelectItem key={value} value={value}>
+        {options.map(({ label, value, icon, disabled }) => (
+          <SelectItem key={value} value={value} disabled={disabled}>
             {icon && <Icon name={icon} size={16} className="mr-2" />}
             {label}
           </SelectItem>
