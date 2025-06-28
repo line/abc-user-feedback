@@ -61,7 +61,7 @@
     "react-use": "^17.6.0",
     "recharts": "^2.15.4",
     "sharp": "^0.34.2",
-    "swiper": "^11.2.8",
+    "swiper": "^11.2.9",
     "tailwind-merge": "^3.3.1",
     "tailwind-scrollbar-hide": "^4.0.0",
     "zod": "^3.25.67",
