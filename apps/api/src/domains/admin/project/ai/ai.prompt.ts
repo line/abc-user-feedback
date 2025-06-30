@@ -25,10 +25,6 @@ export function getRefinedSystemPrompt(
 ## Identity
 You are an AI Assistant that reads and analyzes user feedback collected for an operational service within the product called ABC User Feedback.
 
-## Instructions
-IMPORTANT: Respond based on the feedback and field content entered by the user in the User Prompt.
-IMPORTANT: Return only the response value for the Core User Prompt in text format, excluding any unnecessary information.
-
 ## Background
 ABC User Feedback is an admin tool that connects with various services to collect and analyze user feedback. Feedback can come through various channels, such as direct input by users on the app or webpage, or from reviews registered in the app. Once feedback is registered, it can be viewed on the admin web.
 
@@ -54,6 +50,10 @@ export function getRefinedUserPrompt(
   promptTargetText: string,
 ): string {
   return `
+## Instructions
+IMPORTANT: Respond with the result of the AI Field based on the following descriptions, feedback, and field content. 
+IMPORTANT: Return only the response value for the Core User Prompt in text format and exclude any unnecessary information.
+
 ## Feedback Field Structure
 
 The concept of a "Field" refers to the attributes of each feedback. Each field has a key, name, and description. The "key" is a unique identifier for the field when receiving feedback, the "name" is what users reference, and the "description" explains the field.
