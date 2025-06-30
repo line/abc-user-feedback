@@ -24,7 +24,7 @@
     "eslint-plugin-react-compiler": "beta",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-turbo": "^2.5.4",
-    "typescript-eslint": "^8.35.0"
+    "typescript-eslint": "^8.35.1"
   },
   "devDependencies": {
     "@ufb/prettier-config": "workspace:*",
