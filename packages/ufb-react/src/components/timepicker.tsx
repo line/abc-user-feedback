@@ -14,10 +14,7 @@
  * under the License.
  */
 import * as React from 'react';
-import { useImperativeHandle } from 'react';
 
-import { cn } from '../lib/utils';
-import { Icon } from './icon';
 import type { TextInputProps } from './input';
 import { InputBox, InputField, TextInput } from './input';
 import {
@@ -35,6 +32,7 @@ interface PeriodSelectorProps {
   onDateChange?: (date: Date | undefined) => void;
   onRightFocus?: () => void;
   onLeftFocus?: () => void;
+  className?: string;
 }
 
 const TimePeriodSelect = React.forwardRef<
@@ -42,7 +40,15 @@ const TimePeriodSelect = React.forwardRef<
   PeriodSelectorProps
 >(
   (
-    { period, setPeriod, date, onDateChange, onLeftFocus, onRightFocus },
+    {
+      period,
+      setPeriod,
+      date,
+      onDateChange,
+      onLeftFocus,
+      onRightFocus,
+      className,
+    },
     ref,
   ) => {
     const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -77,8 +83,8 @@ const TimePeriodSelect = React.forwardRef<
         onValueChange={(value: Period) => handleValueChange(value)}
       >
         <SelectTrigger
+          className={className}
           ref={ref}
-          className="min-w-[4.375rem]"
           onKeyDown={handleKeyDown}
         >
           <SelectValue />
@@ -184,7 +190,7 @@ const TimePickerInput = React.forwardRef<
     };
 
     return (
-      <InputField className={cn('w-12', className)}>
+      <InputField className={className}>
         <InputBox>
           <TextInput
             ref={ref}
@@ -211,111 +217,6 @@ const TimePickerInput = React.forwardRef<
 );
 
 TimePickerInput.displayName = 'TimePickerInput';
-
-interface TimePickerProps {
-  date?: Date | null;
-  onChange?: (date: Date | undefined) => void;
-  hourCycle?: 12 | 24;
-  /**
-   * Determines the smallest unit that is displayed in the datetime picker.
-   * Default is 'second'.
-   * */
-  granularity?: Granularity;
-}
-
-interface TimePickerRef {
-  minuteRef: HTMLInputElement | null;
-  hourRef: HTMLInputElement | null;
-  secondRef: HTMLInputElement | null;
-}
-
-const TimePicker = React.forwardRef<TimePickerRef, TimePickerProps>(
-  ({ date, onChange, hourCycle = 24, granularity = 'second' }, ref) => {
-    const minuteRef = React.useRef<HTMLInputElement>(null);
-    const hourRef = React.useRef<HTMLInputElement>(null);
-    const secondRef = React.useRef<HTMLInputElement>(null);
-    const periodRef = React.useRef<HTMLButtonElement>(null);
-    const [period, setPeriod] = React.useState<Period>(
-      date && date.getHours() >= 12 ? 'PM' : 'AM',
-    );
-
-    useImperativeHandle(
-      ref,
-      () => ({
-        minuteRef: minuteRef.current,
-        hourRef: hourRef.current,
-        secondRef: secondRef.current,
-        periodRef: periodRef.current,
-      }),
-      [minuteRef, hourRef, secondRef],
-    );
-    return (
-      <div className="flex items-center justify-center gap-2">
-        <label
-          htmlFor="datetime-picker-hour-input"
-          className="flex cursor-pointer items-center"
-        >
-          <Icon name="RiTimeLine" size={16} />
-        </label>
-        <TimePickerInput
-          picker={hourCycle === 24 ? 'hours' : '12hours'}
-          date={date}
-          id="datetime-picker-hour-input"
-          onDateChange={onChange}
-          ref={hourRef}
-          period={period}
-          onRightFocus={() => minuteRef.current?.focus()}
-        />
-        {(granularity === 'minute' || granularity === 'second') && (
-          <>
-            :
-            <TimePickerInput
-              picker="minutes"
-              date={date}
-              onDateChange={onChange}
-              ref={minuteRef}
-              onLeftFocus={() => hourRef.current?.focus()}
-              onRightFocus={() => secondRef.current?.focus()}
-            />
-          </>
-        )}
-        {granularity === 'second' && (
-          <>
-            :
-            <TimePickerInput
-              picker="seconds"
-              date={date}
-              onDateChange={onChange}
-              ref={secondRef}
-              onLeftFocus={() => minuteRef.current?.focus()}
-              onRightFocus={() => periodRef.current?.focus()}
-            />
-          </>
-        )}
-        {hourCycle === 12 && (
-          <TimePeriodSelect
-            period={period}
-            setPeriod={setPeriod}
-            date={date}
-            onDateChange={(date) => {
-              onChange?.(date);
-              if (date && date.getHours() >= 12) {
-                setPeriod('PM');
-              } else {
-                setPeriod('AM');
-              }
-            }}
-            ref={periodRef}
-            onLeftFocus={() => secondRef.current?.focus()}
-          />
-        )}
-      </div>
-    );
-  },
-);
-TimePicker.displayName = 'TimePicker';
-
-type Granularity = 'hour' | 'minute' | 'second';
 
 // ---------- utils start ----------
 /**
@@ -432,7 +333,7 @@ function set12Hours(date: Date, value: string, period: Period) {
 }
 
 type TimePickerType = 'minutes' | 'seconds' | 'hours' | '12hours';
-type Period = 'AM' | 'PM';
+export type Period = 'AM' | 'PM';
 
 function setDateByType(
   date: Date,
@@ -518,5 +419,5 @@ function display12HourValue(hours: number) {
 
 // ---------- utils end ----------
 
-export { TimePicker, TimePickerInput, TimePeriodSelect };
-export type { TimePickerProps, TimePickerInputProps, PeriodSelectorProps };
+export { TimePickerInput, TimePeriodSelect };
+export type { TimePickerInputProps, PeriodSelectorProps };

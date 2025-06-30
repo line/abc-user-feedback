@@ -28,6 +28,7 @@ interface IconProps {
   size?: number | string;
   className?: string;
   onClick?: React.MouseEventHandler<SVGSVGElement>;
+  style?: React.CSSProperties;
 }
 
 const Icon: React.FC<IconProps> = ({
@@ -41,7 +42,6 @@ const Icon: React.FC<IconProps> = ({
   if (!name) {
     return <></>;
   }
-
   return React.createElement(Icons[name], {
     color,
     size,

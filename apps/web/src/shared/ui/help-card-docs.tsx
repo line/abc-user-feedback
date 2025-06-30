@@ -31,23 +31,25 @@ const urlMap: Record<I18nKey, string> = {
 };
 
 interface IProps {
-  i18nKey: I18nKey;
+  i18nKey?: I18nKey;
 }
 
 const HelpCardDocs: React.FC<IProps> = ({ i18nKey }) => {
   return (
     <span>
-      <Trans
-        i18nKey={i18nKey}
-        components={{
-          docs: (
-            <span
-              className="text-tint-blue mr-1 cursor-pointer"
-              onClick={() => window.open(urlMap[i18nKey], '_blank')}
-            />
-          ),
-        }}
-      />
+      {i18nKey ?
+        <Trans
+          i18nKey={i18nKey}
+          components={{
+            docs: (
+              <span
+                className="text-tint-blue mr-1 cursor-pointer"
+                onClick={() => window.open(urlMap[i18nKey], '_blank')}
+              />
+            ),
+          }}
+        />
+      : '도움말'}
     </span>
   );
 };

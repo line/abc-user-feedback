@@ -217,15 +217,6 @@
     "sign-up-mgmt": "Login Management",
     "user-mgmt": "User Management"
   },
-  "project-setting-menu": {
-    "project-info": "Project Information",
-    "member-mgmt": "Member Management",
-    "role-mgmt": "Role Management",
-    "api-key-mgmt": "API Key Management",
-    "issue-tracker-mgmt": "Issue Tracker Management",
-    "webhook-integration": "Webhook Integration",
-    "delete-project": "Delete Project"
-  },
   "channel-setting-menu": {
     "channel-info": "Channel Information",
     "field-mgmt": "Field Management",
@@ -308,7 +299,7 @@
       "api-key-mgmt": "API Key Management",
       "issue-tracker-mgmt": "Issue Tracker Management",
       "webhook-integration": "Webhook Integration",
-      "delete-project": "Delete Project"
+      "generative-ai-setting": "Generative AI Integration"
     },
     "channel-setting-menu": {
       "channel-info": "Channel Information",

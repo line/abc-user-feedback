@@ -16,7 +16,9 @@
 
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsString } from 'class-validator';
+
+import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 
 export class GetAIIntegrationResponseDto {
   @ApiProperty()
@@ -24,10 +26,10 @@ export class GetAIIntegrationResponseDto {
   @Expose()
   id: number;
 
-  @ApiProperty()
-  @IsString()
   @Expose()
-  provider: string;
+  @ApiProperty({ enum: AIProvidersEnum, enumName: 'AIProvidersEnum' })
+  @IsEnum(AIProvidersEnum)
+  provider: AIProvidersEnum;
 
   @ApiProperty()
   @IsString()
@@ -44,12 +46,12 @@ export class GetAIIntegrationResponseDto {
   @Expose()
   systemPrompt: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, nullable: true })
   @IsNumber()
   @Expose()
   tokenThreshold: number | null;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, nullable: true })
   @IsNumber()
   @Expose()
   notificationThreshold: number | null;

@@ -24,7 +24,7 @@ class AIModel {
 }
 
 export class GetAIIntegrationsModelsResponseDto {
-  @ApiProperty()
+  @ApiProperty({ type: [AIModel] })
   @Expose()
   models: AIModel[];
 

@@ -980,6 +980,182 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/admin/projects/{projectId}/ai/validate': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AIController_validateAPIKey'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/integrations': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['AIController_getIntegration'];
+    put: operations['AIController_updateIntegration'];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/integrations/models': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['AIController_getModels'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/templates': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['AIController_getTemplates'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/templates/default': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AIController_createDefaultTemplates'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/templates/new': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AIController_createNewTemplate'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/templates/{templateId}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations['AIController_update'];
+    post?: never;
+    delete: operations['AIController_delete'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/process': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AIController_processAIFields'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/process/field': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AIController_processAIField'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/playground/test': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AIController_getPlaygroundResult'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/usages': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['AIController_getUsages'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1134,7 +1310,9 @@ export interface components {
       | 'channel_field_read'
       | 'channel_field_update'
       | 'channel_image_read'
-      | 'channel_image_update';
+      | 'channel_image_update'
+      | 'generative_ai_read'
+      | 'generative_ai_update';
     RoleProjectDto: {
       id: number;
       createdAt: string;
@@ -1504,7 +1682,8 @@ export interface components {
       | 'select'
       | 'multiSelect'
       | 'date'
-      | 'images';
+      | 'images'
+      | 'aiField';
     /** @enum {string} */
     FieldPropertyEnum: 'READ_ONLY' | 'EDITABLE';
     /** @enum {string} */
@@ -1522,6 +1701,9 @@ export interface components {
       property: components['schemas']['FieldPropertyEnum'];
       status: components['schemas']['FieldStatusEnum'];
       order: number | null;
+      aiTemplateId?: number | null;
+      aiFieldTargetKeys?: string[] | null;
+      aiFieldAutoProcessing?: boolean | null;
       options?: components['schemas']['CreateChannelRequestFieldSelectOptionDto'][];
     };
     CreateChannelRequestDto: {
@@ -1572,7 +1754,8 @@ export interface components {
         | 'select'
         | 'multiSelect'
         | 'date'
-        | 'images';
+        | 'images'
+        | 'aiField';
       /** @enum {string} */
       property: 'READ_ONLY' | 'EDITABLE';
       /** @enum {string} */
@@ -1586,6 +1769,9 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
       options: components['schemas']['FindFieldsResponseSelectOptionDto'][];
+      aiTemplateId: number | null;
+      aiFieldTargetKeys: string[] | null;
+      aiFieldAutoProcessing: boolean;
     };
     FindChannelByIdResponseDto: {
       id: number;
@@ -1613,6 +1799,9 @@ export interface components {
       property: components['schemas']['FieldPropertyEnum'];
       status: components['schemas']['FieldStatusEnum'];
       order: number | null;
+      aiTemplateId?: number | null;
+      aiFieldTargetKeys?: string[] | null;
+      aiFieldAutoProcessing?: boolean | null;
       options?: components['schemas']['CreateChannelRequestFieldSelectOptionDto'][];
       id?: number;
     };
@@ -1990,6 +2179,94 @@ export interface components {
     };
     UpdateWebhookResponseDto: {
       id: number;
+    };
+    /** @enum {string} */
+    AIProvidersEnum: 'OPEN_AI' | 'GEMINI';
+    ValidteAPIKeyRequestDto: {
+      provider: components['schemas']['AIProvidersEnum'];
+      apiKey: string;
+      endpointUrl: string | null;
+    };
+    ValidateAPIKeyResponseDto: {
+      valid: boolean;
+      error?: string;
+    };
+    GetAIIntegrationResponseDto: {
+      id: number;
+      provider: components['schemas']['AIProvidersEnum'];
+      apiKey: string;
+      endpointUrl: string;
+      systemPrompt: string;
+      tokenThreshold: number | null;
+      notificationThreshold: number | null;
+    };
+    UpdateAIIntegrationsRequestDto: {
+      provider: components['schemas']['AIProvidersEnum'];
+      apiKey: string;
+      endpointUrl: string;
+      systemPrompt: string;
+      tokenThreshold: number | null;
+      notificationThreshold: number | null;
+    };
+    CreateAIIntegrationsResponseDto: {
+      id: number;
+    };
+    AIModel: {
+      id: string;
+    };
+    GetAIIntegrationsModelsResponseDto: {
+      models: components['schemas']['AIModel'][];
+    };
+    GetAITemplatesResponseDto: {
+      id: number;
+      title: string;
+      prompt: string;
+      model: string;
+      temperature: number;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    CreateAITemplateRequestDto: {
+      title: string;
+      model: string;
+      temperature: number;
+      prompt: string;
+    };
+    CreateAITemplateResponseDto: {
+      id: number;
+    };
+    ProcessAIFieldRequestDto: {
+      feedbackIds: number[];
+    };
+    ProcessSingleAIFieldRequestDto: {
+      feedbackId: number;
+      aiFieldId: number;
+    };
+    TemporaryField: {
+      name: string;
+      description: string;
+      value: string;
+    };
+    GetAIPlaygroundResultRequestDto: {
+      templatePrompt: string;
+      model: string;
+      temperature: number;
+      temporaryFields: components['schemas']['TemporaryField'][];
+    };
+    GetAIPlaygroundResultResponseDto: {
+      result: string;
+    };
+    /** @enum {string} */
+    UsageCategoryEnum: 'AI_FIELD' | 'ISSUE_RECOMMEND';
+    GetAIUsagesResponseDto: {
+      year: number;
+      month: number;
+      day: number;
+      category: components['schemas']['UsageCategoryEnum'];
+      provider: components['schemas']['AIProvidersEnum'];
+      usedTokens: number;
     };
   };
   responses: never;
@@ -4000,6 +4277,308 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['GetWebhookByIdResponseDto'];
+        };
+      };
+    };
+  };
+  AIController_validateAPIKey: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ValidteAPIKeyRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ValidateAPIKeyResponseDto'];
+        };
+      };
+    };
+  };
+  AIController_getIntegration: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['GetAIIntegrationResponseDto'];
+        };
+      };
+    };
+  };
+  AIController_updateIntegration: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateAIIntegrationsRequestDto'];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CreateAIIntegrationsResponseDto'];
+        };
+      };
+    };
+  };
+  AIController_getModels: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['GetAIIntegrationsModelsResponseDto'];
+        };
+      };
+    };
+  };
+  AIController_getTemplates: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['GetAITemplatesResponseDto'][];
+        };
+      };
+    };
+  };
+  AIController_createDefaultTemplates: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AIController_createNewTemplate: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateAITemplateRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CreateAITemplateResponseDto'];
+        };
+      };
+    };
+  };
+  AIController_update: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+        templateId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateAITemplateRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AIController_delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+        templateId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AIController_processAIFields: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ProcessAIFieldRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AIController_processAIField: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ProcessSingleAIFieldRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AIController_getPlaygroundResult: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['GetAIPlaygroundResultRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['GetAIPlaygroundResultResponseDto'];
+        };
+      };
+    };
+  };
+  AIController_getUsages: {
+    parameters: {
+      query: {
+        from: string;
+        to: string;
+      };
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['GetAIUsagesResponseDto'][];
         };
       };
     };

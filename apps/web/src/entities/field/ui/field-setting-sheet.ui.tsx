@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
@@ -30,11 +31,22 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
+  Switch,
   Tag,
 } from '@ufb/react';
 
 import type { FormOverlayProps } from '@/shared';
-import { DeleteDialog, SelectInput, TextInput } from '@/shared';
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  DeleteDialog,
+  MultiSelectInput,
+  SelectInput,
+  TextInput,
+  useOAIQuery,
+} from '@/shared';
 
 import { FIELD_FORMAT_ICON_MAP, FIELD_FORMAT_LIST } from '../field.constant';
 import { fieldInfoSchema } from '../field.schema';
@@ -48,6 +60,9 @@ const defaultValues: FieldInfo = {
   status: 'ACTIVE',
   property: 'READ_ONLY',
   order: 0,
+  aiFieldTargetKeys: null,
+  aiTemplateId: null,
+  aiFieldAutoProcessing: null,
 };
 
 interface IProps extends FormOverlayProps<FieldInfo> {
@@ -65,7 +80,8 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     disabledUpdate,
     disabledDelete,
   } = props;
-
+  const router = useRouter();
+  const projectId = parseInt(router.query.projectId as string, 10);
   const { t } = useTranslation();
 
   const [isSameKey, setIsSameKey] = useState(
@@ -170,6 +186,15 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     close();
   };
 
+  const { data: aiIntegration } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/integrations',
+    variables: { projectId },
+  });
+  const { data: templates } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/templates',
+    variables: { projectId },
+  });
+
   return (
     <Sheet open={isOpen} onOpenChange={close}>
       <SheetContent>
@@ -214,15 +239,20 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
             <div>
               <SelectInput
                 label="Format"
-                onChange={(value) =>
+                onChange={(value) => {
                   setValue('format', value as FieldInfo['format'], {
                     shouldDirty: true,
-                  })
-                }
+                  });
+                  setValue('options', undefined);
+                  setValue('aiTemplateId', undefined);
+                  setValue('aiFieldTargetKeys', undefined);
+                  setValue('aiFieldAutoProcessing', undefined);
+                }}
                 options={FIELD_FORMAT_LIST.map((v) => ({
                   label: v,
                   value: v,
                   icon: FIELD_FORMAT_ICON_MAP[v],
+                  disabled: v === 'aiField' && !aiIntegration?.apiKey,
                 }))}
                 value={watch('format')}
                 disabled={isOriginalData || isDefaultField}
@@ -272,6 +302,63 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                   )}
                 </div>
               )}
+            {watch('format') === 'aiField' && (
+              <>
+                <SelectInput
+                  label="AI Field Template"
+                  options={
+                    templates?.map(({ title, id }) => ({
+                      label: title,
+                      value: id.toString(),
+                    })) ?? []
+                  }
+                  disabled={isDefaultField}
+                  value={watch('aiTemplateId')?.toString()}
+                  onChange={(value) =>
+                    setValue('aiTemplateId', value ? parseInt(value) : null, {
+                      shouldDirty: true,
+                    })
+                  }
+                  error={formState.errors.aiTemplateId?.message}
+                  required
+                />
+                <MultiSelectInput
+                  label="AI Field Target"
+                  options={fieldRows.map(({ key, name }) => ({
+                    label: name,
+                    value: key,
+                  }))}
+                  value={watch('aiFieldTargetKeys') ?? []}
+                  onChange={(values) =>
+                    setValue('aiFieldTargetKeys', values, {
+                      shouldDirty: true,
+                    })
+                  }
+                  error={formState.errors.aiFieldTargetKeys?.message}
+                  disabled={isDefaultField}
+                  required
+                />
+                <Card size="sm">
+                  <CardHeader
+                    action={
+                      <Switch
+                        checked={watch('aiFieldAutoProcessing') ?? false}
+                        onCheckedChange={(checked) =>
+                          setValue('aiFieldAutoProcessing', checked, {
+                            shouldDirty: true,
+                          })
+                        }
+                      />
+                    }
+                  >
+                    <CardTitle>Auto Processing</CardTitle>
+                    <CardDescription>
+                      자동으로 AI Prompt를 적용합니다.
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </>
+            )}
             <SelectInput
               label="Property"
               options={[

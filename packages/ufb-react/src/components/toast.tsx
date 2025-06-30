@@ -30,7 +30,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           toast: 'toast alert',
           title: 'alert-title',
           description: 'alert-description',
-          loader: '',
+          loader: 'alert-loader',
           cancelButton:
             'icon-button icon-button-ghost icon-button-medium icon-button-radius-medium alert-close toast-close',
           actionButton:

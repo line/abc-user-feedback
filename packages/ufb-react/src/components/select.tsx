@@ -19,38 +19,31 @@ import { Slot, Slottable } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
 
 import { CAPTION_DEFAULT_ICON, ICON_SIZE } from '../constants';
-import type { CaptionType } from '../lib/types';
+import type { CaptionType, Size } from '../lib/types';
 import { cn } from '../lib/utils';
-import type { Size } from '../types';
 import type { IconNameType } from './icon';
 import { Icon } from './icon';
 import { ScrollArea, ScrollBar } from './scroll-area';
-import { Tag } from './tag';
 import useTheme from './use-theme';
 
-interface Item {
-  icon?: SelectItemProps['icon'];
-  children: SelectItemProps['children'];
+type SelectContextType = {
+  size: Size;
+};
+
+const SelectContext = React.createContext<SelectContextType | undefined>(
+  undefined,
+);
+
+function useSelectContext() {
+  const ctx = React.useContext(SelectContext);
+  if (!ctx) throw new Error('Select components must be used within <Select>');
+  return ctx;
 }
-interface SelectContextProps {
-  type: SelectProps['type'];
-  size?: SelectProps['size'];
-  error?: SelectProps['error'];
-  value?: SingleSelectProps['value'];
-  values?: MultipleSelectProps['values'];
-  itemByValue: Record<string, Item>;
-  setItemByValue: React.Dispatch<React.SetStateAction<Record<string, Item>>>;
+interface SelectProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> {
+  className?: string;
+  size?: Size;
 }
-const SelectContext = React.createContext<SelectContextProps>({
-  type: 'single',
-  size: undefined,
-  error: false,
-  value: undefined,
-  values: [],
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setItemByValue: () => {},
-  itemByValue: {},
-});
 
 const selectVariants = cva('select', {
   variants: {
@@ -65,179 +58,22 @@ const selectVariants = cva('select', {
   },
 });
 
-type SelectProps = {
-  type?: 'single' | 'multiple';
-  size?: Size;
-  error?: boolean;
-} & SingleSelectProps &
-  MultipleSelectProps;
-
-const Select = ({
-  type = 'single',
-  size,
-  error = false,
-  value,
-  values = [],
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  onValueChange,
-  onValuesChange,
-  ...props
-}: SelectProps) => {
+const Select = ({ size, className, ...props }: SelectProps) => {
   const { themeSize } = useTheme();
-  const [singleValue, setSingleValue] = React.useState<string | undefined>(
-    value,
-  );
-  const [multipleValues, setMultipleValues] = React.useState<string[]>(values);
-  const [itemByValue, setItemByValue] = React.useState<Record<string, Item>>(
-    {},
-  );
-
-  const handleSingleValueChange = (value: string) => {
-    setSingleValue(value);
-    onValueChange?.(value);
-  };
-
-  const handleMultipleValuesChange = (values: string[]) => {
-    setMultipleValues(values);
-    onValuesChange?.(values);
-  };
-
-  React.useEffect(() => {
-    if (singleValue === value) return;
-    setSingleValue(value);
-  }, [value]);
-
-  React.useEffect(() => {
-    if (
-      values.every((v) => multipleValues.includes(v)) &&
-      multipleValues.every((v) => values.includes(v))
-    )
-      return;
-    setMultipleValues(values);
-  }, [values]);
   return (
-    <SelectContext.Provider
-      value={{
-        type,
-        size: size ?? themeSize,
-        value: singleValue,
-        values: multipleValues,
-        error,
-        itemByValue,
-        setItemByValue,
-      }}
-    >
-      <div className={cn(selectVariants({ size: size ?? themeSize }))}>
-        {type === 'single' ?
-          <SingleSelect
-            {...props}
-            value={singleValue}
-            onValueChange={handleSingleValueChange}
-          />
-        : <MultipleSelect
-            {...props}
-            values={multipleValues}
-            onValuesChange={handleMultipleValuesChange}
-          />
-        }
+    <SelectContext.Provider value={{ size: size ?? themeSize }}>
+      <div
+        className={cn(selectVariants({ size: size ?? themeSize, className }))}
+      >
+        <SelectPrimitive.Root {...props}></SelectPrimitive.Root>
       </div>
     </SelectContext.Provider>
   );
 };
-Select.displayName = 'Select';
-
-type SingleSelectProps = React.ComponentPropsWithoutRef<
-  typeof SelectPrimitive.Root
->;
-
-const SingleSelect = SelectPrimitive.Root;
-
-type MultipleSelectProps = React.ComponentPropsWithoutRef<
-  typeof SelectPrimitive.Root
-> & {
-  values?: string[];
-  onValuesChange?: (values: string[]) => void;
-};
-const MultipleSelect = ({
-  values = [],
-  onValuesChange,
-  ...props
-}: MultipleSelectProps) => {
-  return (
-    <SelectPrimitive.Root
-      value="null"
-      onValueChange={(value) => {
-        onValuesChange?.(
-          values.includes(value) ?
-            values.filter((curr) => curr !== value)
-          : values.concat(value),
-        );
-      }}
-      {...props}
-    />
-  );
-};
-MultipleSelect.displayName = 'MultipleSelect';
 
 const SelectGroup = SelectPrimitive.Group;
 
-const SelectValue = ({
-  ...props
-}: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>) => {
-  const { type = 'single' } = React.useContext(SelectContext);
-  return type === 'single' ?
-      <SingleSelectValue {...props} />
-    : <MultipleSelectValue {...props} />;
-};
-
-const SingleSelectValue = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Value>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>
->(({ placeholder }, ref) => {
-  const { size, itemByValue, value = '' } = React.useContext(SelectContext);
-  const { themeSize } = useTheme();
-
-  return (
-    <SelectPrimitive.Value ref={ref} placeholder={placeholder}>
-      <SelectPrimitive.Icon asChild>
-        <Icon
-          name={itemByValue[value]?.icon}
-          size={ICON_SIZE[size ?? themeSize]}
-        />
-      </SelectPrimitive.Icon>
-      <Slottable>{itemByValue[value]?.children}</Slottable>
-    </SelectPrimitive.Value>
-  );
-});
-SingleSelectValue.displayName = 'SingleSelectValue';
-
-const MultipleSelectValue = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Value>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>
->(({ placeholder, ...props }, ref) => {
-  const { size, values = [], itemByValue } = React.useContext(SelectContext);
-
-  const { themeSize } = useTheme();
-
-  return (
-    <SelectPrimitive.Value ref={ref} placeholder={placeholder} {...props}>
-      {values.length > 0 ?
-        values.map((value, index) => (
-          <Tag
-            key={index}
-            variant="outline"
-            size={size ?? themeSize}
-            className="select-tag"
-          >
-            {itemByValue[value]?.children}
-            <Icon name={itemByValue[value]?.icon} />
-          </Tag>
-        ))
-      : placeholder}
-    </SelectPrimitive.Value>
-  );
-});
-MultipleSelectValue.displayName = 'MultipleSelectValue';
+const SelectValue = SelectPrimitive.Value;
 
 const selectTriggerVariants = cva('select-trigger', {
   variants: {
@@ -259,55 +95,60 @@ const selectTriggerVariants = cva('select-trigger', {
 
 interface SelectTriggerProps
   extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
-  icon?: IconNameType;
+  error?: boolean;
 }
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   SelectTriggerProps
->(({ className, icon, children, ...props }, ref) => {
-  const { size, error } = React.useContext(SelectContext);
-  const { themeSize } = useTheme();
+>(({ error, className, children, ...props }, ref) => {
+  const { size } = useSelectContext();
+
   return (
     <SelectPrimitive.Trigger
       ref={ref}
-      className={cn(
-        selectTriggerVariants({ size: size ?? themeSize, error, className }),
-      )}
+      className={cn(selectTriggerVariants({ size, error, className }))}
       {...props}
     >
-      {icon && <Icon name={icon} size={ICON_SIZE[size ?? themeSize]} />}
       <Slottable>{children}</Slottable>
       <SelectPrimitive.Icon asChild>
-        <Icon name="RiArrowDownSLine" size={ICON_SIZE[size ?? themeSize]} />
+        <Icon name="RiArrowDownSLine" size={ICON_SIZE[size]} />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
 });
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
+interface SelectContentProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> {
+  maxHeight?: string;
+}
+
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> & {
-    maxHeight?: string;
-  }
->(({ maxHeight, className, children, position = 'popper', ...props }, ref) => (
-  <SelectPrimitive.Portal>
-    <SelectPrimitive.Content
-      ref={ref}
-      className={cn('select-content mt-1', className)}
-      position={position}
-      {...props}
-    >
-      <SelectPrimitive.Viewport className={cn('select-viewport')}>
-        <ScrollArea maxHeight={maxHeight}>
-          {children}
-          <ScrollBar />
-        </ScrollArea>
-      </SelectPrimitive.Viewport>
-    </SelectPrimitive.Content>
-  </SelectPrimitive.Portal>
-));
+  SelectContentProps
+>(
+  (
+    { maxHeight = 'auto', className, children, position = 'popper', ...props },
+    ref,
+  ) => (
+    <SelectPrimitive.Portal>
+      <SelectPrimitive.Content
+        ref={ref}
+        className={cn('select-content', className)}
+        position={position}
+        {...props}
+      >
+        <SelectPrimitive.Viewport className={cn('select-viewport')}>
+          <ScrollArea maxHeight={maxHeight}>
+            {children}
+            <ScrollBar />
+          </ScrollArea>
+        </SelectPrimitive.Viewport>
+      </SelectPrimitive.Content>
+    </SelectPrimitive.Portal>
+  ),
+);
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
 const SelectGroupLabel = React.forwardRef<
@@ -320,7 +161,7 @@ const SelectGroupLabel = React.forwardRef<
     {...props}
   />
 ));
-SelectGroupLabel.displayName = SelectPrimitive.Label.displayName;
+SelectGroupLabel.displayName = 'SelectGroupLabel';
 
 const selectItemVariants = cva('select-item', {
   variants: {
@@ -346,98 +187,36 @@ const selectItemCheckVariants = cva('select-item-check', {
   },
 });
 
-type SelectItemProps = SingleSelectItemProps & MultipleSelectItemProps;
-
-const SelectItem = ({ ...props }: SelectItemProps) => {
-  const { type = 'single' } = React.useContext(SelectContext);
-
-  return type === 'single' ?
-      <SingleSelectItem {...props} />
-    : <MultipleSelectItem {...props} />;
-};
-SelectItem.displayName = 'SelectItem';
-
-type SingleSelectItemProps = React.ComponentPropsWithoutRef<
+type SelectItemProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Item
-> & {
-  icon?: IconNameType;
-  children: React.ReactNode;
-};
-const SingleSelectItem = React.forwardRef<
+>;
+const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
-  SingleSelectItemProps
->(({ value, className, icon, children, ...props }, ref) => {
-  const { setItemByValue } = React.useContext(SelectContext);
-
-  React.useEffect(() => {
-    setItemByValue((prev) => ({ ...prev, [value]: { icon, children } }));
-  }, [children]);
-
-  return (
-    <SelectPrimitive.Item
-      ref={ref}
-      value={value}
+  SelectItemProps
+>(({ className, children, ...props }, ref) => (
+  <SelectPrimitive.Item
+    ref={ref}
+    className={cn(
+      selectItemVariants({
+        check: typeof children === 'string' ? 'left' : 'right',
+        className,
+      }),
+    )}
+    {...props}
+  >
+    <SelectPrimitive.ItemIndicator
       className={cn(
-        selectItemVariants({ check: icon ? 'right' : 'left', className }),
+        selectItemCheckVariants({
+          check: typeof children === 'string' ? 'left' : 'right',
+        }),
       )}
-      {...props}
     >
-      <SelectPrimitive.ItemIndicator
-        className={cn(
-          selectItemCheckVariants({ check: icon ? 'right' : 'left' }),
-        )}
-      >
-        <Icon name="RiCheckLine" size={20} />
-      </SelectPrimitive.ItemIndicator>
-      {icon && <Icon name={icon} size={16} className="select-item-icon" />}
-      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-    </SelectPrimitive.Item>
-  );
-});
-SingleSelectItem.displayName = SelectPrimitive.Item.displayName;
-
-type MultipleSelectItemProps = React.ComponentPropsWithoutRef<
-  typeof SelectPrimitive.Item
-> & {
-  icon?: IconNameType;
-  values?: string[];
-  children: React.ReactNode;
-};
-const MultipleSelectItem = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Item>,
-  MultipleSelectItemProps
->(({ icon, value, className, children, ...props }, ref) => {
-  const { values = [], setItemByValue } = React.useContext(SelectContext);
-  const isSelected = values.includes(value);
-
-  React.useEffect(() => {
-    setItemByValue((prev) => ({ ...prev, [value]: { icon, children } }));
-  }, [children]);
-
-  return (
-    <SelectPrimitive.Item
-      ref={ref}
-      value={value}
-      className={cn(
-        selectItemVariants({ check: icon ? 'right' : 'left', className }),
-      )}
-      {...props}
-    >
-      {isSelected && (
-        <span
-          className={cn(
-            selectItemCheckVariants({ check: icon ? 'right' : 'left' }),
-          )}
-        >
-          <Icon name="RiCheckLine" size={20} />
-        </span>
-      )}
-      {icon && <Icon name={icon} size={16} className="select-item-icon" />}
-      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-    </SelectPrimitive.Item>
-  );
-});
-MultipleSelectItem.displayName = 'MultipleSelectItem';
+      <Icon name="RiCheckLine" size={16} />
+    </SelectPrimitive.ItemIndicator>
+    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+  </SelectPrimitive.Item>
+));
+SelectItem.displayName = SelectPrimitive.Item.displayName;
 
 const SelectSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
@@ -460,7 +239,7 @@ const SelectLabel = React.forwardRef<
     <strong ref={ref} className={cn('select-label', className)} {...rest} />
   );
 });
-SelectLabel.displayName = 'SelectLabel';
+SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
 const selectCaptionVariants = cva('select-caption', {
   variants: {
@@ -479,7 +258,6 @@ const selectCaptionVariants = cva('select-caption', {
 interface SelectCaptionProps extends React.ComponentPropsWithoutRef<'span'> {
   variant?: CaptionType;
   icon?: IconNameType;
-  size?: Size;
   asChild?: boolean;
 }
 
@@ -488,13 +266,12 @@ const SelectCaption = React.forwardRef<HTMLElement, SelectCaptionProps>(
     const {
       icon = undefined,
       variant = 'default',
-      size,
       className,
       children,
       asChild,
       ...rest
     } = props;
-    const { themeSize } = useTheme();
+    const { size } = useSelectContext();
     const Comp = asChild ? Slot : 'span';
 
     return (
@@ -505,7 +282,7 @@ const SelectCaption = React.forwardRef<HTMLElement, SelectCaptionProps>(
       >
         <Icon
           name={icon ?? CAPTION_DEFAULT_ICON[variant]}
-          size={ICON_SIZE[size ?? themeSize]}
+          size={ICON_SIZE[size]}
           className="select-caption-icon"
         />
         <Slottable>{children}</Slottable>
@@ -517,13 +294,13 @@ SelectCaption.displayName = 'SelectCaption';
 
 export {
   Select,
+  SelectLabel,
+  SelectCaption,
   SelectGroup,
   SelectValue,
   SelectTrigger,
   SelectContent,
   SelectGroupLabel,
-  SelectLabel,
   SelectItem,
   SelectSeparator,
-  SelectCaption,
 };

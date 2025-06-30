@@ -51,3 +51,5 @@ export { default as SheetDetailTable } from './sheet-detail-table.ui';
 export * from './table-filter-popover';
 export { default as NoProjectDialogInProjectCreation } from './no-project-dialog-in-project-creation.ui';
 export { default as InfiniteScrollArea } from './infinite-scroll-area.ui';
+export * from './card.ui';
+export * from './slider.ui';

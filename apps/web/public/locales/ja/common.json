@@ -217,15 +217,6 @@
     "sign-up-mgmt": "Login管理",
     "user-mgmt": "User管理"
   },
-  "project-setting-menu": {
-    "project-info": "Project情報",
-    "member-mgmt": "Member管理",
-    "role-mgmt": "Role管理",
-    "api-key-mgmt": "API Key管理",
-    "issue-tracker-mgmt": "Issue Tracker管理",
-    "webhook-integration": "Webhook連動",
-    "delete-project": "Project削除"
-  },
   "channel-setting-menu": {
     "channel-info": "Channel情報",
     "field-mgmt": "Field管理",
@@ -307,7 +298,7 @@
       "api-key-mgmt": "API Key管理",
       "issue-tracker-mgmt": "Issue Tracker管理",
       "webhook-integration": "Webhook連携",
-      "delete-project": "Project削除"
+      "generative-ai-setting": "Generative AI設定"
     },
     "channel-setting-menu": {
       "channel-info": "Channel情報",

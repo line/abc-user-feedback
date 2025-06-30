@@ -13,10 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-declare module '*.svg' {
-  import type * as React from 'react';
-
-  export const ReactComponent: React.FunctionComponent<
-    React.ComponentProps<'svg'> & { title?: string }
-  >;
-}
+export { default as useCheckAIUsageLimit } from './use-check-ai-usage-limit';

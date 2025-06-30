@@ -28,6 +28,7 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -61,6 +62,7 @@ export class AIController {
   constructor(private readonly aiService: AIService) {}
 
   @ApiOkResponse({ type: ValidateAPIKeyResponseDto })
+  @ApiParam({ name: 'projectId', type: Number })
   @Post('validate')
   async validateAPIKey(@Body() body: ValidteAPIKeyRequestDto) {
     return this.aiService.validateAPIKey(
@@ -71,7 +73,7 @@ export class AIController {
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)
-  @ApiCreatedResponse({ type: GetAIIntegrationResponseDto })
+  @ApiOkResponse({ type: GetAIIntegrationResponseDto })
   @Get('integrations')
   async getIntegration(@Param('projectId', ParseIntPipe) projectId: number) {
     return GetAIIntegrationResponseDto.transform(
@@ -103,7 +105,7 @@ export class AIController {
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)
-  @ApiOkResponse({ type: GetAITemplatesResponseDto })
+  @ApiOkResponse({ type: [GetAITemplatesResponseDto] })
   @Get('templates')
   async getTemplates(@Param('projectId', ParseIntPipe) projectId: number) {
     return GetAITemplatesResponseDto.transform(
@@ -154,6 +156,7 @@ export class AIController {
 
   @RequirePermission(PermissionEnum.generative_ai_read)
   @ApiOkResponse()
+  @ApiParam({ name: 'projectId', type: Number })
   @Post('process')
   async processAIFields(@Body() body: ProcessAIFieldRequestDto) {
     await this.aiService.processFeedbacksAIFields(body.feedbackIds);
@@ -161,6 +164,7 @@ export class AIController {
 
   @RequirePermission(PermissionEnum.generative_ai_read)
   @ApiOkResponse()
+  @ApiParam({ name: 'projectId', type: Number })
   @Post('process/field')
   async processAIField(@Body() body: ProcessSingleAIFieldRequestDto) {
     await this.aiService.processAIField(body.feedbackId, body.aiFieldId);
@@ -182,7 +186,7 @@ export class AIController {
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)
-  @ApiOkResponse({ type: GetAIUsagesResponseDto })
+  @ApiOkResponse({ type: [GetAIUsagesResponseDto] })
   @Get('usages')
   async getUsages(
     @Param('projectId', ParseIntPipe) projectId: number,

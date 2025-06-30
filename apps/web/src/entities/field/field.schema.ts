@@ -61,6 +61,9 @@ export const fieldSchema = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
   order: z.number(),
+  aiTemplateId: z.number().nullable().optional(),
+  aiFieldTargetKeys: z.array(z.string()).nullable().optional(),
+  aiFieldAutoProcessing: z.boolean().nullable().optional(),
 });
 
 export const fieldInfoSchema = fieldSchema
@@ -73,6 +76,9 @@ export const fieldInfoSchema = fieldSchema
     status: true,
     options: true,
     order: true,
+    aiTemplateId: true,
+    aiFieldTargetKeys: true,
+    aiFieldAutoProcessing: true,
   })
   .merge(
     z.object({
@@ -86,4 +92,28 @@ export const fieldInfoSchema = fieldSchema
         )
         .optional(),
     }),
+  )
+  .refine(
+    (data) =>
+      data.format === 'select' || data.format === 'multiSelect' ?
+        !!data.options && data.options.length > 0
+      : true,
+    {
+      path: ['options'],
+      message: 'Option is required.',
+    },
+  )
+  .refine((data) => (data.format === 'aiField' ? !!data.aiTemplateId : true), {
+    path: ['aiTemplateId'],
+    message: 'AI Template is required for AI Field format.',
+  })
+  .refine(
+    (data) =>
+      data.format === 'aiField' ?
+        !!data.aiFieldTargetKeys && data.aiFieldTargetKeys.length > 0
+      : true,
+    {
+      path: ['aiFieldTargetKeys'],
+      message: 'AI Field Targets are required for AI Field format.',
+    },
   );

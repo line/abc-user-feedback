@@ -32,7 +32,7 @@ export class GetAITemplatesResponseDto {
 
   @ApiProperty()
   @Expose()
-  model: string | null;
+  model: string;
 
   @ApiProperty()
   @Expose()

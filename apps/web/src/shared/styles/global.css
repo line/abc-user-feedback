@@ -34,6 +34,22 @@
   .dialog-content {
     @apply max-w-[504px];
   }
+  .mask-l-to-primary {
+    mask-image: linear-gradient(
+      to left,
+      transparent,
+      var(--bg-primary) 20%,
+      var(--bg-primary)
+    );
+  }
+  .mask-r-to-primary {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      var(--bg-primary) 20%,
+      var(--bg-primary)
+    );
+  }
 }
 
 .setting-action-buttons .button {
