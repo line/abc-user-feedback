@@ -19,8 +19,6 @@ import { useTranslation } from 'next-i18next';
 
 import { Button, Icon, Tabs, TabsList, TabsTrigger } from '@ufb/react';
 
-import { cn } from '@/shared';
-
 interface Props {
   channels: { id: number; name: string }[];
   currentChannelId: number;
@@ -89,17 +87,14 @@ const FeedbackTableChannelSelection = (props: Props) => {
   return (
     <div className="relative flex items-center overflow-auto">
       <div className="scrollbar-hide relative flex-1 overflow-auto">
-        {/* {showLeftGradient && (
-          <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-12 bg-gradient-to-r from-white to-transparent" />
-        )} */}
+        {showLeftGradient && (
+          <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-12 bg-gradient-to-r from-[var(--bg-neutral-primary)] to-transparent" />
+        )}
 
         <Tabs
           value={String(currentChannelId)}
           onValueChange={(v) => setCurrentChannelId(Number(v))}
-          className={cn('scrollbar-hide overflow-auto', {
-            'mask-l-to-primary': showRightGradient,
-            'mask-r-to-primary': showLeftGradient,
-          })}
+          className="scrollbar-hide overflow-auto"
           ref={tabsContainerRef}
         >
           <TabsList className="scrollbar-hide">
@@ -111,9 +106,7 @@ const FeedbackTableChannelSelection = (props: Props) => {
                 <TabsTrigger key={channel.id} value={String(channel.id)}>
                   {channel.name}
                   {currentChannelId === channel.id && (
-                    <span className="ml-1 font-bold">
-                      {totalItems?.toLocaleString()}
-                    </span>
+                    <span className="ml-1 font-bold">{totalItems}</span>
                   )}
                 </TabsTrigger>
               ))
@@ -121,9 +114,9 @@ const FeedbackTableChannelSelection = (props: Props) => {
           </TabsList>
         </Tabs>
 
-        {/* {showRightGradient && ( */}
-        {/* <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-12 bg-gradient-to-l from-white to-transparent" /> */}
-        {/* )} */}
+        {showRightGradient && (
+          <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-12 bg-gradient-to-l from-[var(--bg-neutral-primary)] to-transparent" />
+        )}
       </div>
 
       {showScrollButtons && (
