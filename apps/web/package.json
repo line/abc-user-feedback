@@ -71,7 +71,7 @@
     "@babel/core": "^7.27.7",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@svgr/webpack": "^8.1.0",
-    "@swc/core": "^1.12.7",
+    "@swc/core": "^1.12.9",
     "@swc/jest": "^0.2.38",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
