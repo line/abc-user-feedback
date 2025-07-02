@@ -29,7 +29,7 @@ import {
   FieldPropertyEnum,
   FieldStatusEnum,
 } from '../../../../common/enums';
-import { AITemplatesEntity } from '../../project/ai/ai-templates.entity';
+import { AIFieldTemplatesEntity } from '../../project/ai/ai-field-templates.entity';
 import { ChannelEntity } from '../channel/channel.entity';
 import { OptionEntity } from '../option/option.entity';
 
@@ -59,12 +59,16 @@ export class FieldEntity extends CommonEntity {
   @Column('int', { default: 0 })
   order: number | null;
 
-  @ManyToOne(() => AITemplatesEntity, (aiTemplate) => aiTemplate.fields, {
-    onDelete: 'CASCADE',
-    orphanedRowAction: 'delete',
-    nullable: true,
-  })
-  aiTemplate: Relation<AITemplatesEntity> | null;
+  @ManyToOne(
+    () => AIFieldTemplatesEntity,
+    (aiFieldTemplate) => aiFieldTemplate.fields,
+    {
+      onDelete: 'CASCADE',
+      orphanedRowAction: 'delete',
+      nullable: true,
+    },
+  )
+  aiFieldTemplate: Relation<AIFieldTemplatesEntity> | null;
 
   @Column('json', { nullable: true })
   aiFieldTargetKeys: string[] | null;
@@ -93,7 +97,7 @@ export class FieldEntity extends CommonEntity {
     property,
     status,
     order,
-    aiTemplateId,
+    aiFieldTemplateId,
     aiFieldTargetKeys,
     aiFieldAutoProcessing,
   }: {
@@ -105,7 +109,7 @@ export class FieldEntity extends CommonEntity {
     property: FieldPropertyEnum;
     status: FieldStatusEnum;
     order?: number | null;
-    aiTemplateId?: number | null;
+    aiFieldTemplateId?: number | null;
     aiFieldTargetKeys?: string[] | null;
     aiFieldAutoProcessing?: boolean | null;
   }) {
@@ -119,9 +123,9 @@ export class FieldEntity extends CommonEntity {
     field.property = property;
     field.status = status;
     field.order = order ?? 0;
-    if (aiTemplateId) {
-      field.aiTemplate = new AITemplatesEntity();
-      field.aiTemplate.id = aiTemplateId;
+    if (aiFieldTemplateId) {
+      field.aiFieldTemplate = new AIFieldTemplatesEntity();
+      field.aiFieldTemplate.id = aiFieldTemplateId;
     }
     field.aiFieldTargetKeys = aiFieldTargetKeys ?? null;
     field.aiFieldAutoProcessing = aiFieldAutoProcessing ?? null;

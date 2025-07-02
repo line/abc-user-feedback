@@ -84,7 +84,7 @@ export class FindFieldsResponseDto {
 
   @Expose()
   @ApiProperty({ type: Number, nullable: true })
-  aiTemplateId: number | null;
+  aiFieldTemplateId: number | null;
 
   @Expose()
   @ApiProperty({ type: Array<string>, nullable: true })

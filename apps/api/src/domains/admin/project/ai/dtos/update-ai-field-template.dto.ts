@@ -13,54 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose, Type } from 'class-transformer';
+import { Expose } from 'class-transformer';
 
-import {
-  FieldFormatEnum,
-  FieldPropertyEnum,
-  FieldStatusEnum,
-} from '../../../../../common/enums';
-
-export class CreateFieldDto {
+export class UpdateAIFieldTemplateDto {
   @Expose()
-  name: string;
+  title: string;
 
   @Expose()
-  key: string;
+  prompt: string;
 
   @Expose()
-  description: string | null;
+  projectId: number;
 
   @Expose()
-  format: FieldFormatEnum;
-
-  @Expose()
-  property: FieldPropertyEnum;
-
-  @Expose()
-  status: FieldStatusEnum;
-
-  @Expose()
-  @Type(() => Option)
-  options?: Option[];
-
-  @Expose()
-  order?: number | null;
-
-  @Expose()
-  aiFieldTemplateId?: number | null;
-
-  @Expose()
-  aiFieldTargetKeys?: string[] | null;
-
-  @Expose()
-  aiFieldAutoProcessing?: boolean | null;
-}
-
-class Option {
-  @Expose()
-  name: string;
-
-  @Expose()
-  key: string;
+  templateId: number;
 }

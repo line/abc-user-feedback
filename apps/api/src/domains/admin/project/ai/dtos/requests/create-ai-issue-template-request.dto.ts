@@ -14,13 +14,24 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString, MaxLength } from 'class-validator';
+import { IsBoolean, IsNumber, IsString } from 'class-validator';
 
-export class CreateAITemplateRequestDto {
+export class CreateAIIssueTemplateRequestDto {
+  @ApiProperty({ nullable: false, type: Number })
+  @IsNumber()
+  channelId: number;
+
+  @ApiProperty({ nullable: false, type: [String] })
+  @IsString({ each: true })
+  targetFieldKeys: string[];
+
   @ApiProperty({ nullable: false, type: String })
   @IsString()
-  @MaxLength(255)
-  title: string;
+  prompt: string;
+
+  @ApiProperty({ nullable: false, type: Boolean })
+  @IsBoolean()
+  isEnabled: boolean;
 
   @ApiProperty({ nullable: false, type: String })
   @IsString()
@@ -30,7 +41,11 @@ export class CreateAITemplateRequestDto {
   @IsNumber()
   temperature: number;
 
-  @ApiProperty({ nullable: false, type: String })
-  @IsString()
-  prompt: string;
+  @ApiProperty({ nullable: false, type: Number })
+  @IsNumber()
+  linkExistingIssues: number;
+
+  @ApiProperty({ nullable: false, type: Number })
+  @IsNumber()
+  linkIssueFeedbacks: number;
 }

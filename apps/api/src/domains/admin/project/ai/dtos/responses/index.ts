@@ -14,10 +14,12 @@
  * under the License.
  */
 export { CreateAIIntegrationsResponseDto } from './create-ai-integrations-response.dto';
-export { CreateAITemplateResponseDto } from './create-ai-template-response.dto';
+export { CreateAIFieldTemplateResponseDto } from './create-ai-field-template-response.dto';
 export { GetAIIntegrationsModelsResponseDto } from './get-ai-integrations-models-response.dto';
-export { GetAITemplatesResponseDto } from './get-ai-templates-response.dto';
+export { GetAIFieldTemplatesResponseDto } from './get-ai-field-templates-response.dto';
 export { GetAIIntegrationResponseDto } from './get-ai-integration-response.dto';
 export { ValidateAPIKeyResponseDto } from './validate-api-key-response.dto';
 export { GetAIPlaygroundResultResponseDto } from './get-ai-playground-result-response.dto';
 export { GetAIUsagesResponseDto } from './get-ai-usages-response.dto';
+export { CreateAIIssueTemplateResponseDto } from './create-ai-issue-template-response.dto';
+export { GetAIIssueTemplatesResponseDto } from './get-ai-issue-templates-response.dto';

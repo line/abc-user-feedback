@@ -24,13 +24,13 @@ export class AddAiFieldType1747717939594 implements MigrationInterface {
       `ALTER TABLE \`fields\` CHANGE \`format\` \`format\` enum ('text', 'keyword', 'number', 'select', 'multiSelect', 'date', 'images', 'aiField') NOT NULL`,
     );
     await queryRunner.query(
-      `ALTER TABLE \`fields\` ADD \`ai_template_id\` int NULL DEFAULT NULL AFTER \`order\``,
+      `ALTER TABLE \`fields\` ADD \`ai_field_template_id\` int NULL DEFAULT NULL AFTER \`order\``,
     );
     await queryRunner.query(
-      `ALTER TABLE \`fields\` ADD CONSTRAINT \`FK_fields_ai_template_id\` FOREIGN KEY (\`ai_template_id\`) REFERENCES \`ai_templates\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`,
+      `ALTER TABLE \`fields\` ADD CONSTRAINT \`FK_fields_ai_field_template_id\` FOREIGN KEY (\`ai_field_template_id\`) REFERENCES \`ai_field_templates\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
-      `ALTER TABLE \`fields\` ADD \`ai_field_target_keys\` json NULL DEFAULT NULL AFTER \`ai_template_id\``,
+      `ALTER TABLE \`fields\` ADD \`ai_field_target_keys\` json NULL DEFAULT NULL AFTER \`ai_field_template_id\``,
     );
     await queryRunner.query(
       `ALTER TABLE \`fields\` ADD \`ai_field_auto_processing\` boolean NULL DEFAULT NULL AFTER \`ai_field_target_keys\``,
@@ -45,10 +45,10 @@ export class AddAiFieldType1747717939594 implements MigrationInterface {
       `ALTER TABLE \`fields\` DROP COLUMN \`ai_field_target_keys\``,
     );
     await queryRunner.query(
-      `ALTER TABLE \`fields\` DROP FOREIGN KEY \`FK_fields_ai_template_id\``,
+      `ALTER TABLE \`fields\` DROP FOREIGN KEY \`FK_fields_ai_field_template_id\``,
     );
     await queryRunner.query(
-      `ALTER TABLE \`fields\` DROP COLUMN \`ai_template_id\``,
+      `ALTER TABLE \`fields\` DROP COLUMN \`ai_field_template_id\``,
     );
     await queryRunner.query(
       `ALTER TABLE \`fields\` CHANGE \`format\` \`format\` enum ('text', 'keyword', 'number', 'select', 'multiSelect', 'date', 'images') NOT NULL`,

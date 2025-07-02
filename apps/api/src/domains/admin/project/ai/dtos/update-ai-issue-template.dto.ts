@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Expose } from 'class-transformer';
 
-export { UpdateAIIntegrationsRequestDto } from './update-ai-integrations-request.dto';
-export { CreateAIFieldTemplateRequestDto } from './create-ai-field-template-request.dto';
-export { ValidteAPIKeyRequestDto } from './validate-api-key-request.dto';
-export { GetAIPlaygroundResultRequestDto } from './get-ai-playground-result-request.dto';
-export { ProcessAIFieldRequestDto } from './process-ai-field-request.dto';
-export { ProcessSingleAIFieldRequestDto } from './process-single-ai-field-request.dto';
-export { CreateAIIssueTemplateRequestDto } from './create-ai-issue-template-request.dto';
+import { CreateAIIssueTemplateDto } from './create-ai-issue-template.dto';
+
+export class UpdateAIIssueTemplateDto extends CreateAIIssueTemplateDto {
+  @Expose()
+  templateId: number;
+}

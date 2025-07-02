@@ -39,15 +39,18 @@ import { FeedbackOSService } from '../../feedback/feedback.os.service';
 import { ProjectEntity } from '../project/project.entity';
 import { PermissionEnum } from '../role/permission.enum';
 import { RoleEntity } from '../role/role.entity';
+import { AIFieldTemplatesEntity } from './ai-field-templates.entity';
 import { AIIntegrationsEntity } from './ai-integrations.entity';
-import { AITemplatesEntity } from './ai-templates.entity';
+import { AIIssueTemplatesEntity } from './ai-issue-templates.entity';
 import { AIUsagesEntity, UsageCategoryEnum } from './ai-usages.entity';
 import { AIClient, PromptParameters } from './ai.client';
+import { CreateAIFieldTemplateDto } from './dtos/create-ai-field-template.dto';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
-import { CreateAITemplateDto } from './dtos/create-ai-template.dto';
+import { CreateAIIssueTemplateDto } from './dtos/create-ai-issue-template.dto';
 import { GetAIPlaygroundResultDto } from './dtos/get-ai-playground-result.dto';
 import { ValidateAPIKeyResponseDto } from './dtos/responses';
-import { UpdateAITemplateDto } from './dtos/update-ai-template.dto';
+import { UpdateAIFieldTemplateDto } from './dtos/update-ai-field-template.dto';
+import { UpdateAIIssueTemplateDto } from './dtos/update-ai-issue-template.dto';
 
 @Injectable()
 export class AIService {
@@ -61,8 +64,11 @@ export class AIService {
     @InjectRepository(AIIntegrationsEntity)
     private readonly aiIntegrationsRepo: Repository<AIIntegrationsEntity>,
 
-    @InjectRepository(AITemplatesEntity)
-    private readonly aiTemplatesRepo: Repository<AITemplatesEntity>,
+    @InjectRepository(AIFieldTemplatesEntity)
+    private readonly aiFieldTemplatesRepo: Repository<AIFieldTemplatesEntity>,
+
+    @InjectRepository(AIIssueTemplatesEntity)
+    private readonly aiIssueTemplatesRepo: Repository<AIIssueTemplatesEntity>,
 
     @InjectRepository(FeedbackEntity)
     private readonly feedbackRepo: Repository<FeedbackEntity>,
@@ -110,7 +116,7 @@ export class AIService {
     });
 
     if (!integration) {
-      await this.createDefaultTemplates(projectId);
+      await this.createDefaultFieldTemplates(projectId);
 
       return await this.upsertIntegration(
         CreateAIIntegrationsDto.from({
@@ -159,8 +165,8 @@ export class AIService {
     return updatedIntegration;
   }
 
-  async findTemplatesByProjectId(projectId: number) {
-    const templates = await this.aiTemplatesRepo.find({
+  async findFieldTemplatesByProjectId(projectId: number) {
+    const fieldTemplates = await this.aiFieldTemplatesRepo.find({
       where: {
         project: {
           id: projectId,
@@ -171,7 +177,7 @@ export class AIService {
       },
     });
 
-    return templates.map((template) => ({
+    return fieldTemplates.map((template) => ({
       id: template.id,
       title: template.title,
       prompt: template.prompt,
@@ -183,7 +189,7 @@ export class AIService {
   }
 
   @Transactional()
-  async createDefaultTemplates(projectId: number) {
+  async createDefaultFieldTemplates(projectId: number) {
     const existingIntegration = await this.aiIntegrationsRepo.findOne({
       where: {
         project: {
@@ -229,9 +235,9 @@ export class AIService {
       },
     ];
 
-    await this.aiTemplatesRepo.save(
+    await this.aiFieldTemplatesRepo.save(
       templates.map((template) =>
-        AITemplatesEntity.from({
+        AIFieldTemplatesEntity.from({
           ...template,
           projectId,
         }),
@@ -240,16 +246,16 @@ export class AIService {
   }
 
   @Transactional()
-  async createNewTemplate(template: CreateAITemplateDto) {
-    const newTemplate = AITemplatesEntity.from(template);
-    await this.aiTemplatesRepo.save(newTemplate);
+  async createNewFieldTemplate(template: CreateAIFieldTemplateDto) {
+    const newTemplate = AIFieldTemplatesEntity.from(template);
+    await this.aiFieldTemplatesRepo.save(newTemplate);
 
     return newTemplate;
   }
 
   @Transactional()
-  async updateTemplate(template: UpdateAITemplateDto) {
-    const existingTemplate = await this.aiTemplatesRepo.findOne({
+  async updateFieldTemplate(template: UpdateAIFieldTemplateDto) {
+    const existingTemplate = await this.aiFieldTemplatesRepo.findOne({
       where: {
         id: template.templateId,
         project: {
@@ -258,19 +264,19 @@ export class AIService {
       },
     });
     if (!existingTemplate) {
-      throw new BadRequestException('Template not found');
+      throw new BadRequestException('Field Template not found');
     }
     const updatedTemplate = {
       ...existingTemplate,
       ...template,
     };
-    await this.aiTemplatesRepo.save(updatedTemplate);
+    await this.aiFieldTemplatesRepo.save(updatedTemplate);
     return updatedTemplate;
   }
 
   @Transactional()
-  async deleteTemplateById(projectId: number, templateId: number) {
-    const template = await this.aiTemplatesRepo.findOne({
+  async deleteFieldTemplateById(projectId: number, templateId: number) {
+    const template = await this.aiFieldTemplatesRepo.findOne({
       where: {
         id: templateId,
         project: {
@@ -280,10 +286,83 @@ export class AIService {
     });
 
     if (!template) {
-      throw new BadRequestException('Template not found');
+      throw new BadRequestException('Field Template not found');
     }
 
-    await this.aiTemplatesRepo.delete(templateId);
+    await this.aiFieldTemplatesRepo.delete(templateId);
+  }
+
+  @Transactional()
+  async findIssueTemplatesByProjectId(projectId: number) {
+    const issueTemplates = await this.aiIssueTemplatesRepo.find({
+      where: {
+        channel: {
+          project: {
+            id: projectId,
+          },
+        },
+      },
+      order: {
+        createdAt: 'ASC',
+      },
+    });
+
+    return issueTemplates.map((template) => ({
+      id: template.id,
+      targetFieldKeys: template.targetFieldKeys,
+      prompt: template.prompt,
+      isEnabled: template.isEnabled,
+      model: template.model,
+      temperature: template.temperature,
+      linkExistingIssues: template.linkExistingIssues,
+      linkIssueFeedbacks: template.linkIssueFeedbacks,
+      createdAt: template.createdAt,
+      updatedAt: template.updatedAt,
+    }));
+  }
+
+  @Transactional()
+  async createNewIssueTemplate(template: CreateAIIssueTemplateDto) {
+    const newTemplate = AIIssueTemplatesEntity.from(template);
+    await this.aiIssueTemplatesRepo.save(newTemplate);
+
+    return newTemplate;
+  }
+
+  @Transactional()
+  async updateIssueTemplate(dto: UpdateAIIssueTemplateDto) {
+    const existingTemplate = await this.aiIssueTemplatesRepo.findOne({
+      where: {
+        id: dto.templateId,
+        channel: {
+          id: dto.channelId,
+        },
+      },
+    });
+    if (!existingTemplate) {
+      throw new BadRequestException('Issue Template not found');
+    }
+    const updatedTemplate = {
+      ...existingTemplate,
+      ...dto,
+    };
+    await this.aiIssueTemplatesRepo.save(updatedTemplate);
+    return updatedTemplate;
+  }
+
+  @Transactional()
+  async deleteIssueTemplateById(templateId: number) {
+    const template = await this.aiIssueTemplatesRepo.findOne({
+      where: {
+        id: templateId,
+      },
+    });
+
+    if (!template) {
+      throw new BadRequestException('Issue Template not found');
+    }
+
+    await this.aiIssueTemplatesRepo.delete(templateId);
   }
 
   async getModels(projectId: number) {
@@ -426,12 +505,14 @@ export class AIService {
       throw new BadRequestException('Integration not found');
     }
 
-    if (!aiField.aiTemplate) {
-      throw new BadRequestException('AI template not found');
+    if (!aiField.aiFieldTemplate) {
+      throw new BadRequestException('AI field template not found');
     }
 
-    if (!aiField.aiTemplate.model) {
-      throw new BadRequestException('The model is not set for the AI template');
+    if (!aiField.aiFieldTemplate.model) {
+      throw new BadRequestException(
+        'The model is not set for the AI field template',
+      );
     }
 
     const promptTargetText = this.generatePromptTargetText(
@@ -475,10 +556,10 @@ export class AIService {
 
     const result = await client.executePrompt(
       new PromptParameters(
-        aiField.aiTemplate.model,
-        aiField.aiTemplate.temperature,
+        aiField.aiFieldTemplate.model,
+        aiField.aiFieldTemplate.temperature,
         integration.systemPrompt,
-        aiField.aiTemplate.prompt,
+        aiField.aiFieldTemplate.prompt,
         aiTargetFields.map((field) => field.key).join(', '),
         promptTargetText,
         feedback.channel.project.name,
@@ -548,7 +629,7 @@ export class AIService {
 
     const fields = await this.fieldRepo.find({
       where: { channel: { id: feedback.channel.id } },
-      relations: { options: true, aiTemplate: true },
+      relations: { options: true, aiFieldTemplate: true },
     });
 
     for (const field of fields) {
@@ -584,7 +665,7 @@ export class AIService {
 
     const fields = await this.fieldRepo.find({
       where: { channel: { id: feedback.channel.id } },
-      relations: { aiTemplate: true },
+      relations: { aiFieldTemplate: true },
     });
 
     const aiField = fields.find(

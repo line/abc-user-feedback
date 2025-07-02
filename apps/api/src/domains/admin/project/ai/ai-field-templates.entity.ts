@@ -19,8 +19,8 @@ import { CommonEntity } from '@/common/entities';
 import { FieldEntity } from '../../channel/field/field.entity';
 import { ProjectEntity } from '../project/project.entity';
 
-@Entity('ai_templates')
-export class AITemplatesEntity extends CommonEntity {
+@Entity('ai_field_templates')
+export class AIFieldTemplatesEntity extends CommonEntity {
   @Column('varchar', { default: '' })
   title: string;
 
@@ -33,12 +33,12 @@ export class AITemplatesEntity extends CommonEntity {
   @Column('float', { default: 0.7 })
   temperature: number;
 
-  @ManyToOne(() => ProjectEntity, (project) => project.aiTemplates, {
+  @ManyToOne(() => ProjectEntity, (project) => project.aiFieldTemplates, {
     onDelete: 'CASCADE',
   })
   project: Relation<ProjectEntity>;
 
-  @OneToMany(() => FieldEntity, (field) => field.aiTemplate, {
+  @OneToMany(() => FieldEntity, (field) => field.aiFieldTemplate, {
     nullable: true,
     cascade: true,
   })
@@ -57,14 +57,14 @@ export class AITemplatesEntity extends CommonEntity {
     temperature: number;
     projectId: number;
   }) {
-    const aiTemplate = new AITemplatesEntity();
+    const aiFieldTemplate = new AIFieldTemplatesEntity();
 
-    aiTemplate.title = title;
-    aiTemplate.prompt = prompt;
-    aiTemplate.model = model;
-    aiTemplate.temperature = temperature;
-    aiTemplate.project = new ProjectEntity();
-    aiTemplate.project.id = projectId;
-    return aiTemplate;
+    aiFieldTemplate.title = title;
+    aiFieldTemplate.prompt = prompt;
+    aiFieldTemplate.model = model;
+    aiFieldTemplate.temperature = temperature;
+    aiFieldTemplate.project = new ProjectEntity();
+    aiFieldTemplate.project.id = projectId;
+    return aiFieldTemplate;
   }
 }

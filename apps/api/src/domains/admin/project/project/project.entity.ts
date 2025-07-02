@@ -30,8 +30,8 @@ import type { IssueTrackerEntity } from '@/domains/admin/project/issue-tracker/i
 import { IssueStatisticsEntity } from '@/domains/admin/statistics/issue/issue-statistics.entity';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
+import { AIFieldTemplatesEntity } from '../ai/ai-field-templates.entity';
 import { AIIntegrationsEntity } from '../ai/ai-integrations.entity';
-import { AITemplatesEntity } from '../ai/ai-templates.entity';
 import { AIUsagesEntity } from '../ai/ai-usages.entity';
 import { CategoryEntity } from '../category/category.entity';
 import { IssueEntity } from '../issue/issue.entity';
@@ -121,10 +121,14 @@ export class ProjectEntity extends CommonEntity {
   )
   aiIntegrations: Relation<AIIntegrationsEntity>[];
 
-  @OneToMany(() => AITemplatesEntity, (aiTemplates) => aiTemplates.project, {
-    cascade: true,
-  })
-  aiTemplates: Relation<AITemplatesEntity>[];
+  @OneToMany(
+    () => AIFieldTemplatesEntity,
+    (aiFieldTemplates) => aiFieldTemplates.project,
+    {
+      cascade: true,
+    },
+  )
+  aiFieldTemplates: Relation<AIFieldTemplatesEntity>[];
 
   @OneToMany(() => AIUsagesEntity, (aiUsages) => aiUsages.project, {
     cascade: true,

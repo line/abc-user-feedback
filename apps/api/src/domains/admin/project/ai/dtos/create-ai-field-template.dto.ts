@@ -15,9 +15,9 @@
  */
 import { Expose, plainToInstance } from 'class-transformer';
 
-import { AITemplatesEntity } from '../ai-templates.entity';
+import { AIFieldTemplatesEntity } from '../ai-field-templates.entity';
 
-export class CreateAITemplateDto {
+export class CreateAIFieldTemplateDto {
   @Expose()
   title: string;
 
@@ -33,16 +33,16 @@ export class CreateAITemplateDto {
   @Expose()
   temperature: number;
 
-  public static from(params: any): CreateAITemplateDto {
-    return plainToInstance(CreateAITemplateDto, params, {
+  public static from(params: any): CreateAIFieldTemplateDto {
+    return plainToInstance(CreateAIFieldTemplateDto, params, {
       excludeExtraneousValues: true,
     });
   }
 
-  static toAITemplateEntity(params: CreateAITemplateDto) {
+  static toAITemplateEntity(params: CreateAIFieldTemplateDto) {
     const { title, prompt, projectId, model, temperature } = params;
 
-    return AITemplatesEntity.from({
+    return AIFieldTemplatesEntity.from({
       title,
       prompt,
       projectId,

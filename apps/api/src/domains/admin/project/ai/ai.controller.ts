@@ -37,7 +37,8 @@ import { RequirePermission } from '../role/require-permission.decorator';
 import { AIService } from './ai.service';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import {
-  CreateAITemplateRequestDto,
+  CreateAIFieldTemplateRequestDto,
+  CreateAIIssueTemplateRequestDto,
   GetAIPlaygroundResultRequestDto,
   ProcessAIFieldRequestDto,
   ProcessSingleAIFieldRequestDto,
@@ -45,12 +46,13 @@ import {
   ValidteAPIKeyRequestDto,
 } from './dtos/requests';
 import {
+  CreateAIFieldTemplateResponseDto,
   CreateAIIntegrationsResponseDto,
-  CreateAITemplateResponseDto,
+  CreateAIIssueTemplateResponseDto,
   GetAIIntegrationResponseDto,
   GetAIIntegrationsModelsResponseDto,
+  GetAIIssueTemplatesResponseDto,
   GetAIPlaygroundResultResponseDto,
-  GetAITemplatesResponseDto,
   GetAIUsagesResponseDto,
   ValidateAPIKeyResponseDto,
 } from './dtos/responses';
@@ -105,53 +107,96 @@ export class AIController {
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)
-  @ApiOkResponse({ type: [GetAITemplatesResponseDto] })
-  @Get('templates')
-  async getTemplates(@Param('projectId', ParseIntPipe) projectId: number) {
-    return GetAITemplatesResponseDto.transform(
-      await this.aiService.findTemplatesByProjectId(projectId),
+  @ApiOkResponse({ type: [GetAIIssueTemplatesResponseDto] })
+  @Get('fieldTemplates')
+  async getFieldTemplates(@Param('projectId', ParseIntPipe) projectId: number) {
+    return GetAIIssueTemplatesResponseDto.transform(
+      await this.aiService.findFieldTemplatesByProjectId(projectId),
     );
   }
 
   @RequirePermission(PermissionEnum.generative_ai_update)
   @ApiOkResponse()
-  @Post('templates/default')
-  async createDefaultTemplates(
+  @Post('fieldTemplates/default')
+  async createDefaultFieldTemplates(
     @Param('projectId', ParseIntPipe) projectId: number,
   ) {
-    await this.aiService.createDefaultTemplates(projectId);
+    await this.aiService.createDefaultFieldTemplates(projectId);
   }
 
   @RequirePermission(PermissionEnum.generative_ai_update)
-  @ApiCreatedResponse({ type: CreateAITemplateResponseDto })
+  @ApiCreatedResponse({ type: CreateAIFieldTemplateResponseDto })
   @ApiOkResponse()
-  @Post('templates/new')
-  async createNewTemplate(
+  @Post('fieldTemplates/new')
+  async createNewFieldTemplate(
     @Param('projectId', ParseIntPipe) projectId: number,
-    @Body() body: CreateAITemplateRequestDto,
+    @Body() body: CreateAIFieldTemplateRequestDto,
   ) {
-    return CreateAITemplateResponseDto.transform(
-      await this.aiService.createNewTemplate({ ...body, projectId }),
+    return CreateAIFieldTemplateResponseDto.transform(
+      await this.aiService.createNewFieldTemplate({ ...body, projectId }),
     );
   }
 
   @RequirePermission(PermissionEnum.generative_ai_update)
-  @Put('templates/:templateId')
-  async update(
+  @Put('fieldTemplates/:templateId')
+  async updateFieldTemplate(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Param('templateId', ParseIntPipe) templateId: number,
-    @Body() body: CreateAITemplateRequestDto,
+    @Body() body: CreateAIFieldTemplateRequestDto,
   ) {
-    await this.aiService.updateTemplate({ ...body, projectId, templateId });
+    await this.aiService.updateFieldTemplate({
+      ...body,
+      projectId,
+      templateId,
+    });
   }
 
   @RequirePermission(PermissionEnum.generative_ai_update)
-  @Delete('templates/:templateId')
-  async delete(
+  @Delete('fieldTemplates/:templateId')
+  async deleteFieldTemplate(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Param('templateId', ParseIntPipe) templateId: number,
   ) {
-    await this.aiService.deleteTemplateById(projectId, templateId);
+    await this.aiService.deleteFieldTemplateById(projectId, templateId);
+  }
+
+  @RequirePermission(PermissionEnum.generative_ai_read)
+  @ApiOkResponse({ type: [GetAIIssueTemplatesResponseDto] })
+  @Get('issueTemplates')
+  async getIssueTemplates(@Param('projectId', ParseIntPipe) projectId: number) {
+    return GetAIIssueTemplatesResponseDto.transform(
+      await this.aiService.findIssueTemplatesByProjectId(projectId),
+    );
+  }
+
+  @RequirePermission(PermissionEnum.generative_ai_update)
+  @ApiCreatedResponse({ type: CreateAIIssueTemplateResponseDto })
+  @ApiOkResponse()
+  @Post('issueTemplates/new')
+  async createNewIssueTemplate(@Body() body: CreateAIIssueTemplateRequestDto) {
+    return CreateAIIssueTemplateResponseDto.transform(
+      await this.aiService.createNewIssueTemplate({ ...body }),
+    );
+  }
+
+  @RequirePermission(PermissionEnum.generative_ai_update)
+  @Put('issueTemplates/:templateId')
+  async updateIssueTemplate(
+    @Param('templateId', ParseIntPipe) templateId: number,
+    @Body() body: CreateAIIssueTemplateRequestDto,
+  ) {
+    await this.aiService.updateIssueTemplate({
+      ...body,
+      templateId,
+    });
+  }
+
+  @RequirePermission(PermissionEnum.generative_ai_update)
+  @Delete('issueTemplates/:templateId')
+  async deleteIssueTemplate(
+    @Param('templateId', ParseIntPipe) templateId: number,
+  ) {
+    await this.aiService.deleteIssueTemplateById(templateId);
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)

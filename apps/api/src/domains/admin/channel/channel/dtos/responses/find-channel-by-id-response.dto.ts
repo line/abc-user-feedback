@@ -59,8 +59,8 @@ export class FindChannelByIdResponseDto {
 
   public static transform(params: any): FindChannelByIdResponseDto {
     params.fields = params.fields.map((field: any) => {
-      if (field.aiTemplate) {
-        field.aiTemplateId = field.aiTemplate.id;
+      if (field.aiFieldTemplate) {
+        field.aiFieldTemplateId = field.aiFieldTemplate.id;
       }
       return field;
     });

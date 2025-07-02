@@ -21,8 +21,9 @@ import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { FeedbackModule } from '../../feedback/feedback.module';
 import { ProjectEntity } from '../project/project.entity';
 import { RoleEntity } from '../role/role.entity';
+import { AIFieldTemplatesEntity } from './ai-field-templates.entity';
 import { AIIntegrationsEntity } from './ai-integrations.entity';
-import { AITemplatesEntity } from './ai-templates.entity';
+import { AIIssueTemplatesEntity } from './ai-issue-templates.entity';
 import { AIUsagesEntity } from './ai-usages.entity';
 import { AIController } from './ai.controller';
 import { AIListener } from './ai.listener';
@@ -32,7 +33,8 @@ import { AIService } from './ai.service';
   imports: [
     TypeOrmModule.forFeature([
       AIIntegrationsEntity,
-      AITemplatesEntity,
+      AIFieldTemplatesEntity,
+      AIIssueTemplatesEntity,
       AIUsagesEntity,
       FeedbackEntity,
       ProjectEntity,

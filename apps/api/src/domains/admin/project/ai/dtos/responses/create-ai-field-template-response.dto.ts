@@ -18,14 +18,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance } from 'class-transformer';
 import { IsNumber } from 'class-validator';
 
-export class CreateAITemplateResponseDto {
+export class CreateAIFieldTemplateResponseDto {
   @ApiProperty()
   @IsNumber()
   @Expose()
   id: number;
 
-  public static transform(params: any): CreateAITemplateResponseDto {
-    return plainToInstance(CreateAITemplateResponseDto, params, {
+  public static transform(params: any): CreateAIFieldTemplateResponseDto {
+    return plainToInstance(CreateAIFieldTemplateResponseDto, params, {
       excludeExtraneousValues: true,
     });
   }

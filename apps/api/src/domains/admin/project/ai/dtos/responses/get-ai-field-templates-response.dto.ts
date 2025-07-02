@@ -13,54 +13,42 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose, Type } from 'class-transformer';
 
-import {
-  FieldFormatEnum,
-  FieldPropertyEnum,
-  FieldStatusEnum,
-} from '../../../../../common/enums';
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose, plainToInstance } from 'class-transformer';
 
-export class CreateFieldDto {
+export class GetAIFieldTemplatesResponseDto {
+  @ApiProperty()
   @Expose()
-  name: string;
+  id: number;
 
+  @ApiProperty()
   @Expose()
-  key: string;
+  title: string;
 
+  @ApiProperty()
   @Expose()
-  description: string | null;
+  prompt: string;
 
+  @ApiProperty()
   @Expose()
-  format: FieldFormatEnum;
+  model: string;
 
+  @ApiProperty()
   @Expose()
-  property: FieldPropertyEnum;
+  temperature: number;
 
+  @ApiProperty()
   @Expose()
-  status: FieldStatusEnum;
+  createdAt: Date;
 
+  @ApiProperty()
   @Expose()
-  @Type(() => Option)
-  options?: Option[];
+  updatedAt: Date;
 
-  @Expose()
-  order?: number | null;
-
-  @Expose()
-  aiFieldTemplateId?: number | null;
-
-  @Expose()
-  aiFieldTargetKeys?: string[] | null;
-
-  @Expose()
-  aiFieldAutoProcessing?: boolean | null;
-}
-
-class Option {
-  @Expose()
-  name: string;
-
-  @Expose()
-  key: string;
+  public static transform(params: any): GetAIFieldTemplatesResponseDto {
+    return plainToInstance(GetAIFieldTemplatesResponseDto, params, {
+      excludeExtraneousValues: true,
+    });
+  }
 }

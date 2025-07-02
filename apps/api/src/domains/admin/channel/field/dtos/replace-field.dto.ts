@@ -47,7 +47,7 @@ export class ReplaceFieldDto {
   order?: number | null;
 
   @Expose()
-  aiTemplateId?: number | null;
+  aiFieldTemplateId?: number | null;
 
   @Expose()
   aiFieldTargetKeys?: string[] | null;

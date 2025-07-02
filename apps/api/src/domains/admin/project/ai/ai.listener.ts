@@ -60,7 +60,7 @@ export class AIListener {
 
     const fields = await this.fieldRepo.find({
       where: { channel: { id: feedback.channel.id } },
-      relations: { options: true, aiTemplate: true },
+      relations: { options: true, aiFieldTemplate: true },
     });
 
     fields.forEach((field) => {

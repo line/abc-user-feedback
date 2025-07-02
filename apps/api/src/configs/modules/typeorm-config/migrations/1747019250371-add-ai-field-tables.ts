@@ -40,7 +40,7 @@ export class AddAIFieldTables1747019250371 implements MigrationInterface {
       `ALTER TABLE \`ai_integrations\` ADD CONSTRAINT \`FK_project_id\` FOREIGN KEY (\`project_id\`) REFERENCES \`projects\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
-      `CREATE TABLE \`ai_templates\` (
+      `CREATE TABLE \`ai_field_templates\` (
         \`id\` int NOT NULL AUTO_INCREMENT,
         \`project_id\` int NOT NULL,
         \`title\` varchar(255) NOT NULL DEFAULT '',
@@ -54,8 +54,8 @@ export class AddAIFieldTables1747019250371 implements MigrationInterface {
       ) ENGINE=InnoDB`,
     );
     await queryRunner.query(
-      `ALTER TABLE \`ai_templates\`
-       ADD CONSTRAINT \`FK_ai_templates_project_id\`
+      `ALTER TABLE \`ai_field_templates\`
+       ADD CONSTRAINT \`FK_ai_field_templates_project_id\`
        FOREIGN KEY (\`project_id\`) REFERENCES \`projects\`(\`id\`)
        ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
@@ -81,9 +81,9 @@ export class AddAIFieldTables1747019250371 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP TABLE \`ai_usages\``);
     await queryRunner.query(
-      `ALTER TABLE \`ai_templates\` DROP FOREIGN KEY \`FK_ai_templates_project_id\``,
+      `ALTER TABLE \`ai_field_templates\` DROP FOREIGN KEY \`FK_ai_field_templates_project_id\``,
     );
-    await queryRunner.query(`DROP TABLE \`ai_templates\``);
+    await queryRunner.query(`DROP TABLE \`ai_field_templates\``);
     await queryRunner.query(
       `ALTER TABLE \`ai_integrations\` DROP FOREIGN KEY \`FK_project_id\``,
     );

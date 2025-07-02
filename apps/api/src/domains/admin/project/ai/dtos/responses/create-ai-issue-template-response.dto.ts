@@ -13,18 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose } from 'class-transformer';
 
-export class UpdateAITemplateDto {
-  @Expose()
-  title: string;
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose, plainToInstance } from 'class-transformer';
+import { IsNumber } from 'class-validator';
 
+export class CreateAIIssueTemplateResponseDto {
+  @ApiProperty()
+  @IsNumber()
   @Expose()
-  prompt: string;
+  id: number;
 
-  @Expose()
-  projectId: number;
-
-  @Expose()
-  templateId: number;
+  public static transform(params: any): CreateAIIssueTemplateResponseDto {
+    return plainToInstance(CreateAIIssueTemplateResponseDto, params, {
+      excludeExtraneousValues: true,
+    });
+  }
 }

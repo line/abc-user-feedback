@@ -13,42 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, plainToInstance } from 'class-transformer';
+import { IsNumber, IsString, MaxLength } from 'class-validator';
 
-export class GetAITemplatesResponseDto {
-  @ApiProperty()
-  @Expose()
-  id: number;
-
-  @ApiProperty()
-  @Expose()
+export class CreateAIFieldTemplateRequestDto {
+  @ApiProperty({ nullable: false, type: String })
+  @IsString()
+  @MaxLength(255)
   title: string;
 
-  @ApiProperty()
-  @Expose()
-  prompt: string;
-
-  @ApiProperty()
-  @Expose()
+  @ApiProperty({ nullable: false, type: String })
+  @IsString()
   model: string;
 
-  @ApiProperty()
-  @Expose()
+  @ApiProperty({ nullable: false, type: Number })
+  @IsNumber()
   temperature: number;
 
-  @ApiProperty()
-  @Expose()
-  createdAt: Date;
-
-  @ApiProperty()
-  @Expose()
-  updatedAt: Date;
-
-  public static transform(params: any): GetAITemplatesResponseDto {
-    return plainToInstance(GetAITemplatesResponseDto, params, {
-      excludeExtraneousValues: true,
-    });
-  }
+  @ApiProperty({ nullable: false, type: String })
+  @IsString()
+  prompt: string;
 }
