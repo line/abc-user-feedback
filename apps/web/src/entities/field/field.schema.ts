@@ -61,7 +61,7 @@ export const fieldSchema = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
   order: z.number(),
-  aiTemplateId: z.number().nullable().optional(),
+  aiFieldTemplateId: z.number().nullable().optional(),
   aiFieldTargetKeys: z.array(z.string()).nullable().optional(),
   aiFieldAutoProcessing: z.boolean().nullable().optional(),
 });
@@ -76,7 +76,7 @@ export const fieldInfoSchema = fieldSchema
     status: true,
     options: true,
     order: true,
-    aiTemplateId: true,
+    aiFieldTemplateId: true,
     aiFieldTargetKeys: true,
     aiFieldAutoProcessing: true,
   })
@@ -103,10 +103,13 @@ export const fieldInfoSchema = fieldSchema
       message: 'Option is required.',
     },
   )
-  .refine((data) => (data.format === 'aiField' ? !!data.aiTemplateId : true), {
-    path: ['aiTemplateId'],
-    message: 'AI Template is required for AI Field format.',
-  })
+  .refine(
+    (data) => (data.format === 'aiField' ? !!data.aiFieldTemplateId : true),
+    {
+      path: ['aiFieldTemplateId'],
+      message: 'AI Template is required for AI Field format.',
+    },
+  )
   .refine(
     (data) =>
       data.format === 'aiField' ?

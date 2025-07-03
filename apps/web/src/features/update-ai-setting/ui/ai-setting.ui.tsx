@@ -22,7 +22,6 @@ import { create } from 'zustand';
 import { Button, toast } from '@ufb/react';
 
 import {
-  client,
   HelpCardDocs,
   SettingAlert,
   useOAIMutation,
@@ -77,12 +76,6 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
-        if (!data?.apiKey) {
-          await client.post({
-            path: '/api/admin/projects/{projectId}/ai/templates/default',
-            pathParams: { projectId },
-          });
-        }
         await queryClient.invalidateQueries({
           queryKey: [
             '/api/admin/projects/{projectId}/ai/integrations',

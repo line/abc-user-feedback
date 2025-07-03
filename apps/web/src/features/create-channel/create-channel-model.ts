@@ -37,7 +37,7 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     description: '',
     order: 0,
     aiFieldTargetKeys: null,
-    aiTemplateId: null,
+    aiFieldTemplateId: null,
     aiFieldAutoProcessing: null,
   },
   {
@@ -49,7 +49,7 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     description: '',
     order: 1,
     aiFieldTargetKeys: null,
-    aiTemplateId: null,
+    aiFieldTemplateId: null,
     aiFieldAutoProcessing: null,
   },
   {
@@ -61,7 +61,7 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     description: '',
     order: 2,
     aiFieldTargetKeys: null,
-    aiTemplateId: null,
+    aiFieldTemplateId: null,
     aiFieldAutoProcessing: null,
   },
   {
@@ -74,7 +74,7 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     options: [],
     order: 3,
     aiFieldTargetKeys: null,
-    aiTemplateId: null,
+    aiFieldTemplateId: null,
     aiFieldAutoProcessing: null,
   },
 ];

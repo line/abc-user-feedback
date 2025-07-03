@@ -116,9 +116,7 @@ export class AIService {
     });
 
     if (!integration) {
-      await this.createDefaultFieldTemplates(projectId);
-
-      return await this.upsertIntegration(
+      const newIntegration = await this.upsertIntegration(
         CreateAIIntegrationsDto.from({
           projectId,
           provider: 'OPEN_AI',
@@ -127,6 +125,9 @@ export class AIService {
           systemPrompt: '',
         }),
       );
+      await this.createDefaultFieldTemplates(projectId);
+
+      return newIntegration;
     }
 
     return {

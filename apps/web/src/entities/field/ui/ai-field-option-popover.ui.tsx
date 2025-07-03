@@ -28,18 +28,18 @@ import {
 import { useOAIQuery } from '@/shared';
 
 interface Props {
-  aiTemplateId: number | null;
+  aiFieldTemplateId: number | null;
 }
 
-const AiFieldOptionPopover = ({ aiTemplateId }: Props) => {
+const AiFieldOptionPopover = ({ aiFieldTemplateId }: Props) => {
   const router = useRouter();
   const projectId = +(router.query.projectId as string);
   const { data } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/ai/templates',
+    path: '/api/admin/projects/{projectId}/ai/fieldTemplates',
     variables: { projectId },
   });
 
-  const aiFieldTemplate = data?.find((v) => v.id === aiTemplateId);
+  const aiFieldTemplate = data?.find((v) => v.id === aiFieldTemplateId);
 
   if (!aiFieldTemplate) {
     return null;

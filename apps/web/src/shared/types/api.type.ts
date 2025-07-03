@@ -1028,14 +1028,14 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/admin/projects/{projectId}/ai/templates': {
+  '/api/admin/projects/{projectId}/ai/fieldTemplates': {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    get: operations['AIController_getTemplates'];
+    get: operations['AIController_getFieldTemplates'];
     put?: never;
     post?: never;
     delete?: never;
@@ -1044,7 +1044,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/admin/projects/{projectId}/ai/templates/default': {
+  '/api/admin/projects/{projectId}/ai/fieldTemplates/new': {
     parameters: {
       query?: never;
       header?: never;
@@ -1053,14 +1053,14 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    post: operations['AIController_createDefaultTemplates'];
+    post: operations['AIController_createNewFieldTemplate'];
     delete?: never;
     options?: never;
     head?: never;
     patch?: never;
     trace?: never;
   };
-  '/api/admin/projects/{projectId}/ai/templates/new': {
+  '/api/admin/projects/{projectId}/ai/fieldTemplates/{templateId}': {
     parameters: {
       query?: never;
       header?: never;
@@ -1068,25 +1068,57 @@ export interface paths {
       cookie?: never;
     };
     get?: never;
-    put?: never;
-    post: operations['AIController_createNewTemplate'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/admin/projects/{projectId}/ai/templates/{templateId}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put: operations['AIController_update'];
+    put: operations['AIController_updateFieldTemplate'];
     post?: never;
-    delete: operations['AIController_delete'];
+    delete: operations['AIController_deleteFieldTemplate'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/issueTemplates': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['AIController_getIssueTemplates'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/issueTemplates/new': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AIController_createNewIssueTemplate'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/issueTemplates/{templateId}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations['AIController_updateIssueTemplate'];
+    post?: never;
+    delete: operations['AIController_deleteIssueTemplate'];
     options?: never;
     head?: never;
     patch?: never;
@@ -1701,7 +1733,7 @@ export interface components {
       property: components['schemas']['FieldPropertyEnum'];
       status: components['schemas']['FieldStatusEnum'];
       order: number | null;
-      aiTemplateId?: number | null;
+      aiFieldTemplateId?: number | null;
       aiFieldTargetKeys?: string[] | null;
       aiFieldAutoProcessing?: boolean | null;
       options?: components['schemas']['CreateChannelRequestFieldSelectOptionDto'][];
@@ -1769,7 +1801,7 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
       options: components['schemas']['FindFieldsResponseSelectOptionDto'][];
-      aiTemplateId: number | null;
+      aiFieldTemplateId: number | null;
       aiFieldTargetKeys: string[] | null;
       aiFieldAutoProcessing: boolean;
     };
@@ -1799,7 +1831,7 @@ export interface components {
       property: components['schemas']['FieldPropertyEnum'];
       status: components['schemas']['FieldStatusEnum'];
       order: number | null;
-      aiTemplateId?: number | null;
+      aiFieldTemplateId?: number | null;
       aiFieldTargetKeys?: string[] | null;
       aiFieldAutoProcessing?: boolean | null;
       options?: components['schemas']['CreateChannelRequestFieldSelectOptionDto'][];
@@ -2217,7 +2249,7 @@ export interface components {
     GetAIIntegrationsModelsResponseDto: {
       models: components['schemas']['AIModel'][];
     };
-    GetAITemplatesResponseDto: {
+    GetAIFieldTemplatesResponseDto: {
       id: number;
       title: string;
       prompt: string;
@@ -2228,13 +2260,41 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
     };
-    CreateAITemplateRequestDto: {
+    CreateAIFieldTemplateRequestDto: {
       title: string;
       model: string;
       temperature: number;
       prompt: string;
     };
-    CreateAITemplateResponseDto: {
+    CreateAIFieldTemplateResponseDto: {
+      id: number;
+    };
+    GetAIIssueTemplatesResponseDto: {
+      id: number;
+      channelId: number;
+      targetFieldKeys: string[];
+      prompt: string;
+      isEnabled: boolean;
+      model: string;
+      temperature: number;
+      linkExistingIssues: number;
+      linkIssueFeedbacks: number;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    CreateAIIssueTemplateRequestDto: {
+      channelId: number;
+      targetFieldKeys: string[];
+      prompt: string;
+      isEnabled: boolean;
+      model: string;
+      temperature: number;
+      linkExistingIssues: number;
+      linkIssueFeedbacks: number;
+    };
+    CreateAIIssueTemplateResponseDto: {
       id: number;
     };
     ProcessAIFieldRequestDto: {
@@ -4373,7 +4433,7 @@ export interface operations {
       };
     };
   };
-  AIController_getTemplates: {
+  AIController_getFieldTemplates: {
     parameters: {
       query?: never;
       header?: never;
@@ -4389,31 +4449,12 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['GetAITemplatesResponseDto'][];
+          'application/json': components['schemas']['GetAIFieldTemplatesResponseDto'][];
         };
       };
     };
   };
-  AIController_createDefaultTemplates: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        projectId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  AIController_createNewTemplate: {
+  AIController_createNewFieldTemplate: {
     parameters: {
       query?: never;
       header?: never;
@@ -4424,7 +4465,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateAITemplateRequestDto'];
+        'application/json': components['schemas']['CreateAIFieldTemplateRequestDto'];
       };
     };
     responses: {
@@ -4439,12 +4480,12 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['CreateAITemplateResponseDto'];
+          'application/json': components['schemas']['CreateAIFieldTemplateResponseDto'];
         };
       };
     };
   };
-  AIController_update: {
+  AIController_updateFieldTemplate: {
     parameters: {
       query?: never;
       header?: never;
@@ -4456,7 +4497,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateAITemplateRequestDto'];
+        'application/json': components['schemas']['CreateAIFieldTemplateRequestDto'];
       };
     };
     responses: {
@@ -4468,12 +4509,104 @@ export interface operations {
       };
     };
   };
-  AIController_delete: {
+  AIController_deleteFieldTemplate: {
     parameters: {
       query?: never;
       header?: never;
       path: {
         projectId: number;
+        templateId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AIController_getIssueTemplates: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['GetAIIssueTemplatesResponseDto'][];
+        };
+      };
+    };
+  };
+  AIController_createNewIssueTemplate: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateAIIssueTemplateRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CreateAIIssueTemplateResponseDto'];
+        };
+      };
+    };
+  };
+  AIController_updateIssueTemplate: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        templateId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateAIIssueTemplateRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AIController_deleteIssueTemplate: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
         templateId: number;
       };
       cookie?: never;

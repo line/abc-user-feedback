@@ -69,29 +69,25 @@ const defaultValues: Partial<AITemplate> = {
 };
 
 export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
+  const router = useRouter();
+  const templateId = router.query.templateId ? +router.query.templateId : null;
+
   const methods = useForm<AITemplate>({
     defaultValues,
     resolver: zodResolver(aiTemplateSchema),
   });
 
   const { register, formState, setValue, watch, handleSubmit } = methods;
-  const router = useRouter();
-  const templateId = router.query.templateId ? +router.query.templateId : null;
 
   const { formId, setIsPending, setIsDirty } = useAITemplateFormStore();
 
-  const { data: templateData } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/ai/templates',
+  const { data: templateData, refetch } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/fieldTemplates',
     variables: { projectId },
-  });
-  const { data: integrationData } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/ai/integrations',
-    variables: { projectId },
-    queryOptions: { enabled: !!templateId },
   });
 
-  const { data, refetch } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/ai/templates',
+  const { data: integrationData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/integrations',
     variables: { projectId },
     queryOptions: { enabled: !!templateId },
   });
@@ -103,7 +99,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
 
   const { mutate: createTemplate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/admin/projects/{projectId}/ai/templates/new',
+    path: '/api/admin/projects/{projectId}/ai/fieldTemplates/new',
     pathParams: { projectId },
     queryOptions: {
       async onSuccess(data) {
@@ -112,9 +108,9 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
           pathname: router.pathname,
           query: { ...router.query, templateId: data?.id },
         });
+        await refetch();
       },
       onError(error) {
-        console.log('error: ', error);
         toast.error(error.message);
       },
     },
@@ -123,7 +119,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
   const { mutate: updateTemplate } = useMutation({
     mutationFn: async (body: AITemplate & { templateId: number }) => {
       const { data } = await client.put({
-        path: '/api/admin/projects/{projectId}/ai/templates/{templateId}',
+        path: '/api/admin/projects/{projectId}/ai/fieldTemplates/{templateId}',
         pathParams: { projectId, templateId: body.templateId },
         body,
       });
@@ -147,9 +143,9 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
   }, [formState.isDirty]);
 
   useEffect(() => {
-    const original = data?.find((v) => v.id === templateId);
+    const original = templateData?.find((v) => v.id === templateId);
     methods.reset(original ?? defaultValues);
-  }, [data, templateId]);
+  }, [templateData, templateId]);
 
   useWarnIfUnsavedChanges(
     methods.formState.isDirty,
@@ -273,7 +269,7 @@ export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
   const { mutate: deleteTemplate } = useMutation({
     mutationFn: async (body: { templateId: number }) => {
       const { data } = await client.delete({
-        path: '/api/admin/projects/{projectId}/ai/templates/{templateId}',
+        path: '/api/admin/projects/{projectId}/ai/fieldTemplates/{templateId}',
         pathParams: { projectId, templateId: body.templateId },
       });
       return data;

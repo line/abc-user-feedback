@@ -49,7 +49,6 @@ interface Props {
 
 const TableFilterPopover = (props: Props) => {
   const { filterFields, onSubmit, tableFilters, table, operator } = props;
-  console.log('filterFields: ', filterFields);
 
   const { t } = useTranslation();
 
