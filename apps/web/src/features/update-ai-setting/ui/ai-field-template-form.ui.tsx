@@ -69,14 +69,15 @@ const defaultValues: Partial<AITemplate> = {
 };
 
 export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
+  const router = useRouter();
+  const templateId = router.query.templateId ? +router.query.templateId : null;
+
   const methods = useForm<AITemplate>({
     defaultValues,
     resolver: zodResolver(aiTemplateSchema),
   });
 
   const { register, formState, setValue, watch, handleSubmit } = methods;
-  const router = useRouter();
-  const templateId = router.query.templateId ? +router.query.templateId : null;
 
   const { formId, setIsPending, setIsDirty } = useAITemplateFormStore();
 
@@ -84,6 +85,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
     path: '/api/admin/projects/{projectId}/ai/fieldTemplates',
     variables: { projectId },
   });
+
   const { data: integrationData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/integrations',
     variables: { projectId },
@@ -106,9 +108,9 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
           pathname: router.pathname,
           query: { ...router.query, templateId: data?.id },
         });
+        await refetch();
       },
       onError(error) {
-        console.log('error: ', error);
         toast.error(error.message);
       },
     },

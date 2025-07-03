@@ -61,7 +61,7 @@ const defaultValues: FieldInfo = {
   property: 'READ_ONLY',
   order: 0,
   aiFieldTargetKeys: null,
-  aiTemplateId: null,
+  aiFieldTemplateId: null,
   aiFieldAutoProcessing: null,
 };
 
@@ -244,7 +244,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                     shouldDirty: true,
                   });
                   setValue('options', undefined);
-                  setValue('aiTemplateId', undefined);
+                  setValue('aiFieldTemplateId', undefined);
                   setValue('aiFieldTargetKeys', undefined);
                   setValue('aiFieldAutoProcessing', undefined);
                 }}
@@ -313,13 +313,15 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                     })) ?? []
                   }
                   disabled={isDefaultField}
-                  value={watch('aiTemplateId')?.toString()}
+                  value={watch('aiFieldTemplateId')?.toString()}
                   onChange={(value) =>
-                    setValue('aiTemplateId', value ? parseInt(value) : null, {
-                      shouldDirty: true,
-                    })
+                    setValue(
+                      'aiFieldTemplateId',
+                      value ? parseInt(value) : null,
+                      { shouldDirty: true },
+                    )
                   }
-                  error={formState.errors.aiTemplateId?.message}
+                  error={formState.errors.aiFieldTemplateId?.message}
                   required
                 />
                 <MultiSelectInput

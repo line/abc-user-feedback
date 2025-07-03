@@ -79,7 +79,7 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
       async onSuccess() {
         if (!data?.apiKey) {
           await client.post({
-            path: '/api/admin/projects/{projectId}/ai/templates/default',
+            path: '/api/admin/projects/{projectId}/ai/fieldTemplates/default',
             pathParams: { projectId },
           });
         }

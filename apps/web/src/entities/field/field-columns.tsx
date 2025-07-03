@@ -53,7 +53,6 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
           )}
         </div>
       ),
-
       enableSorting: false,
     }),
     columnHelper.accessor('name', {
@@ -83,9 +82,14 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
             <SelectOptionListPopover options={row.original.options ?? []} />
           );
         }
-        if (row.original.format === 'aiField' && row.original.aiTemplateId) {
+        if (
+          row.original.format === 'aiField' &&
+          row.original.aiFieldTemplateId
+        ) {
           return (
-            <AiFieldOptionPopover aiTemplateId={row.original.aiTemplateId} />
+            <AiFieldOptionPopover
+              aiFieldTemplateId={row.original.aiFieldTemplateId}
+            />
           );
         }
         return '-';
