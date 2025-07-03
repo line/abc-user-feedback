@@ -117,15 +117,6 @@ export class AIController {
   }
 
   @RequirePermission(PermissionEnum.generative_ai_update)
-  @ApiOkResponse()
-  @Post('fieldTemplates/default')
-  async createDefaultFieldTemplates(
-    @Param('projectId', ParseIntPipe) projectId: number,
-  ) {
-    await this.aiService.createDefaultFieldTemplates(projectId);
-  }
-
-  @RequirePermission(PermissionEnum.generative_ai_update)
   @ApiCreatedResponse({ type: CreateAIFieldTemplateResponseDto })
   @ApiOkResponse()
   @Post('fieldTemplates/new')
