@@ -354,7 +354,7 @@ importers:
         version: 0.5.10(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@t3-oss/env-nextjs':
         specifier: ^0.13.8
-        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.67)
+        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.71)
       '@tanstack/react-query':
         specifier: ^5.81.5
         version: 5.81.5(react@19.1.0)
@@ -467,8 +467,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.12.9(@swc/helpers@0.5.17))(@types/node@22.15.33)(typescript@5.8.3)))
       zod:
-        specifier: ^3.25.67
-        version: 3.25.67
+        specifier: ^3.25.71
+        version: 3.25.71
       zustand:
         specifier: ^5.0.6
         version: 5.0.6(@types/react@19.1.8)(immer@10.1.1)(react@19.1.0)(use-sync-external-store@1.4.0(react@19.1.0))
@@ -10089,8 +10089,8 @@ packages:
     peerDependencies:
       zod: ^3.18.0
 
-  zod@3.25.67:
-    resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
+  zod@3.25.71:
+    resolution: {integrity: sha512-BsBc/NPk7h8WsUWYWYL+BajcJPY8YhjelaWu2NMLuzgraKAz4Lb4/6K11g9jpuDetjMiqhZ6YaexFLOC0Ogi3Q==}
 
   zustand@5.0.6:
     resolution: {integrity: sha512-ihAqNeUVhe0MAD+X8M5UzqyZ9k3FFZLBTtqo6JLPwV53cbRB/mJwBI0PxcIgqhBBHlEs8G45OTDTMq3gNcLq3A==}
@@ -14214,19 +14214,19 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@t3-oss/env-core@0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.67)':
+  '@t3-oss/env-core@0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.71)':
     optionalDependencies:
       arktype: 2.1.20
       typescript: 5.8.3
-      zod: 3.25.67
+      zod: 3.25.71
 
-  '@t3-oss/env-nextjs@0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.67)':
+  '@t3-oss/env-nextjs@0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.71)':
     dependencies:
-      '@t3-oss/env-core': 0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.67)
+      '@t3-oss/env-core': 0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.71)
     optionalDependencies:
       arktype: 2.1.20
       typescript: 5.8.3
-      zod: 3.25.67
+      zod: 3.25.71
 
   '@tanstack/query-core@5.81.5': {}
 
@@ -16385,8 +16385,8 @@ snapshots:
       '@babel/plugin-proposal-private-methods': 7.18.6(@babel/core@7.28.0)
       eslint: 9.30.1(jiti@2.4.2)
       hermes-parser: 0.25.1
-      zod: 3.25.67
-      zod-validation-error: 3.4.0(zod@3.25.67)
+      zod: 3.25.71
+      zod-validation-error: 3.4.0(zod@3.25.71)
     transitivePeerDependencies:
       - supports-color
 
@@ -21212,11 +21212,11 @@ snapshots:
       compress-commons: 4.1.2
       readable-stream: 3.6.2
 
-  zod-validation-error@3.4.0(zod@3.25.67):
+  zod-validation-error@3.4.0(zod@3.25.71):
     dependencies:
-      zod: 3.25.67
+      zod: 3.25.71
 
-  zod@3.25.67: {}
+  zod@3.25.71: {}
 
   zustand@5.0.6(@types/react@19.1.8)(immer@10.1.1)(react@19.1.0)(use-sync-external-store@1.4.0(react@19.1.0)):
     optionalDependencies:
