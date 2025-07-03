@@ -17,16 +17,7 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@ufb/react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@ufb/react';
 
 import { cn, MultiSelectInput } from '@/shared';
 import type { Channel } from '@/entities/channel';
@@ -83,6 +74,7 @@ const WebhookEventCard: React.FC<Props> = (props) => {
           </div>
           <div onClick={(e) => e.stopPropagation()}>
             <MultiSelectInput
+              placeholder={t('v2.placeholder.select')}
               options={channels.map((channel) => ({
                 label: channel.name,
                 value: String(channel.id),
@@ -92,6 +84,7 @@ const WebhookEventCard: React.FC<Props> = (props) => {
                   channels.map((v) => String(v.id))
                 : selectedValues
               }
+              onChange={setSelectedValues}
               disabled={!checked}
             />
           </div>

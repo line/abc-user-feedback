@@ -191,7 +191,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     variables: { projectId },
   });
   const { data: templates } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/ai/templates',
+    path: '/api/admin/projects/{projectId}/ai/fieldTemplates',
     variables: { projectId },
   });
 

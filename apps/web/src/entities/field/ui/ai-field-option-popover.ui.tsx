@@ -35,7 +35,7 @@ const AiFieldOptionPopover = ({ aiTemplateId }: Props) => {
   const router = useRouter();
   const projectId = +(router.query.projectId as string);
   const { data } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/ai/templates',
+    path: '/api/admin/projects/{projectId}/ai/fieldTemplates',
     variables: { projectId },
   });
 

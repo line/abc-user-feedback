@@ -49,6 +49,7 @@ import {
   CreateAIFieldTemplateResponseDto,
   CreateAIIntegrationsResponseDto,
   CreateAIIssueTemplateResponseDto,
+  GetAIFieldTemplatesResponseDto,
   GetAIIntegrationResponseDto,
   GetAIIntegrationsModelsResponseDto,
   GetAIIssueTemplatesResponseDto,
@@ -107,10 +108,10 @@ export class AIController {
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)
-  @ApiOkResponse({ type: [GetAIIssueTemplatesResponseDto] })
+  @ApiOkResponse({ type: [GetAIFieldTemplatesResponseDto] })
   @Get('fieldTemplates')
   async getFieldTemplates(@Param('projectId', ParseIntPipe) projectId: number) {
-    return GetAIIssueTemplatesResponseDto.transform(
+    return GetAIFieldTemplatesResponseDto.transform(
       await this.aiService.findFieldTemplatesByProjectId(projectId),
     );
   }
