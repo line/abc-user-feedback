@@ -98,24 +98,28 @@ const CompleteProjectCreationPage: NextPage = () => {
         <h3 className="text-title-h3">{t('v2.text.summary')}</h3>
         <Accordion
           type="multiple"
-          defaultValue={[t('project-setting-menu.project-info')]}
+          defaultValue={[t('v2.project-setting-menu.project-info')]}
           className="overflow-auto"
         >
           <CreateSectionTemplate
-            title={t('project-setting-menu.project-info')}
+            title={t('v2.project-setting-menu.project-info')}
             defaultOpen
           >
             <FormProvider {...projectInfoFormMethods}>
               <ProjectInfoForm type="update" readOnly />
             </FormProvider>
           </CreateSectionTemplate>
-          <CreateSectionTemplate title={t('project-setting-menu.role-mgmt')}>
+          <CreateSectionTemplate title={t('v2.project-setting-menu.role-mgmt')}>
             <RoleTable roles={roles?.roles ?? []} />
           </CreateSectionTemplate>
-          <CreateSectionTemplate title={t('project-setting-menu.member-mgmt')}>
+          <CreateSectionTemplate
+            title={t('v2.project-setting-menu.member-mgmt')}
+          >
             <MemberTable data={members?.items ?? []} />
           </CreateSectionTemplate>
-          <CreateSectionTemplate title={t('project-setting-menu.api-key-mgmt')}>
+          <CreateSectionTemplate
+            title={t('v2.project-setting-menu.api-key-mgmt')}
+          >
             <ApiKeyTable data={apiKeys?.items ?? []} />
           </CreateSectionTemplate>
         </Accordion>

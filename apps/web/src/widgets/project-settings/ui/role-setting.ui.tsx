@@ -140,7 +140,7 @@ const RoleSetting: React.FC<IProps> = (props) => {
 
   return (
     <SettingTemplate
-      title={t('project-setting-menu.role-mgmt')}
+      title={t('v2.project-setting-menu.role-mgmt')}
       onClickBack={() =>
         router.push({
           pathname: '/main/project/[projectId]/settings',
