@@ -103,3 +103,76 @@ ${prompt}
 Below is the content of the Feedback containing the values of the Target Fields to be referenced in the response:
 ${promptTargetText}`.trim();
 }
+
+export function getRefinedIssueRecommendPrompt(
+  targetFeedback: string,
+  additionalPrompt: string,
+  issueExamples: string,
+  existingIssues: string,
+): string {
+  return `
+## Instructions
+IMPORTANT: 다음 설명들과 피드백과 이슈 예제들을 바탕으로 AI Issue 추천에 대한 결과를 응답해
+IMPORTANT: 응답시 추천된 Issue들에 대한 응답값만을 text 형식으로 리턴하고 특수문자 등 나머지 불필요한 정보는 제외해.
+IMPORTANT: 응답시 이슈가 여러개일 경우 comma(,)로 구분해서 응답해.
+
+## Feedback Field Structure
+
+"Field"라는 개념은 각 feedback의 attribute를 의미해. 각 필드는 key, name, description을 가지고 있어. "key"는 피드백을 입력 받을 때 필드의 유일한 key 값을 의미하고, "name"은 유저가 참조하는 필드의 이름이고 "description"은 필드에 대한 설명이야. 
+
+예를 들어 다음과 같이 field들이 정의될 수 있고 feedback이 입력 될 수 있어.
+
+\`\`\`
+Fields:
+[
+  { key: "os", name: "device_os", description: "operating system of app" },
+  { key: "message",name: "message", description: "Contents of feedback" }
+]
+
+Feedback: { "os": "IOS", "message": "The app is not opened"}
+
+\`\`\`
+
+## Feedback and Issue
+"Issue"는 ABC User Feedback 내부에서 "Feedback"들에 할당되어 관리하는 목적으로 사용 돼. "Issue"는 name, description, status를 가질 수 있어. "name"은 이슈의 이름을 의미하는데, 피드백에 할당될 때 피드백의 내용을 요약해서 어떤 이슈인지를 표현할 수 있어야 해. "description"은 이슈에 대한 설명이고 "status"는 이슈에 대한 상태인데 "INIT", "IN_PROGRESS", "RESOLVED" 등의 상태를 가질 수 있어. 
+
+예를 들어 다음과 같이 Feedback과 관련된 Issue가 있을 수 있어. 다음 예제에서는 하나의 피드백에 하나의 이슈만 존재하지만 피드백과 이슈는 n:m관계가 될 수 있어.
+
+\`\`\`
+Feedback: { "os": "IOS", "message": "When I've tried to login, I got an error message."}
+
+Issue: { "name": "Login Issue", "description": "The user could not login." }
+
+\`\`\`
+
+## AI Issue Recommend
+
+AI Issue Recommend 기능은 유저의 Feedback과 Core User Prompt와 Issue Examples와 Existing Issues가 입력되었을 때 Feedback에 할당될 Issue를 자동으로 추천해주는 기능이야. Issue Example에는 현재 이 서비스에서 피드백들에 대해 할당된 이슈에 대한 정보가 있기 때문에 참고할 수 있어. Feedback의 내용을 중점적으로 분석하되 Core User Prompt의 내용을 반영해서 응답해.
+
+다음은 Feedback이 입력되었을 때 추천되는 Issue의 예제야. Feedback이 길더라도 핵심적인 이슈로 요약이 가능해야 하고, Issue Examples를 참고하여 이미 존재하는 이슈 Existing Issues에 할당 가능할 경우 이슈를 생성하지 말고 그것을 우선적으로 추천해 줘.
+
+\`\`\`
+Feedback: { "os": "IOS", "message": "In order to check my account setting, I've tried to login with correct email and password, but It doesn't work. If it is possible, I want to change my password."}
+
+Issues:
+{ "name": "Login Issue", "description": "The user could not login." }
+{ "name": "Password Change Issue", "description": "The user want to change the password" }
+
+\`\`\`
+
+## Feedback
+다음은 AI Issue Recommend의 대상이 되는 피드백 내용이야.
+${targetFeedback}
+
+## Additional User Prompt
+${additionalPrompt}
+
+## Issue Examples
+다음은 기존에 존재하는 이슈들의 예제야. 각 이슈의 name, description과 함께 어떤 피드백이 각 이슈에 할당되었는지 함께 제공돼.
+${issueExamples}
+
+## Existing Issues
+다음은 이미 서비스 안에 존재하는 이슈들의 목록이야. 만약 이미 존재하는 이슈에 할당 가능할 경우 이슈를 생성하지 말고 그것을 우선적으로 추천하고, 그렇지 않을 경우 새로운 이슈를 추천해 줘.
+${existingIssues}
+ `.trim();
+}

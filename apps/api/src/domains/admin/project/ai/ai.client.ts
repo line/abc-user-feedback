@@ -19,7 +19,11 @@ import type { AxiosInstance, AxiosResponse } from 'axios';
 
 import { AIPromptStatusEnum } from '@/common/enums/ai-prompt-status.enum';
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
-import { getRefinedSystemPrompt, getRefinedUserPrompt } from './ai.prompt';
+import {
+  getRefinedIssueRecommendPrompt,
+  getRefinedSystemPrompt,
+  getRefinedUserPrompt,
+} from './ai.prompt';
 
 interface AIClientConfig {
   apiKey: string;
@@ -86,6 +90,46 @@ export class PromptParameters {
     this.prompt = prompt;
     this.targetFields = targetFields;
     this.promptTargetText = promptTargetText;
+    this.projectName = projectName;
+    this.projectDesc = projectDesc;
+    this.channelName = channelName;
+    this.channelDesc = channelDesc;
+  }
+}
+
+export class IssueRecommendParameters {
+  model: string;
+  temperature: number;
+  systemPrompt: string;
+  targetFeedback: string;
+  additionalPrompt: string;
+  issueExamples: string;
+  existingIssues: string;
+  projectName: string;
+  projectDesc: string;
+  channelName: string;
+  channelDesc: string;
+
+  constructor(
+    model: string,
+    temperature: number,
+    systemPrompt: string,
+    targetFeedback: string,
+    additionalPrompt: string,
+    issueExamples: string,
+    existingIssues: string,
+    projectName: string,
+    projectDesc: string,
+    channelName: string,
+    channelDesc: string,
+  ) {
+    this.model = model;
+    this.temperature = temperature;
+    this.systemPrompt = systemPrompt;
+    this.targetFeedback = targetFeedback;
+    this.additionalPrompt = additionalPrompt;
+    this.issueExamples = issueExamples;
+    this.existingIssues = existingIssues;
     this.projectName = projectName;
     this.projectDesc = projectDesc;
     this.channelName = channelName;
@@ -221,6 +265,101 @@ export class AIClient {
 
       this.logger.log(
         `──────────────────── AI Prompt Execution ────────────────────`,
+      );
+      this.logger.log('System Prompt');
+      this.logger.log(systemPrompt);
+      this.logger.log('User Prompt');
+      this.logger.log(userPrompt);
+
+      if (this.provider === AIProvidersEnum.OPEN_AI) {
+        response = await this.axiosInstance.post('/chat/completions', {
+          model: params.model,
+          messages: [
+            {
+              role: 'developer',
+              content: systemPrompt,
+            },
+            {
+              role: 'user',
+              content: userPrompt,
+            },
+          ],
+          temperature: params.temperature,
+        });
+        const result = new PromptResult();
+        result.content = response.data.choices[0].message.content;
+        result.usedTokens = response.data.usage.total_tokens;
+        result.statusCode = response.status;
+
+        return result;
+      } else {
+        response = await this.axiosInstance.post(
+          `/models/${params.model}:generateContent`,
+          {
+            systemInstruction: {
+              parts: [
+                {
+                  text: systemPrompt,
+                },
+              ],
+            },
+            contents: [
+              {
+                parts: [
+                  {
+                    text: userPrompt,
+                  },
+                ],
+              },
+            ],
+            generationConfig: {
+              temperature: params.temperature,
+            },
+          },
+          {
+            params: { key: this.apiKey },
+          },
+        );
+      }
+
+      const result = new PromptResult();
+      result.content = response.data.candidates[0].content.parts[0].text;
+      result.usedTokens = response.data.usageMetadata.totalTokenCount;
+      result.statusCode = response.status;
+
+      return result;
+    } catch (error) {
+      const result = new PromptResult();
+      result.status = AIPromptStatusEnum.error;
+      result.content = `Error executing prompt: ${error}`;
+      result.usedTokens = 0;
+      result.statusCode = (error as ErrorResponse).status;
+
+      return result;
+    }
+  }
+
+  async executeIssueRecommend(params: IssueRecommendParameters) {
+    try {
+      let response: ExecutePromptResponse;
+
+      const systemPrompt = getRefinedSystemPrompt(
+        params.systemPrompt,
+        params.projectName,
+        params.projectDesc,
+        params.channelName,
+        params.channelDesc,
+      );
+
+      const userPrompt = getRefinedIssueRecommendPrompt(
+        params.targetFeedback,
+        params.additionalPrompt,
+        params.issueExamples,
+        params.existingIssues,
+      );
+
+      this.logger.log(
+        `──────────────────── AI Issue Recommend Execution ────────────────────`,
       );
       this.logger.log('System Prompt');
       this.logger.log(systemPrompt);

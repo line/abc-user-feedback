@@ -52,6 +52,7 @@ import {
   GetAIFieldTemplatesResponseDto,
   GetAIIntegrationResponseDto,
   GetAIIntegrationsModelsResponseDto,
+  GetAIIssueRecommendResponseDto,
   GetAIIssueTemplatesResponseDto,
   GetAIPlaygroundResultResponseDto,
   GetAIUsagesResponseDto,
@@ -220,6 +221,18 @@ export class AIController {
         projectId,
       }),
     });
+  }
+
+  @RequirePermission(PermissionEnum.generative_ai_read)
+  @ApiOkResponse({ type: GetAIIssueRecommendResponseDto })
+  @ApiParam({ name: 'projectId', type: Number })
+  @Post('issueRecommend/:feedbackId')
+  async recommendAIIssue(
+    @Param('feedbackId', ParseIntPipe) feedbackId: number,
+  ) {
+    return GetAIIssueRecommendResponseDto.transform(
+      await this.aiService.recommendAIIssue(feedbackId),
+    );
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)

@@ -23,3 +23,4 @@ export { GetAIPlaygroundResultResponseDto } from './get-ai-playground-result-res
 export { GetAIUsagesResponseDto } from './get-ai-usages-response.dto';
 export { CreateAIIssueTemplateResponseDto } from './create-ai-issue-template-response.dto';
 export { GetAIIssueTemplatesResponseDto } from './get-ai-issue-templates-response.dto';
+export { GetAIIssueRecommendResponseDto } from './get-ai-issue-recommend-response.dto';

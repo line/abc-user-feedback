@@ -36,6 +36,7 @@ import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { FeedbackMySQLService } from '../../feedback/feedback.mysql.service';
 import { FeedbackOSService } from '../../feedback/feedback.os.service';
+import { IssueEntity } from '../issue/issue.entity';
 import { ProjectEntity } from '../project/project.entity';
 import { PermissionEnum } from '../role/permission.enum';
 import { RoleEntity } from '../role/role.entity';
@@ -43,7 +44,11 @@ import { AIFieldTemplatesEntity } from './ai-field-templates.entity';
 import { AIIntegrationsEntity } from './ai-integrations.entity';
 import { AIIssueTemplatesEntity } from './ai-issue-templates.entity';
 import { AIUsagesEntity, UsageCategoryEnum } from './ai-usages.entity';
-import { AIClient, PromptParameters } from './ai.client';
+import {
+  AIClient,
+  IssueRecommendParameters,
+  PromptParameters,
+} from './ai.client';
 import { CreateAIFieldTemplateDto } from './dtos/create-ai-field-template.dto';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import { CreateAIIssueTemplateDto } from './dtos/create-ai-issue-template.dto';
@@ -72,6 +77,9 @@ export class AIService {
 
     @InjectRepository(FeedbackEntity)
     private readonly feedbackRepo: Repository<FeedbackEntity>,
+
+    @InjectRepository(IssueEntity)
+    private readonly issueRepo: Repository<IssueEntity>,
 
     @InjectRepository(FieldEntity)
     private readonly fieldRepo: Repository<FieldEntity>,
@@ -469,7 +477,7 @@ export class AIService {
       if (field.key === 'issues') {
         const issues = feedback.issues
           .map((issue) => `${issue.name}: ${issue.description}`)
-          .join(', ');
+          .join(',');
         return `${acc}\n${field.key}: ${issues}`;
       }
 
@@ -774,6 +782,159 @@ export class AIService {
         category: usage.category,
         provider: usage.provider,
         usedTokens: usage.usedTokens,
+      };
+    });
+  }
+
+  private generateIssueExamples(
+    issues: IssueEntity[],
+    issueTemplate: AIIssueTemplatesEntity,
+  ) {
+    return issues
+      .map((issue) => {
+        return JSON.stringify({
+          name: issue.name,
+          description: issue.description,
+          feedbacks: issue.feedbacks.map((feedback) => {
+            const content = issueTemplate.targetFieldKeys.reduce(
+              (acc, key, idx) => {
+                if (
+                  idx <= issueTemplate.linkIssueFeedbacks &&
+                  feedback.data[key] !== undefined
+                ) {
+                  return acc ?
+                      `${acc},${feedback.data[key]}`
+                    : `${feedback.data[key]}`;
+                }
+                return acc;
+              },
+              '',
+            );
+            return content;
+          }),
+        });
+      })
+      .join(',');
+  }
+
+  async recommendAIIssue(feedbackId: number) {
+    const feedback = await this.feedbackRepo.findOne({
+      where: { id: feedbackId },
+      relations: {
+        channel: {
+          project: true,
+        },
+      },
+    });
+    if (!feedback) {
+      throw new NotFoundException(`Feedback ${feedbackId} not found`);
+    }
+
+    const integration = await this.aiIntegrationsRepo.findOne({
+      where: {
+        project: {
+          id: feedback.channel.project.id,
+        },
+      },
+    });
+
+    if (!integration) {
+      throw new BadRequestException('Integration not found');
+    }
+
+    if (
+      await this.hasTokenThresholdExceeded(
+        feedback.channel.project.id,
+        integration.provider,
+      )
+    ) {
+      return {
+        success: false,
+        message:
+          'Token threshold exceeded, cannot process AI Issue recommendation',
+        result: [],
+      };
+    }
+
+    const issueTemplate = await this.aiIssueTemplatesRepo.findOne({
+      where: {
+        channel: {
+          id: feedback.channel.id,
+        },
+        isEnabled: true,
+      },
+    });
+
+    if (issueTemplate === null) {
+      throw new NotFoundException('No issue templates found');
+    }
+
+    const client = new AIClient({
+      apiKey: integration.apiKey,
+      provider: integration.provider,
+      baseUrl: integration.endpointUrl,
+    });
+
+    type FieldType = {
+      fieldKey: string;
+      fieldValue: any;
+    };
+
+    const targetFeedback = JSON.stringify(
+      issueTemplate.targetFieldKeys.reduce((acc: FieldType[], key) => {
+        if (feedback.data[key] !== undefined) {
+          acc.push({ fieldKey: key, fieldValue: feedback.data[key] });
+          return acc;
+        }
+        return acc;
+      }, []),
+    );
+
+    const issues = await this.issueRepo.find({
+      relations: {
+        feedbacks: true,
+      },
+    });
+
+    const existingIssues = issues.map((issue) => issue.name).join(',');
+    const issueExamples = this.generateIssueExamples(issues, issueTemplate);
+
+    const param = new IssueRecommendParameters(
+      issueTemplate.model!,
+      issueTemplate.temperature,
+      integration.systemPrompt,
+      targetFeedback,
+      issueTemplate.prompt,
+      issueExamples,
+      existingIssues,
+      feedback.channel.project.name,
+      feedback.channel.project.description ?? '',
+      feedback.channel.name,
+      feedback.channel.description ?? '',
+    );
+
+    const result = await client.executeIssueRecommend(param);
+
+    this.logger.log(`Issue Recommend Result: ${result.content}`);
+
+    void this.saveAIUsage(
+      result.usedTokens,
+      integration.provider,
+      UsageCategoryEnum.ISSUE_RECOMMEND,
+      feedback.channel.project.id,
+    );
+
+    return {
+      success: true,
+      result: this.parseIssueRecommendResult(result.content),
+    };
+  }
+
+  private parseIssueRecommendResult(content: string) {
+    return content.split(',').map((issue) => {
+      const name = issue;
+      return {
+        issueName: name.trim(),
       };
     });
   }
