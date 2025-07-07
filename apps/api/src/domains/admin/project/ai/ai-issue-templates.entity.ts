@@ -41,11 +41,8 @@ export class AIIssueTemplatesEntity extends CommonEntity {
   @Column('float', { default: 0.7 })
   temperature: number;
 
-  @Column('float', { default: 1.0 })
-  linkExistingIssues: number;
-
   @Column('int', { default: 3 })
-  linkIssueFeedbacks: number;
+  dataReferenceAmount: number;
 
   @OneToMany(() => FieldEntity, (field) => field.aiFieldTemplate, {
     nullable: true,
@@ -60,8 +57,7 @@ export class AIIssueTemplatesEntity extends CommonEntity {
     isEnabled,
     model,
     temperature,
-    linkExistingIssues,
-    linkIssueFeedbacks,
+    dataReferenceAmount,
   }: {
     channelId: number;
     targetFieldKeys: string[];
@@ -69,8 +65,7 @@ export class AIIssueTemplatesEntity extends CommonEntity {
     isEnabled: boolean;
     model: string | null;
     temperature: number;
-    linkExistingIssues: number;
-    linkIssueFeedbacks: number;
+    dataReferenceAmount: number;
   }) {
     const aiIssueTemplate = new AIIssueTemplatesEntity();
 
@@ -81,8 +76,7 @@ export class AIIssueTemplatesEntity extends CommonEntity {
     aiIssueTemplate.isEnabled = isEnabled;
     aiIssueTemplate.model = model;
     aiIssueTemplate.temperature = temperature;
-    aiIssueTemplate.linkExistingIssues = linkExistingIssues;
-    aiIssueTemplate.linkIssueFeedbacks = linkIssueFeedbacks;
+    aiIssueTemplate.dataReferenceAmount = dataReferenceAmount;
 
     return aiIssueTemplate;
   }

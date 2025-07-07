@@ -37,10 +37,7 @@ export class CreateAIIssueTemplateDto {
   temperature: number;
 
   @Expose()
-  linkExistingIssues: number;
-
-  @Expose()
-  linkIssueFeedbacks: number;
+  dataReferenceAmount: number;
 
   public static from(params: any): CreateAIIssueTemplateDto {
     return plainToInstance(CreateAIIssueTemplateDto, params, {
@@ -56,8 +53,7 @@ export class CreateAIIssueTemplateDto {
       isEnabled,
       model,
       temperature,
-      linkExistingIssues,
-      linkIssueFeedbacks,
+      dataReferenceAmount,
     } = params;
 
     return AIIssueTemplatesEntity.from({
@@ -67,8 +63,7 @@ export class CreateAIIssueTemplateDto {
       isEnabled,
       model,
       temperature,
-      linkExistingIssues,
-      linkIssueFeedbacks,
+      dataReferenceAmount,
     });
   }
 }

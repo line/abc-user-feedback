@@ -43,9 +43,5 @@ export class CreateAIIssueTemplateRequestDto {
 
   @ApiProperty({ nullable: false, type: Number })
   @IsNumber()
-  linkExistingIssues: number;
-
-  @ApiProperty({ nullable: false, type: Number })
-  @IsNumber()
-  linkIssueFeedbacks: number;
+  dataReferenceAmount: number;
 }

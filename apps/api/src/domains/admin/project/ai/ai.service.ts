@@ -323,8 +323,7 @@ export class AIService {
       isEnabled: template.isEnabled,
       model: template.model,
       temperature: template.temperature,
-      linkExistingIssues: template.linkExistingIssues,
-      linkIssueFeedbacks: template.linkIssueFeedbacks,
+      dataReferenceAmount: template.dataReferenceAmount,
       createdAt: template.createdAt,
       updatedAt: template.updatedAt,
     }));
@@ -786,6 +785,40 @@ export class AIService {
     });
   }
 
+  private convertToLinkedFeedbackCount(dataReferenceAmount: number) {
+    switch (dataReferenceAmount) {
+      case 1:
+        return 1;
+      case 2:
+        return 2;
+      case 3:
+        return 3;
+      case 4:
+        return 4;
+      case 5:
+        return 5;
+      default:
+        return 3;
+    }
+  }
+
+  private convertToLinkedIssueCount(dataReferenceAmount: number) {
+    switch (dataReferenceAmount) {
+      case 1:
+        return 0.2;
+      case 2:
+        return 0.4;
+      case 3:
+        return 0.6;
+      case 4:
+        return 0.8;
+      case 5:
+        return 1;
+      default:
+        return 0.6;
+    }
+  }
+
   private generateIssueExamples(
     issues: IssueEntity[],
     issueTemplate: AIIssueTemplatesEntity,
@@ -795,21 +828,15 @@ export class AIService {
         return JSON.stringify({
           name: issue.name,
           description: issue.description,
-          feedbacks: issue.feedbacks.map((feedback) => {
-            const content = issueTemplate.targetFieldKeys.reduce(
-              (acc, key, idx) => {
-                if (
-                  idx <= issueTemplate.linkIssueFeedbacks &&
-                  feedback.data[key] !== undefined
-                ) {
-                  return acc ?
-                      `${acc},${feedback.data[key]}`
-                    : `${feedback.data[key]}`;
-                }
-                return acc;
-              },
-              '',
-            );
+          feedbacks: issue.feedbacks.map((feedback, idx) => {
+            const content = issueTemplate.targetFieldKeys.reduce((acc, key) => {
+              if (feedback.data[key] !== undefined) {
+                return acc ?
+                    `${acc},${feedback.data[key]}`
+                  : `${feedback.data[key]}`;
+              }
+              return acc;
+            }, '');
             return content;
           }),
         });
@@ -890,10 +917,28 @@ export class AIService {
       }, []),
     );
 
+    const count = await this.issueRepo.count();
     const issues = await this.issueRepo.find({
       relations: {
         feedbacks: true,
       },
+      order: {
+        feedbackCount: 'DESC',
+      },
+      take: Math.ceil(
+        count *
+          this.convertToLinkedIssueCount(issueTemplate.dataReferenceAmount),
+      ),
+    });
+
+    issues.forEach((issue) => {
+      issue.feedbacks.sort((a, b) => {
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      });
+      issue.feedbacks = issue.feedbacks.slice(
+        0,
+        this.convertToLinkedFeedbackCount(issueTemplate.dataReferenceAmount),
+      );
     });
 
     const existingIssues = issues.map((issue) => issue.name).join(',');
@@ -924,9 +969,17 @@ export class AIService {
       feedback.channel.project.id,
     );
 
+    if (result.status === AIPromptStatusEnum.success) {
+      return {
+        success: true,
+        result: this.parseIssueRecommendResult(result.content),
+      };
+    }
+
     return {
-      success: true,
-      result: this.parseIssueRecommendResult(result.content),
+      success: false,
+      message: result.content,
+      result: [],
     };
   }
 

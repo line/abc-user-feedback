@@ -48,11 +48,7 @@ export class GetAIIssueTemplatesResponseDto {
 
   @ApiProperty({ nullable: false, type: Number })
   @Expose()
-  linkExistingIssues: number;
-
-  @ApiProperty({ nullable: false, type: Number })
-  @Expose()
-  linkIssueFeedbacks: number;
+  dataReferenceAmount: number;
 
   @ApiProperty()
   @Expose()
