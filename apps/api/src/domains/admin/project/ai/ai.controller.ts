@@ -39,6 +39,7 @@ import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import {
   CreateAIFieldTemplateRequestDto,
   CreateAIIssueTemplateRequestDto,
+  GetAIIssuePlaygroundResultRequestDto,
   GetAIPlaygroundResultRequestDto,
   ProcessAIFieldRequestDto,
   ProcessSingleAIFieldRequestDto,
@@ -233,6 +234,19 @@ export class AIController {
     return GetAIIssueRecommendResponseDto.transform(
       await this.aiService.recommendAIIssue(feedbackId),
     );
+  }
+
+  @RequirePermission(PermissionEnum.generative_ai_read)
+  @ApiOkResponse({ type: GetAIPlaygroundResultResponseDto })
+  @Post('issueRecommend/playground/test')
+  async getAIIssuePlaygroundResult(
+    @Body() body: GetAIIssuePlaygroundResultRequestDto,
+  ) {
+    return GetAIPlaygroundResultResponseDto.transform({
+      result: await this.aiService.getIssuePlaygroundPromptResult({
+        ...body,
+      }),
+    });
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)

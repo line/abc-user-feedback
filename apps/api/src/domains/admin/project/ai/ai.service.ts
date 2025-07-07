@@ -32,6 +32,7 @@ import {
   getCurrentMonth,
   getCurrentYear,
 } from '@/utils/date-utils';
+import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { FeedbackMySQLService } from '../../feedback/feedback.mysql.service';
@@ -52,10 +53,15 @@ import {
 import { CreateAIFieldTemplateDto } from './dtos/create-ai-field-template.dto';
 import { CreateAIIntegrationsDto } from './dtos/create-ai-integrations.dto';
 import { CreateAIIssueTemplateDto } from './dtos/create-ai-issue-template.dto';
+import { GetAIIssuePlaygroundResultDto } from './dtos/get-ai-issue-playground-result.dto';
 import { GetAIPlaygroundResultDto } from './dtos/get-ai-playground-result.dto';
 import { ValidateAPIKeyResponseDto } from './dtos/responses';
 import { UpdateAIFieldTemplateDto } from './dtos/update-ai-field-template.dto';
 import { UpdateAIIssueTemplateDto } from './dtos/update-ai-issue-template.dto';
+
+type FieldType = {
+  [key: string]: string;
+};
 
 @Injectable()
 export class AIService {
@@ -83,6 +89,9 @@ export class AIService {
 
     @InjectRepository(FieldEntity)
     private readonly fieldRepo: Repository<FieldEntity>,
+
+    @InjectRepository(ChannelEntity)
+    private readonly channelRepo: Repository<ChannelEntity>,
 
     @InjectRepository(ProjectEntity)
     private readonly projectRepo: Repository<ProjectEntity>,
@@ -828,7 +837,7 @@ export class AIService {
         return JSON.stringify({
           name: issue.name,
           description: issue.description,
-          feedbacks: issue.feedbacks.map((feedback, idx) => {
+          feedbacks: issue.feedbacks.map((feedback) => {
             const content = issueTemplate.targetFieldKeys.reduce((acc, key) => {
               if (feedback.data[key] !== undefined) {
                 return acc ?
@@ -902,15 +911,10 @@ export class AIService {
       baseUrl: integration.endpointUrl,
     });
 
-    type FieldType = {
-      fieldKey: string;
-      fieldValue: any;
-    };
-
     const targetFeedback = JSON.stringify(
       issueTemplate.targetFieldKeys.reduce((acc: FieldType[], key) => {
         if (feedback.data[key] !== undefined) {
-          acc.push({ fieldKey: key, fieldValue: feedback.data[key] });
+          acc.push({ [key]: feedback.data[key] });
           return acc;
         }
         return acc;
@@ -981,6 +985,121 @@ export class AIService {
       message: result.content,
       result: [],
     };
+  }
+
+  async getIssuePlaygroundPromptResult(dto: GetAIIssuePlaygroundResultDto) {
+    const channel = await this.channelRepo.findOne({
+      where: { id: dto.channelId },
+      relations: {
+        project: true,
+      },
+    });
+
+    if (!channel) {
+      throw new NotFoundException(`Channel ${dto.channelId} not found`);
+    }
+
+    const integration = await this.aiIntegrationsRepo.findOne({
+      where: {
+        project: {
+          id: channel.project.id,
+        },
+      },
+    });
+
+    if (!integration) {
+      throw new BadRequestException('Integration not found');
+    }
+
+    const client = new AIClient({
+      apiKey: integration.apiKey,
+      provider: integration.provider,
+      baseUrl: integration.endpointUrl,
+    });
+
+    const targetFeedback = JSON.stringify(
+      dto.temporaryFields.reduce((acc: FieldType[], temporaryField) => {
+        acc.push({
+          [temporaryField.name]: temporaryField.value,
+        });
+        return acc;
+      }, []),
+    );
+
+    const count = await this.issueRepo.count();
+    const issues = await this.issueRepo.find({
+      relations: {
+        feedbacks: true,
+      },
+      order: {
+        feedbackCount: 'DESC',
+      },
+      take: Math.ceil(
+        count * this.convertToLinkedIssueCount(dto.dataReferenceAmount),
+      ),
+    });
+
+    issues.forEach((issue) => {
+      issue.feedbacks.sort((a, b) => {
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      });
+      issue.feedbacks = issue.feedbacks.slice(
+        0,
+        this.convertToLinkedFeedbackCount(dto.dataReferenceAmount),
+      );
+    });
+
+    const existingIssues = issues.map((issue) => issue.name).join(',');
+
+    const issueExamples = issues
+      .map((issue) => {
+        return JSON.stringify({
+          name: issue.name,
+          description: issue.description,
+          feedbacks: issue.feedbacks.map((feedback) => {
+            const content = dto.targetFieldKeys.reduce(
+              (acc, targetFieldKey) => {
+                if (feedback.data[targetFieldKey] !== undefined) {
+                  return acc ?
+                      `${acc},${feedback.data[targetFieldKey]}`
+                    : `${feedback.data[targetFieldKey]}`;
+                }
+                return acc;
+              },
+              '',
+            );
+            return content;
+          }),
+        });
+      })
+      .join(',');
+
+    const param = new IssueRecommendParameters(
+      dto.model,
+      dto.temperature,
+      integration.systemPrompt,
+      targetFeedback,
+      dto.templatePrompt,
+      issueExamples,
+      existingIssues,
+      channel.project.name,
+      channel.project.description ?? '',
+      channel.name,
+      channel.description ?? '',
+    );
+
+    const result = await client.executeIssueRecommend(param);
+
+    this.logger.log(`Issue Recommend Result: ${result.content}`);
+
+    void this.saveAIUsage(
+      result.usedTokens,
+      integration.provider,
+      UsageCategoryEnum.ISSUE_RECOMMEND,
+      channel.project.id,
+    );
+
+    return result.content;
   }
 
   private parseIssueRecommendResult(content: string) {

@@ -21,3 +21,4 @@ export { GetAIPlaygroundResultRequestDto } from './get-ai-playground-result-requ
 export { ProcessAIFieldRequestDto } from './process-ai-field-request.dto';
 export { ProcessSingleAIFieldRequestDto } from './process-single-ai-field-request.dto';
 export { CreateAIIssueTemplateRequestDto } from './create-ai-issue-template-request.dto';
+export { GetAIIssuePlaygroundResultRequestDto } from './get-ai-issue-playground-result-request.dto';

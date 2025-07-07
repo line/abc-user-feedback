@@ -16,6 +16,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { FieldEntity } from '../../channel/field/field.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { FeedbackModule } from '../../feedback/feedback.module';
@@ -40,6 +41,7 @@ import { AIService } from './ai.service';
       FeedbackEntity,
       IssueEntity,
       ProjectEntity,
+      ChannelEntity,
       FieldEntity,
       RoleEntity,
     ]),
