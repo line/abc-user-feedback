@@ -139,7 +139,7 @@ const AiIssueComboboxGroup = ({
           key={issue.name}
           value={issue.name}
           onSelect={() => onSelect?.(issue)}
-          className="justify-between"
+          className="justify-between gap-4"
         >
           <span>{issue.name}</span>
           <span>{issue.option}</span>

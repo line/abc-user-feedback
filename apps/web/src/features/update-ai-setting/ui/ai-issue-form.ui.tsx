@@ -343,7 +343,7 @@ export const AIIssueFormButton = ({ projectId }: { projectId: number }) => {
   const { mutate: deleteTemplate } = useMutation({
     mutationFn: async (body: { templateId: number }) => {
       const { data } = await client.delete({
-        path: '/api/admin/projects/{projectId}/ai/fieldTemplates/{templateId}',
+        path: '/api/admin/projects/{projectId}/ai/issueTemplates/{templateId}',
         pathParams: { projectId, templateId: body.templateId },
       });
       return data;
