@@ -18,22 +18,33 @@ import { useState } from 'react';
 
 import { ComboboxGroup, ComboboxItem, Icon, Tag } from '@ufb/react';
 
-import { useOAIMutation, useOAIQuery } from '@/shared';
+import type { TableFilterCondition } from '@/shared';
+import { client, useOAIMutation, useOAIQuery } from '@/shared';
+import type { Issue } from '@/entities/issue';
 
 interface Props {
   projectId: number;
   channelId: number;
   feedbackId: number;
-  onSelect?: (issue: string) => void;
+  onSelect?: (issueItem: AIIssueRecommendationItem) => void;
+  currentIssues: Issue[];
 }
+
+type AIIssueRecommendationItem = {
+  id?: number;
+  name: string;
+  option: 'ADDED' | 'CREATE' | 'EXISTING';
+};
 
 const AiIssueComboboxGroup = ({
   projectId,
   channelId,
   feedbackId,
   onSelect,
+  currentIssues,
 }: Props) => {
-  const [issues, setIssues] = useState<string[]>([]);
+  const [issues, setIssues] = useState<AIIssueRecommendationItem[]>([]);
+
   const { data: aiIntegrations } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/integrations',
     variables: { projectId },
@@ -47,8 +58,46 @@ const AiIssueComboboxGroup = ({
     path: '/api/admin/projects/{projectId}/ai/issueRecommend/{feedbackId}',
     pathParams: { projectId, feedbackId },
     queryOptions: {
-      onSettled(data) {
-        setIssues(data?.result.map((v) => v.issueName) ?? []);
+      async onSettled(data) {
+        const issues = data?.result.map((v) => v.issueName) ?? [];
+        const { data: searchedIssues } = await client.post({
+          path: '/api/admin/projects/{projectId}/issues/search',
+          pathParams: { projectId },
+          body: {
+            operator: 'OR',
+            queries: issues.map((issue) => ({
+              key: 'name',
+              condition: 'IS' as TableFilterCondition,
+              value: issue,
+            })),
+          },
+        });
+        const getOption = (v: { issueName: string }) =>
+          currentIssues.some((issue) => issue.name === v.issueName) ? 'ADDED'
+          : searchedIssues?.items.some((issue) => issue.name === v.issueName) ?
+            'EXISTING'
+          : 'CREATE';
+        setIssues(
+          data?.result.map((v) => {
+            const option = getOption(v);
+
+            if (option === 'ADDED') {
+              const id = currentIssues.find(
+                ({ name }) => name === v.issueName,
+              )?.id;
+              return { id, name: v.issueName, option: 'ADDED' };
+            }
+
+            if (option === 'EXISTING') {
+              const id = searchedIssues?.items.find(
+                (issue) => issue.name === v.issueName,
+              )?.id;
+
+              return { id, name: v.issueName, option: 'EXISTING' };
+            }
+            return { name: v.issueName, option: 'CREATE' };
+          }) ?? [],
+        );
       },
     },
   });
@@ -78,7 +127,7 @@ const AiIssueComboboxGroup = ({
       className="border-neutral-secondary border-b"
     >
       {!aiIssue && (
-        <div className="flex max-w-[320px] items-center gap-2 p-3">
+        <div className="flex items-center gap-2 p-3">
           <Icon name="RiInformation2Fill" size={12} />
           <p className="text-neutral-tertiary text-base-normal">
             AI 이슈 템플릿을 등록해야 AI 기능을 실행할 수 있습니다.
@@ -87,11 +136,13 @@ const AiIssueComboboxGroup = ({
       )}
       {issues.map((issue) => (
         <ComboboxItem
-          key={issue}
-          value={issue}
+          key={issue.name}
+          value={issue.name}
           onSelect={() => onSelect?.(issue)}
+          className="justify-between"
         >
-          {issue}
+          <span>{issue.name}</span>
+          <span>{issue.option}</span>
         </ComboboxItem>
       ))}
     </ComboboxGroup>

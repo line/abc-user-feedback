@@ -162,12 +162,20 @@ const IssueCell: React.FC<IProps> = (props) => {
       },
     },
   });
-  const onClickIssue = (issue: Issue) => {
-    if (currentIssues.some((v) => v.id === issue.id)) {
-      detachIssue({ issueId: issue.id });
+  const onClickIssue = (issueId: number) => {
+    if (currentIssues.some((v) => v.id === issueId)) {
+      detachIssue({ issueId });
     } else {
-      attatchIssue({ issueId: issue.id });
+      attatchIssue({ issueId });
     }
+  };
+  const onCreateIssue = async (name: string) => {
+    const data = await createIssue({
+      name,
+      description: '',
+    });
+    if (!data) return;
+    attatchIssue({ issueId: data.id });
   };
 
   return (
@@ -195,7 +203,10 @@ const IssueCell: React.FC<IProps> = (props) => {
             )}
           </button>
         </ComboboxTrigger>
-        <ComboboxContent commandProps={{ filter: commandFilter }}>
+        <ComboboxContent
+          commandProps={{ filter: commandFilter }}
+          className="max-w-[320px]"
+        >
           <ComboboxInput
             onClick={(e) => e.stopPropagation()}
             onValueChange={(value) => setInputValue(value)}
@@ -206,23 +217,15 @@ const IssueCell: React.FC<IProps> = (props) => {
               projectId={projectId}
               channelId={channelId}
               feedbackId={feedbackId}
-              onSelect={(issueName) => {
-                const issue = allIssues.find((v) => v.name === issueName);
-                if (issue) {
-                  onClickIssue(issue);
-                } else {
-                  createIssue({ name: issueName, description: '' })
-                    .then((data) => {
-                      if (data) {
-                        setInputValue(issueName);
-                        attatchIssue({ issueId: data.id });
-                      }
-                    })
-                    .catch((error) => {
-                      toast.error(error.message);
-                    });
+              onSelect={async ({ name, option, id }) => {
+                if (option === 'CREATE') {
+                  await onCreateIssue(name);
+                }
+                if (option === 'EXISTING' && id) {
+                  onClickIssue(id);
                 }
               }}
+              currentIssues={currentIssues}
             />
           )}
           <ComboboxList maxHeight="333px">
@@ -237,7 +240,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                 {allIssues.map((issue) => (
                   <ComboboxItem
                     key={issue.id}
-                    onSelect={() => onClickIssue(issue)}
+                    onSelect={() => onClickIssue(issue.id)}
                     value={issue.name}
                     className="justify-between"
                     disabled={!perms.includes('feedback_issue_update')}
@@ -265,16 +268,7 @@ const IssueCell: React.FC<IProps> = (props) => {
               !allIssues.some((issue) => issue.name === inputValue) && (
                 <div
                   className="combobox-item"
-                  onClick={async () => {
-                    const name = inputValue.trim();
-                    const data = await createIssue({
-                      name,
-                      description: '',
-                    });
-                    if (!data) return;
-                    setInputValue(name);
-                    attatchIssue({ issueId: data.id });
-                  }}
+                  onClick={() => onCreateIssue(inputValue)}
                 >
                   <span className="flex-1">{inputValue}</span>
                   <span className="text-neutral-tertiary text-small-normal">

@@ -176,7 +176,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
   return (
     <div className="flex min-h-0 flex-1 gap-4">
       <FormProvider {...methods}>
-        <Card className="flex-[1] border" size="md">
+        <Card className="flex-[1] overflow-auto border" size="md">
           <CardHeader>
             <CardTitle>Configuration</CardTitle>
             <CardDescription>

@@ -69,6 +69,7 @@ const defaultValues: Partial<AIIssue> = {
   temperature: 0.5,
   prompt: '',
   isEnabled: true,
+  dataReferenceAmount: 3,
 };
 
 export const AIIssueForm = ({ projectId }: { projectId: number }) => {
@@ -162,7 +163,7 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
 
   useWarnIfUnsavedChanges(
     methods.formState.isDirty,
-    '/settings?menu=generative-ai&subMenu=field-template-form',
+    '/settings?menu=generative-ai&subMenu=ai-issue-form',
   );
 
   const onSubmit = (values: AIIssue) => {
@@ -218,7 +219,7 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
                   setValue('channelId', +value, { shouldDirty: true });
                   setValue('targetFieldKeys', [], { shouldDirty: true });
                 }}
-                value={String(watch('channelId'))}
+                value={watch('channelId') ? String(watch('channelId')) : ''}
                 error={formState.errors.channelId?.message}
               />
               <MultiSelectInput
@@ -309,12 +310,12 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
                     <div className="border-neutral-tertiary rounded-8 flex gap-4 border p-6">
                       <div>Low</div>
                       <Slider
-                        min={0}
-                        max={1}
-                        step={0.1}
+                        min={1}
+                        max={5}
+                        step={1}
                         value={[watch('dataReferenceAmount')]}
                         onValueChange={(value) => {
-                          setValue('dataReferenceAmount', value[0] ?? 0, {
+                          setValue('dataReferenceAmount', value[0] ?? 3, {
                             shouldDirty: true,
                           });
                         }}

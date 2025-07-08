@@ -89,7 +89,7 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
           : undefined
         }
       >
-        {subMenu !== 'field-template-form' && (
+        {subMenu !== 'field-template-form' && subMenu !== 'ai-issue-form' && (
           <Menu
             type="single"
             orientation="horizontal"
