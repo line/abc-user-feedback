@@ -34,3 +34,13 @@ export const aiTemplateSchema = z.object({
   model: z.string(),
   temperature: z.number(),
 });
+
+export const aiIssueSchema = z.object({
+  channelId: z.number().int(),
+  targetFieldKeys: z.array(z.string()),
+  prompt: z.string().trim(),
+  isEnabled: z.boolean(),
+  model: z.string(),
+  temperature: z.number(),
+  dataReferenceAmount: z.number(),
+});

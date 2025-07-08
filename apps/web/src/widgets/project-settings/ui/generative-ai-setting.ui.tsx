@@ -24,6 +24,9 @@ import { SettingTemplate, useOAIQuery } from '@/shared';
 import {
   AIFieldTemplateForm,
   AIFieldTemplateSetting,
+  AIIssueForm,
+  AIIssueFormButton,
+  AiIssueSetting,
   AISettingForm,
   AISettingFormButton,
   AITemplateFormButton,
@@ -35,7 +38,10 @@ type SubMenuType =
   | 'setting'
   | 'usage'
   | 'field-template'
-  | 'field-template-form';
+  | 'field-template-form'
+  | 'ai-issue'
+  | 'ai-issue-form';
+
 const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -68,11 +74,18 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
             {subMenu === 'field-template-form' && (
               <AITemplateFormButton projectId={projectId} />
             )}
+            {subMenu === 'ai-issue' && (
+              <AITemplateFormButton projectId={projectId} />
+            )}
+            {subMenu === 'ai-issue-form' && (
+              <AIIssueFormButton projectId={projectId} />
+            )}
           </>
         }
         onClickBack={
-          subMenu === 'field-template-form' ?
-            () => setSubMenu('field-template')
+          subMenu === 'field-template-form' ? () => setSubMenu('field-template')
+          : subMenu === 'ai-issue-form' ?
+            () => setSubMenu('ai-issue')
           : undefined
         }
       >
@@ -98,6 +111,9 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
             <MenuItem className="w-fit shrink-0" value="field-template">
               AI Field Template
             </MenuItem>
+            <MenuItem className="w-fit shrink-0" value="ai-issue">
+              AI Issue
+            </MenuItem>
           </Menu>
         )}
         {subMenu === 'setting' && <AISettingForm projectId={projectId} />}
@@ -111,6 +127,13 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
         {subMenu === 'field-template-form' && (
           <AIFieldTemplateForm projectId={projectId} />
         )}
+        {subMenu === 'ai-issue' && (
+          <AiIssueSetting
+            projectId={projectId}
+            onClick={(id) => setSubMenu('ai-issue-form', id)}
+          />
+        )}
+        {subMenu === 'ai-issue-form' && <AIIssueForm projectId={projectId} />}
       </SettingTemplate>
     </>
   );

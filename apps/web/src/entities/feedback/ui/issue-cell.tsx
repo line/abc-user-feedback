@@ -27,6 +27,7 @@ import {
   ComboboxItem,
   ComboboxList,
   ComboboxTrigger,
+  Icon,
   Tag,
   toast,
 } from '@ufb/react';
@@ -43,7 +44,7 @@ import { IssueBadge, useIssueSearchInfinite } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 
 import { useFeedbackSearch } from '../lib';
-import IssueCellEditCombobox from './issue-cell-edit-combobox.ui';
+import AiIssueComboboxGroup from './ai-issue-combobox-group.ui';
 
 interface IProps {
   issues?: Issue[];
@@ -104,8 +105,13 @@ const IssueCell: React.FC<IProps> = (props) => {
     return allIssueData.pages
       .map((v) => v?.items)
       .filter((v) => !!v)
-      .flat();
-  }, [allIssueData]);
+      .flat()
+      .sort(
+        (a, b) =>
+          (currentIssues.some((issue) => issue.id === a.id) ? -1 : 1) -
+          (currentIssues.some((issue) => issue.id === b.id) ? -1 : 1),
+      );
+  }, [allIssueData, currentIssues]);
 
   const { mutate: attatchIssue } = useMutation({
     mutationFn: async ({ issueId }: { issueId: number }) => {
@@ -125,7 +131,7 @@ const IssueCell: React.FC<IProps> = (props) => {
       toast.error(error.message);
     },
   });
-  const { mutateAsync: detecthIssue } = useMutation({
+  const { mutate: detachIssue } = useMutation({
     mutationFn: async ({ issueId }: { issueId: number }) => {
       if (!feedbackId) return;
 
@@ -156,6 +162,13 @@ const IssueCell: React.FC<IProps> = (props) => {
       },
     },
   });
+  const onClickIssue = (issue: Issue) => {
+    if (currentIssues.some((v) => v.id === issue.id)) {
+      detachIssue({ issueId: issue.id });
+    } else {
+      attatchIssue({ issueId: issue.id });
+    }
+  };
 
   return (
     <div
@@ -188,33 +201,31 @@ const IssueCell: React.FC<IProps> = (props) => {
             onValueChange={(value) => setInputValue(value)}
             value={inputValue}
           />
+          {!!feedbackId && !inputValue && (
+            <AiIssueComboboxGroup
+              projectId={projectId}
+              channelId={channelId}
+              feedbackId={feedbackId}
+              onSelect={(issueName) => {
+                const issue = allIssues.find((v) => v.name === issueName);
+                if (issue) {
+                  onClickIssue(issue);
+                } else {
+                  createIssue({ name: issueName, description: '' })
+                    .then((data) => {
+                      if (data) {
+                        setInputValue(issueName);
+                        attatchIssue({ issueId: data.id });
+                      }
+                    })
+                    .catch((error) => {
+                      toast.error(error.message);
+                    });
+                }
+              }}
+            />
+          )}
           <ComboboxList maxHeight="333px">
-            <ComboboxGroup
-              heading={
-                <span className="text-neutral-tertiary text-base-normal">
-                  Selected Issue List
-                </span>
-              }
-            >
-              {currentIssues.map((issue) => (
-                <ComboboxItem
-                  key={issue.id}
-                  onSelect={() => detecthIssue({ issueId: issue.id })}
-                  className="flex justify-between"
-                  value={issue.name}
-                  disabled={!perms.includes('feedback_issue_update')}
-                >
-                  <IssueBadge
-                    key={issue.id}
-                    name={issue.name}
-                    status={issue.status}
-                  />
-                  <span className="text-neutral-tertiary text-small-normal">
-                    Remove
-                  </span>
-                </ComboboxItem>
-              ))}
-            </ComboboxGroup>
             {!!allIssues.length && (
               <ComboboxGroup
                 heading={
@@ -223,26 +234,24 @@ const IssueCell: React.FC<IProps> = (props) => {
                   </span>
                 }
               >
-                {allIssues
-                  .filter(
-                    (v) => !currentIssues.some((issue) => issue.id === v.id),
-                  )
-                  .map((issue) => (
-                    <ComboboxItem
+                {allIssues.map((issue) => (
+                  <ComboboxItem
+                    key={issue.id}
+                    onSelect={() => onClickIssue(issue)}
+                    value={issue.name}
+                    className="justify-between"
+                    disabled={!perms.includes('feedback_issue_update')}
+                  >
+                    <IssueBadge
                       key={issue.id}
-                      onSelect={() => attatchIssue({ issueId: issue.id })}
-                      className="flex justify-between"
-                      value={issue.name}
-                      disabled={!perms.includes('feedback_issue_update')}
-                    >
-                      <IssueBadge
-                        key={issue.id}
-                        name={issue.name}
-                        status={issue.status}
-                      />
-                      <IssueCellEditCombobox issue={issue} />
-                    </ComboboxItem>
-                  ))}
+                      name={issue.name}
+                      status={issue.status}
+                    />
+                    {currentIssues.some((v) => v.id === issue.id) && (
+                      <Icon name="RiCheckLine" size={16} />
+                    )}
+                  </ComboboxItem>
+                ))}
                 <InfiniteScrollArea
                   fetchNextPage={fetchNextPage}
                   hasNextPage={hasNextPage}
