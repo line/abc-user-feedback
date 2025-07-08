@@ -320,6 +320,7 @@ export class AIService {
           },
         },
       },
+      relations: { channel: true },
       order: {
         createdAt: 'ASC',
       },
@@ -327,6 +328,7 @@ export class AIService {
 
     return issueTemplates.map((template) => ({
       id: template.id,
+      channelId: template.channel.id,
       targetFieldKeys: template.targetFieldKeys,
       prompt: template.prompt,
       isEnabled: template.isEnabled,
@@ -1099,7 +1101,7 @@ export class AIService {
       channel.project.id,
     );
 
-    return result.content;
+    return result.content.split(',');
   }
 
   private parseIssueRecommendResult(content: string) {
