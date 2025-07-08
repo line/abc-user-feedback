@@ -74,9 +74,6 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
             {subMenu === 'field-template-form' && (
               <AITemplateFormButton projectId={projectId} />
             )}
-            {subMenu === 'ai-issue' && (
-              <AITemplateFormButton projectId={projectId} />
-            )}
             {subMenu === 'ai-issue-form' && (
               <AIIssueFormButton projectId={projectId} />
             )}

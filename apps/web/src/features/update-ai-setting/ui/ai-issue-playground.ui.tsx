@@ -20,7 +20,7 @@ import { useTranslation } from 'next-i18next';
 import { useForm, useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Button, Icon, toast } from '@ufb/react';
+import { Badge, Button, Icon, toast } from '@ufb/react';
 
 import {
   Card,
@@ -56,14 +56,14 @@ const AIPlaygroundContext = React.createContext<{
 
 const AIIssuePlayground = () => {
   const [inputItems, setInputItems] = useState<InputItem[]>([]);
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState<string[] | undefined>();
   const { getValues, watch } = useFormContext<AIIssue>();
   const { mutateAsync, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/issueRecommend/playground/test',
     queryOptions: {
       onSuccess: (data) => {
-        console.log('data: ', data);
+        setResult(data?.result as unknown as string[]);
       },
     },
   });
@@ -173,11 +173,43 @@ const AIIssuePlayground = () => {
               <CardTitle>AI Result (Output)</CardTitle>
             </CardHeader>
             <CardBody>
-              {result ?
-                <div className="bg-neutral-tertiary rounded-8 overflow-auto p-3">
-                  <p className="text-small-normal text-neutral-secondary">
-                    {result}
-                  </p>
+              {isPending ?
+                <div className="flex flex-col gap-2">
+                  <div
+                    className="h-4 w-full animate-pulse rounded"
+                    style={{
+                      background:
+                        'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
+                    }}
+                  />
+                  <div
+                    className="h-4 w-full animate-pulse rounded"
+                    style={{
+                      background:
+                        'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
+                    }}
+                  />
+                  <div
+                    className="h-4 w-full animate-pulse rounded"
+                    style={{
+                      background:
+                        'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
+                    }}
+                  />
+                </div>
+              : result ?
+                <div className="flex gap-2">
+                  {result.map((item, index) => (
+                    <Badge
+                      key={index}
+                      style={{
+                        background:
+                          'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
+                      }}
+                    >
+                      {item}
+                    </Badge>
+                  ))}
                 </div>
               : <div className="flex h-full flex-col items-center justify-center gap-4">
                   <WatingImage width={120} height={120} />

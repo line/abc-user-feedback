@@ -19,8 +19,9 @@ import { useState } from 'react';
 import { ComboboxGroup, ComboboxItem, Icon, Tag } from '@ufb/react';
 
 import type { TableFilterCondition } from '@/shared';
-import { client, useOAIMutation, useOAIQuery } from '@/shared';
-import type { Issue } from '@/entities/issue';
+import { client, cn, useOAIMutation, useOAIQuery } from '@/shared';
+import { IssueBadge } from '@/entities/issue';
+import type { Issue, IssueStatus } from '@/entities/issue';
 
 interface Props {
   projectId: number;
@@ -34,6 +35,7 @@ type AIIssueRecommendationItem = {
   id?: number;
   name: string;
   option: 'ADDED' | 'CREATE' | 'EXISTING';
+  status?: IssueStatus;
 };
 
 const AiIssueComboboxGroup = ({
@@ -53,7 +55,7 @@ const AiIssueComboboxGroup = ({
     path: '/api/admin/projects/{projectId}/ai/issueTemplates',
     variables: { projectId },
   });
-  const { mutate: recommendIssues } = useOAIMutation({
+  const { mutate: recommendIssues, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/issueRecommend/{feedbackId}',
     pathParams: { projectId, feedbackId },
@@ -78,25 +80,35 @@ const AiIssueComboboxGroup = ({
             'EXISTING'
           : 'CREATE';
         setIssues(
-          data?.result.map((v) => {
+          (data?.result.map((v) => {
             const option = getOption(v);
 
             if (option === 'ADDED') {
-              const id = currentIssues.find(
+              const currentIssue = currentIssues.find(
                 ({ name }) => name === v.issueName,
-              )?.id;
-              return { id, name: v.issueName, option: 'ADDED' };
+              );
+              return {
+                id: currentIssue?.id,
+                name: v.issueName,
+                option: 'ADDED',
+                status: currentIssue?.status,
+              };
             }
 
             if (option === 'EXISTING') {
-              const id = searchedIssues?.items.find(
+              const currentIssue = searchedIssues?.items.find(
                 (issue) => issue.name === v.issueName,
-              )?.id;
+              );
 
-              return { id, name: v.issueName, option: 'EXISTING' };
+              return {
+                id: currentIssue?.id,
+                name: v.issueName,
+                option: 'EXISTING',
+                status: currentIssue?.status,
+              };
             }
             return { name: v.issueName, option: 'CREATE' };
-          }) ?? [],
+          }) ?? []) as AIIssueRecommendationItem[],
         );
       },
     },
@@ -114,18 +126,41 @@ const AiIssueComboboxGroup = ({
           <span className="text-neutral-tertiary text-base-normal">
             AI Recommend
           </span>
-          <Tag asChild>
+          <Tag asChild size="small">
             <button
               className="disabled:opacity-50"
               onClick={() => recommendIssues(undefined)}
+              style={{
+                background:
+                  'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
+              }}
             >
+              <Icon name="RiSparklingFill" />
               AI 실행
             </button>
           </Tag>
         </div>
       }
-      className="border-neutral-secondary border-b"
+      className="border-neutral-tertiary border-b"
     >
+      {isPending && (
+        <div className="flex flex-col gap-2">
+          <div
+            className="h-4 w-full animate-pulse rounded"
+            style={{
+              background:
+                'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
+            }}
+          />
+          <div
+            className="h-4 w-full animate-pulse rounded"
+            style={{
+              background:
+                'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
+            }}
+          />
+        </div>
+      )}
       {!aiIssue && (
         <div className="flex items-center gap-2 p-3">
           <Icon name="RiInformation2Fill" size={12} />
@@ -139,10 +174,17 @@ const AiIssueComboboxGroup = ({
           key={issue.name}
           value={issue.name}
           onSelect={() => onSelect?.(issue)}
-          className="justify-between gap-4"
+          className={cn('justify-between gap-4', {
+            'cursor-not-allowed opacity-50': issue.option === 'ADDED',
+          })}
+          disabled={issue.option === 'ADDED'}
         >
-          <span>{issue.name}</span>
-          <span>{issue.option}</span>
+          <IssueBadge name={issue.name} status={issue.status ?? 'INIT'} />
+          <span className="text-small-normal text-neutral-tertiary">
+            {issue.option === 'ADDED' && 'Added'}
+            {issue.option === 'CREATE' && 'Create'}
+            {issue.option === 'EXISTING' && 'Add'}
+          </span>
         </ComboboxItem>
       ))}
     </ComboboxGroup>

@@ -221,6 +221,7 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
                 }}
                 value={watch('channelId') ? String(watch('channelId')) : ''}
                 error={formState.errors.channelId?.message}
+                required
               />
               <MultiSelectInput
                 options={
@@ -235,6 +236,7 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
                 }}
                 value={watch('targetFieldKeys')}
                 error={formState.errors.targetFieldKeys?.message}
+                required
               />
               <InputField>
                 <InputLabel>Prompt</InputLabel>
