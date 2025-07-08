@@ -114,8 +114,8 @@ export function getRefinedIssueRecommendationPrompt(
 ## Instructions
 IMPORTANT: 다음 설명들과 피드백과 Issue 예제들을 바탕으로 AI Issue 추천에 대한 결과를 응답해
 IMPORTANT: 응답시 추천된 Issue들에 대한 응답값만을 text 형식으로 리턴하고 특수문자 등 나머지 불필요한 정보는 제외해.
-IMPORTANT: 응답시 Issue가 여러개일 경우 comma(,)로 구분해서 응답해.
-IMPORTANT: 20자 이내로 응답해.
+IMPORTANT: 응답시 이슈가 여러개일 경우 comma(,)로 구분해서 응답해.
+IMPORTANT: comma(,)로 구분된 각 응답값은 최대 20자가 되도록 해.
 
 ## Feedback Field Structure
 
