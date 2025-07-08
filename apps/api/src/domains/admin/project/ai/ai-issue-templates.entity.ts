@@ -32,7 +32,7 @@ export class AIIssueTemplatesEntity extends CommonEntity {
   @Column('varchar')
   prompt: string;
 
-  @Column('tinyint', { default: 1 })
+  @Column('boolean', { default: true })
   isEnabled: boolean;
 
   @Column('varchar')
