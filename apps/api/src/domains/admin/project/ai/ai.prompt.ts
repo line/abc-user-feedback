@@ -104,7 +104,7 @@ Below is the content of the Feedback containing the values of the Target Fields 
 ${promptTargetText}`.trim();
 }
 
-export function getRefinedIssueRecommendPrompt(
+export function getRefinedIssueRecommendationPrompt(
   targetFeedback: string,
   additionalPrompt: string,
   issueExamples: string,

@@ -20,7 +20,7 @@ import type { AxiosInstance, AxiosResponse } from 'axios';
 import { AIPromptStatusEnum } from '@/common/enums/ai-prompt-status.enum';
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 import {
-  getRefinedIssueRecommendPrompt,
+  getRefinedIssueRecommendationPrompt,
   getRefinedSystemPrompt,
   getRefinedUserPrompt,
 } from './ai.prompt';
@@ -351,7 +351,7 @@ export class AIClient {
         params.channelDesc,
       );
 
-      const userPrompt = getRefinedIssueRecommendPrompt(
+      const userPrompt = getRefinedIssueRecommendationPrompt(
         params.targetFeedback,
         params.additionalPrompt,
         params.issueExamples,
@@ -359,7 +359,7 @@ export class AIClient {
       );
 
       this.logger.log(
-        `──────────────────── AI Issue Recommend Execution ────────────────────`,
+        `──────────────────── AI Issue Recommendation Execution ────────────────────`,
       );
       this.logger.log('System Prompt');
       this.logger.log(systemPrompt);
