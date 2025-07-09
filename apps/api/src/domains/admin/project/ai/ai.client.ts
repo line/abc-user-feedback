@@ -213,7 +213,7 @@ export class AIClient {
           params: { key: this.apiKey },
         });
         return response.data.models.map((model: Model) => ({
-          id: model.name ?? '',
+          id: model.name?.replace('models/', '') ?? '',
         }));
       }
     } catch (error) {

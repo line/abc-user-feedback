@@ -1101,10 +1101,12 @@ export class AIService {
       channel.project.id,
     );
 
-    return result.content.split(',');
+    return !result.content ? [] : result.content.split(',');
   }
 
   private parseIssueRecommendResult(content: string) {
+    if (!content) return [];
+
     return content.split(',').map((issue) => {
       const name = issue;
       return {

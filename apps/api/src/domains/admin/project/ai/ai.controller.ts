@@ -53,6 +53,7 @@ import {
   GetAIFieldTemplatesResponseDto,
   GetAIIntegrationResponseDto,
   GetAIIntegrationsModelsResponseDto,
+  GetAIIssuePlaygroundResultResponseDto,
   GetAIIssueRecommendResponseDto,
   GetAIIssueTemplatesResponseDto,
   GetAIPlaygroundResultResponseDto,
@@ -237,12 +238,12 @@ export class AIController {
   }
 
   @RequirePermission(PermissionEnum.generative_ai_read)
-  @ApiOkResponse({ type: GetAIPlaygroundResultResponseDto })
+  @ApiOkResponse({ type: GetAIIssuePlaygroundResultResponseDto })
   @Post('issueRecommend/playground/test')
   async getAIIssuePlaygroundResult(
     @Body() body: GetAIIssuePlaygroundResultRequestDto,
   ) {
-    return GetAIPlaygroundResultResponseDto.transform({
+    return GetAIIssuePlaygroundResultResponseDto.transform({
       result: await this.aiService.getIssuePlaygroundPromptResult({
         ...body,
       }),
