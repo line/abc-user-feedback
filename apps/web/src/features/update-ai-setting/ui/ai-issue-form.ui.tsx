@@ -155,11 +155,26 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
   useEffect(() => {
     setIsDirty(formState.isDirty);
   }, [formState.isDirty]);
-
   useEffect(() => {
-    const original = templateData?.find((v) => v.id === templateId);
-    methods.reset(original ?? defaultValues);
-  }, [templateData, templateId]);
+    if (!templateData) return;
+    const original = templateData.find((v) => v.id === templateId);
+    if (original) {
+      methods.reset({
+        ...defaultValues,
+        ...original,
+        temperature:
+          integrationData?.provider === 'GEMINI' ?
+            original.temperature / 2
+          : original.temperature,
+      });
+      return;
+    }
+    methods.reset({
+      ...defaultValues,
+      model:
+        integrationData?.provider === 'GEMINI' ? 'gemini-2.5-flash' : 'gpt-4o',
+    });
+  }, [templateData, templateId, integrationData]);
 
   useWarnIfUnsavedChanges(
     methods.formState.isDirty,
