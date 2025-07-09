@@ -114,7 +114,6 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
   const { mutate: createTemplate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/issueTemplates/new',
-    pathParams: { projectId },
     queryOptions: {
       async onSuccess(data) {
         toast.success('AI 설정이 저장되었습니다.');
