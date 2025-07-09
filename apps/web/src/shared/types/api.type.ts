@@ -2365,6 +2365,9 @@ export interface components {
       dataReferenceAmount: number;
       temporaryFields: components['schemas']['TemporaryField'][];
     };
+    GetAIIssuePlaygroundResultResponseDto: {
+      result: string[];
+    };
     /** @enum {string} */
     UsageCategoryEnum: 'AI_FIELD' | 'ISSUE_RECOMMEND';
     GetAIUsagesResponseDto: {
@@ -4601,9 +4604,7 @@ export interface operations {
     parameters: {
       query?: never;
       header?: never;
-      path: {
-        projectId: number;
-      };
+      path?: never;
       cookie?: never;
     };
     requestBody: {
@@ -4781,7 +4782,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['GetAIPlaygroundResultResponseDto'];
+          'application/json': components['schemas']['GetAIIssuePlaygroundResultResponseDto'];
         };
       };
     };

@@ -63,7 +63,7 @@ const AIIssuePlayground = () => {
     path: '/api/admin/projects/{projectId}/ai/issueRecommend/playground/test',
     queryOptions: {
       onSuccess: (data) => {
-        setResult(data?.result as unknown as string[]);
+        setResult(data?.result);
       },
     },
   });

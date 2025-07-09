@@ -134,6 +134,7 @@ const AiIssueComboboxGroup = ({
                 background:
                   'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
               }}
+              disabled={!aiIssue || isPending}
             >
               <Icon name="RiSparklingFill" />
               AI 실행
@@ -143,24 +144,6 @@ const AiIssueComboboxGroup = ({
       }
       className="border-neutral-tertiary border-b"
     >
-      {isPending && (
-        <div className="flex flex-col gap-2">
-          <div
-            className="h-4 w-full animate-pulse rounded"
-            style={{
-              background:
-                'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
-            }}
-          />
-          <div
-            className="h-4 w-full animate-pulse rounded"
-            style={{
-              background:
-                'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
-            }}
-          />
-        </div>
-      )}
       {!aiIssue && (
         <div className="flex items-center gap-2 p-3">
           <Icon name="RiInformation2Fill" size={12} />
@@ -169,24 +152,42 @@ const AiIssueComboboxGroup = ({
           </p>
         </div>
       )}
-      {issues.map((issue) => (
-        <ComboboxItem
-          key={issue.name}
-          value={issue.name}
-          onSelect={() => onSelect?.(issue)}
-          className={cn('justify-between gap-4', {
-            'cursor-not-allowed opacity-50': issue.option === 'ADDED',
-          })}
-          disabled={issue.option === 'ADDED'}
-        >
-          <IssueBadge name={issue.name} status={issue.status ?? 'INIT'} />
-          <span className="text-small-normal text-neutral-tertiary">
-            {issue.option === 'ADDED' && 'Added'}
-            {issue.option === 'CREATE' && 'Create'}
-            {issue.option === 'EXISTING' && 'Add'}
-          </span>
-        </ComboboxItem>
-      ))}
+      {isPending ?
+        <div className="flex flex-col gap-2 py-2">
+          <div
+            className="h-4 w-full animate-pulse rounded"
+            style={{
+              background:
+                'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
+            }}
+          />
+          <div
+            className="h-4 w-full animate-pulse rounded"
+            style={{
+              background:
+                'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
+            }}
+          />
+        </div>
+      : issues.map((issue) => (
+          <ComboboxItem
+            key={issue.name}
+            value={issue.name}
+            onSelect={() => onSelect?.(issue)}
+            className={cn('justify-between gap-4', {
+              'cursor-not-allowed opacity-50': issue.option === 'ADDED',
+            })}
+            disabled={issue.option === 'ADDED'}
+          >
+            <IssueBadge name={issue.name} status={issue.status ?? 'INIT'} />
+            <span className="text-small-normal text-neutral-tertiary">
+              {issue.option === 'ADDED' && 'Added'}
+              {issue.option === 'CREATE' && 'Create'}
+              {issue.option === 'EXISTING' && 'Add'}
+            </span>
+          </ComboboxItem>
+        ))
+      }
     </ComboboxGroup>
   );
 };
