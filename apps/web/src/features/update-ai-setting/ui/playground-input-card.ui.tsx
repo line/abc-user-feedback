@@ -1,0 +1,57 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+
+import React from 'react';
+
+import { Button, Icon } from '@ufb/react';
+
+import { Card, CardBody, CardHeader, CardTitle } from '@/shared';
+
+import { NodataImage } from '@/assets';
+import { useAIPlayground } from '../contexts/ai-playground-context';
+import { EmptyState } from './empty-state';
+import PlaygroundInputData from './playground-input-data';
+
+const PlaygroundInputCard = () => {
+  const { inputItems, addNewEditingItem } = useAIPlayground();
+
+  return (
+    <Card size="sm" className="flex min-h-0 flex-[2] flex-col">
+      <CardHeader
+        action={
+          <Button variant="outline" onClick={addNewEditingItem}>
+            <Icon name="RiAddLine" />
+            테스트 케이스 추가
+          </Button>
+        }
+      >
+        <CardTitle>Test Data (Input)</CardTitle>
+      </CardHeader>
+      <CardBody className="flex min-h-0 flex-1 flex-col gap-4 overflow-auto">
+        {inputItems.length === 0 ?
+          <EmptyState
+            image={<NodataImage width={120} height={120} />}
+            message="No Data"
+          />
+        : inputItems.map((_, key) => (
+            <PlaygroundInputData key={key} index={key} />
+          ))
+        }
+      </CardBody>
+    </Card>
+  );
+};
+export default PlaygroundInputCard;

@@ -13,8 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './chart-colors';
-export * from './date-format';
-export * from './path';
-export * from './issues';
-export * from './style.constants';
+
+import React from 'react';
+
+interface EmptyStateProps {
+  image: React.ReactNode;
+  message: string;
+}
+
+export const EmptyState = ({ image, message }: EmptyStateProps) => (
+  <div className="flex h-full flex-col items-center justify-center gap-4">
+    {image}
+    <p className="text-small-normal text-neutral-tertiary">{message}</p>
+  </div>
+);

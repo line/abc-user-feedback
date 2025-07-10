@@ -19,7 +19,13 @@ import { useState } from 'react';
 import { ComboboxGroup, ComboboxItem, Icon, Tag } from '@ufb/react';
 
 import type { TableFilterCondition } from '@/shared';
-import { client, cn, useOAIMutation, useOAIQuery } from '@/shared';
+import {
+  client,
+  cn,
+  GRADIENT_CSS,
+  useOAIMutation,
+  useOAIQuery,
+} from '@/shared';
 import { IssueBadge } from '@/entities/issue';
 import type { Issue, IssueStatus } from '@/entities/issue';
 
@@ -130,10 +136,7 @@ const AiIssueComboboxGroup = ({
             <button
               className="disabled:opacity-50"
               onClick={() => recommendIssues(undefined)}
-              style={{
-                background:
-                  'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
-              }}
+              style={GRADIENT_CSS.primary}
               disabled={!aiIssue || isPending}
             >
               <Icon name="RiSparklingFill" />
@@ -156,17 +159,11 @@ const AiIssueComboboxGroup = ({
         <div className="flex flex-col gap-2 py-2">
           <div
             className="h-4 w-full animate-pulse rounded"
-            style={{
-              background:
-                'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
-            }}
+            style={GRADIENT_CSS.primary}
           />
           <div
             className="h-4 w-full animate-pulse rounded"
-            style={{
-              background:
-                'linear-gradient(105.34deg, #62A5F5 0%, #6ED2C3 100%)',
-            }}
+            style={GRADIENT_CSS.primary}
           />
         </div>
       : issues.map((issue) => (

@@ -14,14 +14,8 @@
  * under the License.
  */
 
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { useOverlay } from '@toss/use-overlay';
-import { parseAsInteger, useQueryState } from 'nuqs';
-import { FormProvider, useForm } from 'react-hook-form';
-import { create } from 'zustand';
+import React from 'react';
+import { FormProvider } from 'react-hook-form';
 
 import {
   Button,
@@ -30,7 +24,6 @@ import {
   InputField,
   InputLabel,
   Textarea,
-  toast,
 } from '@ufb/react';
 
 import {
@@ -39,155 +32,28 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  client,
-  DeleteDialog,
   SelectInput,
   Slider,
   TextInput,
-  useOAIMutation,
-  useOAIQuery,
   useWarnIfUnsavedChanges,
 } from '@/shared';
-import { aiTemplateSchema } from '@/entities/ai';
-import type { AITemplate } from '@/entities/ai';
 
-import type { AISettingStore } from '../ai-setting-form.type';
+import { TEMPERATURE_CONFIG } from '../constants';
+import { useAITemplateDelete } from '../hooks/use-ai-template-deletion';
+import { useAITemplateForm } from '../hooks/use-ai-template-form';
+import { useAITemplateFormStore } from '../stores/ai-template-form.store';
 import AiFieldPlayground from './ai-field-playground.ui';
 
-const useAITemplateFormStore = create<AISettingStore>((set) => ({
-  formId: 'ai-template-form',
-  isPending: false,
-  setIsPending: (isPending) => set({ isPending }),
-  isDirty: false,
-  setIsDirty: (isDirty) => set({ isDirty }),
-}));
-
-const defaultValues: Partial<AITemplate> = {
-  temperature: 0.5,
-  title: '',
-  prompt: '',
-};
-
 export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
-  const router = useRouter();
-  const templateId = router.query.templateId ? +router.query.templateId : null;
-
-  const methods = useForm<AITemplate>({
-    defaultValues,
-    resolver: zodResolver(aiTemplateSchema),
-  });
+  const { methods, modelData, handleFormSubmit } = useAITemplateForm(projectId);
 
   const { register, formState, setValue, watch, handleSubmit } = methods;
-
-  const { formId, setIsPending, setIsDirty } = useAITemplateFormStore();
-
-  const { data: templateData, refetch } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/ai/fieldTemplates',
-    variables: { projectId },
-  });
-
-  const { data: integrationData } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/ai/integrations',
-    variables: { projectId },
-    queryOptions: { enabled: !!templateId },
-  });
-
-  const { data: modelData } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/ai/integrations/models',
-    variables: { projectId },
-  });
-
-  const { mutate: createTemplate, isPending } = useOAIMutation({
-    method: 'post',
-    path: '/api/admin/projects/{projectId}/ai/fieldTemplates/new',
-    pathParams: { projectId },
-    queryOptions: {
-      async onSuccess(data) {
-        toast.success('AI 설정이 저장되었습니다.');
-        await router.push({
-          pathname: router.pathname,
-          query: { ...router.query, templateId: data?.id },
-        });
-        await refetch();
-      },
-      onError(error) {
-        toast.error(error.message);
-      },
-    },
-  });
-
-  const { mutate: updateTemplate } = useMutation({
-    mutationFn: async (body: AITemplate & { templateId: number }) => {
-      const { data } = await client.put({
-        path: '/api/admin/projects/{projectId}/ai/fieldTemplates/{templateId}',
-        pathParams: { projectId, templateId: body.templateId },
-        body,
-      });
-      return data;
-    },
-    async onSuccess() {
-      await refetch();
-      toast.success('AI 설정이 저장되었습니다.');
-    },
-    onError(error) {
-      toast.error(error.message);
-    },
-  });
-
-  useEffect(() => {
-    setIsPending(isPending);
-  }, [isPending]);
-
-  useEffect(() => {
-    setIsDirty(formState.isDirty);
-  }, [formState.isDirty]);
-
-  useEffect(() => {
-    if (!templateData) return;
-    const original = templateData.find((v) => v.id === templateId);
-    if (original) {
-      methods.reset({
-        ...defaultValues,
-        ...original,
-        temperature:
-          integrationData?.provider === 'GEMINI' ?
-            original.temperature / 2
-          : original.temperature,
-      });
-      return;
-    }
-    methods.reset({
-      ...defaultValues,
-      model:
-        integrationData?.provider === 'GEMINI' ? 'gemini-2.5-flash' : 'gpt-4o',
-    });
-  }, [templateData, templateId, integrationData]);
+  const { formId } = useAITemplateFormStore();
 
   useWarnIfUnsavedChanges(
     methods.formState.isDirty,
     '/settings?menu=generative-ai&subMenu=field-template-form',
   );
-
-  const onSubmit = (values: AITemplate) => {
-    if (
-      templateData?.some((v) => v.title === values.title && v.id !== templateId)
-    ) {
-      methods.setError('title', {
-        type: 'manual',
-        message: '이미 존재하는 템플릿 이름입니다.',
-      });
-      return;
-    }
-    const input = {
-      ...values,
-      temperature:
-        integrationData?.provider === 'GEMINI' ?
-          values.temperature * 2
-        : values.temperature,
-    };
-    if (templateId) updateTemplate({ ...input, templateId });
-    else createTemplate(input);
-  };
 
   return (
     <div className="flex min-h-0 flex-1 gap-4">
@@ -203,7 +69,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
             <form
               id={formId}
               className="flex flex-col gap-4"
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={handleSubmit(handleFormSubmit)}
             >
               <TextInput
                 label="Title"
@@ -252,9 +118,9 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
                     <div className="border-neutral-tertiary rounded-8 flex gap-4 border p-6">
                       <div>Precise</div>
                       <Slider
-                        min={0}
-                        max={1}
-                        step={0.1}
+                        min={TEMPERATURE_CONFIG.min}
+                        max={TEMPERATURE_CONFIG.max}
+                        step={TEMPERATURE_CONFIG.step}
                         value={[watch('temperature')]}
                         onValueChange={(value) => {
                           setValue('temperature', value[0] ?? 0, {
@@ -278,46 +144,20 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
 
 export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
   const { formId, isPending, isDirty } = useAITemplateFormStore();
-  const [templateId] = useQueryState('templateId', parseAsInteger);
-  const overlay = useOverlay();
-  const router = useRouter();
-
-  const { mutate: deleteTemplate } = useMutation({
-    mutationFn: async (body: { templateId: number }) => {
-      const { data } = await client.delete({
-        path: '/api/admin/projects/{projectId}/ai/fieldTemplates/{templateId}',
-        pathParams: { projectId, templateId: body.templateId },
-      });
-      return data;
-    },
-    onSuccess() {
-      router.back();
-      toast.success('AI 설정이 저장되었습니다.');
-    },
-    onError(error) {
-      toast.error(error.message);
-    },
-  });
-  const openDeleteTemplateConfirm = () => {
-    if (!templateId) return;
-    overlay.open(({ close, isOpen }) => (
-      <DeleteDialog
-        close={close}
-        isOpen={isOpen}
-        onClickDelete={() => {
-          deleteTemplate({ templateId });
-        }}
-      />
-    ));
-  };
+  const {
+    templateId,
+    isPending: isDeletePending,
+    openDeleteConfirmDialog,
+  } = useAITemplateDelete(projectId);
 
   return (
     <div className="flex items-center gap-2">
       <Button
         variant="outline"
         className="!text-tint-red"
-        onClick={openDeleteTemplateConfirm}
+        onClick={openDeleteConfirmDialog}
         disabled={!templateId}
+        loading={isDeletePending}
       >
         Template 삭제
       </Button>

@@ -19,6 +19,7 @@ import { Icon } from '@ufb/react';
 import {
   Card,
   CardBody,
+  GRADIENT_CSS,
   HelpCardDocs,
   SettingAlert,
   useOAIQuery,
@@ -90,10 +91,7 @@ const TemplateCard = (props: {
               </p>
               <div
                 className="rounded-12 absolute inset-0"
-                style={{
-                  background:
-                    'linear-gradient(180deg, rgba(239, 239, 239, 0) 0%, var(--bg-tertiary) 100%)',
-                }}
+                style={GRADIENT_CSS.fadeOut}
               />
             </div>
           </div>

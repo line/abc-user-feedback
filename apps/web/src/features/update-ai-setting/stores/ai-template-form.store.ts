@@ -13,8 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './chart-colors';
-export * from './date-format';
-export * from './path';
-export * from './issues';
-export * from './style.constants';
+
+import { create } from 'zustand';
+
+import type { AISettingStore } from '../ai-setting-form.type';
+
+export const useAITemplateFormStore = create<AISettingStore>((set) => ({
+  formId: 'ai-template-form',
+  isPending: false,
+  setIsPending: (isPending) => set({ isPending }),
+  isDirty: false,
+  setIsDirty: (isDirty) => set({ isDirty }),
+}));

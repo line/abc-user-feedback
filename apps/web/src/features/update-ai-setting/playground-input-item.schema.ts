@@ -13,8 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './chart-colors';
-export * from './date-format';
-export * from './path';
-export * from './issues';
-export * from './style.constants';
+
+import { z } from 'zod';
+
+export const playgroundInputItemSchema = z.object({
+  name: z.string().trim().min(1).max(20),
+  description: z.string().trim().max(50),
+  value: z.string().min(1),
+  isEditing: z.boolean().optional(),
+});
+
+export type PlaygroundInputItem = z.infer<typeof playgroundInputItemSchema>;

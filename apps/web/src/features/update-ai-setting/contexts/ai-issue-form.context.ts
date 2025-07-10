@@ -13,8 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './chart-colors';
-export * from './date-format';
-export * from './path';
-export * from './issues';
-export * from './style.constants';
+export const ISSUE_FORM_ID = 'issue-form';
