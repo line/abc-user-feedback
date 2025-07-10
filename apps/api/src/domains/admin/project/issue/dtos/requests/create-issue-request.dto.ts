@@ -29,7 +29,7 @@ export class CreateIssueRequestDto {
   @ApiProperty({ description: 'Issue name', example: 'payment issue' })
   @IsString()
   @MinLength(1)
-  @MaxLength(20)
+  @MaxLength(30)
   name: string;
 
   @ApiProperty({
