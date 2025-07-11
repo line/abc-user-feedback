@@ -138,8 +138,8 @@ importers:
         specifier: ^17.13.3
         version: 17.13.3
       luxon:
-        specifier: ^3.6.1
-        version: 3.6.1
+        specifier: ^3.7.1
+        version: 3.7.1
       magic-bytes.js:
         specifier: ^1.12.1
         version: 1.12.1
@@ -7552,6 +7552,10 @@ packages:
 
   luxon@3.6.1:
     resolution: {integrity: sha512-tJLxrKJhO2ukZ5z0gyjY1zPh3Rh88Ej9P7jNrZiHMUXHae1yvI2imgOZtL1TO8TW6biMMKfTtAOoEJANgtWBMQ==}
+    engines: {node: '>=12'}
+
+  luxon@3.7.1:
+    resolution: {integrity: sha512-RkRWjA926cTvz5rAb1BqyWkKbbjzCGchDUIKMCUvNi17j6f6j8uHGDV82Aqcqtzd+icoYpELmG3ksgGiFNNcNg==}
     engines: {node: '>=12'}
 
   lz-string@1.5.0:
@@ -18278,6 +18282,8 @@ snapshots:
       react: 19.1.0
 
   luxon@3.6.1: {}
+
+  luxon@3.7.1: {}
 
   lz-string@1.5.0: {}
 
