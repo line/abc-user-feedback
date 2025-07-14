@@ -13,9 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './ai-setting.ui';
-export * from './ai-usage.ui';
-export * from './ai-field-template-setting.ui';
-export * from './ai-field-template-form.ui';
-export * from './ai-issue-setting.ui';
-export * from './ai-issue-form.ui';
+
+import React from 'react';
+
+interface EmptyStateProps {
+  image: React.ReactNode;
+  message: string;
+}
+
+export const EmptyState = ({ image, message }: EmptyStateProps) => (
+  <div className="flex h-full flex-col items-center justify-center gap-4">
+    {image}
+    <p className="text-small-normal text-neutral-tertiary">{message}</p>
+  </div>
+);

@@ -13,9 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './ai-setting.ui';
-export * from './ai-usage.ui';
-export * from './ai-field-template-setting.ui';
-export * from './ai-field-template-form.ui';
-export * from './ai-issue-setting.ui';
-export * from './ai-issue-form.ui';
+
+import { z } from 'zod';
+
+export const playgroundInputItemSchema = z.object({
+  name: z.string().trim().min(1).max(20),
+  description: z.string().trim().max(50),
+  value: z.string().min(1),
+  isEditing: z.boolean().optional(),
+});
+
+export type PlaygroundInputItem = z.infer<typeof playgroundInputItemSchema>;

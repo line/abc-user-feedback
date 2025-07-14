@@ -13,9 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './ai-setting.ui';
-export * from './ai-usage.ui';
-export * from './ai-field-template-setting.ui';
-export * from './ai-field-template-form.ui';
-export * from './ai-issue-setting.ui';
-export * from './ai-issue-form.ui';
+import { create } from 'zustand';
+
+import type { AISettingStore } from '../ai-setting-form.type';
+import { ISSUE_FORM_ID } from '../contexts/ai-issue-form.context';
+
+export const useAIIssueFormStore = create<AISettingStore>((set) => ({
+  formId: ISSUE_FORM_ID,
+  isPending: false,
+  setIsPending: (isPending) => set({ isPending }),
+  isDirty: false,
+  setIsDirty: (isDirty) => set({ isDirty }),
+}));

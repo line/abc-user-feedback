@@ -1172,6 +1172,38 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/admin/projects/{projectId}/ai/issueRecommend/{feedbackId}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AIController_recommendAIIssue'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/ai/issueRecommend/playground/test': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AIController_getAIIssuePlaygroundResult'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/admin/projects/{projectId}/ai/usages': {
     parameters: {
       query?: never;
@@ -2277,8 +2309,7 @@ export interface components {
       isEnabled: boolean;
       model: string;
       temperature: number;
-      linkExistingIssues: number;
-      linkIssueFeedbacks: number;
+      dataReferenceAmount: number;
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -2291,8 +2322,7 @@ export interface components {
       isEnabled: boolean;
       model: string;
       temperature: number;
-      linkExistingIssues: number;
-      linkIssueFeedbacks: number;
+      dataReferenceAmount: number;
     };
     CreateAIIssueTemplateResponseDto: {
       id: number;
@@ -2317,6 +2347,26 @@ export interface components {
     };
     GetAIPlaygroundResultResponseDto: {
       result: string;
+    };
+    IssueRecommendResult: {
+      issueName: string;
+    };
+    GetAIIssueRecommendResponseDto: {
+      success: boolean;
+      message: string;
+      result: components['schemas']['IssueRecommendResult'][];
+    };
+    GetAIIssuePlaygroundResultRequestDto: {
+      channelId: number;
+      targetFieldKeys: string[] | null;
+      templatePrompt: string;
+      model: string;
+      temperature: number;
+      dataReferenceAmount: number;
+      temporaryFields: components['schemas']['TemporaryField'][];
+    };
+    GetAIIssuePlaygroundResultResponseDto: {
+      result: string[];
     };
     /** @enum {string} */
     UsageCategoryEnum: 'AI_FIELD' | 'ISSUE_RECOMMEND';
@@ -4688,6 +4738,51 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['GetAIPlaygroundResultResponseDto'];
+        };
+      };
+    };
+  };
+  AIController_recommendAIIssue: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        feedbackId: number;
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['GetAIIssueRecommendResponseDto'];
+        };
+      };
+    };
+  };
+  AIController_getAIIssuePlaygroundResult: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['GetAIIssuePlaygroundResultRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['GetAIIssuePlaygroundResultResponseDto'];
         };
       };
     };

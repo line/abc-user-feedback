@@ -34,17 +34,12 @@ const AiSettingForm = () => {
   const { register, setValue, watch, formState } = useFormContext<AI>();
   const { t } = useTranslation();
   const [previousValues, setPreviousValues] = useState<
-    Record<
-      AI['provider'],
-      {
-        apiKey: string;
-        endpointUrl: string;
-      }
-    >
+    Record<AI['provider'], { apiKey: string; endpointUrl: string }>
   >({
     GEMINI: { apiKey: '', endpointUrl: '' },
     OPEN_AI: { apiKey: '', endpointUrl: '' },
   });
+
   return (
     <div className="flex flex-col gap-4">
       <RadioCardGroup

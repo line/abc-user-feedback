@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { Icon } from '@ufb/react';
+import { Icon, Tag } from '@ufb/react';
 
 import {
   Card,
@@ -25,7 +25,7 @@ import {
   useOAIQuery,
 } from '@/shared';
 
-export const AIFieldTemplateSetting = ({
+export const AiIssueSetting = ({
   onClick,
   projectId,
 }: {
@@ -33,7 +33,11 @@ export const AIFieldTemplateSetting = ({
   projectId: number;
 }) => {
   const { data } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/ai/fieldTemplates',
+    path: '/api/admin/projects/{projectId}/ai/issueTemplates',
+    variables: { projectId },
+  });
+  const { data: channelData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels',
     variables: { projectId },
   });
 
@@ -45,14 +49,18 @@ export const AIFieldTemplateSetting = ({
       <div className="grid grid-cols-4 gap-4">
         <TemplateCard
           type="create"
-          title="New Template"
+          title="신규 템플릿"
           onClick={() => onClick()}
         />
-        {data?.map(({ id, title, prompt }) => (
+        {data?.map(({ id, prompt, channelId, isEnabled }) => (
           <TemplateCard
             key={id}
             type="update"
-            title={title}
+            title={
+              channelData?.items.find((channel) => channel.id === channelId)
+                ?.name ?? 'Unknown Channel'
+            }
+            isEnabled={isEnabled}
             description={prompt}
             onClick={() => onClick(id)}
           />
@@ -66,21 +74,32 @@ const TemplateCard = (props: {
   title: string;
   description?: string;
   type: 'create' | 'update';
+  isEnabled?: boolean;
   onClick?: () => void;
 }) => {
-  const { title, description, type, onClick } = props;
+  const { title, description, type, onClick, isEnabled } = props;
   return (
     <Card
       onClick={onClick}
       className="min-h-60 cursor-pointer hover:opacity-50"
     >
       <CardBody className="flex h-full flex-col justify-between">
-        <div className="flex flex-col gap-1">
-          {type === 'create' && (
-            <Icon name="RiAddCircleFill" className="text-neutral-tertiary" />
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-1">
+            {type === 'create' && (
+              <Icon name="RiAddCircleFill" className="text-neutral-tertiary" />
+            )}
+            <h4 className="text-title-h4">{title}</h4>
+          </div>
+          {type === 'update' && (
+            <Tag
+              className="text-small-normal"
+              variant={isEnabled ? 'primary' : 'secondary'}
+              radius="large"
+            >
+              {isEnabled ? 'Enabled' : 'Disabled'}
+            </Tag>
           )}
-          {type === 'update' && <StarIcon />}
-          <h4 className="text-title-h4">{title}</h4>
         </div>
         {description && (
           <div>
@@ -98,48 +117,5 @@ const TemplateCard = (props: {
         )}
       </CardBody>
     </Card>
-  );
-};
-
-const StarIcon = () => {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6 3.59961H12.4004V4.40039H6C4.56406 4.40039 3.40039 5.56406 3.40039 7V17C3.40039 18.436 4.56406 19.5996 6 19.5996H18C19.436 19.5996 20.5996 18.436 20.5996 17V12.5996H21.4004V17C21.4004 18.8777 19.8777 20.4004 18 20.4004H6C4.12223 20.4004 2.59961 18.8777 2.59961 17V7C2.59961 5.12223 4.12223 3.59961 6 3.59961ZM19.1973 2.59961C19.4547 4.24564 20.7544 5.54527 22.4004 5.80273V6.19629C20.7543 6.4537 19.4547 7.75432 19.1973 9.40039H18.8027C18.5453 7.75432 17.2457 6.4537 15.5996 6.19629V5.80273C17.2456 5.54527 18.5453 4.24564 18.8027 2.59961H19.1973Z"
-        fill="url(#paint0_linear_12996_14077)"
-        stroke="url(#paint1_linear_12996_14077)"
-        stroke-width="1.2"
-      />
-      <defs>
-        <linearGradient
-          id="paint0_linear_12996_14077"
-          x1="12.5"
-          y1="2"
-          x2="12.5"
-          y2="21"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stop-color="#2DD4BF" />
-          <stop offset="1" stop-color="#0EA5E9" />
-        </linearGradient>
-        <linearGradient
-          id="paint1_linear_12996_14077"
-          x1="12.5"
-          y1="2"
-          x2="12.5"
-          y2="21"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stop-color="#2DD4BF" />
-          <stop offset="1" stop-color="#0EA5E9" />
-        </linearGradient>
-      </defs>
-    </svg>
   );
 };

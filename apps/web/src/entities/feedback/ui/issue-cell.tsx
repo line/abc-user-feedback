@@ -27,6 +27,7 @@ import {
   ComboboxItem,
   ComboboxList,
   ComboboxTrigger,
+  Icon,
   Tag,
   toast,
 } from '@ufb/react';
@@ -43,7 +44,7 @@ import { IssueBadge, useIssueSearchInfinite } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 
 import { useFeedbackSearch } from '../lib';
-import IssueCellEditCombobox from './issue-cell-edit-combobox.ui';
+import AiIssueComboboxGroup from './ai-issue-combobox-group.ui';
 
 interface IProps {
   issues?: Issue[];
@@ -104,8 +105,13 @@ const IssueCell: React.FC<IProps> = (props) => {
     return allIssueData.pages
       .map((v) => v?.items)
       .filter((v) => !!v)
-      .flat();
-  }, [allIssueData]);
+      .flat()
+      .sort(
+        (a, b) =>
+          (currentIssues.some((issue) => issue.id === a.id) ? -1 : 1) -
+          (currentIssues.some((issue) => issue.id === b.id) ? -1 : 1),
+      );
+  }, [allIssueData, currentIssues]);
 
   const { mutate: attatchIssue } = useMutation({
     mutationFn: async ({ issueId }: { issueId: number }) => {
@@ -125,7 +131,7 @@ const IssueCell: React.FC<IProps> = (props) => {
       toast.error(error.message);
     },
   });
-  const { mutateAsync: detecthIssue } = useMutation({
+  const { mutate: detachIssue } = useMutation({
     mutationFn: async ({ issueId }: { issueId: number }) => {
       if (!feedbackId) return;
 
@@ -156,6 +162,21 @@ const IssueCell: React.FC<IProps> = (props) => {
       },
     },
   });
+  const onClickIssue = (issueId: number) => {
+    if (currentIssues.some((v) => v.id === issueId)) {
+      detachIssue({ issueId });
+    } else {
+      attatchIssue({ issueId });
+    }
+  };
+  const onCreateIssue = async (name: string) => {
+    const data = await createIssue({
+      name,
+      description: '',
+    });
+    if (!data) return;
+    attatchIssue({ issueId: data.id });
+  };
 
   return (
     <div
@@ -182,39 +203,32 @@ const IssueCell: React.FC<IProps> = (props) => {
             )}
           </button>
         </ComboboxTrigger>
-        <ComboboxContent commandProps={{ filter: commandFilter }}>
+        <ComboboxContent
+          commandProps={{ filter: commandFilter }}
+          className="max-w-[320px]"
+        >
           <ComboboxInput
             onClick={(e) => e.stopPropagation()}
             onValueChange={(value) => setInputValue(value)}
             value={inputValue}
           />
+          {!!feedbackId && !inputValue && (
+            <AiIssueComboboxGroup
+              projectId={projectId}
+              channelId={channelId}
+              feedbackId={feedbackId}
+              onSelect={async ({ name, option, id }) => {
+                if (option === 'CREATE') {
+                  await onCreateIssue(name);
+                }
+                if (option === 'EXISTING' && id) {
+                  onClickIssue(id);
+                }
+              }}
+              currentIssues={currentIssues}
+            />
+          )}
           <ComboboxList maxHeight="333px">
-            <ComboboxGroup
-              heading={
-                <span className="text-neutral-tertiary text-base-normal">
-                  Selected Issue List
-                </span>
-              }
-            >
-              {currentIssues.map((issue) => (
-                <ComboboxItem
-                  key={issue.id}
-                  onSelect={() => detecthIssue({ issueId: issue.id })}
-                  className="flex justify-between"
-                  value={issue.name}
-                  disabled={!perms.includes('feedback_issue_update')}
-                >
-                  <IssueBadge
-                    key={issue.id}
-                    name={issue.name}
-                    status={issue.status}
-                  />
-                  <span className="text-neutral-tertiary text-small-normal">
-                    Remove
-                  </span>
-                </ComboboxItem>
-              ))}
-            </ComboboxGroup>
             {!!allIssues.length && (
               <ComboboxGroup
                 heading={
@@ -223,26 +237,24 @@ const IssueCell: React.FC<IProps> = (props) => {
                   </span>
                 }
               >
-                {allIssues
-                  .filter(
-                    (v) => !currentIssues.some((issue) => issue.id === v.id),
-                  )
-                  .map((issue) => (
-                    <ComboboxItem
+                {allIssues.map((issue) => (
+                  <ComboboxItem
+                    key={issue.id}
+                    onSelect={() => onClickIssue(issue.id)}
+                    value={issue.name}
+                    className="justify-between"
+                    disabled={!perms.includes('feedback_issue_update')}
+                  >
+                    <IssueBadge
                       key={issue.id}
-                      onSelect={() => attatchIssue({ issueId: issue.id })}
-                      className="flex justify-between"
-                      value={issue.name}
-                      disabled={!perms.includes('feedback_issue_update')}
-                    >
-                      <IssueBadge
-                        key={issue.id}
-                        name={issue.name}
-                        status={issue.status}
-                      />
-                      <IssueCellEditCombobox issue={issue} />
-                    </ComboboxItem>
-                  ))}
+                      name={issue.name}
+                      status={issue.status}
+                    />
+                    {currentIssues.some((v) => v.id === issue.id) && (
+                      <Icon name="RiCheckLine" size={16} />
+                    )}
+                  </ComboboxItem>
+                ))}
                 <InfiniteScrollArea
                   fetchNextPage={fetchNextPage}
                   hasNextPage={hasNextPage}
@@ -256,16 +268,7 @@ const IssueCell: React.FC<IProps> = (props) => {
               !allIssues.some((issue) => issue.name === inputValue) && (
                 <div
                   className="combobox-item"
-                  onClick={async () => {
-                    const name = inputValue.trim();
-                    const data = await createIssue({
-                      name,
-                      description: '',
-                    });
-                    if (!data) return;
-                    setInputValue(name);
-                    attatchIssue({ issueId: data.id });
-                  }}
+                  onClick={() => onCreateIssue(inputValue)}
                 >
                   <span className="flex-1">{inputValue}</span>
                   <span className="text-neutral-tertiary text-small-normal">

@@ -13,9 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './ai-setting.ui';
-export * from './ai-usage.ui';
-export * from './ai-field-template-setting.ui';
-export * from './ai-field-template-form.ui';
-export * from './ai-issue-setting.ui';
-export * from './ai-issue-form.ui';
+export const ISSUE_FORM_ID = 'issue-form';

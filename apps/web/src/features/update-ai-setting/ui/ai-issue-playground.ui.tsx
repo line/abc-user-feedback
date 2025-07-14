@@ -23,17 +23,13 @@ import {
 } from '@/shared';
 
 import { AIPlaygroundContextProvider } from '../contexts/ai-playground-context';
-import { useAITemplateTest } from '../hooks/use-ai-template-test';
+import { useAIIssueTest } from '../hooks/use-ai-issue-test';
 import PlaygroundInputCard from './playground-input-card.ui';
 import PlaygroundOutputCard from './playground-output-card.ui';
 
-interface AIPlaygroundProps {
-  projectId: number;
-}
-
 // Main component
-const AiFieldPlayground = ({ projectId }: AIPlaygroundProps) => {
-  const aiTest = useAITemplateTest(projectId);
+const AIIssuePlayground = () => {
+  const aiTest = useAIIssueTest();
 
   return (
     <AIPlaygroundContextProvider>
@@ -51,12 +47,10 @@ const AiFieldPlayground = ({ projectId }: AIPlaygroundProps) => {
           <PlaygroundInputCard />
           <PlaygroundOutputCard
             result={aiTest.result}
-            onTestAI={(inputItems) => {
-              aiTest.executeTest(inputItems);
-            }}
+            onTestAI={(inputItems) => aiTest.executeTest(inputItems)}
             isPending={aiTest.isPending}
             isDisabled={aiTest.isTestDisabled}
-            resultType="text"
+            resultType="badges"
           />
         </CardBody>
       </Card>
@@ -64,4 +58,4 @@ const AiFieldPlayground = ({ projectId }: AIPlaygroundProps) => {
   );
 };
 
-export default AiFieldPlayground;
+export default AIIssuePlayground;

@@ -34,7 +34,7 @@ import { CategoryCombobox } from '@/entities/category';
 import type { Category } from '@/entities/category';
 import IssueCell from '@/entities/feedback/ui/issue-cell';
 
-import { DATE_TIME_FORMAT } from '../constants';
+import { DATE_TIME_FORMAT, GRADIENT_CSS } from '../constants';
 import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
 import { useOAIMutation } from '../lib';
@@ -396,9 +396,7 @@ const AISheetDetailCell = ({
       {showButton && (
         <Tag
           size="small"
-          style={{
-            background: 'linear-gradient(95.64deg, #62A5F5 0%, #6ED2C3 100%)',
-          }}
+          style={GRADIENT_CSS.primaryAlt}
           onClick={() => {
             if (isPending) return;
             toast.promise(processAI({ feedbackId, aiFieldId: fieldId }), {
