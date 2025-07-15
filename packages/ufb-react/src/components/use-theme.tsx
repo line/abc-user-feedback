@@ -13,21 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { Radius, Size } from "../types";
+import type { Radius, Size } from '../types';
 
 const DefaultValue: {
   themeSize: Size;
   themeRadius: Radius;
 } = {
-  themeSize: "small",
-  themeRadius: "medium",
+  themeSize: 'small',
+  themeRadius: 'medium',
 } as const;
 
 const useTheme = () => {
-  if (typeof window !== "undefined") {
-    const size = (document.body.getAttribute("data-size") ??
+  if (typeof window !== 'undefined') {
+    const size = (document.body.getAttribute('data-size') ??
       DefaultValue.themeSize) as Size;
-    const radius = (document.body.getAttribute("data-radius") ??
+    const radius = (document.body.getAttribute('data-radius') ??
       DefaultValue.themeRadius) as Radius;
     return { themeSize: size, themeRadius: radius };
   } else {

@@ -112,43 +112,61 @@ export class FeedbackMySQLService {
       if (fieldKey === 'ids') {
         queryBuilder.andWhere('feedbacks.id IN(:value)', { value });
       } else if (fieldKey === 'searchText') {
-        const stringFields = fields.reduce((prev, field) => {
+        const searchableFields = fields.reduce((prev, field) => {
           if (
-            [FieldFormatEnum.keyword, FieldFormatEnum.text].includes(
-              field.format,
-            )
+            [
+              FieldFormatEnum.keyword,
+              FieldFormatEnum.text,
+              FieldFormatEnum.number,
+              FieldFormatEnum.select,
+              FieldFormatEnum.multiSelect,
+              FieldFormatEnum.date,
+            ].includes(field.format)
           ) {
             prev.push(field);
           }
           return prev;
         }, [] as FieldEntity[]);
 
-        if (stringFields.length > 0) {
+        if (searchableFields.length > 0) {
           queryBuilder.andWhere(
             new Brackets((qb) => {
-              for (let i = 0; i < stringFields.length; i++) {
-                if (stringFields[i].format === FieldFormatEnum.keyword) {
+              for (let i = 0; i < searchableFields.length; i++) {
+                const field = searchableFields[i];
+                const jsonExtractExpression = `JSON_EXTRACT(feedbacks.data, '$."${field.key}"')`;
+
+                if (
+                  field.format === FieldFormatEnum.keyword ||
+                  field.format === FieldFormatEnum.select ||
+                  field.format === FieldFormatEnum.date ||
+                  field.format === FieldFormatEnum.number
+                ) {
                   if (i === 0) {
-                    qb.where(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') = :value`,
-                      { value },
-                    );
+                    qb.where(`${jsonExtractExpression} = :value`, { value });
                   } else {
-                    qb.orWhere(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') = :value`,
-                      { value },
-                    );
+                    qb.orWhere(`${jsonExtractExpression} = :value`, { value });
                   }
-                } else {
+                } else if (field.format === FieldFormatEnum.text) {
+                  if (i === 0) {
+                    qb.where(`${jsonExtractExpression} like :likeValue`, {
+                      likeValue: `%${value as string | number}%`,
+                    });
+                  } else {
+                    qb.orWhere(`${jsonExtractExpression} like :likeValue`, {
+                      likeValue: `%${value as string | number}%`,
+                    });
+                  }
+                } else if (field.format === FieldFormatEnum.multiSelect) {
+                  const jsonValue = JSON.stringify([value]);
                   if (i === 0) {
                     qb.where(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') like :likeValue`,
-                      { likeValue: `%${value as string | number}%` },
+                      `JSON_CONTAINS(${jsonExtractExpression}, :jsonValue)`,
+                      { jsonValue },
                     );
                   } else {
                     qb.orWhere(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') like :likeValue`,
-                      { likeValue: `%${value as string | number}%` },
+                      `JSON_CONTAINS(${jsonExtractExpression}, :jsonValue)`,
+                      { jsonValue },
                     );
                   }
                 }
@@ -347,14 +365,32 @@ export class FeedbackMySQLService {
             const issueIds = value as string[];
 
             if (condition === QueryV2ConditionsEnum.IS) {
-              queryBuilder.having(
-                "JSON_LENGTH(JSON_ARRAYAGG(feedbacks_issues_issues.issues_id)) = :arrayLength AND JSON_CONTAINS(JSON_ARRAYAGG(feedbacks_issues_issues.issues_id), JSON_ARRAY(:...issueIds), '$')",
-                { arrayLength: issueIds.length, issueIds },
-              );
-            } else {
               qb[method](
-                'feedbacks_issues_issues.issues_id IN (:...issueIds)',
-                { issueIds },
+                `feedbacks.id IN (
+                  SELECT feedbacks_id
+                  FROM feedbacks_issues_issues
+                  GROUP BY feedbacks_id
+                  HAVING COUNT(DISTINCT issues_id) = :arrayLength${paramName}
+                  AND COUNT(DISTINCT CASE WHEN issues_id IN (:...issueIds${paramName}) THEN issues_id END) = :arrayLength${paramName}
+                )`,
+                {
+                  [`arrayLength${paramName}`]: issueIds.length,
+                  [`issueIds${paramName}`]: issueIds,
+                },
+              );
+            } else if (condition === QueryV2ConditionsEnum.CONTAINS) {
+              qb[method](
+                `feedbacks.id IN (
+                  SELECT feedbacks_id
+                  FROM feedbacks_issues_issues
+                  WHERE issues_id IN (:...issueIds${paramName})
+                  GROUP BY feedbacks_id
+                  HAVING COUNT(DISTINCT issues_id) = :arrayLength${paramName}
+                )`,
+                {
+                  [`arrayLength${paramName}`]: issueIds.length,
+                  [`issueIds${paramName}`]: issueIds,
+                },
               );
             }
           } else if (fieldKey === 'updatedAt') {
@@ -385,7 +421,7 @@ export class FeedbackMySQLService {
 
               if (condition === QueryV2ConditionsEnum.IS) {
                 qb[method](
-                  `JSON_LENGTH(JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"')) = :arrayLength AND JSON_CONTAINS(
+                  `JSON_LENGTH(JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"')) = :arrayLength${paramName} AND JSON_CONTAINS(
                     (SELECT JSON_ARRAYAGG(jt.value) FROM JSON_TABLE(
                       JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
                       '$[*]' COLUMNS(value VARCHAR(255) PATH '$')
@@ -393,12 +429,12 @@ export class FeedbackMySQLService {
                     JSON_ARRAY(${values.map((optionKey) => `'${optionKey}'`).join(', ')}),
                     '$'
                   )`,
-                  { arrayLength: values.length },
+                  { [`arrayLength${paramName}`]: values.length },
                 );
               } else if (condition === QueryV2ConditionsEnum.CONTAINS) {
                 if (values.length > 0) {
                   qb[method](
-                    `JSON_LENGTH(JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"')) >= :arrayLength AND JSON_CONTAINS(
+                    `JSON_LENGTH(JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"')) >= :arrayLength${paramName} AND JSON_CONTAINS(
                       (SELECT JSON_ARRAYAGG(jt.value) FROM JSON_TABLE(
                         JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
                         '$[*]' COLUMNS(value VARCHAR(255) PATH '$')
@@ -406,7 +442,7 @@ export class FeedbackMySQLService {
                       JSON_ARRAY(${values.map((optionKey) => `'${optionKey}'`).join(', ')}),
                       '$'
                     )`,
-                    { arrayLength: values.length },
+                    { [`arrayLength${paramName}`]: values.length },
                   );
                 } else {
                   qb[method]('1 = 0');

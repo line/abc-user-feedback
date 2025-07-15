@@ -26,4 +26,7 @@ export class UpdateChannelDto {
 
   @Expose()
   imageConfig: ImageConfigDto | null;
+
+  @Expose()
+  feedbackSearchMaxDays: number;
 }

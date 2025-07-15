@@ -21,8 +21,9 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useQueryClient } from '@tanstack/react-query';
 
-import { Button } from '@ufb/react';
+import { Button, Icon } from '@ufb/react';
 
 import type { IssuesItem, SearchQuery, TableFilterOperator } from '@/shared';
 import { useIssueSearchInfinite } from '@/entities/issue';
@@ -64,6 +65,8 @@ const IssueKanbanColumn = (props: Props) => {
     operator,
   } = props;
 
+  const queryClient = useQueryClient();
+
   const [sort, setSort] = useState({ key: 'createdAt', value: 'DESC' });
   const [meta, setMeta] = useState(DEFAULT_META);
 
@@ -96,6 +99,23 @@ const IssueKanbanColumn = (props: Props) => {
     }));
     setMeta(data.pages[0]?.meta ?? DEFAULT_META);
   }, [data]);
+  const resetQuery = () => {
+    void queryClient.resetQueries({
+      queryKey: [
+        '/api/admin/projects/{projectId}/issues/search',
+        projectId,
+        {
+          queries,
+          defaultQueries: defaultQueries.concat([
+            { key: 'status', value: issue.status, condition: 'IS' },
+          ]),
+          sort: { [sort.key]: sort.value },
+          limit: 5,
+          operator,
+        },
+      ],
+    });
+  };
 
   return (
     <div
@@ -130,11 +150,23 @@ const IssueKanbanColumn = (props: Props) => {
           }
           {hasNextPage && (
             <Button
-              variant="secondary"
+              variant="outline"
+              className="!bg-neutral-primary"
               onClick={() => fetchNextPage()}
               loading={isFetching}
             >
-              More
+              View More
+              <Icon name="RiArrowDownSLine" />
+            </Button>
+          )}
+          {items.length > 5 && !hasNextPage && (
+            <Button
+              variant="outline"
+              className="!bg-neutral-primary"
+              onClick={resetQuery}
+            >
+              View Less
+              <Icon name="RiArrowUpSLine" />
             </Button>
           )}
         </div>

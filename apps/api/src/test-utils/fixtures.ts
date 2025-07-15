@@ -300,6 +300,7 @@ export const channelFixture = {
   name: faker.string.sample(),
   description: faker.lorem.lines(2),
   imageConfig: null,
+  feedbackSearchMaxDays: faker.number.int({ min: 1, max: 365 }),
   createdAt: faker.date.past(),
   updatedAt: faker.date.past(),
   project: projectFixture,

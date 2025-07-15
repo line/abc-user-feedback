@@ -16,7 +16,7 @@
 import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { TextInput } from '@/shared';
+import { SelectInput, TextInput } from '@/shared';
 
 import type { ChannelInfo } from '../channel.type';
 
@@ -30,7 +30,10 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
 
   const { t } = useTranslation();
 
-  const { register, formState } = useFormContext<ChannelInfo>();
+  const { register, formState, setValue, watch } =
+    useFormContext<ChannelInfo>();
+
+  const feedbackSearchMaxDays = watch('feedbackSearchMaxDays');
 
   return (
     <div className="flex flex-col gap-4">
@@ -51,6 +54,27 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
         placeholder={t('v2.placeholder.text')}
         disabled={readOnly}
         error={formState.errors.description?.message}
+      />
+      <SelectInput
+        label="Maximum feedback search period"
+        value={
+          feedbackSearchMaxDays ? String(feedbackSearchMaxDays) : undefined
+        }
+        onChange={(value) => {
+          if (!value) return;
+          setValue('feedbackSearchMaxDays', Number(value), {
+            shouldDirty: true,
+          });
+        }}
+        options={[
+          { value: '30', label: t('text.date.before-days', { day: 30 }) },
+          { value: '90', label: t('text.date.before-days', { day: 90 }) },
+          { value: '180', label: t('text.date.before-days', { day: 180 }) },
+          { value: '365', label: t('text.date.before-days', { day: 365 }) },
+          { value: '-1', label: t('text.date.entire-period') },
+        ]}
+        disabled={readOnly}
+        error={formState.errors.feedbackSearchMaxDays?.message}
       />
     </div>
   );

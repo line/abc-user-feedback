@@ -62,14 +62,16 @@
         "invalid-member": "유효하지 않은 Member 목록이 존재합니다.",
         "invalid-role": "유효하지 않는 Role 정보가 존재합니다.",
         "invalid-project": "유효하지 않는 Project 정보가 존재합니다."
-      }
+      },
+      "alert-description": "이어서 Channel을 생성하러 갈까요?"
     },
     "create-channel": {
       "title": "Channel 생성",
       "complete-title": "Channel 생성이 완료되었습니다.",
       "guide": {
         "invalid-channel": "유효하지 않은 Project 정보가 존재합니다."
-      }
+      },
+      "alert-description": "축하합니다! 이제 본격적으로 시작할 준비가 되었습니다."
     }
   },
   "header": {
@@ -115,6 +117,7 @@
       "today": "오늘",
       "yesterday": "어제",
       "before-days": "{{day, number}}일",
+      "entire-period": "전체 기간",
       "last-days": "지난 {{day, number}}일",
       "date-range-over-max-days": "조회 기간은 최대 {{maxDays}}일까지만 입력 가능합니다."
     },
@@ -180,11 +183,11 @@
     },
     "issue-status-count": {
       "title": "이슈 현황",
-      "description": "전체 이슈의 현황을 보여줍니다."
+      "description": "전체 이슈의 현황을 보여줍니다. (전체 기간)"
     },
     "issue-rank": {
       "title": "상위 이슈",
-      "description": "피드백 개수가 많은 상위 이슈를 보여줍니다."
+      "description": "피드백 개수가 많은 상위 이슈를 보여줍니다. (전체 기간)"
     },
     "issue-comparison": {
       "title": "이슈 비교",
@@ -197,7 +200,10 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "해당 이슈에 등록된 피드백 개수입니다."
+    "issue-feedback-count": "해당 이슈에 등록된 피드백 개수입니다.",
+    "feedback-date-picker-button": "피드백 생성일시 기준으로 데이터를 조회합니다.",
+    "issue-date-picker-button": "이슈 생성일시 기준으로 데이터를 조회합니다.",
+    "dashboard-date-picker-button": "피드백 또는 이슈 생성일시 기준으로 데이터를 조회합니다."
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant 정보",
@@ -329,12 +335,16 @@
     },
     "text": {
       "no-data": {
-        "api-key": "생성된 API Key가 없습니다.",
-        "member": "등록된 Member가 없습니다.",
         "channel": "생성된 Channel이 없습니다.",
+        "feedback": "생성된 피드백이 없습니다.",
+        "member": "등록된 Member가 없습니다.",
+        "api-key": "생성된 API Key가 없습니다.",
         "webhook": "등록된 Webhook이 없습니다.",
-        "feedback": "생성된 피드백이 없습니다."
+        "empty": "아직 데이터가 없습니다.",
+        "filter": "조회 결과가 없습니다.\n조회 또는 필터 조건을 변경해 보세요."
       },
+      "required-step": "필수 입력 단계입니다. 필수 정보를 입력해 주세요.",
+      "optional-step": "선택 입력 단계입니다. 나중에 설정 메뉴에서 다시 입력할 수 있어요.",
       "create-project": "Project 생성",
       "create-channel": "Channel 생성",
       "name": {

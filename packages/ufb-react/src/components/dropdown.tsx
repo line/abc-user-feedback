@@ -13,16 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
-import * as React from "react";
-import * as DropdownPrimitive from "@radix-ui/react-dropdown-menu";
-import { Slottable } from "@radix-ui/react-slot";
+import * as React from 'react';
+import type { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu';
+import * as DropdownPrimitive from '@radix-ui/react-dropdown-menu';
+import { Slottable } from '@radix-ui/react-slot';
 
-import type { TriggerType } from "../lib/types";
-import { cn } from "../lib/utils";
-import { Button } from "./button";
-import { Icon } from "./icon";
-import { ScrollArea, ScrollBar } from "./scroll-area";
+import type { TriggerType } from '../lib/types';
+import { cn } from '../lib/utils';
+import { Button } from './button';
+import { Icon } from './icon';
+import { ScrollArea, ScrollBar } from './scroll-area';
 
 const DropdownContext = React.createContext<{
   trigger: TriggerType;
@@ -30,18 +30,19 @@ const DropdownContext = React.createContext<{
   setTrigger: React.Dispatch<React.SetStateAction<TriggerType>>;
   setIsHover: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
-  trigger: "click",
-  setTrigger: () => "click",
+  trigger: 'click',
+  setTrigger: () => 'click',
   isHover: false,
   setIsHover: () => false,
 });
 
 const Dropdown = ({
   open = false,
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   onOpenChange,
   ...props
 }: React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Root>) => {
-  const [trigger, setTrigger] = React.useState<TriggerType>("click");
+  const [trigger, setTrigger] = React.useState<TriggerType>('click');
   const [isHover, setIsHover] = React.useState(false);
   return (
     <DropdownContext.Provider
@@ -68,7 +69,7 @@ const DropdownTrigger = React.forwardRef<
 >(
   (
     {
-      variant = "outline",
+      variant = 'outline',
       trigger,
       onMouseEnter,
       onMouseLeave,
@@ -81,14 +82,14 @@ const DropdownTrigger = React.forwardRef<
     const { setTrigger, setIsHover } = React.useContext(DropdownContext);
 
     const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (trigger === "hover") {
+      if (trigger === 'hover') {
         setIsHover(true);
       }
       onMouseEnter?.(e);
     };
 
     const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (trigger === "hover") {
+      if (trigger === 'hover') {
         setIsHover(false);
       }
       onMouseLeave?.(e);
@@ -103,7 +104,7 @@ const DropdownTrigger = React.forwardRef<
     if (props.asChild) {
       return (
         <DropdownPrimitive.Trigger
-          className={cn("dropdown-trigger", className)}
+          className={cn('dropdown-trigger', className)}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           ref={ref}
@@ -118,7 +119,7 @@ const DropdownTrigger = React.forwardRef<
       <DropdownPrimitive.Trigger asChild>
         <Button
           variant={variant}
-          className={cn("dropdown-trigger", className)}
+          className={cn('dropdown-trigger', className)}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           ref={ref}
@@ -150,8 +151,8 @@ const DropdownSubTrigger = React.forwardRef<
     <DropdownPrimitive.SubTrigger
       ref={ref}
       className={cn(
-        "dropdown-sub-trigger",
-        inset && "dropdown-sub-trigger-inset",
+        'dropdown-sub-trigger',
+        inset && 'dropdown-sub-trigger-inset',
         className,
       )}
       {...props}
@@ -163,12 +164,12 @@ const DropdownSubTrigger = React.forwardRef<
 DropdownSubTrigger.displayName = DropdownPrimitive.SubTrigger.displayName;
 
 const DropdownCaption = React.forwardRef<
-  React.ElementRef<"span">,
-  React.ComponentPropsWithoutRef<"span">
+  React.ElementRef<'span'>,
+  React.ComponentPropsWithoutRef<'span'>
 >(({ className, ...props }, ref) => (
-  <span ref={ref} className={cn("dropdown-caption", className)} {...props} />
+  <span ref={ref} className={cn('dropdown-caption', className)} {...props} />
 ));
-DropdownCaption.displayName = "DropdownCaption";
+DropdownCaption.displayName = 'DropdownCaption';
 
 const DropdownSubContent = React.forwardRef<
   React.ElementRef<typeof DropdownPrimitive.SubContent>,
@@ -176,7 +177,7 @@ const DropdownSubContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownPrimitive.SubContent
     ref={ref}
-    className={cn("dropdown-sub-content", className)}
+    className={cn('dropdown-sub-content', className)}
     {...props}
   />
 ));
@@ -203,14 +204,14 @@ const DropdownContent = React.forwardRef<
     const { trigger, setIsHover } = React.useContext(DropdownContext);
 
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (trigger === "hover") {
+      if (trigger === 'hover') {
         setIsHover(true);
       }
       onMouseEnter?.(e);
     };
 
     const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (trigger === "hover") {
+      if (trigger === 'hover') {
         setIsHover(false);
       }
       onMouseLeave?.(e);
@@ -221,7 +222,7 @@ const DropdownContent = React.forwardRef<
         <DropdownPrimitive.Content
           ref={ref}
           sideOffset={sideOffset}
-          className={cn("dropdown-content", className)}
+          className={cn('dropdown-content', className)}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           {...props}
@@ -245,7 +246,7 @@ const DropdownItem = React.forwardRef<
 >(({ children, className, inset, ...props }, ref) => (
   <DropdownPrimitive.Item
     ref={ref}
-    className={cn("dropdown-item", inset && "dropdown-item-inset", className)}
+    className={cn('dropdown-item', inset && 'dropdown-item-inset', className)}
     {...props}
   >
     {children}
@@ -259,7 +260,7 @@ const DropdownCheckboxItem = React.forwardRef<
 >(({ className, children, checked, ...props }, ref) => (
   <DropdownPrimitive.CheckboxItem
     ref={ref}
-    className={cn("dropdown-checkbox", className)}
+    className={cn('dropdown-checkbox', className)}
     checked={checked}
     {...props}
   >
@@ -277,7 +278,7 @@ const DropdownRadioItem = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <DropdownPrimitive.RadioItem
     ref={ref}
-    className={cn("dropdown-radio", className)}
+    className={cn('dropdown-radio', className)}
     {...props}
   >
     <DropdownPrimitive.ItemIndicator className="dropdown-radio-icon">
@@ -296,7 +297,7 @@ const DropdownLabel = React.forwardRef<
 >(({ className, inset, ...props }, ref) => (
   <DropdownPrimitive.Label
     ref={ref}
-    className={cn("dropdown-label", inset && "dropdown-label-inset", className)}
+    className={cn('dropdown-label', inset && 'dropdown-label-inset', className)}
     {...props}
   />
 ));
@@ -308,7 +309,7 @@ const DropdownSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownPrimitive.Separator
     ref={ref}
-    className={cn("dropdown-separator", className)}
+    className={cn('dropdown-separator', className)}
     {...props}
   />
 ));

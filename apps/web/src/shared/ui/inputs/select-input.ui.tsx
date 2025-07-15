@@ -15,11 +15,10 @@
  */
 import type { IconNameType, Size } from '@ufb/react';
 import {
-  Button,
-  Icon,
   Select,
   SelectCaption,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectLabel,
   SelectTrigger,
@@ -39,7 +38,6 @@ interface Props {
   type?: 'single' | 'multiple';
   error?: string;
   size?: Size;
-  clearable?: boolean;
 }
 
 const SelectInput: React.FC<Props> = (props) => {
@@ -56,7 +54,6 @@ const SelectInput: React.FC<Props> = (props) => {
     type = 'single',
     error,
     size,
-    clearable = false,
   } = props;
 
   return (
@@ -76,25 +73,15 @@ const SelectInput: React.FC<Props> = (props) => {
       )}
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
-        {clearable && (!!value || (!!values && values.length > 0)) && (
-          <Button variant="ghost" onClick={(e) => e.stopPropagation()}>
-            <Icon
-              name="RiCloseCircleFill"
-              className="z-20"
-              onClick={() => {
-                onChange?.(undefined);
-                onValuesChange?.([]);
-              }}
-            />
-          </Button>
-        )}
       </SelectTrigger>
       <SelectContent>
-        {options.map(({ label, value, icon }) => (
-          <SelectItem key={value} value={value} icon={icon}>
-            {label}
-          </SelectItem>
-        ))}
+        <SelectGroup>
+          {options.map(({ label, value, icon }) => (
+            <SelectItem key={value} value={value} icon={icon}>
+              {label}
+            </SelectItem>
+          ))}
+        </SelectGroup>
       </SelectContent>
       {error && <SelectCaption variant="error">{error}</SelectCaption>}
     </Select>

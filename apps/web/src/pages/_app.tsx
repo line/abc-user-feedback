@@ -29,6 +29,7 @@ import { OverlayProvider } from '@toss/use-overlay';
 import { appWithTranslation } from 'next-i18next';
 import i18nConfig from 'next-i18next.config';
 import { ThemeProvider } from 'next-themes';
+import { NuqsAdapter } from 'nuqs/adapters/next/pages';
 
 import { Toaster, TooltipProvider } from '@ufb/react';
 
@@ -93,17 +94,19 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider attribute="class" defaultTheme="system">
           <OverlayProvider>
-            <HydrationBoundary state={dehydratedState}>
-              <TooltipProvider delayDuration={0}>
-                <TenantGuard>
-                  {getLayout(<Component {...otherProps} />)}
-                  <Toaster />
-                </TenantGuard>
-              </TooltipProvider>
-            </HydrationBoundary>
-            {process.env.NODE_ENV === 'development' && (
-              <ReactQueryDevtools initialIsOpen={false} />
-            )}
+            <NuqsAdapter>
+              <HydrationBoundary state={dehydratedState}>
+                <TooltipProvider delayDuration={0}>
+                  <TenantGuard>
+                    {getLayout(<Component {...otherProps} />)}
+                    <Toaster />
+                  </TenantGuard>
+                </TooltipProvider>
+              </HydrationBoundary>
+              {process.env.NODE_ENV === 'development' && (
+                <ReactQueryDevtools initialIsOpen={false} />
+              )}
+            </NuqsAdapter>
           </OverlayProvider>
         </ThemeProvider>
       </QueryClientProvider>

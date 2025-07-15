@@ -19,7 +19,16 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Accordion, Button, Icon } from '@ufb/react';
+import {
+  Accordion,
+  Alert,
+  AlertButton,
+  AlertContent,
+  AlertDescription,
+  AlertTextContainer,
+  AlertTitle,
+  Icon,
+} from '@ufb/react';
 
 import type { NextPageWithLayout } from '@/shared';
 import {
@@ -71,7 +80,7 @@ const CompleteChannelCreationPage: NextPageWithLayout<IProps> = () => {
         </p>
       }
     >
-      <div className="border-neutral-tertiary flex h-[calc(100vh-100px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
+      <div className="border-neutral-tertiary flex h-[calc(100vh-96px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
         <h3 className="text-title-h3">{t('v2.text.summary')}</h3>
         <Accordion
           type="multiple"
@@ -90,11 +99,27 @@ const CompleteChannelCreationPage: NextPageWithLayout<IProps> = () => {
             <FieldTable fields={data?.fields ?? []} disableFilter />
           </CreateSectionTemplate>
         </Accordion>
-        <div className="create-template-footer flex justify-end gap-2">
-          <Button onClick={gotoFeedback}>
-            <Icon name="RiSparklingFill" />
-            {t('button.start')}
-          </Button>
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+          <Alert className="w-[calc(100vw-32px)] max-w-[700px] shadow-md">
+            <AlertContent>
+              <AlertTextContainer>
+                <AlertTitle>
+                  {t('main.create-channel.complete-title')}
+                </AlertTitle>
+                <AlertDescription>
+                  {t('main.create-channel.alert-description')}
+                </AlertDescription>
+              </AlertTextContainer>
+              <AlertButton
+                onClick={gotoFeedback}
+                variant="primary"
+                className="min-w-[120px]"
+              >
+                <Icon name="RiSparklingFill" />
+                {t('button.start')}
+              </AlertButton>
+            </AlertContent>
+          </Alert>
         </div>
       </div>
     </CreationLayout>

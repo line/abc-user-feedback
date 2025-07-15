@@ -13,23 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import * as React from "react";
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import { Slottable } from "@radix-ui/react-slot";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
+import { Slottable } from '@radix-ui/react-slot';
+import { cva } from 'class-variance-authority';
 
-import { cn } from "../lib/utils";
-import { Icon } from "./icon";
+import { cn } from '../lib/utils';
+import { Icon } from './icon';
 
-const radioGroupVariants = cva("radio-group", {
+const radioGroupVariants = cva('radio-group', {
   variants: {
     orientation: {
-      horizontal: "radio-group-horizontal",
-      vertical: "radio-group-vertical",
+      horizontal: 'radio-group-horizontal',
+      vertical: 'radio-group-vertical',
     },
   },
   defaultVariants: {
-    orientation: "horizontal",
+    orientation: 'horizontal',
   },
 });
 
@@ -54,7 +54,7 @@ const RadioItem = React.forwardRef<
   return (
     <RadioGroupPrimitive.Item
       ref={ref}
-      className={cn("radio-item", className)}
+      className={cn('radio-item', className)}
       {...props}
     >
       <span className="radio">

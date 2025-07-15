@@ -47,7 +47,6 @@ jest.mock('next/router', () => ({
 
 jest.mock('@t3-oss/env-nextjs', () => ({
   createEnv: () => ({
-    NEXT_PUBLIC_MAX_DAYS: process.env.NEXT_PUBLIC_MAX_DAYS,
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
     NODE_ENV: process.env.NODE_ENV,
   }),

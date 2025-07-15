@@ -97,6 +97,7 @@ describe('AppController (e2e)', () => {
       fields: Array.from({
         length: faker.number.int({ min: 1, max: 10 }),
       }).map(createFieldDto),
+      feedbackSearchMaxDays: faker.number.int({ min: 1, max: 30 }),
       imageConfig: null,
     });
 

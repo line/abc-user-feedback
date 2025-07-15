@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -33,21 +33,16 @@ import {
 
 import { commandFilter } from '@/shared/utils';
 
-import InfiniteScrollArea from '../infinite-scroll-area.ui';
-
 interface Props {
   label?: string;
   value?: string | null;
-  onChange?: (value?: string) => void;
+  onChange?: (value: string | null) => void;
   options: { label: string; value: string }[];
   required?: boolean;
   disabled?: boolean;
   error?: string;
-  fetchNextPage?: () => void;
-  hasNextPage?: boolean;
   inputValue?: string;
   setInputValue?: (value: string) => void;
-  isFetchingNextPage?: boolean;
 }
 
 const SelectSearchInput: React.FC<Props> = (props) => {
@@ -59,25 +54,16 @@ const SelectSearchInput: React.FC<Props> = (props) => {
     required,
     disabled = false,
     error,
-    fetchNextPage,
-    hasNextPage,
     inputValue,
     setInputValue,
-    isFetchingNextPage,
   } = props;
 
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
-  const [currentOption, setCurrentOption] = useState<{
-    label: string;
-    value: string;
-  }>();
 
-  useEffect(() => {
-    const option = options.find((v) => v.value === value);
-    setCurrentOption(option);
-  }, [value]);
+  const currentOptions = options.filter((option) => option.value !== value);
+  const selectedValue = options.find((option) => option.value === value);
 
   return (
     <InputField>
@@ -88,7 +74,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
       )}
       <Combobox open={open} onOpenChange={setOpen}>
         <ComboboxTrigger disabled={disabled} className="font-normal">
-          {currentOption?.label ?? value ?? t('v2.placeholder.select')}
+          {selectedValue?.label ?? t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
         <ComboboxContent align="start" commandProps={{ filter: commandFilter }}>
@@ -99,29 +85,47 @@ const SelectSearchInput: React.FC<Props> = (props) => {
           />
           <ComboboxList maxHeight="200px">
             <ComboboxEmpty>No results found.</ComboboxEmpty>
-            <ComboboxGroup>
-              {options.map((option) => (
+            {selectedValue && (
+              <ComboboxGroup
+                heading={
+                  <span className="text-neutral-tertiary text-base-normal">
+                    Selected
+                  </span>
+                }
+              >
                 <ComboboxSelectItem
-                  key={option.value}
-                  value={option.value}
-                  checked={option.value === value}
-                  onSelect={() => {
-                    const newValue =
-                      option.value === value ? undefined : option.value;
-                    setCurrentOption(option);
-                    onChange?.(newValue);
-                    setOpen(false);
-                  }}
+                  value={selectedValue.value}
+                  keywords={[selectedValue.label]}
+                  onSelect={() => onChange?.(null)}
+                  checked
                 >
-                  {option.label}
+                  {selectedValue.label}
                 </ComboboxSelectItem>
-              ))}
-            </ComboboxGroup>
-            <InfiniteScrollArea
-              hasNextPage={hasNextPage}
-              fetchNextPage={fetchNextPage}
-              isFetchingNextPage={isFetchingNextPage}
-            />
+              </ComboboxGroup>
+            )}
+            {currentOptions.length > 0 && (
+              <ComboboxGroup
+                heading={
+                  <span className="text-neutral-tertiary text-base-normal">
+                    List
+                  </span>
+                }
+              >
+                {currentOptions.map((option) => (
+                  <ComboboxSelectItem
+                    key={option.value}
+                    value={option.value}
+                    keywords={[option.label]}
+                    checked={option.value === value}
+                    onSelect={(input) =>
+                      onChange?.(input === value ? null : input)
+                    }
+                  >
+                    {option.label}
+                  </ComboboxSelectItem>
+                ))}
+              </ComboboxGroup>
+            )}
           </ComboboxList>
         </ComboboxContent>
       </Combobox>

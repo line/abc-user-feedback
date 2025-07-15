@@ -27,7 +27,7 @@ interface Props {
 const CreationHeader: React.FC<Props> = ({ onClickGoBack }) => {
   const { data } = useAllProjects();
   return (
-    <div className="flex h-12 items-center justify-between p-6">
+    <div className="flex h-12 items-center justify-between px-6">
       <Logo />
       {onClickGoBack && data?.meta.totalItems !== 0 && (
         <Button variant="ghost" onClick={onClickGoBack}>

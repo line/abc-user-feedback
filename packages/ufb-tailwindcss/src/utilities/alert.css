@@ -26,7 +26,7 @@
 }
 
 .alert-default {
-  @apply border-[var(--alert-border-default)];
+  @apply border-[var(--alert-border)];
 }
 
 .alert-warning {
@@ -46,21 +46,21 @@
 }
 
 .alert-icon-default {
-  @apply text-[var(--alert-icon-default)];
+  @apply text-[var(--alert-fg)];
 }
 
 .alert-icon-warning {
-  @apply text-[var(--alert-icon-warning)];
+  @apply text-[var(--alert-fg-warning)];
 }
 
 .alert-icon-success {
-  @apply text-[var(--alert-icon-success)];
+  @apply text-[var(--alert-fg-success)];
 }
 
 .alert-icon-error {
-  @apply text-[var(--alert-icon-error)];
+  @apply text-[var(--alert-fg-error)];
 }
 
 .alert-icon-informative {
-  @apply text-[var(--alert-icon-informative)];
+  @apply text-[var(--alert-fg-informative)];
 }

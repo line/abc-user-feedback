@@ -1,12 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "ignorePaths": [
-    "**/.github/workflows/e2e-test.yml",
-    "**/.github/workflows/integration-test.yml",
-    "**/.github/workflows/publish-api-docs.yml"
-  ],
-  "baseBranches": ["dev"],
   "packageRules": [
     {
       "matchPackagePatterns": ["^@ufb/"],
@@ -17,5 +11,13 @@
       "enabled": false
     }
   ],
-  "automerge": true
+  "updateInternalDeps": true,
+  "rangeStrategy": "bump",
+  "automerge": true,
+  "ignorePaths": [
+    "**/.github/workflows/e2e-test.yml",
+    "**/.github/workflows/integration-test.yml",
+    "**/.github/workflows/publish-api-docs.yml"
+  ],
+  "baseBranches": ["dev"]
 }

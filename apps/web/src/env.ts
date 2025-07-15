@@ -23,11 +23,9 @@ export const env = createEnv({
       .default('development'),
   },
   client: {
-    NEXT_PUBLIC_MAX_DAYS: z.coerce.number().default(90),
     NEXT_PUBLIC_API_BASE_URL: z.string().url(),
   },
   runtimeEnv: {
-    NEXT_PUBLIC_MAX_DAYS: process.env.NEXT_PUBLIC_MAX_DAYS,
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
     NODE_ENV: process.env.NODE_ENV,
   },

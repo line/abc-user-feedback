@@ -32,6 +32,7 @@ import { DateTime } from 'luxon';
 import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { Transactional } from 'typeorm-transactional';
 
+import { TimeRange } from '@/common/dtos';
 import {
   EventTypeEnum,
   FieldFormatEnum,
@@ -39,6 +40,7 @@ import {
   FieldStatusEnum,
   IssueStatusEnum,
 } from '@/common/enums';
+import calculateDaysBetweenDates from '@/utils/date-utils';
 import { ChannelService } from '../channel/channel/channel.service';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import type { FieldEntity } from '../channel/field/field.entity';
@@ -94,6 +96,7 @@ export class FeedbackService {
   private validateQuery(
     query: FindFeedbacksByChannelIdDto['query'],
     fields: FieldEntity[],
+    feedbackSearchMaxDays: number,
   ) {
     const fieldsByKey = fields.reduce(
       (fields: Record<string, FieldEntity>, field) => {
@@ -117,6 +120,12 @@ export class FeedbackService {
       if ('searchText' === fieldKey) {
         continue;
       }
+      if ('fieldKey' === fieldKey) {
+        continue;
+      }
+      if ('issueName' === fieldKey) {
+        continue;
+      }
       if ('condition' === fieldKey) {
         continue;
       }
@@ -138,6 +147,18 @@ export class FeedbackService {
             )
           )
             throw new BadRequestException(`${fieldKey} must be DateTimeRange`);
+
+          if (
+            feedbackSearchMaxDays >= 0 &&
+            calculateDaysBetweenDates(
+              (query[fieldKey] as TimeRange).gte,
+              (query[fieldKey] as TimeRange).lt,
+            ) > feedbackSearchMaxDays
+          ) {
+            throw new BadRequestException(
+              `${fieldKey} must be less than ${feedbackSearchMaxDays} days`,
+            );
+          }
           break;
         case FieldFormatEnum.multiSelect:
           if (!Array.isArray(query[fieldKey]))
@@ -170,6 +191,7 @@ export class FeedbackService {
   private validateQueryV2(
     queries: FindFeedbacksByChannelIdDtoV2['queries'],
     fields: FieldEntity[],
+    feedbackSearchMaxDays: number,
   ) {
     const fieldsByKey = fields.reduce(
       (fields: Record<string, FieldEntity>, field) => {
@@ -211,6 +233,18 @@ export class FeedbackService {
             )
           )
             throw new BadRequestException(`${fieldKey} must be DateTimeRange`);
+
+          if (
+            feedbackSearchMaxDays >= 0 &&
+            calculateDaysBetweenDates(
+              (fieldValue as TimeRange).gte,
+              (fieldValue as TimeRange).lt,
+            ) > feedbackSearchMaxDays
+          ) {
+            throw new BadRequestException(
+              `${fieldKey} must be less than ${feedbackSearchMaxDays} days`,
+            );
+          }
           break;
         case FieldFormatEnum.multiSelect:
           if (!Array.isArray(fieldValue))
@@ -594,9 +628,44 @@ export class FeedbackService {
     if (fields.length === 0) {
       throw new BadRequestException('invalid channel');
     }
-    dto.fields = fields;
+    if (dto.query?.fieldKey) {
+      const field = fields.find((v) => v.key === dto.query?.fieldKey);
+      if (!field) {
+        throw new BadRequestException(
+          'invalid field key: ' + dto.query.fieldKey.toString(),
+        );
+      }
+      dto.fields = [field];
+    } else {
+      dto.fields = fields;
+    }
+    delete dto.query?.fieldKey;
 
-    this.validateQuery(dto.query ?? {}, fields);
+    if (dto.query?.issueName) {
+      const issue = await this.issueService.findByName({
+        name: dto.query.issueName as string,
+      });
+      if (issue) {
+        dto.query.issueIds = [issue.id];
+      } else {
+        dto.query.issueIds = [];
+      }
+    }
+    delete dto.query?.issueName;
+    if (!dto.query?.searchText) delete dto.query?.searchText;
+
+    let feedbackSearchMaxDays = (
+      await this.channelService.findById({
+        channelId: dto.channelId,
+      })
+    ).feedbackSearchMaxDays;
+
+    if (dto.query?.feedbackSearchMaxDays) {
+      feedbackSearchMaxDays = dto.query.feedbackSearchMaxDays as number;
+      delete dto.query.feedbackSearchMaxDays;
+    }
+
+    this.validateQuery(dto.query ?? {}, fields, feedbackSearchMaxDays);
 
     const feedbacksByPagination =
       this.configService.get('opensearch.use') ?
@@ -627,8 +696,14 @@ export class FeedbackService {
     }
     dto.fields = fields;
 
-    this.validateQueryV2(dto.queries, fields);
-    this.validateQueryV2(dto.defaultQueries, fields);
+    const feedbackSearchMaxDays = (
+      await this.channelService.findById({
+        channelId: dto.channelId,
+      })
+    ).feedbackSearchMaxDays;
+
+    this.validateQueryV2(dto.queries, fields, feedbackSearchMaxDays);
+    this.validateQueryV2(dto.defaultQueries, fields, feedbackSearchMaxDays);
 
     const feedbacksByPagination =
       this.configService.get('opensearch.use') ?
@@ -796,8 +871,15 @@ export class FeedbackService {
       }
     }
 
-    this.validateQueryV2(dto.queries, fields);
-    this.validateQueryV2(dto.defaultQueries, fields);
+    const feedbackSearchMaxDays = (
+      await this.channelService.findById({
+        channelId: dto.channelId,
+      })
+    ).feedbackSearchMaxDays;
+
+    this.validateQueryV2(dto.queries, fields, feedbackSearchMaxDays);
+    this.validateQueryV2(dto.defaultQueries, fields, feedbackSearchMaxDays);
+
     const fieldsByKey: Record<string, FieldEntity> = fields.reduce(
       (prev: Record<string, FieldEntity>, field) => {
         prev[field.key] = field;
