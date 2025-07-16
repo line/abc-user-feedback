@@ -103,7 +103,6 @@ export class IssueRecommendParameters {
   systemPrompt: string;
   targetFeedback: string;
   additionalPrompt: string;
-  issueExamples: string;
   existingIssues: string;
   projectName: string;
   projectDesc: string;
@@ -116,7 +115,6 @@ export class IssueRecommendParameters {
     systemPrompt: string,
     targetFeedback: string,
     additionalPrompt: string,
-    issueExamples: string,
     existingIssues: string,
     projectName: string,
     projectDesc: string,
@@ -128,7 +126,6 @@ export class IssueRecommendParameters {
     this.systemPrompt = systemPrompt;
     this.targetFeedback = targetFeedback;
     this.additionalPrompt = additionalPrompt;
-    this.issueExamples = issueExamples;
     this.existingIssues = existingIssues;
     this.projectName = projectName;
     this.projectDesc = projectDesc;
@@ -354,7 +351,6 @@ export class AIClient {
       const userPrompt = getRefinedIssueRecommendationPrompt(
         params.targetFeedback,
         params.additionalPrompt,
-        params.issueExamples,
         params.existingIssues,
       );
 

@@ -796,23 +796,6 @@ export class AIService {
     });
   }
 
-  private convertToLinkedFeedbackCount(dataReferenceAmount: number) {
-    switch (dataReferenceAmount) {
-      case 1:
-        return 1;
-      case 2:
-        return 2;
-      case 3:
-        return 3;
-      case 4:
-        return 4;
-      case 5:
-        return 5;
-      default:
-        return 3;
-    }
-  }
-
   private convertToLinkedIssueCount(dataReferenceAmount: number) {
     switch (dataReferenceAmount) {
       case 1:
@@ -828,31 +811,6 @@ export class AIService {
       default:
         return 0.6;
     }
-  }
-
-  private generateIssueExamples(
-    issues: IssueEntity[],
-    issueTemplate: AIIssueTemplatesEntity,
-  ) {
-    return issues
-      .map((issue) => {
-        return JSON.stringify({
-          name: issue.name,
-          description: issue.description,
-          feedbacks: issue.feedbacks.map((feedback) => {
-            const content = issueTemplate.targetFieldKeys.reduce((acc, key) => {
-              if (feedback.data[key] !== undefined) {
-                return acc ?
-                    `${acc},${feedback.data[key]}`
-                  : `${feedback.data[key]}`;
-              }
-              return acc;
-            }, '');
-            return content;
-          }),
-        });
-      })
-      .join(',');
   }
 
   async recommendAIIssue(feedbackId: number) {
@@ -937,18 +895,7 @@ export class AIService {
       ),
     });
 
-    issues.forEach((issue) => {
-      issue.feedbacks.sort((a, b) => {
-        return b.createdAt.getTime() - a.createdAt.getTime();
-      });
-      issue.feedbacks = issue.feedbacks.slice(
-        0,
-        this.convertToLinkedFeedbackCount(issueTemplate.dataReferenceAmount),
-      );
-    });
-
     const existingIssues = issues.map((issue) => issue.name).join(',');
-    const issueExamples = this.generateIssueExamples(issues, issueTemplate);
 
     const param = new IssueRecommendParameters(
       issueTemplate.model!,
@@ -956,7 +903,6 @@ export class AIService {
       integration.systemPrompt,
       targetFeedback,
       issueTemplate.prompt,
-      issueExamples,
       existingIssues,
       feedback.channel.project.name,
       feedback.channel.project.description ?? '',
@@ -1041,40 +987,7 @@ export class AIService {
       ),
     });
 
-    issues.forEach((issue) => {
-      issue.feedbacks.sort((a, b) => {
-        return b.createdAt.getTime() - a.createdAt.getTime();
-      });
-      issue.feedbacks = issue.feedbacks.slice(
-        0,
-        this.convertToLinkedFeedbackCount(dto.dataReferenceAmount),
-      );
-    });
-
     const existingIssues = issues.map((issue) => issue.name).join(',');
-
-    const issueExamples = issues
-      .map((issue) => {
-        return JSON.stringify({
-          name: issue.name,
-          description: issue.description,
-          feedbacks: issue.feedbacks.map((feedback) => {
-            const content = dto.targetFieldKeys.reduce(
-              (acc, targetFieldKey) => {
-                if (feedback.data[targetFieldKey] !== undefined) {
-                  return acc ?
-                      `${acc},${feedback.data[targetFieldKey]}`
-                    : `${feedback.data[targetFieldKey]}`;
-                }
-                return acc;
-              },
-              '',
-            );
-            return content;
-          }),
-        });
-      })
-      .join(',');
 
     const param = new IssueRecommendParameters(
       dto.model,
@@ -1082,7 +995,6 @@ export class AIService {
       integration.systemPrompt,
       targetFeedback,
       dto.templatePrompt,
-      issueExamples,
       existingIssues,
       channel.project.name,
       channel.project.description ?? '',

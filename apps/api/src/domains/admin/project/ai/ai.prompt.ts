@@ -107,12 +107,11 @@ ${promptTargetText}`.trim();
 export function getRefinedIssueRecommendationPrompt(
   targetFeedback: string,
   additionalPrompt: string,
-  issueExamples: string,
   existingIssues: string,
 ): string {
   return `
 ## Instructions
-IMPORTANT: Respond with the results of the AI Issue recommendation based on the following descriptions, feedback, and issue examples.
+IMPORTANT: Respond with the results of the AI Issue recommendation based on the following descriptions, feedback, and existing issues.
 IMPORTANT: When responding, return only the text format of the recommended Issues, excluding any unnecessary information such as special characters.
 IMPORTANT: If there are multiple issues, separate them with a comma (,).
 IMPORTANT: Ensure each response value separated by a comma is no longer than 30 characters.
@@ -145,7 +144,7 @@ Issue: { "name": "Login Issue", "description": "The user could not login." }
 \`\`\`
 
 ## AI Issue Recommend
-The AI Issue Recommend feature automatically recommends an Issue to be assigned to Feedback when User Feedback, Core User Prompt, Issue Examples, and Existing Issues are input. Since Issue Examples contain information about issues assigned to feedback in this service, they can be referenced. Focus on analyzing the content of the Feedback, but reflect the contents of the Core User Prompt in the response.
+The AI Issue Recommend feature automatically recommends an Issue to be assigned to Feedback when User Feedback, Core User Prompt, and Existing Issues are input. Focus on analyzing the content of the Feedback, but reflect the contents of the Core User Prompt in the response.
 
 Here is an example of a recommended Issue when Feedback is input. Even if the Feedback is long, it should be possible to summarize it into a core issue, and if it can be assigned to an already existing issue in the Existing Issues, prioritize recommending that instead of creating a new issue.
 
@@ -155,10 +154,6 @@ ${targetFeedback}
 
 ## Additional User Prompt
 ${additionalPrompt}
-
-## Issue Examples
-The following are examples of existing issues. Each issue's name, description, and the feedback assigned to each issue are provided.
-${issueExamples}
 
 ## Existing Issues
 The following is a list of issues that already exist within the service. If it can be assigned to an already existing issue, prioritize recommending that, and if not, recommend a new issue.
