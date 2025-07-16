@@ -115,7 +115,7 @@ IMPORTANT: Respond with the results of the AI Issue recommendation based on the 
 IMPORTANT: When responding, return only the text format of the recommended Issues, excluding any unnecessary information such as special characters.
 IMPORTANT: If there are multiple issues, separate them with a comma (,).
 IMPORTANT: Ensure each response value separated by a comma is no longer than 30 characters.
-IMPORTANT: If no feedback is provided or there are no Issues to recommend, respond with an empty value.
+IMPORTANT: If it is a newly created issue, not an existing issue, please recommend at least two issues with high accuracy.
 
 ## Feedback Field Structure
 The concept of a "Field" refers to each attribute of the feedback. Each field has a key, name, and description. The "key" is the unique key value of the field when receiving feedback input, the "name" is the name of the field referenced by the user, and the "description" is an explanation of the field.
