@@ -507,10 +507,49 @@ export class AIService {
     }, '');
   }
 
+  private convertAiFieldToJson(
+    data: Record<string, any>,
+    fields: FieldEntity[],
+  ) {
+    for (const field of fields) {
+      if (field.format === FieldFormatEnum.aiField) {
+        if (data[field.key] && typeof data[field.key] === 'string') {
+          try {
+            data[field.key] = JSON.parse(data[field.key]);
+          } catch (e) {
+            this.logger.error(
+              `Failed to parse AI field data for key ${field.key}: ${e}`,
+            );
+          }
+        }
+      }
+    }
+  }
+
+  private convertAiFieldToString(
+    data: Record<string, any>,
+    fields: FieldEntity[],
+  ) {
+    for (const field of fields) {
+      if (field.format === FieldFormatEnum.aiField) {
+        if (data[field.key] && typeof data[field.key] === 'object') {
+          try {
+            data[field.key] = JSON.stringify(data[field.key]);
+          } catch (e) {
+            this.logger.error(
+              `Failed to stringify AI field data for key ${field.key}: ${e}`,
+            );
+          }
+        }
+      }
+    }
+  }
+
   async executeAIFieldPrompt(
     feedback: FeedbackEntity,
     aiField: FieldEntity,
     aiTargetFields: FieldEntity[],
+    fields: FieldEntity[] = [],
   ): Promise<boolean> {
     const integration = await this.aiIntegrationsRepo.findOne({
       where: {
@@ -553,6 +592,7 @@ export class AIService {
     )
       return false;
 
+    this.convertAiFieldToString(feedback.data, fields);
     feedback.data[aiField.key] =
       `{"status": "${AIPromptStatusEnum.loading}", "message": "Processing..."}`;
 
@@ -562,10 +602,7 @@ export class AIService {
     });
 
     if (this.configService.get('opensearch.use')) {
-      feedback.data[aiField.key] = {
-        status: AIPromptStatusEnum.loading,
-        message: 'Processing...',
-      };
+      this.convertAiFieldToJson(feedback.data, fields);
       await this.feedbackOSService.upsertFeedbackItem({
         feedbackId: feedback.id,
         data: feedback.data,
@@ -588,6 +625,7 @@ export class AIService {
       ),
     );
     this.logger.log(`Result: ${result.content}`);
+    this.convertAiFieldToString(feedback.data, fields);
     feedback.data[aiField.key] =
       `{"status": "${result.status}", "message": "${result.content.replace(/"/g, "'").replace(/\n/g, '')}"}`;
 
@@ -604,10 +642,7 @@ export class AIService {
     });
 
     if (this.configService.get('opensearch.use')) {
-      feedback.data[aiField.key] = {
-        status: result.status,
-        message: result.content,
-      };
+      this.convertAiFieldToJson(feedback.data, fields);
       await this.feedbackOSService.upsertFeedbackItem({
         feedbackId: feedback.id,
         data: feedback.data,
@@ -660,7 +695,14 @@ export class AIService {
           field.aiFieldTargetKeys?.includes(f.key),
         );
 
-        if (!(await this.executeAIFieldPrompt(feedback, field, targetFields))) {
+        if (
+          !(await this.executeAIFieldPrompt(
+            feedback,
+            field,
+            targetFields,
+            fields,
+          ))
+        ) {
           throw new BadRequestException(
             'Token threshold exceeded, cannot process AI field',
           );
@@ -702,7 +744,14 @@ export class AIService {
       aiField.aiFieldTargetKeys?.includes(f.key),
     );
 
-    if (!(await this.executeAIFieldPrompt(feedback, aiField, targetFields))) {
+    if (
+      !(await this.executeAIFieldPrompt(
+        feedback,
+        aiField,
+        targetFields,
+        fields,
+      ))
+    ) {
       throw new BadRequestException(
         'Token threshold exceeded, cannot process AI field',
       );
