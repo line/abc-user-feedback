@@ -53,6 +53,7 @@ export function getRefinedUserPrompt(
 ## Instructions
 IMPORTANT: Respond with the result of the AI Field based on the following descriptions, feedback, and field content. 
 IMPORTANT: Return only the response value for the Core User Prompt in text format and exclude any unnecessary information.
+IMPORTANT: Unless instructed otherwise, the language of the response should follow the fieldValue of Feedback's language.
 
 ## Feedback Field Structure
 
