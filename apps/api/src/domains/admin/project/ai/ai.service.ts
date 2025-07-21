@@ -482,8 +482,10 @@ export class AIService {
   private generatePromptTargetText(
     feedback: FeedbackEntity,
     aiTargetFields: FieldEntity[],
+    aiField: FieldEntity,
   ): string {
     return aiTargetFields.reduce((acc, field) => {
+      if (field.key === aiField.key) return acc;
       if (field.key === 'issues') {
         const issues = feedback.issues
           .map((issue) => `${issue.name}: ${issue.description}`)
@@ -576,6 +578,7 @@ export class AIService {
     const promptTargetText = this.generatePromptTargetText(
       feedback,
       aiTargetFields,
+      aiField,
     );
 
     const client = new AIClient({
