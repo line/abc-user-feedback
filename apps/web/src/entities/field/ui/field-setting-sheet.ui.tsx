@@ -305,7 +305,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
             {watch('format') === 'aiField' && (
               <>
                 <SelectInput
-                  label="AI Field Template"
+                  label="Template"
                   options={
                     templates?.map(({ title, id }) => ({
                       label: title,
@@ -325,7 +325,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                   required
                 />
                 <MultiSelectInput
-                  label="AI Field Target"
+                  label="Target Field"
                   options={fieldRows.map(({ key, name }) => ({
                     label: name,
                     value: key,
@@ -353,9 +353,9 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                       />
                     }
                   >
-                    <CardTitle>Auto Processing</CardTitle>
+                    <CardTitle>AI Field Automation</CardTitle>
                     <CardDescription>
-                      자동으로 AI Prompt를 적용합니다.
+                      {t('v2.description.ai-field-template-auto-processing')}
                     </CardDescription>
                   </CardHeader>
                 </Card>

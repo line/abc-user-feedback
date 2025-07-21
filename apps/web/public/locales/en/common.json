@@ -241,7 +241,11 @@
     "field": "You can define feedback data to be collected in the Channel by Field units. Please add Fields considering the data type and properties.",
     "image-config": "When collecting feedback in Image format, this screen allows you to set up Image Storage integration and configure whitelist for Image URL domains. For details, please refer to the Image <docs>Docs</docs>.",
     "field-preview": "Provides a preview of what your feedback will look like based on registered Field information. The preview uses example data for reference.",
-    "webhook": "This is the screen where you can set up Webhook integration according to event triggers occurring in User Feedback. For details, please refer to the Webhook <docs>Docs</docs>."
+    "webhook": "This is the screen where you can set up Webhook integration according to event triggers occurring in User Feedback. For details, please refer to the Webhook <docs>Docs</docs>.",
+    "ai-setting": "This is the screen for setting up the integration of Generative AI. To use AI features, essential information must be entered.",
+    "ai-usage": "This is the screen for checking and managing token usage related to AI feature usage.",
+    "ai-field-template": "This is the screen for defining the behavior of AI fields. You can enter instructions through templates and adjust advanced settings.",
+    "ai-issue-recommendation": "This is the screen for setting up the AI issue recommendation feature. After detailed configuration per channel, you can use the AI issue recommendation feature."
   },
   "hint": {
     "required": "Required",
@@ -290,7 +294,10 @@
       "next": "Next",
       "previous": "Previous",
       "addFilter": "Add Filter",
-      "edit": "Edit"
+      "edit": "Edit",
+      "process-ai": "Process AI",
+      "process-ai-test": "Process AI Test",
+      "setting": "Setting"
     },
     "project-setting-menu": {
       "project-info": "Project Information",
@@ -360,7 +367,10 @@
       "request-email-auth": "Authentication has been requested.",
       "all-image-url-allow": "All Image URLs are allowed.",
       "select-project": "Please select a project.",
-      "no-category": "No Category"
+      "no-category": "No Category",
+      "token-usage": "Token Usage",
+      "remaining-token-amount": "Remaining Token Amount",
+      "token-threshold-percentage": "Reached {{percentage}}% of the limit"
     },
     "create-tenant": {
       "tenant": {
@@ -379,11 +389,18 @@
     "placeholder": {
       "select": "Please select.",
       "text": "Please enter.",
-      "text-or-generate": "Please enter or generate."
+      "text-or-generate": "Please enter or generate.",
+      "ai-endpoint-url": "Please enter only if a separate Endpoint URL configuration is required.",
+      "system-prompt": "If there is additional information that the Generative AI should refer to, please enter it.",
+      "ai-field-template-prompt": "Please enter instructions on how the Generative AI should process.",
+      "ai-field-reccommendation-prompt": "If there are additional instructions to request from the Generative AI, please enter them."
     },
     "toast": {
       "success": "Successfully processed.",
-      "copy": "Copied to clipboard."
+      "copy": "Copied to clipboard.",
+      "ai-usage-limit-approaching": "AI usage limit approaching for this month.",
+      "ai-function-terminated": "AI function terminated.",
+      "ai-function-terminated-description": "AI execution has been stopped due to exceeding token usage limit."
     },
     "webhook-card": {
       "feedback-creation": {
@@ -410,7 +427,20 @@
     },
     "description": {
       "create-project": "Project has been created successfully.\nNext, you need to create a Channel to collect feedback.\nProceed to the next step through 'Create Channel'.",
-      "create-channel": "Channel has been created successfully.\nNow you're ready to collect and manage user feedback.\nStart experiencing it in full through 'Get Started'."
+      "create-channel": "Channel has been created successfully.\nNow you're ready to collect and manage user feedback.\nStart experiencing it in full through 'Get Started'.",
+      "remaining-token-amount": "To check the remaining token amount, please set a limit.",
+      "token-threshold": "Set a limit for monthly token usage. If the limit is exceeded, AI functionality will be stopped.",
+      "pre-limit-notification": "When the set threshold is reached, you will receive a notification about token usage. (Usage is reset on the 1st of every month.)",
+      "ai-field-template-form": "Set the basic information for the template.",
+      "ai-field-template-advanced-configuration": "You can change the connected model and temperature of the template.",
+      "ai-field-template-playground": "You can preview AI results in advance using the template and test data.",
+      "ai-issue-recommendation-form": "Set the basic information for AI issue recommendations.",
+      "ai-issue-recommendation-enable": "Set whether to use the AI issue recommendation feature.",
+      "ai-issue-recommendation-advanced-configuration": "You can change the connected model, temperature, and data reference amount for AI issue recommendations.",
+      "ai-issue-recommendation-data-reference-amount": "You can adjust the amount of issue data that the Generative AI should reference for AI issue recommendations.",
+      "ai-issue-recommendation-playground": "You can preview AI results in advance using the AI issue recommendation settings and test data.",
+      "ai-field-template-auto-processing": "Automatically executes AI fields.",
+      "ai-issue-recommendation-setting-required": "The AI issue recommendation feature requires configuration. Please set it up to use the feature."
     },
     "login-setting": {
       "oauth-description": "Provides a way to log in using OAuth2.0.",

@@ -16,6 +16,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 import {
   Label,
@@ -37,8 +38,6 @@ import {
   CardHeader,
   CardTitle,
   DateRangePicker,
-  DescriptionTooltip,
-  HelpCardDocs,
   SelectInput,
   SettingAlert,
   SimpleLineChart,
@@ -64,6 +63,8 @@ type UsageForm = {
 };
 
 export const AIUsageForm = ({ projectId }: { projectId: number }) => {
+  const { t } = useTranslation();
+
   const { register, formState, setValue, watch, handleSubmit, reset } =
     useForm<UsageForm>();
 
@@ -75,11 +76,8 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
+        toast.success(t('v2.toast.success'));
         await refetch();
-        toast.success('AI 설정이 저장되었습니다.');
-      },
-      onError(error) {
-        toast.error(error.message);
       },
     },
   });
@@ -131,101 +129,129 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
 
   return (
     <>
-      <SettingAlert
-        description={<HelpCardDocs i18nKey="help-card.api-key" />}
-      />
-      <form
-        id={formId}
-        className="flex flex-row gap-4"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div className="flex-[2]">
-          <AIChartCard projectId={projectId} />
+      <SettingAlert description={t('help-card.ai-usage')} />
+      <form id={formId} onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-row gap-4">
+          <div className="flex-[2]">
+            <AIChartCard projectId={projectId} />
+          </div>
+          <div className="flex-[1]">
+            <AIChartUsageCard projectId={projectId} />
+          </div>
         </div>
-        <div className="flex-[1]">
-          <AIChartUsageCard projectId={projectId} />
+        <div className="flex gap-4">
+          <Card className="flex-[1]" size="md">
+            <CardHeader
+              className="flex-1"
+              action={
+                <Switch
+                  checked={watch('tokenThreshold') !== null}
+                  onCheckedChange={(checked) => {
+                    setValue('tokenThreshold', checked ? 1000000 : null, {
+                      shouldDirty: true,
+                    });
+                    if (!checked) {
+                      setValue('percentage', undefined, { shouldDirty: true });
+                    }
+                  }}
+                />
+              }
+            >
+              <CardTitle>Token Threshold</CardTitle>
+              <CardDescription>
+                {t('v2.description.token-threshold')}
+              </CardDescription>
+            </CardHeader>
+            <CardBody>
+              <TextInput type="number" {...register('tokenThreshold')} />
+            </CardBody>
+          </Card>
+          <Card className="flex-[1]" size="md">
+            <CardHeader
+              className="flex-1"
+              action={
+                <Switch
+                  disabled={watch('tokenThreshold') === null}
+                  checked={!!watch('percentage')}
+                  onCheckedChange={(checked) =>
+                    setValue('percentage', checked ? '50' : undefined, {
+                      shouldDirty: true,
+                    })
+                  }
+                />
+              }
+            >
+              <CardTitle>Pre-limit notification</CardTitle>
+              <CardDescription>
+                {t('v2.description.pre-limit-notification')}
+              </CardDescription>
+            </CardHeader>
+            <CardBody>
+              <SelectInput
+                disabled={!watch('percentage')}
+                value={watch('percentage')}
+                onChange={(value) =>
+                  setValue('percentage', value, { shouldDirty: true })
+                }
+                options={[
+                  {
+                    value: '50',
+                    label: t('v2.text.token-threshold-percentage', {
+                      percentage: 50,
+                    }),
+                  },
+                  {
+                    value: '60',
+                    label: t('v2.text.token-threshold-percentage', {
+                      percentage: 60,
+                    }),
+                  },
+                  {
+                    value: '70',
+                    label: t('v2.text.token-threshold-percentage', {
+                      percentage: 70,
+                    }),
+                  },
+                  {
+                    value: '80',
+                    label: t('v2.text.token-threshold-percentage', {
+                      percentage: 80,
+                    }),
+                  },
+                  {
+                    value: '90',
+                    label: t('v2.text.token-threshold-percentage', {
+                      percentage: 90,
+                    }),
+                  },
+                  {
+                    value: '95',
+                    label: t('v2.text.token-threshold-percentage', {
+                      percentage: 95,
+                    }),
+                  },
+                ]}
+              />
+            </CardBody>
+          </Card>
         </div>
       </form>
-      <div className="flex gap-4">
-        <Card className="flex-[1]" size="md">
-          <CardHeader
-            action={
-              <Switch
-                checked={watch('tokenThreshold') !== null}
-                onCheckedChange={(checked) => {
-                  setValue('tokenThreshold', checked ? 1000000 : null, {
-                    shouldDirty: true,
-                  });
-                  if (!checked) {
-                    setValue('percentage', undefined, { shouldDirty: true });
-                  }
-                }}
-              />
-            }
-          >
-            <CardTitle>Token Threshold</CardTitle>
-            <CardDescription>
-              토큰 사용량 상한을 설정하여 AI 기능에 대한 사용량을 제어할 수
-              있습니다.
-            </CardDescription>
-          </CardHeader>
-          <CardBody>
-            <TextInput type="number" {...register('tokenThreshold')} />
-          </CardBody>
-        </Card>
-        <Card className="flex-[1]" size="md">
-          <CardHeader
-            action={
-              <Switch
-                disabled={watch('tokenThreshold') === null}
-                checked={!!watch('percentage')}
-                onCheckedChange={(checked) =>
-                  setValue('percentage', checked ? '50' : undefined, {
-                    shouldDirty: true,
-                  })
-                }
-              />
-            }
-          >
-            <CardTitle>Pre-limit notification</CardTitle>
-            <CardDescription>
-              토큰 사용량 상한을 기준으로 사용량에 대한 노티를 미리 안내 받을 수
-              있습니다.
-            </CardDescription>
-          </CardHeader>
-          <CardBody>
-            <SelectInput
-              disabled={!watch('percentage')}
-              value={watch('percentage')}
-              onChange={(value) =>
-                setValue('percentage', value, { shouldDirty: true })
-              }
-              options={[
-                { value: '50', label: '상한값의 50% 도달' },
-                { value: '60', label: '상한값의 60% 도달' },
-                { value: '70', label: '상한값의 70% 도달' },
-                { value: '80', label: '상한값의 80% 도달' },
-                { value: '90', label: '상한값의 90% 도달' },
-                { value: '95', label: '상한값의 95% 도달' },
-              ]}
-            />
-          </CardBody>
-        </Card>
-      </div>
     </>
   );
 };
 
 export const AIUsageFormButton = () => {
+  const { t } = useTranslation();
   const { formId, isPending, isDirty } = useAIUsageFormStore();
   return (
     <Button form={formId} type="submit" disabled={!isDirty} loading={isPending}>
-      저장
+      {t('v2.button.save')}
     </Button>
   );
 };
 
 const AIChartCard = ({ projectId }: { projectId: number }) => {
+  const { t } = useTranslation();
   const [dateRange, setDateRange] = useState<DateRangeType>({
     startDate: dayjs().startOf('month').toDate(),
     endDate: dayjs().toDate(),
@@ -293,15 +319,15 @@ const AIChartCard = ({ projectId }: { projectId: number }) => {
         { name: 'AI Field', color: '#50E3C2' },
         { name: 'AI Issue', color: '#F5A623' },
       ]}
-      title="사용 토큰량"
+      title={t('v2.text.token-usage')}
       data={chartData}
       showLegend
-      description=""
       height={334}
     />
   );
 };
 const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
+  const { t } = useTranslation();
   const { data: integrationData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/integrations',
     variables: { projectId },
@@ -344,10 +370,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>
-          잔여 토큰량
-          <DescriptionTooltip description="토큰 사용량은 매월 1일에 초기화됩니다." />
-        </CardTitle>
+        <CardTitle>{t('v2.text.remaining-token-amount')}</CardTitle>
       </CardHeader>
       <CardBody className="flex flex-col items-center gap-8">
         <RadialBarChart
@@ -453,11 +476,11 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
             </div>
             <div className="flex justify-between">
               <div>Monthly tokens reset in</div>
-              <div>매월 1일</div>
+              <div>1st of every month</div>
             </div>
           </div>
         : <p className="text-center">
-            잔여 토큰량을 확인하려면 상한값을 먼저 설정해 주세요.
+            {t('v2.description.remaining-token-amount')}
           </p>
         }
       </CardBody>

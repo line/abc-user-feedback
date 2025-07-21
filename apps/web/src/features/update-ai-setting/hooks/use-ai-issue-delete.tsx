@@ -17,6 +17,7 @@
 import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 import { parseAsInteger, useQueryState } from 'nuqs';
 
 import { toast } from '@ufb/react';
@@ -24,6 +25,7 @@ import { toast } from '@ufb/react';
 import { client, DeleteDialog } from '@/shared';
 
 export const useAIIssueDelete = (projectId: number) => {
+  const { t } = useTranslation();
   const [templateId] = useQueryState('templateId', parseAsInteger);
   const overlay = useOverlay();
   const router = useRouter();
@@ -38,7 +40,7 @@ export const useAIIssueDelete = (projectId: number) => {
     },
     onSuccess() {
       router.back();
-      toast.success('AI 설정이 삭제되었습니다.');
+      toast.success(t('v2.toast.success'));
     },
     onError(error) {
       toast.error(error.message);

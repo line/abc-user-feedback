@@ -15,15 +15,14 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 
 import { Badge, Button, Icon } from '@ufb/react';
 
 import { Card, CardBody, CardHeader, CardTitle, GRADIENT_CSS } from '@/shared';
 
-import { WatingImage } from '@/assets';
 import { useAIPlayground } from '../contexts/ai-playground-context';
 import type { PlaygroundInputItem } from '../playground-input-item.schema';
-import { EmptyState } from './empty-state';
 
 // Loading Component
 export const LoadingBars = () => (
@@ -71,6 +70,7 @@ const PlaygroundOutputCard = ({
   isDisabled,
   resultType = 'text',
 }: AIResultSectionProps) => {
+  const { t } = useTranslation();
   const { inputItems } = useAIPlayground();
 
   return (
@@ -84,7 +84,7 @@ const PlaygroundOutputCard = ({
             disabled={isDisabled || inputItems.length === 0}
           >
             <Icon name="RiSparklingFill" />
-            AI 테스트 실행
+            {t('v2.button.process-ai-test')}
           </Button>
         }
       >
@@ -99,11 +99,7 @@ const PlaygroundOutputCard = ({
           : resultType === 'text' && typeof result === 'string' ?
             <TextResult result={result} />
           : null
-        : <EmptyState
-            image={<WatingImage width={120} height={120} />}
-            message="아직 테스트를 실행하지 않은 상태입니다."
-          />
-        }
+        : null}
       </CardBody>
     </Card>
   );

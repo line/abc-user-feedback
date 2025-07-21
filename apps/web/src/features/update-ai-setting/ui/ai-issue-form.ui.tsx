@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 import { FormProvider } from 'react-hook-form';
 
 import { Button, Divider } from '@ufb/react';
@@ -43,6 +44,7 @@ import {
 import AIIssuePlayground from './ai-issue-playground.ui';
 
 export const AIIssueForm = ({ projectId }: { projectId: number }) => {
+  const { t } = useTranslation();
   const { channelData, modelData, methods, handleFormSubmit } =
     useAIIssueForm(projectId);
   const { formId } = useAIIssueFormStore();
@@ -61,7 +63,7 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
           <CardHeader>
             <CardTitle>Configuration</CardTitle>
             <CardDescription>
-              템플릿 정보와 프롬프트를 설정해주세요
+              {t('v2.description.ai-issue-recommendation-form')}
             </CardDescription>
           </CardHeader>
           <CardBody className="flex flex-col gap-4">
@@ -79,7 +81,9 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
                 <div>
                   <h4 className="text-title-h4">Advanced Configuration</h4>
                   <p className="text-small-normal text-neutral-secondary">
-                    description
+                    {t(
+                      'v2.description.ai-issue-recommendation-advanced-configuration',
+                    )}
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">
@@ -98,6 +102,8 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
 };
 
 export const AIIssueFormButton = ({ projectId }: { projectId: number }) => {
+  const { t } = useTranslation();
+
   const { formId, isPending, isDirty } = useAIIssueFormStore();
   const {
     isPending: isDeletePending,
@@ -113,7 +119,7 @@ export const AIIssueFormButton = ({ projectId }: { projectId: number }) => {
         disabled={!templateId}
         loading={isDeletePending}
       >
-        Template 삭제
+        {t('v2.button.name.delete', { name: 'Template' })}
       </Button>
       <Button
         form={formId}
@@ -121,7 +127,7 @@ export const AIIssueFormButton = ({ projectId }: { projectId: number }) => {
         loading={isPending}
         disabled={!isDirty}
       >
-        저장
+        {t('v2.button.save')}
       </Button>
     </div>
   );

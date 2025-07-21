@@ -63,9 +63,10 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
     <>
       <SettingTemplate
         title={
-          subMenu === 'field-template-form' ? 'Template Details' : (
-            t('v2.project-setting-menu.generative-ai-setting')
-          )
+          subMenu === 'field-template-form' ? 'Template Details'
+          : subMenu === 'ai-issue-form' ?
+            'AI Issue Recommend Details'
+          : t('v2.project-setting-menu.generative-ai-setting')
         }
         action={
           <>
@@ -92,8 +93,9 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
             orientation="horizontal"
             value={subMenu}
             onValueChange={async (v) => {
+              if (!v) return;
               if (isSettingsEmpty && v !== 'setting') {
-                toast.warning('AI Settings 저장 후에 이용할 수 있습니다.');
+                toast.warning('Please set up AI settings first.');
                 return;
               }
               await setSubMenu(v as SubMenuType);
@@ -109,7 +111,7 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
               AI Field Template
             </MenuItem>
             <MenuItem className="w-fit shrink-0" value="ai-issue">
-              AI Issue
+              AI Issue Recommendation
             </MenuItem>
           </Menu>
         )}

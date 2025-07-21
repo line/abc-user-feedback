@@ -59,7 +59,7 @@ const PlaygroundInputDataItem = ({
     if (inputItems.some((item, i) => item.name === data.name && i !== index)) {
       setError('name', {
         type: 'manual',
-        message: '이미 존재하는 필드 이름입니다.',
+        message: 'A data item with this name already exists.',
       });
       return;
     }

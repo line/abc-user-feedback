@@ -76,14 +76,14 @@ const AiSettingForm = () => {
       />
       <TextInput
         label="Endpoint URL"
-        placeholder={t('v2.placeholder.text')}
+        placeholder={t('v2.placeholder.ai-endpoint-url')}
         {...register('endpointUrl')}
         error={formState.errors.endpointUrl?.message}
       />
       <InputField>
         <InputLabel>System Prompt</InputLabel>
         <Textarea
-          placeholder={t('v2.placeholder.text')}
+          placeholder={t('v2.placeholder.system-prompt')}
           {...register('systemPrompt')}
         />
         <div className="flex flex-row-reverse items-center justify-between">

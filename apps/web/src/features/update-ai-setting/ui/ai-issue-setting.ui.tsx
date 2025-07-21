@@ -14,13 +14,14 @@
  * under the License.
  */
 
+import { useTranslation } from 'next-i18next';
+
 import { Icon, Tag } from '@ufb/react';
 
 import {
   Card,
   CardBody,
   GRADIENT_CSS,
-  HelpCardDocs,
   SettingAlert,
   useOAIQuery,
 } from '@/shared';
@@ -32,6 +33,8 @@ export const AiIssueSetting = ({
   onClick: (templateId?: number) => void;
   projectId: number;
 }) => {
+  const { t } = useTranslation();
+
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/issueTemplates',
     variables: { projectId },
@@ -43,13 +46,11 @@ export const AiIssueSetting = ({
 
   return (
     <>
-      <SettingAlert
-        description={<HelpCardDocs i18nKey="help-card.api-key" />}
-      />
+      <SettingAlert description={t('help-card.ai-issue-recommendation')} />
       <div className="grid grid-cols-4 gap-4">
         <TemplateCard
           type="create"
-          title="신규 템플릿"
+          title="Create New"
           onClick={() => onClick()}
         />
         {data?.map(({ id, prompt, channelId, isEnabled }) => (

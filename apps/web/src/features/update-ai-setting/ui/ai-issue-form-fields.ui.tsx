@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
 
 import {
@@ -30,6 +31,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  DescriptionTooltip,
   MultiSelectInput,
   SelectInput,
   Slider,
@@ -99,11 +101,14 @@ export const FieldSelect: React.FC<FieldSelectProps> = ({ fields }) => {
 
 export const PromptField: React.FC = () => {
   const { register, formState } = useFormContext<AIIssue>();
-
+  const { t } = useTranslation();
   return (
     <InputField>
       <InputLabel>Prompt</InputLabel>
-      <Textarea {...register('prompt')} />
+      <Textarea
+        {...register('prompt')}
+        placeholder={t('v2.placeholder.ai-field-template-prompt')}
+      />
       {formState.errors.prompt?.message && (
         <InputCaption variant="error">
           {formState.errors.prompt.message}
@@ -114,6 +119,7 @@ export const PromptField: React.FC = () => {
 };
 
 export const EnableTemplateCard: React.FC = () => {
+  const { t } = useTranslation();
   const { setValue, watch } = useFormContext<AIIssue>();
 
   return (
@@ -128,8 +134,10 @@ export const EnableTemplateCard: React.FC = () => {
           />
         }
       >
-        <CardTitle>Enable Template</CardTitle>
-        <CardDescription>AI 이슈 템플릿 사용여부를 설정합니다.</CardDescription>
+        <CardTitle>Enable/Disable</CardTitle>
+        <CardDescription>
+          {t('v2.description.ai-issue-recommendation-enable')}
+        </CardDescription>
       </CardHeader>
     </Card>
   );
@@ -188,11 +196,19 @@ export const TemperatureSlider: React.FC = () => {
 };
 
 export const DataReferenceSlider: React.FC = () => {
+  const { t } = useTranslation();
   const { setValue, watch } = useFormContext<AIIssue>();
 
   return (
     <InputField>
-      <InputLabel>Data Reference Amount</InputLabel>
+      <InputLabel>
+        Data Reference Amount
+        <DescriptionTooltip
+          description={t(
+            'v2.description.ai-issue-recommendation-data-reference-amount',
+          )}
+        />
+      </InputLabel>
       <div className="border-neutral-tertiary rounded-8 flex gap-4 border p-6">
         <div>{DATA_REFERENCE_CONFIG.labels.min}</div>
         <Slider

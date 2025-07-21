@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import { useTranslation } from 'next-i18next';
+
 import {
   Card,
   CardBody,
@@ -29,6 +31,7 @@ import PlaygroundOutputCard from './playground-output-card.ui';
 
 // Main component
 const AIIssuePlayground = () => {
+  const { t } = useTranslation();
   const aiTest = useAIIssueTest();
 
   return (
@@ -40,7 +43,7 @@ const AIIssuePlayground = () => {
         <CardHeader>
           <CardTitle>Playground</CardTitle>
           <CardDescription>
-            테스트 데이터와 템플릿 가지고 AI 결과를 미리 확인해 보세요.
+            {t('v2.description.ai-issue-recommendation-playground')}
           </CardDescription>
         </CardHeader>
         <CardBody className="flex min-h-0 flex-1 flex-col gap-4">

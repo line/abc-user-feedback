@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 
 import { Button, Icon } from '@ufb/react';
 
@@ -26,6 +27,7 @@ import { EmptyState } from './empty-state';
 import PlaygroundInputData from './playground-input-data';
 
 const PlaygroundInputCard = () => {
+  const { t } = useTranslation();
   const { inputItems, addNewEditingItem } = useAIPlayground();
 
   return (
@@ -34,7 +36,7 @@ const PlaygroundInputCard = () => {
         action={
           <Button variant="outline" onClick={addNewEditingItem}>
             <Icon name="RiAddLine" />
-            테스트 케이스 추가
+            {t('v2.button.name.add', { name: 'Data' })}
           </Button>
         }
       >

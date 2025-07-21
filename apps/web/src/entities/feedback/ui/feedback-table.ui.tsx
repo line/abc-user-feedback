@@ -307,7 +307,7 @@ const FeedbackTable = (props: Props) => {
                   }}
                   disabled={isPendingAIProcess}
                 >
-                  AI 실행{' '}
+                  {t('v2.button.process-ai')}
                   <Badge variant="subtle">{selectedRowIds.length}</Badge>
                 </Button>
               </>

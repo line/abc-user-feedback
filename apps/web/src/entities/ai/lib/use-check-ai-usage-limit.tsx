@@ -16,6 +16,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
+import { useTranslation } from 'next-i18next';
 import { useLocalStorage } from 'react-use';
 
 import { Icon, toast } from '@ufb/react';
@@ -23,6 +24,7 @@ import { Icon, toast } from '@ufb/react';
 import { useOAIQuery } from '@/shared';
 
 const useCheckAIUsageLimit = (projectId: number) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const { data: aiIntegrations } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/integrations',
@@ -62,11 +64,10 @@ const useCheckAIUsageLimit = (projectId: number) => {
           dayjs(checkedTotalLimitTime).add(1, 'day').isBefore(dayjs())
         ) {
           setCheckedTotalLimitTime(dayjs().toISOString());
-          const toastId = toast.error('AI 기능 중단', {
-            description:
-              '토큰 사용량이 한도를 초과해서 AI 실행이 중지되었습니다.',
+          const toastId = toast.error(t('v2.toast.ai-function-terminated'), {
+            description: t('v2.toast.ai-function-terminated-description'),
             action: {
-              label: '설정하기',
+              label: t('v2.button.setting'),
               onClick: () => {
                 void router.push({
                   pathname: '/main/project/1/settings',
@@ -90,7 +91,7 @@ const useCheckAIUsageLimit = (projectId: number) => {
       if (!notificationLimit) return;
       if (totalUsage >= notificationLimit) {
         if (!isCheckedNotificationLimit) {
-          toast.warning('AI usage limit approaching for this month.', {
+          toast.warning(t('v2.toast.ai-usage-limit-approaching'), {
             duration: Infinity,
           });
           setIsCheckedNotificationLimit(true);

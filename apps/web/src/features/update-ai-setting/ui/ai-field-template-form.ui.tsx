@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 import { FormProvider } from 'react-hook-form';
 
 import {
@@ -45,6 +46,7 @@ import { useAITemplateFormStore } from '../stores/ai-template-form.store';
 import AiFieldPlayground from './ai-field-playground.ui';
 
 export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
+  const { t } = useTranslation();
   const { methods, modelData, handleFormSubmit } = useAITemplateForm(projectId);
 
   const { register, formState, setValue, watch, handleSubmit } = methods;
@@ -62,7 +64,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
           <CardHeader>
             <CardTitle>Configuration</CardTitle>
             <CardDescription>
-              템플릿 정보와 프롬프트를 설정해주세요
+              {t('v2.description.ai-field-template-form')}
             </CardDescription>
           </CardHeader>
           <CardBody className="flex flex-col gap-4">
@@ -81,7 +83,10 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
                 <InputLabel>
                   Prompt <span className="text-tint-red">*</span>
                 </InputLabel>
-                <Textarea {...register('prompt')} />
+                <Textarea
+                  {...register('prompt')}
+                  placeholder={t('v2.placeholder.ai-field-template-prompt')}
+                />
                 {formState.errors.prompt?.message && (
                   <InputCaption variant="error">
                     {formState.errors.prompt.message}
@@ -93,7 +98,9 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
                 <div>
                   <h4 className="text-title-h4">Advanced Configuration</h4>
                   <p className="text-small-normal text-neutral-secondary">
-                    description
+                    {t(
+                      'v2.description.ai-field-template-advanced-configuration',
+                    )}
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">
@@ -143,6 +150,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
 };
 
 export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
+  const { t } = useTranslation();
   const { formId, isPending, isDirty } = useAITemplateFormStore();
   const {
     templateId,
@@ -159,7 +167,7 @@ export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
         disabled={!templateId}
         loading={isDeletePending}
       >
-        Template 삭제
+        {t('v2.button.name.delete', { name: 'Template' })}
       </Button>
       <Button
         form={formId}
@@ -167,7 +175,7 @@ export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
         loading={isPending}
         disabled={!isDirty}
       >
-        저장
+        {t('v2.button.save')}
       </Button>
     </div>
   );

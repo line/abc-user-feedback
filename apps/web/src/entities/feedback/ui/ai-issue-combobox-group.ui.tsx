@@ -15,6 +15,7 @@
  */
 
 import { useState } from 'react';
+import { useTranslation } from 'next-i18next';
 
 import { ComboboxGroup, ComboboxItem, Icon, Tag } from '@ufb/react';
 
@@ -51,6 +52,7 @@ const AiIssueComboboxGroup = ({
   onSelect,
   currentIssues,
 }: Props) => {
+  const { t } = useTranslation();
   const [issues, setIssues] = useState<AIIssueRecommendationItem[]>([]);
 
   const { data: aiIntegrations } = useOAIQuery({
@@ -140,7 +142,7 @@ const AiIssueComboboxGroup = ({
               disabled={!aiIssue || isPending}
             >
               <Icon name="RiSparklingFill" />
-              AI 실행
+              {t('v2.button.process-ai')}
             </button>
           </Tag>
         </div>
@@ -151,7 +153,7 @@ const AiIssueComboboxGroup = ({
         <div className="flex items-center gap-2 p-3">
           <Icon name="RiInformation2Fill" size={12} />
           <p className="text-neutral-tertiary text-base-normal">
-            AI 이슈 템플릿을 등록해야 AI 기능을 실행할 수 있습니다.
+            {t('v2.description.ai-field-template-auto-processing')}
           </p>
         </div>
       )}
