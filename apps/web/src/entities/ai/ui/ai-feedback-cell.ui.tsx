@@ -18,6 +18,8 @@ import { memo } from 'react';
 
 import { Icon } from '@ufb/react';
 
+import { LoadingBars } from '@/features/update-ai-setting/ui/playground-output-card.ui';
+
 interface Props {
   value:
     | { status: 'loading' | 'success' | 'error'; message: string }
@@ -32,11 +34,7 @@ const AICell = memo((props: Props) => {
   return (
     <>
       {value.status === 'loading' || isLoading ?
-        <div className="flex flex-col gap-2">
-          <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
-          <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
-          <div className="bg-neutral-tertiary h-4 w-full animate-pulse rounded" />
-        </div>
+        <LoadingBars width={410} />
       : value.status === 'error' ?
         <div className="text-tint-red">
           <Icon name="RiErrorWarningFill" className="mr-2" size={16} />

@@ -38,6 +38,7 @@ import { DATE_TIME_FORMAT, GRADIENT_CSS } from '../constants';
 import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
 import { useOAIMutation } from '../lib';
+import { cn } from '../utils';
 import ImagePreviewButton from './image-preview-button';
 import { DatePicker, MultiSelectInput, SelectInput } from './inputs';
 
@@ -405,7 +406,9 @@ const AISheetDetailCell = ({
               success: () => 'Success',
             });
           }}
-          className="cursor-pointer"
+          className={cn('cursor-pointer', {
+            'opacity-50': isPending,
+          })}
         >
           <Icon name="RiAiGenerate" />
           {t('v2.button.process-ai')}

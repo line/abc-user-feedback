@@ -14,24 +14,17 @@
  * under the License.
  */
 
-import React from 'react';
 import { useTranslation } from 'next-i18next';
-import { FormProvider } from 'react-hook-form';
 
 import { Button, Divider } from '@ufb/react';
 
-import {
-  Card,
-  CardBody,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  useOAIQuery,
-} from '@/shared';
+import { useOAIQuery } from '@/shared';
 
 import { useAIIssueDelete } from '../hooks/use-ai-issue-delete';
 import { useAIIssueForm } from '../hooks/use-ai-issue-form';
+import { useAIIssueTest } from '../hooks/use-ai-issue-test';
 import { useAIIssueFormStore } from '../stores/ai-issue-form.store';
+import AiFormTemplate from './ai-form-template.ui';
 import {
   ChannelSelect,
   DataReferenceSlider,
@@ -41,7 +34,7 @@ import {
   PromptField,
   TemperatureSlider,
 } from './ai-issue-form-fields.ui';
-import AIIssuePlayground from './ai-issue-playground.ui';
+import AiPlaygroundTemplate from './ai-playground-template.ui';
 
 export const AIIssueForm = ({ projectId }: { projectId: number }) => {
   const { t } = useTranslation();
@@ -57,47 +50,53 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
   });
 
   return (
-    <div className="flex min-h-0 flex-1 gap-4">
-      <FormProvider {...methods}>
-        <Card className="flex-[1] overflow-auto border" size="md">
-          <CardHeader>
-            <CardTitle>Configuration</CardTitle>
-            <CardDescription>
-              {t('v2.description.ai-issue-recommendation-form')}
-            </CardDescription>
-          </CardHeader>
-          <CardBody className="flex flex-col gap-4">
-            <form
-              id={formId}
-              className="flex flex-col gap-4"
-              onSubmit={handleSubmit(handleFormSubmit)}
-            >
-              <ChannelSelect channels={channelData?.items} />
-              <FieldSelect fields={channelDetailData?.fields} />
-              <PromptField />
-              <EnableTemplateCard />
-              <Divider variant="subtle" />
-              <div className="flex flex-col gap-4">
-                <div>
-                  <h4 className="text-title-h4">Advanced Configuration</h4>
-                  <p className="text-small-normal text-neutral-secondary">
-                    {t(
-                      'v2.description.ai-issue-recommendation-advanced-configuration',
-                    )}
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <ModelSelect models={modelData?.models} />
-                  <TemperatureSlider />
-                  <DataReferenceSlider />
-                </div>
-              </div>
-            </form>
-          </CardBody>
-        </Card>
-        <AIIssuePlayground />
-      </FormProvider>
-    </div>
+    <AiFormTemplate
+      methods={methods}
+      description={t('v2.description.ai-issue-recommendation-form')}
+      playground={<AIIssuePlayground />}
+    >
+      <form
+        id={formId}
+        className="flex flex-col gap-3"
+        onSubmit={handleSubmit(handleFormSubmit)}
+      >
+        <ChannelSelect channels={channelData?.items} />
+        <FieldSelect fields={channelDetailData?.fields} />
+        <PromptField />
+        <EnableTemplateCard />
+        <Divider variant="subtle" />
+        <div className="flex flex-col gap-4">
+          <div>
+            <h4 className="text-title-h4">Advanced Configuration</h4>
+            <p className="text-small-normal text-neutral-secondary">
+              {t(
+                'v2.description.ai-issue-recommendation-advanced-configuration',
+              )}
+            </p>
+          </div>
+          <div className="flex flex-col gap-3">
+            <ModelSelect models={modelData?.models} />
+            <TemperatureSlider />
+            <DataReferenceSlider />
+          </div>
+        </div>
+      </form>
+    </AiFormTemplate>
+  );
+};
+
+const AIIssuePlayground = () => {
+  const { t } = useTranslation();
+  const aiTest = useAIIssueTest();
+
+  return (
+    <AiPlaygroundTemplate
+      description={t('v2.description.ai-issue-recommendation-playground')}
+      onTestAI={aiTest.executeTest}
+      result={aiTest.result}
+      isPending={aiTest.isPending}
+      isDisabled={aiTest.isTestDisabled}
+    />
   );
 };
 

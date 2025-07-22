@@ -72,7 +72,7 @@ const TemplateCard = (props: {
   return (
     <Card
       onClick={onClick}
-      className="min-h-60 cursor-pointer hover:opacity-50"
+      className="min-h-60 cursor-pointer transition-shadow duration-300 hover:shadow-lg"
     >
       <CardBody className="flex h-full flex-col justify-between">
         <div className="flex flex-col gap-1">

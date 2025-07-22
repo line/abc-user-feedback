@@ -115,24 +115,26 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
             </MenuItem>
           </Menu>
         )}
-        {subMenu === 'setting' && <AISettingForm projectId={projectId} />}
-        {subMenu === 'usage' && <AIUsageForm projectId={projectId} />}
-        {subMenu === 'field-template' && (
-          <AIFieldTemplateSetting
-            projectId={projectId}
-            onClick={(id) => setSubMenu('field-template-form', id)}
-          />
-        )}
-        {subMenu === 'field-template-form' && (
-          <AIFieldTemplateForm projectId={projectId} />
-        )}
-        {subMenu === 'ai-issue' && (
-          <AiIssueSetting
-            projectId={projectId}
-            onClick={(id) => setSubMenu('ai-issue-form', id)}
-          />
-        )}
-        {subMenu === 'ai-issue-form' && <AIIssueForm projectId={projectId} />}
+        <div className="flex h-full flex-col gap-4 overflow-auto">
+          {subMenu === 'setting' && <AISettingForm projectId={projectId} />}
+          {subMenu === 'usage' && <AIUsageForm projectId={projectId} />}
+          {subMenu === 'field-template' && (
+            <AIFieldTemplateSetting
+              projectId={projectId}
+              onClick={(id) => setSubMenu('field-template-form', id)}
+            />
+          )}
+          {subMenu === 'field-template-form' && (
+            <AIFieldTemplateForm projectId={projectId} />
+          )}
+          {subMenu === 'ai-issue' && (
+            <AiIssueSetting
+              projectId={projectId}
+              onClick={(id) => setSubMenu('ai-issue-form', id)}
+            />
+          )}
+          {subMenu === 'ai-issue-form' && <AIIssueForm projectId={projectId} />}
+        </div>
       </SettingTemplate>
     </>
   );
