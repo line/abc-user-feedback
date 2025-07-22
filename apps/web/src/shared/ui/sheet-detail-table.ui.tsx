@@ -344,11 +344,13 @@ const SheetDetailTable = (props: Props) => {
           const value = data[key];
           return (
             <tr key={key}>
-              <th className="text-neutral-tertiary w-1/4 py-2.5 align-top font-normal">
-                <div className="flex items-center gap-1 text-left">
-                  <Icon name={FIELD_FORMAT_ICON_MAP[format]} size={16} />
-                  {name}
-                </div>
+              <th className="text-neutral-tertiary w-1/4 py-2.5 text-left align-top font-normal">
+                <Icon
+                  className="mr-2"
+                  name={FIELD_FORMAT_ICON_MAP[format]}
+                  size={16}
+                />
+                <span className="break-words">{name}</span>
               </th>
               <td className="w-3/4 whitespace-normal break-words py-2.5">
                 {mode === 'edit' && row.editable ?

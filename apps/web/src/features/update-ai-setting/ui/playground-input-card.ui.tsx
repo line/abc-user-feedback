@@ -48,10 +48,7 @@ const PlaygroundInputCard = () => {
             image={<NodataImage width={120} height={120} />}
             message="No Data"
           />
-        : inputItems.map((_, key) => (
-            <PlaygroundInputData key={key} index={key} />
-          ))
-        }
+        : inputItems.map(({ id }) => <PlaygroundInputData key={id} id={id} />)}
       </CardBody>
     </Card>
   );

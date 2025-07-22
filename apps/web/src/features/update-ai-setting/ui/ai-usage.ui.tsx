@@ -15,6 +15,7 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
@@ -26,6 +27,7 @@ import {
   RadialBarChart,
   Tooltip,
 } from 'recharts';
+import { z } from 'zod';
 import { create } from 'zustand';
 
 import { Button, Switch, toast } from '@ufb/react';
@@ -56,17 +58,17 @@ const useAIUsageFormStore = create<AISettingStore>((set) => ({
   isDirty: false,
   setIsDirty: (isDirty) => set({ isDirty }),
 }));
-
-type UsageForm = {
-  tokenThreshold: number | null;
-  percentage: string | undefined;
-};
+const usageSchema = z.object({
+  tokenThreshold: z.number().min(1).nullable(),
+  percentage: z.string().optional(),
+});
+type UsageForm = z.infer<typeof usageSchema>;
 
 export const AIUsageForm = ({ projectId }: { projectId: number }) => {
   const { t } = useTranslation();
 
   const { register, formState, setValue, watch, handleSubmit, reset } =
-    useForm<UsageForm>();
+    useForm<UsageForm>({ resolver: zodResolver(usageSchema) });
 
   const { formId, setIsPending, setIsDirty } = useAIUsageFormStore();
 
@@ -113,6 +115,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
   }, [integrationData]);
 
   const onSubmit = (data: UsageForm) => {
+    console.log('data: ', data);
     if (!integrationData) return;
     const { percentage, tokenThreshold } = data;
 
@@ -147,7 +150,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
                 <Switch
                   checked={watch('tokenThreshold') !== null}
                   onCheckedChange={(checked) => {
-                    setValue('tokenThreshold', checked ? 1000000 : null, {
+                    setValue('tokenThreshold', checked ? 0 : null, {
                       shouldDirty: true,
                     });
                     if (!checked) {
@@ -165,17 +168,9 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
             <CardBody>
               <TextInput
                 type="number"
-                {...register('tokenThreshold')}
-                onChange={(e) => {
-                  const value = parseInt(e.target.value);
-                  setValue('tokenThreshold', value ? +value : null, {
-                    shouldDirty: true,
-                  });
-                  if (!value) {
-                    setValue('tokenThreshold', null, { shouldDirty: true });
-                    setValue('percentage', undefined, { shouldDirty: true });
-                  }
-                }}
+                disabled={watch('tokenThreshold') === null}
+                {...register('tokenThreshold', { valueAsNumber: true })}
+                error={formState.errors.tokenThreshold?.message}
               />
             </CardBody>
           </Card>

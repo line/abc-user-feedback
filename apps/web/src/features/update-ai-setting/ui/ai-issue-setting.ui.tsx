@@ -23,6 +23,7 @@ import {
   CardBody,
   GRADIENT_CSS,
   SettingAlert,
+  useAllChannels,
   useOAIQuery,
 } from '@/shared';
 
@@ -35,25 +36,24 @@ export const AiIssueSetting = ({
 }) => {
   const { t } = useTranslation();
 
-  const { data } = useOAIQuery({
+  const { data: issueTemplates } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/issueTemplates',
     variables: { projectId },
   });
-  const { data: channelData } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId },
-  });
+  const { data: channelData } = useAllChannels(projectId);
 
   return (
     <>
       <SettingAlert description={t('help-card.ai-issue-recommendation')} />
       <div className="grid grid-cols-4 gap-4">
-        <TemplateCard
-          type="create"
-          title="Create New"
-          onClick={() => onClick()}
-        />
-        {data?.map(({ id, prompt, channelId, isEnabled }) => (
+        {issueTemplates?.length !== channelData?.items.length && (
+          <TemplateCard
+            type="create"
+            title="Create New"
+            onClick={() => onClick()}
+          />
+        )}
+        {issueTemplates?.map(({ id, prompt, channelId, isEnabled }) => (
           <TemplateCard
             key={id}
             type="update"

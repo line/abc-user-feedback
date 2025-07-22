@@ -14,7 +14,6 @@
  * under the License.
  */
 
-import React, { useCallback } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
@@ -38,14 +37,14 @@ interface AIPlaygroundInputDataItemFormProps {
   onSubmit: (input: PlaygroundInputItem) => void;
   onClose: () => void;
   initialValues?: PlaygroundInputItem;
-  index: number;
+  id: string;
 }
 
 const PlaygroundInputDataItem = ({
   onSubmit,
   onClose,
   initialValues,
-  index,
+  id,
 }: AIPlaygroundInputDataItemFormProps) => {
   const { t } = useTranslation();
   const { inputItems } = useAIPlayground();
@@ -56,7 +55,7 @@ const PlaygroundInputDataItem = ({
     });
 
   const handleFormSubmit = handleSubmit((data) => {
-    if (inputItems.some((item, i) => item.name === data.name && i !== index)) {
+    if (inputItems.some((item) => item.name === data.name && item.id !== id)) {
       setError('name', {
         type: 'manual',
         message: 'A data item with this name already exists.',
@@ -97,10 +96,10 @@ const PlaygroundInputDataItem = ({
           />
           <div className="flex justify-end gap-2">
             <Button onClick={handleCancel} variant="outline">
-              Cancel
+              {t('v2.button.cancel')}
             </Button>
             <Button type="submit" disabled={!formState.isDirty}>
-              Confirm
+              {t('v2.button.confirm')}
             </Button>
           </div>
         </form>
@@ -110,47 +109,44 @@ const PlaygroundInputDataItem = ({
 };
 
 interface PlaygroundInputDataProps {
-  index: number;
+  id: string;
 }
 
-const PlaygroundInputData = ({ index }: PlaygroundInputDataProps) => {
+const PlaygroundInputData = ({ id }: PlaygroundInputDataProps) => {
   const { inputItems, updateInputItem, deleteInputItem } = useAIPlayground();
-  const data = inputItems[index];
+  const originalData = inputItems.find((item) => item.id === id);
 
-  const setIsEditing = useCallback(
-    (isEditing: boolean) => {
-      if (!data) return;
-      updateInputItem(index, { ...data, isEditing });
-    },
-    [data, index, updateInputItem],
-  );
+  const setIsEditing = (isEditing: boolean) => {
+    if (!originalData) return;
+    updateInputItem(id, { ...originalData, isEditing });
+  };
 
-  const handleClose = useCallback(() => {
-    if (data?.name === '') {
-      deleteInputItem(index);
+  const handleClose = () => {
+    if (!originalData) return;
+    if (originalData.name === '') {
+      deleteInputItem(id);
+      return;
     }
-  }, [data?.name, deleteInputItem, index]);
+    updateInputItem(id, { ...originalData, isEditing: false });
+  };
 
-  const handleSubmit = useCallback(
-    (newData: PlaygroundInputItem) => {
-      updateInputItem(index, { ...newData, isEditing: false });
-    },
-    [index, updateInputItem],
-  );
+  const handleSubmit = (newData: PlaygroundInputItem) => {
+    updateInputItem(id, { ...newData, isEditing: false });
+  };
 
-  const handleDelete = useCallback(() => {
-    deleteInputItem(index);
-  }, [deleteInputItem, index]);
+  const handleDelete = () => {
+    deleteInputItem(id);
+  };
 
-  if (!data) return null;
+  if (!originalData) return null;
 
-  if (data.isEditing) {
+  if (originalData.isEditing) {
     return (
       <PlaygroundInputDataItem
-        initialValues={data}
+        initialValues={originalData}
         onClose={handleClose}
         onSubmit={handleSubmit}
-        index={index}
+        id={id}
       />
     );
   }
@@ -173,13 +169,13 @@ const PlaygroundInputData = ({ index }: PlaygroundInputDataProps) => {
           </div>
         }
       >
-        <CardTitle>{data.name}</CardTitle>
-        <CardDescription>{data.description}</CardDescription>
+        <CardTitle>{originalData.name}</CardTitle>
+        <CardDescription>{originalData.description}</CardDescription>
       </CardHeader>
       <CardBody>
         <div className="bg-neutral-tertiary rounded-8 max-h-16 overflow-auto p-3">
           <p className="text-small-normal text-neutral-secondary">
-            {data.value}
+            {originalData.value}
           </p>
         </div>
       </CardBody>

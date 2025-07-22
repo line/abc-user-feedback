@@ -71,7 +71,7 @@ export const useAITemplateForm = (projectId: number) => {
     queryOptions: {
       async onSuccess(data) {
         toast.success(t('v2.toast.success'));
-        await router.push({
+        await router.replace({
           pathname: router.pathname,
           query: { ...router.query, templateId: data?.id },
         });
