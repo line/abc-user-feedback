@@ -27,13 +27,14 @@ import {
   CardTitle,
 } from '@/shared';
 
-interface Props extends React.PropsWithChildren {
-  methods: UseFormReturn<any>;
+interface Props<T extends Record<string, unknown>>
+  extends React.PropsWithChildren {
+  methods: UseFormReturn<T>;
   playground?: React.ReactNode;
   description?: string;
 }
 
-const AiFormTemplate = (props: Props) => {
+const AiFormTemplate = <T extends Record<string, unknown>>(props: Props<T>) => {
   const { methods, children, playground, description } = props;
   const [isShrunk, setIsShrunk] = useState(false);
 

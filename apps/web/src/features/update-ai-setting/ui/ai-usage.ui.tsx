@@ -163,7 +163,20 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
               </CardDescription>
             </CardHeader>
             <CardBody>
-              <TextInput type="number" {...register('tokenThreshold')} />
+              <TextInput
+                type="number"
+                {...register('tokenThreshold')}
+                onChange={(e) => {
+                  const value = parseInt(e.target.value);
+                  setValue('tokenThreshold', value ? +value : null, {
+                    shouldDirty: true,
+                  });
+                  if (!value) {
+                    setValue('tokenThreshold', null, { shouldDirty: true });
+                    setValue('percentage', undefined, { shouldDirty: true });
+                  }
+                }}
+              />
             </CardBody>
           </Card>
           <Card className="flex-[1]" size="md">
