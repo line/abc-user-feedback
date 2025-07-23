@@ -106,7 +106,7 @@
     "jest": "^29.7.0",
     "mockdate": "^3.0.5",
     "prettier": "catalog:",
-    "supertest": "^7.1.1",
+    "supertest": "^7.1.4",
     "ts-jest": "^29.4.0",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
