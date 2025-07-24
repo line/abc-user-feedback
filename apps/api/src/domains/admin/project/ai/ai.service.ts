@@ -551,7 +551,7 @@ export class AIService {
     feedback: FeedbackEntity,
     aiField: FieldEntity,
     aiTargetFields: FieldEntity[],
-    fields: FieldEntity[] = [],
+    fields: FieldEntity[],
   ): Promise<boolean> {
     const integration = await this.aiIntegrationsRepo.findOne({
       where: {
