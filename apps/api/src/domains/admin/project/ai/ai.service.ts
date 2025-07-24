@@ -247,7 +247,8 @@ export class AIService {
       },
       {
         title: 'Feedback Keyword Extraction',
-        prompt: 'Extract the keywords from the following feedback',
+        prompt:
+          'Extract the 2-3 most important keywords from the following feedback.',
         model: model,
         temperature: 0.7,
       },
