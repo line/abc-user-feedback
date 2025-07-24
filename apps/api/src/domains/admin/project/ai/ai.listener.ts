@@ -77,6 +77,7 @@ export class AIListener {
             feedback,
             field,
             targetFields,
+            fields,
           );
         }
       }
