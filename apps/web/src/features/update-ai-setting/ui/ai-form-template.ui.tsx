@@ -42,7 +42,7 @@ const AiFormTemplate = <T extends Record<string, unknown>>(props: Props<T>) => {
     <div className="flex min-h-0 flex-1 gap-4">
       <FormProvider {...methods}>
         {!isShrunk ?
-          <Card className="flex-1 overflow-auto border" size="md">
+          <Card className="flex-1 overflow-auto border" size="lg">
             <CardHeader
               action={
                 <Button

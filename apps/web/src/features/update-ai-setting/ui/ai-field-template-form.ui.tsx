@@ -26,6 +26,8 @@ import {
 } from '@ufb/react';
 
 import {
+  CardDescription,
+  CardTitle,
   SelectInput,
   Slider,
   TextInput,
@@ -86,10 +88,10 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
         <Divider variant="subtle" />
         <div className="flex flex-col gap-4">
           <div>
-            <h4 className="text-title-h4">Advanced Configuration</h4>
-            <p className="text-small-normal text-neutral-secondary">
+            <CardTitle size="lg">Advanced Configuration</CardTitle>
+            <CardDescription>
               {t('v2.description.ai-field-template-advanced-configuration')}
-            </p>
+            </CardDescription>
           </div>
           <div className="flex flex-col gap-2">
             <SelectInput

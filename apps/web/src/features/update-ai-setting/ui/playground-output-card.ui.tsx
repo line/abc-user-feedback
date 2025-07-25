@@ -34,10 +34,10 @@ export const LoadingBars = (props: LoadingBarsProps) => (
     height={76}
     viewBox="0 0 534 76"
     backgroundColor="#2a8dcb"
-    foregroundColor="#0f1111"
+    foregroundColor="#6fecd7"
     {...props}
   >
-    <path d="M 0 10 C 0 4.477 4.477 0 10 0 h 514 c 5.523 0 10 4.477 10 10 s -4.477 10 -10 10 H 10 C 4.477 20 0 15.523 0 10 z M 0 38 c 0 -5.523 4.477 -10 10 -10 h 376 c 5.523 0 10 4.477 10 10 s -4.477 10 -10 10 H 10 C 4.477 48 0 43.523 0 38 z M 0 66 c 0 -5.523 4.477 -10 10 -10 h 452 c 5.523 0 10 4.477 10 10 s -4.477 10 -10 10 H 10 C 4.477 76 0 71.523 0 66 z" />
+    <path d="M 0 10 C 0 4.477 4.477 0 10 0 h 514 c 5.523 0 10 4.477 10 10 s -4.477 10 -10 10 H 10 C 4.477 20 0 15.523 0 10 z M 0 38 c 0 -5.523 4.477 -10 10 -10 h 376 c 5.523 0 10 4.477 10 10 s -4.477 10 -10 10 H 10 C 4.477 48 0 43.523 0 38 z M 0 66 c 0 -5.523 4.477 -10 10 -10 h 452 c 5.523 0 10 4.477 10 10 s -4.477 10 -10 10 H 10 C 4.477 76 0 71.523 0 66 z" />{' '}
   </ContentLoader>
 );
 
@@ -78,7 +78,7 @@ const PlaygroundOutputCard = ({
   const { inputItems } = useAIPlayground();
 
   return (
-    <Card size="sm" className="flex-1">
+    <Card className="flex-1">
       <CardHeader
         action={
           <Button

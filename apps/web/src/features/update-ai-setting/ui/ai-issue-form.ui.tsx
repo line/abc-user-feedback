@@ -18,7 +18,7 @@ import { useTranslation } from 'next-i18next';
 
 import { Button, Divider } from '@ufb/react';
 
-import { useOAIQuery } from '@/shared';
+import { CardDescription, CardTitle, useOAIQuery } from '@/shared';
 
 import { useAIIssueDelete } from '../hooks/use-ai-issue-delete';
 import { useAIIssueForm } from '../hooks/use-ai-issue-form';
@@ -67,12 +67,12 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
         <Divider variant="subtle" />
         <div className="flex flex-col gap-4">
           <div>
-            <h4 className="text-title-h4">Advanced Configuration</h4>
-            <p className="text-small-normal text-neutral-secondary">
+            <CardTitle size="lg">Advanced Configuration</CardTitle>
+            <CardDescription>
               {t(
                 'v2.description.ai-issue-recommendation-advanced-configuration',
               )}
-            </p>
+            </CardDescription>
           </div>
           <div className="flex flex-col gap-3">
             <ModelSelect models={modelData?.models} />

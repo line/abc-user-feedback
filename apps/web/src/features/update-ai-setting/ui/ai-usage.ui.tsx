@@ -113,9 +113,9 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
       });
     }
   }, [integrationData]);
+  console.log(watch('percentage'));
 
   const onSubmit = (data: UsageForm) => {
-    console.log('data: ', data);
     if (!integrationData) return;
     const { percentage, tokenThreshold } = data;
 
@@ -143,7 +143,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
           </div>
         </div>
         <div className="flex gap-4">
-          <Card className="flex-[1]" size="md">
+          <Card className="!rounded-16 flex-[1]">
             <CardHeader
               className="flex-1"
               action={
@@ -174,7 +174,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
               />
             </CardBody>
           </Card>
-          <Card className="flex-[1]" size="md">
+          <Card className="!rounded-16 flex-[1]">
             <CardHeader
               className="flex-1"
               action={
@@ -198,9 +198,13 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
               <SelectInput
                 disabled={!watch('percentage')}
                 value={watch('percentage')}
-                onChange={(value) =>
-                  setValue('percentage', value, { shouldDirty: true })
-                }
+                onChange={(value) => {
+                  if (!value) {
+                    console.log('value: ', value);
+                    return;
+                  }
+                  setValue('percentage', value, { shouldDirty: true });
+                }}
                 options={[
                   {
                     value: '50',
@@ -376,7 +380,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
   );
 
   return (
-    <Card className="h-full">
+    <Card className="!rounded-16 h-full">
       <CardHeader>
         <CardTitle>{t('v2.text.remaining-token-amount')}</CardTitle>
       </CardHeader>

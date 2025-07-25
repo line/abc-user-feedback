@@ -344,7 +344,7 @@ const SheetDetailTable = (props: Props) => {
           const value = data[key];
           return (
             <tr key={key}>
-              <th className="text-neutral-tertiary w-1/4 py-2.5 text-left align-top font-normal">
+              <th className="text-neutral-tertiary w-1/4 py-2.5 pr-3 text-left align-top font-normal">
                 <Icon
                   className="mr-2"
                   name={FIELD_FORMAT_ICON_MAP[format]}

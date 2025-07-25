@@ -31,7 +31,7 @@ const PlaygroundInputCard = () => {
   const { inputItems, addNewEditingItem } = useAIPlayground();
 
   return (
-    <Card size="sm" className="flex min-h-0 flex-1 flex-col">
+    <Card className="flex min-h-0 flex-1 flex-col">
       <CardHeader
         action={
           <Button variant="outline" onClick={addNewEditingItem}>

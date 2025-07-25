@@ -38,11 +38,7 @@ import {
 } from '@/shared';
 import type { AIIssue } from '@/entities/ai';
 
-import {
-  DATA_REFERENCE_CONFIG,
-  DEFAULT_FIELD_COLUMNS_KEYS,
-  TEMPERATURE_CONFIG,
-} from '../constants';
+import { DATA_REFERENCE_CONFIG, TEMPERATURE_CONFIG } from '../constants';
 
 interface ChannelSelectProps {
   channels: { id: number; name: string }[] | undefined;
@@ -84,7 +80,7 @@ export const FieldSelect: React.FC<FieldSelectProps> = ({ fields }) => {
     <MultiSelectInput
       options={
         fields
-          ?.filter((v) => !DEFAULT_FIELD_COLUMNS_KEYS.includes(v.key))
+          ?.filter((v) => v.key !== 'issues')
           .map(({ name, key }) => ({ value: key, label: name })) ?? []
       }
       label="Field"
@@ -107,7 +103,7 @@ export const PromptField: React.FC = () => {
       <InputLabel>Prompt</InputLabel>
       <Textarea
         {...register('prompt')}
-        placeholder={t('v2.placeholder.ai-field-template-prompt')}
+        placeholder={t('v2.placeholder.ai-field-reccommendation-prompt')}
       />
       {formState.errors.prompt?.message && (
         <InputCaption variant="error">

@@ -19,7 +19,7 @@ import { cn } from '../utils';
 
 type Size = 'sm' | 'md' | 'lg';
 const CardContext = React.createContext<{ size: Size }>({
-  size: 'lg',
+  size: 'md',
 });
 interface Props
   extends React.PropsWithChildren,
@@ -29,15 +29,15 @@ interface Props
 }
 
 export const Card = (props: Props) => {
-  const { size = 'lg', children, className, ...otherProps } = props;
+  const { size = 'md', children, className, ...otherProps } = props;
 
   return (
     <CardContext.Provider value={{ size }}>
       <div
         className={cn(
-          'rounded-20 border-neutral-tertiary bg-neutral-primary flex flex-col gap-4 border py-6', // shadow-default
+          'rounded-8 border-neutral-tertiary bg-neutral-primary flex flex-col gap-4 border py-6', // shadow-default
           className,
-          { 'rounded-8 gap-4 py-4': size === 'sm' },
+          { 'gap-4 py-4': size === 'sm' },
         )}
         {...otherProps}
       >
@@ -77,7 +77,7 @@ export const CardHeader = (
   return (
     <div
       className={cn(
-        'flex items-center justify-between px-6',
+        'flex items-center justify-between gap-6 px-6',
         { 'px-4': size === 'sm' },
         className,
       )}
@@ -91,7 +91,7 @@ export const CardHeader = (
 
 export const CardTitle = (
   props: React.PropsWithChildren &
-    React.HTMLAttributes<HTMLHeadingElement> & {},
+    React.HTMLAttributes<HTMLHeadingElement> & { size?: Size },
 ) => {
   const { children, className, ...divProps } = props;
 
@@ -101,9 +101,9 @@ export const CardTitle = (
     <h4
       className={cn(
         {
-          'text-title-h4': size === 'lg',
-          'text-title-h5': size === 'md',
-          'text-base-strong': size === 'sm',
+          'text-title-h4': (props.size ?? size) === 'lg',
+          'text-title-h5': (props.size ?? size) === 'md',
+          'text-base-strong': (props.size ?? size) === 'sm',
         },
         className,
       )}
@@ -120,19 +120,9 @@ export const CardDescription = (
 ) => {
   const { children, className, ...divProps } = props;
 
-  const { size } = React.useContext(CardContext);
-
   return (
     <p
-      className={cn(
-        'text-neutral-tertiary',
-        {
-          'text-large-h4': size === 'lg',
-          'text-base-normal': size === 'md',
-          'text-small-normal': size === 'sm',
-        },
-        className,
-      )}
+      className={cn('text-neutral-tertiary text-small-normal', className)}
       {...divProps}
     >
       {children}

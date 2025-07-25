@@ -48,8 +48,8 @@ const AiPlaygroundTemplate = (props: Props) => {
   return (
     <AIPlaygroundContextProvider>
       <Card
+        size="lg"
         className="last-of-type: flex h-full flex-[2] flex-col border"
-        size="md"
       >
         <CardHeader
           action={
@@ -57,6 +57,7 @@ const AiPlaygroundTemplate = (props: Props) => {
               type="single"
               value={viewType}
               onValueChange={(v) => setViewType(v as 'vertical' | 'horizontal')}
+              className="flex-shrink-0"
             >
               <ToggleGroupItem value="vertical">
                 <Icon name="RiFlipVerticalLine" />

@@ -76,7 +76,7 @@ const CategoryCombobox = (props: Props) => {
 
   const refetch = async () => {
     await queryClient.invalidateQueries({
-      queryKey: ['/api/admin/projects/{projectId}/categories'],
+      queryKey: ['/api/admin/projects/{projectId}/categories/search'],
     });
     await queryClient.invalidateQueries({
       queryKey: ['/api/admin/projects/{projectId}/issues/search'],
