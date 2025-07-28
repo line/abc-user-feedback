@@ -112,9 +112,10 @@ export function getRefinedIssueRecommendationPrompt(
 ): string {
   return `
 ## Instructions
+IMPORTANT: If an Additional User Prompt exists, it should be followed first.
 IMPORTANT: Respond with the results of the AI Issue recommendation based on the following descriptions, feedback, and existing issues.
 IMPORTANT: When responding, return only the text format of the recommended Issues, excluding any unnecessary information such as special characters.
-IMPORTANT: If there are multiple issues, separate them with a comma (,).
+IMPORTANT: If there are multiple issues, separate them with a comma (,), and the language of all the letters in the issues that are printed in response should be consistent.
 IMPORTANT: Ensure each response value separated by a comma is no longer than 30 characters.
 IMPORTANT: Please recommend between 2 and 3 issues, but with high accuracy, preferably many non-overlapping issues.
 
@@ -154,7 +155,7 @@ The following is the feedback content that is the target of the AI Issue Recomme
 ${targetFeedback}
 
 ## Additional User Prompt
-${additionalPrompt}
+IMPORTANT: ${additionalPrompt}
 
 ## Existing Issues
 The following is a list of issues that already exist within the service. If it can be assigned to an already existing issue, prioritize recommending that, and if not, recommend a new issue.
