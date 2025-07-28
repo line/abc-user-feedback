@@ -22,6 +22,7 @@ import { useThrottle } from 'react-use';
 import {
   Combobox,
   ComboboxContent,
+  ComboboxEmpty,
   ComboboxGroup,
   ComboboxInput,
   ComboboxItem,
@@ -205,13 +206,14 @@ const IssueCell: React.FC<IProps> = (props) => {
         </ComboboxTrigger>
         <ComboboxContent
           commandProps={{ filter: commandFilter }}
-          className="min-w-[320px]"
+          className="w-[320px]"
         >
           <ComboboxInput
             onClick={(e) => e.stopPropagation()}
             onValueChange={(value) => setInputValue(value)}
             value={inputValue}
           />
+          <ComboboxEmpty>{t('v2.text.no-data.empty')}</ComboboxEmpty>
           {!!feedbackId && !inputValue && (
             <AiIssueComboboxGroup
               projectId={projectId}

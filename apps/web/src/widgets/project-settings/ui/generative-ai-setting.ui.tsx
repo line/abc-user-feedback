@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 
@@ -58,6 +58,11 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
     variables: { projectId },
   });
   const isSettingsEmpty = !data || data.apiKey === '';
+  useEffect(() => {
+    if (isSettingsEmpty) {
+      void setSubMenu('setting');
+    }
+  }, [subMenu, isSettingsEmpty]);
 
   return (
     <>

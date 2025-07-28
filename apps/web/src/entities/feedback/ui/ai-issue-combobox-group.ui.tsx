@@ -174,7 +174,7 @@ const AiIssueComboboxGroup = ({
             className="w-full"
             onClick={recommendIssues}
             style={GRADIENT_CSS.primary}
-            disabled={!aiIssue}
+            disabled={!aiIssue?.isEnabled}
             loading={isPending}
           >
             <Icon name="RiSparklingFill" />
@@ -183,12 +183,12 @@ const AiIssueComboboxGroup = ({
         </div>
       )}
       <p className="text-neutral-tertiary text-small-normal px-2 py-1 text-center">
-        {!aiIssue ?
+        {!aiIssue?.isEnabled ?
           t('v2.description.ai-issue-recommendation-setting-required')
         : status === 'idle' ?
-          '피드백에 맞는 이슈를 추천해드릴게요.'
+          t('v2.text.ai-issue-ready')
         : status === 'pending' ?
-          'AI가 Issue를 분석하고 있습니다...'
+          t('v2.text.ai-issue-pending')
         : ''}
       </p>
       {status === 'success' &&
@@ -203,7 +203,6 @@ const AiIssueComboboxGroup = ({
             disabled={issue.option === 'ADDED'}
           >
             <Badge style={GRADIENT_CSS.primary}>{issue.name}</Badge>
-            {/* <IssueBadge name={issue.name} status={issue.status ?? 'INIT'} /> */}
             {issue.option === 'ADDED' ?
               <Icon name="RiCheckLine" size={16} />
             : <span className="text-small-normal text-neutral-tertiary opacity-0 transition-opacity group-hover:opacity-100">

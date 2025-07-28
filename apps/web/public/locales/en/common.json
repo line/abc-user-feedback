@@ -370,7 +370,9 @@
       "no-category": "No Category",
       "token-usage": "Token Usage",
       "remaining-token-amount": "Remaining Token Amount",
-      "token-threshold-percentage": "Reached {{percentage}}% of the limit"
+      "token-threshold-percentage": "Reached {{percentage}}% of the limit",
+      "ai-issue-ready": "I will recommend issues for the feedback.",
+      "ai-issue-pending": "AI is analyzing the issues..."
     },
     "create-tenant": {
       "tenant": {

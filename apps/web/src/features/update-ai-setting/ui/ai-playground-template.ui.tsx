@@ -85,7 +85,6 @@ const AiPlaygroundTemplate = (props: Props) => {
             onTestAI={onTestAI}
             isPending={isPending}
             isDisabled={isDisabled}
-            resultType="text"
           />
         </CardBody>
       </Card>

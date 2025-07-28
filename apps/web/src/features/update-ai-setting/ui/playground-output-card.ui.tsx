@@ -64,7 +64,6 @@ interface AIResultSectionProps {
   onTestAI: (inputItems: PlaygroundInputItem[]) => void;
   isPending: boolean;
   isDisabled: boolean;
-  resultType?: 'text' | 'badges';
 }
 
 const PlaygroundOutputCard = ({
@@ -72,7 +71,6 @@ const PlaygroundOutputCard = ({
   onTestAI,
   isPending,
   isDisabled,
-  resultType = 'text',
 }: AIResultSectionProps) => {
   const { t } = useTranslation();
   const { inputItems } = useAIPlayground();
@@ -98,9 +96,9 @@ const PlaygroundOutputCard = ({
         {isPending ?
           <LoadingBars />
         : result ?
-          resultType === 'badges' && Array.isArray(result) ?
+          Array.isArray(result) ?
             <ResultBadges results={result} />
-          : resultType === 'text' && typeof result === 'string' ?
+          : typeof result === 'string' ?
             <TextResult result={result} />
           : null
         : null}
