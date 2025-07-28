@@ -22,6 +22,7 @@ import { useThrottle } from 'react-use';
 import {
   Combobox,
   ComboboxContent,
+  ComboboxEmpty,
   ComboboxGroup,
   ComboboxInput,
   ComboboxItem,
@@ -205,13 +206,14 @@ const IssueCell: React.FC<IProps> = (props) => {
         </ComboboxTrigger>
         <ComboboxContent
           commandProps={{ filter: commandFilter }}
-          className="max-w-[320px]"
+          className="w-[320px]"
         >
           <ComboboxInput
             onClick={(e) => e.stopPropagation()}
             onValueChange={(value) => setInputValue(value)}
             value={inputValue}
           />
+          <ComboboxEmpty>{t('v2.text.no-data.empty')}</ComboboxEmpty>
           {!!feedbackId && !inputValue && (
             <AiIssueComboboxGroup
               projectId={projectId}
@@ -242,7 +244,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                     key={issue.id}
                     onSelect={() => onClickIssue(issue.id)}
                     value={issue.name}
-                    className="justify-between"
+                    className="group justify-between"
                     disabled={!perms.includes('feedback_issue_update')}
                   >
                     <IssueBadge
@@ -250,9 +252,12 @@ const IssueCell: React.FC<IProps> = (props) => {
                       name={issue.name}
                       status={issue.status}
                     />
-                    {currentIssues.some((v) => v.id === issue.id) && (
+                    {currentIssues.some((v) => v.id === issue.id) ?
                       <Icon name="RiCheckLine" size={16} />
-                    )}
+                    : <span className="text-small-normal text-neutral-tertiary opacity-0 transition-opacity group-hover:opacity-100">
+                        Add
+                      </span>
+                    }
                   </ComboboxItem>
                 ))}
                 <InfiniteScrollArea
@@ -262,21 +267,21 @@ const IssueCell: React.FC<IProps> = (props) => {
                 />
               </ComboboxGroup>
             )}
-            {!!inputValue &&
-              perms.includes('issue_create') &&
-              !currentIssues.some((issue) => issue.name === inputValue) &&
-              !allIssues.some((issue) => issue.name === inputValue) && (
-                <div
-                  className="combobox-item"
-                  onClick={() => onCreateIssue(inputValue)}
-                >
-                  <span className="flex-1">{inputValue}</span>
-                  <span className="text-neutral-tertiary text-small-normal">
-                    Create
-                  </span>
-                </div>
-              )}
           </ComboboxList>
+          {!!inputValue &&
+            perms.includes('issue_create') &&
+            !currentIssues.some((issue) => issue.name === inputValue) &&
+            !allIssues.some((issue) => issue.name === inputValue) && (
+              <div
+                className="combobox-item border-neutral-tertiary justify-between border-t"
+                onClick={() => onCreateIssue(inputValue)}
+              >
+                <IssueBadge name={inputValue} status="INIT" />
+                <span className="text-neutral-tertiary text-small-normal">
+                  Create
+                </span>
+              </div>
+            )}
         </ComboboxContent>
       </Combobox>
       {currentIssues.map((issue) => (

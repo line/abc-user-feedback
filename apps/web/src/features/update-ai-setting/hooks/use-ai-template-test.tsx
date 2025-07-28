@@ -41,11 +41,6 @@ export const useAITemplateTest = (projectId: number) => {
 
   const executeTest = useCallback(
     (inputItems: PlaygroundInputItem[]) => {
-      if (inputItems.length === 0) {
-        alert('테스트 케이스를 추가해주세요.');
-        return;
-      }
-
       const { model, temperature, prompt } = getValues();
       toast.promise(
         mutateAsync({

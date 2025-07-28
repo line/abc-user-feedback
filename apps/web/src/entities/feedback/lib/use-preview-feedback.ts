@@ -80,7 +80,11 @@ const usePreviewFeedback = (fields: FieldInfo[]) => {
             : undefined
           : field.format === 'number' ? faker.number.int()
           : field.format === 'text' ? faker.lorem.text()
-          : field.format === 'aiField' ? 'AI Results will be displayed'
+          : field.format === 'aiField' ?
+            {
+              status: 'success',
+              message: 'The AI response results will be displayed here.',
+            }
           : faker.helpers.arrayElements(
               Array.from({
                 length: 15,

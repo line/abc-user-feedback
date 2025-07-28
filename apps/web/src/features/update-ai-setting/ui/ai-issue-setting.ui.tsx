@@ -14,14 +14,16 @@
  * under the License.
  */
 
+import { useTranslation } from 'next-i18next';
+
 import { Icon, Tag } from '@ufb/react';
 
 import {
   Card,
   CardBody,
   GRADIENT_CSS,
-  HelpCardDocs,
   SettingAlert,
+  useAllChannels,
   useOAIQuery,
 } from '@/shared';
 
@@ -32,27 +34,26 @@ export const AiIssueSetting = ({
   onClick: (templateId?: number) => void;
   projectId: number;
 }) => {
-  const { data } = useOAIQuery({
+  const { t } = useTranslation();
+
+  const { data: issueTemplates } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/issueTemplates',
     variables: { projectId },
   });
-  const { data: channelData } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId },
-  });
+  const { data: channelData } = useAllChannels(projectId);
 
   return (
     <>
-      <SettingAlert
-        description={<HelpCardDocs i18nKey="help-card.api-key" />}
-      />
+      <SettingAlert description={t('help-card.ai-issue-recommendation')} />
       <div className="grid grid-cols-4 gap-4">
-        <TemplateCard
-          type="create"
-          title="신규 템플릿"
-          onClick={() => onClick()}
-        />
-        {data?.map(({ id, prompt, channelId, isEnabled }) => (
+        {issueTemplates?.length !== channelData?.items.length && (
+          <TemplateCard
+            type="create"
+            title="Create New"
+            onClick={() => onClick()}
+          />
+        )}
+        {issueTemplates?.map(({ id, prompt, channelId, isEnabled }) => (
           <TemplateCard
             key={id}
             type="update"
@@ -81,7 +82,7 @@ const TemplateCard = (props: {
   return (
     <Card
       onClick={onClick}
-      className="min-h-60 cursor-pointer hover:opacity-50"
+      className="!rounded-24 min-h-60 cursor-pointer transition-shadow duration-300 hover:shadow-lg"
     >
       <CardBody className="flex h-full flex-col justify-between">
         <div className="flex items-center justify-between">

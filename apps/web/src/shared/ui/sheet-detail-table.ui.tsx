@@ -38,6 +38,7 @@ import { DATE_TIME_FORMAT, GRADIENT_CSS } from '../constants';
 import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
 import { useOAIMutation } from '../lib';
+import { cn } from '../utils';
 import ImagePreviewButton from './image-preview-button';
 import { DatePicker, MultiSelectInput, SelectInput } from './inputs';
 
@@ -343,11 +344,13 @@ const SheetDetailTable = (props: Props) => {
           const value = data[key];
           return (
             <tr key={key}>
-              <th className="text-neutral-tertiary w-1/4 py-2.5 align-top font-normal">
-                <div className="flex items-center gap-1 text-left">
-                  <Icon name={FIELD_FORMAT_ICON_MAP[format]} size={16} />
-                  {name}
-                </div>
+              <th className="text-neutral-tertiary w-1/4 py-2.5 pr-3 text-left align-top font-normal">
+                <Icon
+                  className="mr-2"
+                  name={FIELD_FORMAT_ICON_MAP[format]}
+                  size={16}
+                />
+                <span className="break-words">{name}</span>
               </th>
               <td className="w-3/4 whitespace-normal break-words py-2.5">
                 {mode === 'edit' && row.editable ?
@@ -377,6 +380,7 @@ const AISheetDetailCell = ({
   refetch?: () => Promise<void>;
   showButton?: boolean;
 }) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const projectId = +(router.query.projectId as string);
 
@@ -404,10 +408,12 @@ const AISheetDetailCell = ({
               success: () => 'Success',
             });
           }}
-          className="cursor-pointer"
+          className={cn('cursor-pointer', {
+            'opacity-50': isPending,
+          })}
         >
           <Icon name="RiAiGenerate" />
-          AI 실행
+          {t('v2.button.process-ai')}
         </Tag>
       )}
       <div className="py-2">

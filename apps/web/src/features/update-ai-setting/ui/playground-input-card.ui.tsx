@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 
 import { Button, Icon } from '@ufb/react';
 
@@ -26,15 +27,16 @@ import { EmptyState } from './empty-state';
 import PlaygroundInputData from './playground-input-data';
 
 const PlaygroundInputCard = () => {
+  const { t } = useTranslation();
   const { inputItems, addNewEditingItem } = useAIPlayground();
 
   return (
-    <Card size="sm" className="flex min-h-0 flex-[2] flex-col">
+    <Card className="flex min-h-0 flex-1 flex-col">
       <CardHeader
         action={
           <Button variant="outline" onClick={addNewEditingItem}>
             <Icon name="RiAddLine" />
-            테스트 케이스 추가
+            {t('v2.button.name.add', { name: 'Data' })}
           </Button>
         }
       >
@@ -46,10 +48,7 @@ const PlaygroundInputCard = () => {
             image={<NodataImage width={120} height={120} />}
             message="No Data"
           />
-        : inputItems.map((_, key) => (
-            <PlaygroundInputData key={key} index={key} />
-          ))
-        }
+        : inputItems.map(({ id }) => <PlaygroundInputData key={id} id={id} />)}
       </CardBody>
     </Card>
   );

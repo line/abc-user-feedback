@@ -14,23 +14,19 @@
  * under the License.
  */
 
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 import type { PlaygroundInputItem } from '../playground-input-item.schema';
 
 export interface AIPlaygroundContextValue {
   inputItems: PlaygroundInputItem[];
-  createInputItem: (item: PlaygroundInputItem) => void;
-  updateInputItem: (index: number, item: PlaygroundInputItem) => void;
-  deleteInputItem: (index: number) => void;
+  updateInputItem: (id: string, item: PlaygroundInputItem) => void;
+  deleteInputItem: (id: string) => void;
   addNewEditingItem: () => void;
 }
 
 export const AIPlaygroundContext = createContext<AIPlaygroundContextValue>({
   inputItems: [],
-  createInputItem: () => {
-    // Empty function for default context
-  },
   updateInputItem: () => {
     // Empty function for default context
   },
@@ -47,34 +43,32 @@ export const AIPlaygroundContextProvider: React.FC<{
 }> = ({ children }) => {
   const [inputItems, setInputItems] = useState<PlaygroundInputItem[]>([]);
 
-  const createInputItem = useCallback((item: PlaygroundInputItem) => {
-    setInputItems((prev) => [...prev, item]);
-  }, []);
+  const updateInputItem = (id: string, item: PlaygroundInputItem) => {
+    setInputItems((prev) =>
+      prev.map((prevItem) => (prevItem.id === id ? item : prevItem)),
+    );
+  };
 
-  const updateInputItem = useCallback(
-    (index: number, item: PlaygroundInputItem) => {
-      setInputItems((prev) =>
-        prev.map((prevItem, i) => (i === index ? item : prevItem)),
-      );
-    },
-    [],
-  );
+  const deleteInputItem = (id: string) => {
+    setInputItems((prev) => prev.filter((item) => item.id !== id));
+  };
 
-  const deleteInputItem = useCallback((index: number) => {
-    setInputItems((prev) => prev.filter((_, i) => i !== index));
-  }, []);
-
-  const addNewEditingItem = useCallback(() => {
+  const addNewEditingItem = () => {
     setInputItems((prev) => [
-      { name: '', description: '', value: '', isEditing: true },
+      {
+        name: '',
+        description: '',
+        value: '',
+        isEditing: true,
+        id: crypto.randomUUID(),
+      },
       ...prev,
     ]);
-  }, []);
+  };
 
   return (
     <AIPlaygroundContext.Provider
       value={{
-        createInputItem,
         deleteInputItem,
         inputItems,
         updateInputItem,

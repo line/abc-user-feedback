@@ -14,9 +14,10 @@
  * under the License.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'next-i18next';
 
-import { ComboboxGroup, ComboboxItem, Icon, Tag } from '@ufb/react';
+import { Badge, Button, ComboboxGroup, ComboboxItem, Icon } from '@ufb/react';
 
 import type { TableFilterCondition } from '@/shared';
 import {
@@ -26,7 +27,6 @@ import {
   useOAIMutation,
   useOAIQuery,
 } from '@/shared';
-import { IssueBadge } from '@/entities/issue';
 import type { Issue, IssueStatus } from '@/entities/issue';
 
 interface Props {
@@ -51,7 +51,9 @@ const AiIssueComboboxGroup = ({
   onSelect,
   currentIssues,
 }: Props) => {
+  const { t } = useTranslation();
   const [issues, setIssues] = useState<AIIssueRecommendationItem[]>([]);
+  const [searchedIssues, setSearchedIssues] = useState<Issue[]>([]);
 
   const { data: aiIntegrations } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/integrations',
@@ -61,64 +63,85 @@ const AiIssueComboboxGroup = ({
     path: '/api/admin/projects/{projectId}/ai/issueTemplates',
     variables: { projectId },
   });
-  const { mutate: recommendIssues, isPending } = useOAIMutation({
+  const { mutateAsync, isPending, status } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/issueRecommend/{feedbackId}',
     pathParams: { projectId, feedbackId },
-    queryOptions: {
-      async onSettled(data) {
-        const issues = data?.result.map((v) => v.issueName) ?? [];
-        const { data: searchedIssues } = await client.post({
-          path: '/api/admin/projects/{projectId}/issues/search',
-          pathParams: { projectId },
-          body: {
-            operator: 'OR',
-            queries: issues.map((issue) => ({
-              key: 'name',
-              condition: 'IS' as TableFilterCondition,
-              value: issue,
-            })),
-          },
-        });
-        const getOption = (v: { issueName: string }) =>
-          currentIssues.some((issue) => issue.name === v.issueName) ? 'ADDED'
-          : searchedIssues?.items.some((issue) => issue.name === v.issueName) ?
-            'EXISTING'
-          : 'CREATE';
-        setIssues(
-          (data?.result.map((v) => {
-            const option = getOption(v);
-
-            if (option === 'ADDED') {
-              const currentIssue = currentIssues.find(
-                ({ name }) => name === v.issueName,
-              );
-              return {
-                id: currentIssue?.id,
-                name: v.issueName,
-                option: 'ADDED',
-                status: currentIssue?.status,
-              };
-            }
-
-            if (option === 'EXISTING') {
-              const currentIssue = searchedIssues?.items.find(
-                (issue) => issue.name === v.issueName,
-              );
-
-              return {
-                id: currentIssue?.id,
-                name: v.issueName,
-                option: 'EXISTING',
-                status: currentIssue?.status,
-              };
-            }
-            return { name: v.issueName, option: 'CREATE' };
-          }) ?? []) as AIIssueRecommendationItem[],
-        );
-      },
-    },
   });
+
+  const recommendIssues = async () => {
+    const data = await mutateAsync(undefined);
+    if (!data) {
+      setIssues([]);
+      return;
+    }
+
+    const issueNames = data.result.map((v) => v.issueName);
+    const { data: searchedIssuesResponse } = await client.post({
+      path: '/api/admin/projects/{projectId}/issues/search',
+      pathParams: { projectId },
+      body: {
+        operator: 'OR',
+        queries: issueNames.map((name) => ({
+          key: 'name',
+          condition: 'IS' as TableFilterCondition,
+          value: name,
+        })),
+      },
+    });
+
+    const searchedIssuesList = searchedIssuesResponse?.items ?? [];
+    setSearchedIssues(searchedIssuesList);
+
+    const result: AIIssueRecommendationItem[] = data.result.map(
+      ({ issueName }) => {
+        const existingIssue = currentIssues.find(
+          ({ name }) => name === issueName,
+        );
+        if (existingIssue) {
+          return {
+            id: existingIssue.id,
+            name: issueName,
+            option: 'ADDED',
+            status: existingIssue.status,
+          };
+        }
+
+        const matchedIssue = searchedIssuesList.find(
+          ({ name }) => name === issueName,
+        );
+        if (matchedIssue) {
+          return {
+            id: matchedIssue.id,
+            name: issueName,
+            option: 'EXISTING',
+            status: matchedIssue.status,
+          };
+        }
+
+        return { name: issueName, option: 'CREATE' };
+      },
+    );
+
+    setIssues(result);
+  };
+
+  useEffect(() => {
+    setIssues((prev) =>
+      prev.map((issue) => {
+        if (currentIssues.some(({ name }) => name === issue.name)) {
+          return { ...issue, option: 'ADDED' };
+        }
+
+        if (searchedIssues.some(({ name }) => name === issue.name)) {
+          return { ...issue, option: 'EXISTING' };
+        }
+
+        return { ...issue, option: 'CREATE' };
+      }),
+    );
+  }, [currentIssues, searchedIssues, issues]);
+
   const aiIssue = aiIssueTemplates?.find((v) => v.channelId === channelId);
 
   if (!aiIntegrations?.apiKey) {
@@ -127,64 +150,68 @@ const AiIssueComboboxGroup = ({
 
   return (
     <ComboboxGroup
-      heading={
-        <div className="flex items-center justify-between">
-          <span className="text-neutral-tertiary text-base-normal">
-            AI Recommend
-          </span>
-          <Tag asChild size="small">
-            <button
-              className="disabled:opacity-50"
-              onClick={() => recommendIssues(undefined)}
-              style={GRADIENT_CSS.primary}
-              disabled={!aiIssue || isPending}
-            >
-              <Icon name="RiSparklingFill" />
-              AI 실행
-            </button>
-          </Tag>
-        </div>
-      }
       className="border-neutral-tertiary border-b"
+      heading={
+        status === 'success' && (
+          <div className="flex items-center justify-between">
+            <span className="text-neutral-tertiary text-base-normal">
+              AI Recommend
+            </span>
+            <p
+              className="text-small-normal cursor-pointer"
+              onClick={recommendIssues}
+            >
+              Retry
+            </p>
+          </div>
+        )
+      }
     >
-      {!aiIssue && (
-        <div className="flex items-center gap-2 p-3">
-          <Icon name="RiInformation2Fill" size={12} />
-          <p className="text-neutral-tertiary text-base-normal">
-            AI 이슈 템플릿을 등록해야 AI 기능을 실행할 수 있습니다.
-          </p>
+      {status !== 'success' && (
+        <div className="px-2 py-1">
+          <Button
+            size="small"
+            className="w-full"
+            onClick={recommendIssues}
+            style={GRADIENT_CSS.primary}
+            disabled={!aiIssue?.isEnabled}
+            loading={isPending}
+          >
+            <Icon name="RiSparklingFill" />
+            {t('v2.button.process-ai')}
+          </Button>
         </div>
       )}
-      {isPending ?
-        <div className="flex flex-col gap-2 py-2">
-          <div
-            className="h-4 w-full animate-pulse rounded"
-            style={GRADIENT_CSS.primary}
-          />
-          <div
-            className="h-4 w-full animate-pulse rounded"
-            style={GRADIENT_CSS.primary}
-          />
-        </div>
-      : issues.map((issue) => (
+      <p className="text-neutral-tertiary text-small-normal px-2 py-1 text-center">
+        {!aiIssue?.isEnabled ?
+          t('v2.description.ai-issue-recommendation-setting-required')
+        : status === 'idle' ?
+          t('v2.text.ai-issue-ready')
+        : status === 'pending' ?
+          t('v2.text.ai-issue-pending')
+        : ''}
+      </p>
+      {status === 'success' &&
+        issues.map((issue) => (
           <ComboboxItem
             key={issue.name}
             value={issue.name}
             onSelect={() => onSelect?.(issue)}
-            className={cn('justify-between gap-4', {
+            className={cn('group justify-between gap-4', {
               'cursor-not-allowed opacity-50': issue.option === 'ADDED',
             })}
             disabled={issue.option === 'ADDED'}
           >
-            <IssueBadge name={issue.name} status={issue.status ?? 'INIT'} />
-            <span className="text-small-normal text-neutral-tertiary">
-              {issue.option === 'ADDED' && 'Added'}
-              {issue.option === 'CREATE' && 'Create'}
-              {issue.option === 'EXISTING' && 'Add'}
-            </span>
+            <Badge style={GRADIENT_CSS.primary}>{issue.name}</Badge>
+            {issue.option === 'ADDED' ?
+              <Icon name="RiCheckLine" size={16} />
+            : <span className="text-small-normal text-neutral-tertiary opacity-0 transition-opacity group-hover:opacity-100">
+                {issue.option === 'CREATE' && 'Create'}
+                {issue.option === 'EXISTING' && 'Add'}
+              </span>
+            }
           </ComboboxItem>
-        ))
-      }
+        ))}
     </ComboboxGroup>
   );
 };

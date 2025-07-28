@@ -15,20 +15,17 @@
  */
 import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
-import { Slot, Slottable } from '@radix-ui/react-slot';
+import { Slottable } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
 
-import { CAPTION_DEFAULT_ICON, ICON_SIZE } from '../constants';
-import type { CaptionType, Size } from '../lib/types';
+import { ICON_SIZE } from '../constants';
+import type { Radius, Size } from '../lib/types';
 import { cn } from '../lib/utils';
-import type { IconNameType } from './icon';
 import { Icon } from './icon';
 import { ScrollArea, ScrollBar } from './scroll-area';
 import useTheme from './use-theme';
 
-type SelectContextType = {
-  size: Size;
-};
+type SelectContextType = { size: Size; radius: Radius };
 
 const SelectContext = React.createContext<SelectContextType | undefined>(
   undefined,
@@ -43,6 +40,7 @@ interface SelectProps
   extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> {
   className?: string;
   size?: Size;
+  radius?: Radius;
 }
 
 const selectVariants = cva('select', {
@@ -52,16 +50,16 @@ const selectVariants = cva('select', {
       medium: 'select-medium',
       large: 'select-large',
     },
-    defaultVariants: {
-      size: undefined,
-    },
+    defaultVariants: { size: undefined },
   },
 });
 
-const Select = ({ size, className, ...props }: SelectProps) => {
-  const { themeSize } = useTheme();
+const Select = ({ size, radius, className, ...props }: SelectProps) => {
+  const { themeSize, themeRadius } = useTheme();
   return (
-    <SelectContext.Provider value={{ size: size ?? themeSize }}>
+    <SelectContext.Provider
+      value={{ size: size ?? themeSize, radius: radius ?? themeRadius }}
+    >
       <div
         className={cn(selectVariants({ size: size ?? themeSize, className }))}
       >
@@ -82,32 +80,28 @@ const selectTriggerVariants = cva('select-trigger', {
       medium: 'select-trigger-medium',
       large: 'select-trigger-large',
     },
-    error: {
-      true: 'select-trigger-error',
-      false: '',
+    radius: {
+      small: 'select-trigger-radius-small',
+      medium: 'select-trigger-radius-medium',
+      large: 'select-trigger-radius-large',
     },
   },
-  defaultVariants: {
-    size: undefined,
-    error: false,
-  },
+  defaultVariants: { size: undefined, radius: undefined },
 });
 
 interface SelectTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
-  error?: boolean;
-}
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {}
 
 const SelectTrigger = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Trigger>,
+  React.ComponentRef<typeof SelectPrimitive.Trigger>,
   SelectTriggerProps
->(({ error, className, children, ...props }, ref) => {
-  const { size } = useSelectContext();
+>(({ className, children, ...props }, ref) => {
+  const { size, radius } = useSelectContext();
 
   return (
     <SelectPrimitive.Trigger
       ref={ref}
-      className={cn(selectTriggerVariants({ size, error, className }))}
+      className={cn(selectTriggerVariants({ size, radius, className }))}
       {...props}
     >
       <Slottable>{children}</Slottable>
@@ -125,7 +119,7 @@ interface SelectContentProps
 }
 
 const SelectContent = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Content>,
+  React.ComponentRef<typeof SelectPrimitive.Content>,
   SelectContentProps
 >(
   (
@@ -152,7 +146,7 @@ const SelectContent = React.forwardRef<
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
 const SelectGroupLabel = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Label>,
+  React.ComponentRef<typeof SelectPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
@@ -164,34 +158,22 @@ const SelectGroupLabel = React.forwardRef<
 SelectGroupLabel.displayName = 'SelectGroupLabel';
 
 const selectItemVariants = cva('select-item', {
-  variants: {
-    check: {
-      left: 'select-item-left',
-      right: 'select-item-right',
-    },
-  },
-  defaultVariants: {
-    check: 'left',
-  },
+  variants: { check: { left: 'select-item-left', right: 'select-item-right' } },
+  defaultVariants: { check: 'left' },
 });
 
 const selectItemCheckVariants = cva('select-item-check', {
   variants: {
-    check: {
-      left: 'select-item-check-left',
-      right: 'select-item-check-right',
-    },
+    check: { left: 'select-item-check-left', right: 'select-item-check-right' },
   },
-  defaultVariants: {
-    check: 'left',
-  },
+  defaultVariants: { check: 'left' },
 });
 
 type SelectItemProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Item
 >;
 const SelectItem = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Item>,
+  React.ComponentRef<typeof SelectPrimitive.Item>,
   SelectItemProps
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
@@ -219,7 +201,7 @@ const SelectItem = React.forwardRef<
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
 const SelectSeparator = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Separator>,
+  React.ComponentRef<typeof SelectPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Separator
@@ -230,72 +212,8 @@ const SelectSeparator = React.forwardRef<
 ));
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
-const SelectLabel = React.forwardRef<
-  HTMLElement,
-  React.ComponentPropsWithoutRef<'strong'>
->((props, ref) => {
-  const { className, ...rest } = props;
-  return (
-    <strong ref={ref} className={cn('select-label', className)} {...rest} />
-  );
-});
-SelectLabel.displayName = SelectPrimitive.Label.displayName;
-
-const selectCaptionVariants = cva('select-caption', {
-  variants: {
-    variant: {
-      default: 'select-caption-default',
-      success: 'select-caption-success',
-      info: 'select-caption-info',
-      error: 'select-caption-error',
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  },
-});
-
-interface SelectCaptionProps extends React.ComponentPropsWithoutRef<'span'> {
-  variant?: CaptionType;
-  icon?: IconNameType;
-  asChild?: boolean;
-}
-
-const SelectCaption = React.forwardRef<HTMLElement, SelectCaptionProps>(
-  (props, ref) => {
-    const {
-      icon = undefined,
-      variant = 'default',
-      className,
-      children,
-      asChild,
-      ...rest
-    } = props;
-    const { size } = useSelectContext();
-    const Comp = asChild ? Slot : 'span';
-
-    return (
-      <Comp
-        ref={ref}
-        className={cn(selectCaptionVariants({ variant, className }))}
-        {...rest}
-      >
-        <Icon
-          name={icon ?? CAPTION_DEFAULT_ICON[variant]}
-          size={ICON_SIZE[size]}
-          className="select-caption-icon"
-        />
-        <Slottable>{children}</Slottable>
-      </Comp>
-    );
-  },
-);
-SelectCaption.displayName = 'SelectCaption';
-
 export {
   Select,
-  SelectLabel,
-  SelectCaption,
   SelectGroup,
   SelectValue,
   SelectTrigger,

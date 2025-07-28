@@ -17,6 +17,7 @@
 import { z } from 'zod';
 
 export const playgroundInputItemSchema = z.object({
+  id: z.string(),
   name: z.string().trim().min(1).max(20),
   description: z.string().trim().max(50),
   value: z.string().min(1),

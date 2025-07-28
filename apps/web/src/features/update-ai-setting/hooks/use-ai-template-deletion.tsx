@@ -18,6 +18,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 import { parseAsInteger, useQueryState } from 'nuqs';
 
 import { toast } from '@ufb/react';
@@ -33,6 +34,7 @@ interface UseAITemplateDeleteReturn {
 export const useAITemplateDelete = (
   projectId: number,
 ): UseAITemplateDeleteReturn => {
+  const { t } = useTranslation();
   const router = useRouter();
   const overlay = useOverlay();
   const [templateId] = useQueryState('templateId', parseAsInteger);
@@ -47,7 +49,7 @@ export const useAITemplateDelete = (
     },
     onSuccess() {
       router.back();
-      toast.success('AI 설정이 삭제되었습니다.');
+      toast.success(t('v2.toast.success'));
     },
     onError(error) {
       toast.error(error.message);

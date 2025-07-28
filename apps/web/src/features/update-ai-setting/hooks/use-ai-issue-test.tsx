@@ -22,7 +22,7 @@ import { toast } from '@ufb/react';
 import { useOAIMutation } from '@/shared';
 import type { AIIssue } from '@/entities/ai';
 
-import { PlaygroundInputItem } from '../playground-input-item.schema';
+import type { PlaygroundInputItem } from '../playground-input-item.schema';
 
 export const useAIIssueTest = () => {
   const [result, setResult] = useState<string[] | undefined>();
@@ -40,11 +40,6 @@ export const useAIIssueTest = () => {
 
   const executeTest = useCallback(
     (inputItems: PlaygroundInputItem[]) => {
-      if (inputItems.length === 0) {
-        alert('테스트 케이스를 추가해주세요.');
-        return;
-      }
-
       const {
         model,
         temperature,

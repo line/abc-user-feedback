@@ -13,13 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-.toaster {
+import * as React from "react";
+import * as LabelPrimitive from "@radix-ui/react-label";
+
+import { cn } from "../lib/utils";
+
+interface LabelProps extends React.ComponentProps<typeof LabelPrimitive.Root> {}
+
+function Label({ className, ...props }: LabelProps) {
+  return (
+    <LabelPrimitive.Root
+      data-slot="label"
+      className={cn("label", className)}
+      {...props}
+    />
+  );
 }
 
-.toast {
-  @apply !absolute !left-0;
-}
-
-.toast-close {
-  @apply order-1;
-}
+export { Label };

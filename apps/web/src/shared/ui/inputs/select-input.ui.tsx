@@ -16,12 +16,12 @@
 import type { IconNameType, Size } from '@ufb/react';
 import {
   Button,
+  Caption,
   Icon,
+  Label,
   Select,
-  SelectCaption,
   SelectContent,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@ufb/react';
@@ -66,9 +66,9 @@ const SelectInput: React.FC<Props> = (props) => {
       size={size}
     >
       {label && (
-        <SelectLabel>
+        <Label>
           {label} {required && <span className="text-tint-red">*</span>}
-        </SelectLabel>
+        </Label>
       )}
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
@@ -92,7 +92,7 @@ const SelectInput: React.FC<Props> = (props) => {
           </SelectItem>
         ))}
       </SelectContent>
-      {error && <SelectCaption variant="error">{error}</SelectCaption>}
+      {error && <Caption variant="error">{error}</Caption>}
     </Select>
   );
 };

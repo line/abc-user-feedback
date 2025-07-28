@@ -18,6 +18,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 
 import { toast } from '@ufb/react';
@@ -35,6 +36,7 @@ import { AI_ISSUE_DEFAULT_VALUES, PROVIDER_MODEL_CONFIG } from '../constants';
 import { useAIIssueFormStore } from '../stores/ai-issue-form.store';
 
 export const useAIIssueForm = (projectId: number) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const templateId = router.query.templateId ? +router.query.templateId : null;
   const { setIsPending, setIsDirty } = useAIIssueFormStore();
@@ -72,15 +74,12 @@ export const useAIIssueForm = (projectId: number) => {
     path: '/api/admin/projects/{projectId}/ai/issueTemplates/new',
     queryOptions: {
       async onSuccess(data) {
-        toast.success('AI 설정이 저장되었습니다.');
-        await router.push({
+        toast.success(t('v2.toast.success'));
+        await router.replace({
           pathname: router.pathname,
           query: { ...router.query, templateId: data?.id },
         });
         await refetch();
-      },
-      onError(error) {
-        toast.error(error.message);
       },
     },
   });
@@ -95,8 +94,8 @@ export const useAIIssueForm = (projectId: number) => {
       return data;
     },
     async onSuccess() {
+      toast.success(t('v2.toast.success'));
       await refetch();
-      toast.success('AI 설정이 저장되었습니다.');
     },
     onError(error) {
       toast.error(error.message);
@@ -112,8 +111,8 @@ export const useAIIssueForm = (projectId: number) => {
       return data;
     },
     onSuccess() {
+      toast.success(t('v2.toast.success'));
       router.back();
-      toast.success('AI 설정이 저장되었습니다.');
     },
     onError(error) {
       toast.error(error.message);
@@ -172,7 +171,7 @@ export const useAIIssueForm = (projectId: number) => {
     ) {
       methods.setError('channelId', {
         type: 'manual',
-        message: '이미 존재하는 채널 ID입니다.',
+        message: 'A channel with this ID already exists.',
       });
       return;
     }

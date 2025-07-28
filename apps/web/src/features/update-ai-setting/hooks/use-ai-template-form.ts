@@ -18,6 +18,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 
 import { toast } from '@ufb/react';
@@ -33,6 +34,7 @@ import {
 import { useAITemplateFormStore } from '../stores/ai-template-form.store';
 
 export const useAITemplateForm = (projectId: number) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const templateId = router.query.templateId ? +router.query.templateId : null;
   const { setIsPending, setIsDirty } = useAITemplateFormStore();
@@ -68,15 +70,12 @@ export const useAITemplateForm = (projectId: number) => {
     pathParams: { projectId },
     queryOptions: {
       async onSuccess(data) {
-        toast.success('AI 설정이 저장되었습니다.');
-        await router.push({
+        toast.success(t('v2.toast.success'));
+        await router.replace({
           pathname: router.pathname,
           query: { ...router.query, templateId: data?.id },
         });
         await refetch();
-      },
-      onError(error) {
-        toast.error(error.message);
       },
     },
   });
@@ -92,7 +91,7 @@ export const useAITemplateForm = (projectId: number) => {
     },
     async onSuccess() {
       await refetch();
-      toast.success('AI 설정이 저장되었습니다.');
+      toast.success(t('v2.toast.success'));
     },
     onError(error) {
       toast.error(error.message);
@@ -147,7 +146,7 @@ export const useAITemplateForm = (projectId: number) => {
     ) {
       methods.setError('title', {
         type: 'manual',
-        message: '이미 존재하는 템플릿 이름입니다.',
+        message: 'A template with this title already exists.',
       });
       return;
     }

@@ -14,23 +14,17 @@
  * under the License.
  */
 
-import React from 'react';
-import { FormProvider } from 'react-hook-form';
+import { useTranslation } from 'next-i18next';
 
 import { Button, Divider } from '@ufb/react';
 
-import {
-  Card,
-  CardBody,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  useOAIQuery,
-} from '@/shared';
+import { CardDescription, CardTitle, useOAIQuery } from '@/shared';
 
 import { useAIIssueDelete } from '../hooks/use-ai-issue-delete';
 import { useAIIssueForm } from '../hooks/use-ai-issue-form';
+import { useAIIssueTest } from '../hooks/use-ai-issue-test';
 import { useAIIssueFormStore } from '../stores/ai-issue-form.store';
+import AiFormTemplate from './ai-form-template.ui';
 import {
   ChannelSelect,
   DataReferenceSlider,
@@ -40,9 +34,10 @@ import {
   PromptField,
   TemperatureSlider,
 } from './ai-issue-form-fields.ui';
-import AIIssuePlayground from './ai-issue-playground.ui';
+import AiPlaygroundTemplate from './ai-playground-template.ui';
 
 export const AIIssueForm = ({ projectId }: { projectId: number }) => {
+  const { t } = useTranslation();
   const { channelData, modelData, methods, handleFormSubmit } =
     useAIIssueForm(projectId);
   const { formId } = useAIIssueFormStore();
@@ -55,49 +50,59 @@ export const AIIssueForm = ({ projectId }: { projectId: number }) => {
   });
 
   return (
-    <div className="flex min-h-0 flex-1 gap-4">
-      <FormProvider {...methods}>
-        <Card className="flex-[1] overflow-auto border" size="md">
-          <CardHeader>
-            <CardTitle>Configuration</CardTitle>
+    <AiFormTemplate
+      methods={methods}
+      description={t('v2.description.ai-issue-recommendation-form')}
+      playground={<AIIssuePlayground />}
+    >
+      <form
+        id={formId}
+        className="flex flex-col gap-3"
+        onSubmit={handleSubmit(handleFormSubmit)}
+      >
+        <ChannelSelect channels={channelData?.items} />
+        <FieldSelect fields={channelDetailData?.fields} />
+        <PromptField />
+        <EnableTemplateCard />
+        <Divider variant="subtle" />
+        <div className="flex flex-col gap-4">
+          <div>
+            <CardTitle size="lg">Advanced Configuration</CardTitle>
             <CardDescription>
-              템플릿 정보와 프롬프트를 설정해주세요
+              {t(
+                'v2.description.ai-issue-recommendation-advanced-configuration',
+              )}
             </CardDescription>
-          </CardHeader>
-          <CardBody className="flex flex-col gap-4">
-            <form
-              id={formId}
-              className="flex flex-col gap-4"
-              onSubmit={handleSubmit(handleFormSubmit)}
-            >
-              <ChannelSelect channels={channelData?.items} />
-              <FieldSelect fields={channelDetailData?.fields} />
-              <PromptField />
-              <EnableTemplateCard />
-              <Divider variant="subtle" />
-              <div className="flex flex-col gap-4">
-                <div>
-                  <h4 className="text-title-h4">Advanced Configuration</h4>
-                  <p className="text-small-normal text-neutral-secondary">
-                    description
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <ModelSelect models={modelData?.models} />
-                  <TemperatureSlider />
-                  <DataReferenceSlider />
-                </div>
-              </div>
-            </form>
-          </CardBody>
-        </Card>
-        <AIIssuePlayground />
-      </FormProvider>
-    </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            <ModelSelect models={modelData?.models} />
+            <TemperatureSlider />
+            <DataReferenceSlider />
+          </div>
+        </div>
+      </form>
+    </AiFormTemplate>
+  );
+};
+
+const AIIssuePlayground = () => {
+  const { t } = useTranslation();
+  const aiTest = useAIIssueTest();
+
+  return (
+    <AiPlaygroundTemplate
+      description={t('v2.description.ai-issue-recommendation-playground')}
+      onTestAI={aiTest.executeTest}
+      result={aiTest.result}
+      isPending={aiTest.isPending}
+      isDisabled={aiTest.isTestDisabled}
+    />
   );
 };
 
 export const AIIssueFormButton = ({ projectId }: { projectId: number }) => {
+  const { t } = useTranslation();
+
   const { formId, isPending, isDirty } = useAIIssueFormStore();
   const {
     isPending: isDeletePending,
@@ -113,7 +118,7 @@ export const AIIssueFormButton = ({ projectId }: { projectId: number }) => {
         disabled={!templateId}
         loading={isDeletePending}
       >
-        Template 삭제
+        {t('v2.button.name.delete', { name: 'Template' })}
       </Button>
       <Button
         form={formId}
@@ -121,7 +126,7 @@ export const AIIssueFormButton = ({ projectId }: { projectId: number }) => {
         loading={isPending}
         disabled={!isDirty}
       >
-        저장
+        {t('v2.button.save')}
       </Button>
     </div>
   );

@@ -16,14 +16,14 @@
 import type { IconNameType, Size } from '@ufb/react';
 import {
   Button,
+  Caption,
   Icon,
+  Label,
   MultiSelect,
-  MultiSelectCaption,
   MultiSelectContent,
   MultiSelectItem,
   MultiSelectTrigger,
   MultiSelectValue,
-  SelectLabel,
 } from '@ufb/react';
 
 interface Props {
@@ -57,13 +57,13 @@ const MultiSelectInput: React.FC<Props> = (props) => {
     <MultiSelect
       value={value}
       onValueChange={onChange}
-      // disabled={disabled}
+      disabled={disabled}
       size={size}
     >
       {label && (
-        <SelectLabel>
+        <Label>
           {label} {required && <span className="text-tint-red">*</span>}
-        </SelectLabel>
+        </Label>
       )}
       <MultiSelectTrigger>
         <MultiSelectValue placeholder={placeholder} />
@@ -85,9 +85,7 @@ const MultiSelectInput: React.FC<Props> = (props) => {
           </MultiSelectItem>
         ))}
       </MultiSelectContent>
-      {error && (
-        <MultiSelectCaption variant="error">{error}</MultiSelectCaption>
-      )}
+      {error && <Caption variant="error">{error}</Caption>}
     </MultiSelect>
   );
 };

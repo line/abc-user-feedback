@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 
@@ -58,14 +58,20 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
     variables: { projectId },
   });
   const isSettingsEmpty = !data || data.apiKey === '';
+  useEffect(() => {
+    if (isSettingsEmpty) {
+      void setSubMenu('setting');
+    }
+  }, [subMenu, isSettingsEmpty]);
 
   return (
     <>
       <SettingTemplate
         title={
-          subMenu === 'field-template-form' ? 'Template Details' : (
-            t('v2.project-setting-menu.generative-ai-setting')
-          )
+          subMenu === 'field-template-form' ? 'Template Details'
+          : subMenu === 'ai-issue-form' ?
+            'AI Issue Recommend Details'
+          : t('v2.project-setting-menu.generative-ai-setting')
         }
         action={
           <>
@@ -92,8 +98,9 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
             orientation="horizontal"
             value={subMenu}
             onValueChange={async (v) => {
+              if (!v) return;
               if (isSettingsEmpty && v !== 'setting') {
-                toast.warning('AI Settings 저장 후에 이용할 수 있습니다.');
+                toast.warning('Please set up AI settings first.');
                 return;
               }
               await setSubMenu(v as SubMenuType);
@@ -109,28 +116,30 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
               AI Field Template
             </MenuItem>
             <MenuItem className="w-fit shrink-0" value="ai-issue">
-              AI Issue
+              AI Issue Recommendation
             </MenuItem>
           </Menu>
         )}
-        {subMenu === 'setting' && <AISettingForm projectId={projectId} />}
-        {subMenu === 'usage' && <AIUsageForm projectId={projectId} />}
-        {subMenu === 'field-template' && (
-          <AIFieldTemplateSetting
-            projectId={projectId}
-            onClick={(id) => setSubMenu('field-template-form', id)}
-          />
-        )}
-        {subMenu === 'field-template-form' && (
-          <AIFieldTemplateForm projectId={projectId} />
-        )}
-        {subMenu === 'ai-issue' && (
-          <AiIssueSetting
-            projectId={projectId}
-            onClick={(id) => setSubMenu('ai-issue-form', id)}
-          />
-        )}
-        {subMenu === 'ai-issue-form' && <AIIssueForm projectId={projectId} />}
+        <div className="flex h-full flex-col gap-4 overflow-auto">
+          {subMenu === 'setting' && <AISettingForm projectId={projectId} />}
+          {subMenu === 'usage' && <AIUsageForm projectId={projectId} />}
+          {subMenu === 'field-template' && (
+            <AIFieldTemplateSetting
+              projectId={projectId}
+              onClick={(id) => setSubMenu('field-template-form', id)}
+            />
+          )}
+          {subMenu === 'field-template-form' && (
+            <AIFieldTemplateForm projectId={projectId} />
+          )}
+          {subMenu === 'ai-issue' && (
+            <AiIssueSetting
+              projectId={projectId}
+              onClick={(id) => setSubMenu('ai-issue-form', id)}
+            />
+          )}
+          {subMenu === 'ai-issue-form' && <AIIssueForm projectId={projectId} />}
+        </div>
       </SettingTemplate>
     </>
   );

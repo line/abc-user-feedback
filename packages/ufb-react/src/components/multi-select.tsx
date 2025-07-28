@@ -13,29 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+'use client';
+
 import * as React from 'react';
 import { Slot, Slottable } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
 
-import { CAPTION_DEFAULT_ICON, ICON_SIZE } from '../constants';
-import type { CaptionType } from '../lib/types';
+import { ICON_SIZE } from '../constants';
 import { cn } from '../lib/utils';
-import type { Size } from '../types';
-import type { IconNameType } from './icon';
+import type { Radius, Size } from '../types';
 import { Icon } from './icon';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { ScrollArea, ScrollBar } from './scroll-area';
 import { Tag } from './tag';
 import useTheme from './use-theme';
 
-type MultiSelectItemType = {
-  value: string;
-  label: React.ReactNode;
-};
+type MultiSelectItemType = { value: string; label: React.ReactNode };
 
 type MultiSelectContextType = {
+  disabled: boolean;
   size: Size;
-  setSize?: (size: Size) => void;
+  radius: Radius;
   selectedItems: MultiSelectItemType[];
   setSelectedItems: (items: MultiSelectItemType[]) => void;
   isOpen: boolean;
@@ -63,6 +61,8 @@ interface MultiSelectProps {
   children: React.ReactNode;
   className?: string;
   size?: Size;
+  radius?: Radius;
+  disabled?: boolean;
 }
 
 const selectVariants = cva('select', {
@@ -72,9 +72,7 @@ const selectVariants = cva('select', {
       medium: 'select-medium',
       large: 'select-large',
     },
-    defaultVariants: {
-      size: undefined,
-    },
+    defaultVariants: { size: undefined },
   },
 });
 
@@ -86,12 +84,13 @@ const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
       onValueChange,
       children,
       className,
-      size: propSize,
+      size,
+      radius,
+      disabled = false,
     },
     ref,
   ) {
-    const { themeSize } = useTheme();
-    const [size, setSize] = React.useState<Size | undefined>(propSize);
+    const { themeSize, themeRadius } = useTheme();
 
     const [registeredItems, setRegisteredItems] = React.useState<
       MultiSelectItemType[]
@@ -155,8 +154,9 @@ const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
     return (
       <MultiSelectContext.Provider
         value={{
-          size: size ?? propSize ?? themeSize,
-          setSize,
+          disabled,
+          size: size ?? themeSize,
+          radius: radius ?? themeRadius,
           selectedItems,
           setSelectedItems: (items) => setValues(items.map((i) => i.value)),
           isOpen,
@@ -171,7 +171,10 @@ const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
           <div
             ref={ref}
             className={cn(
-              selectVariants({ size: size ?? themeSize, className }),
+              selectVariants({
+                size: size ?? themeSize,
+                className,
+              }),
             )}
           >
             {children}
@@ -184,7 +187,7 @@ const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
 
 interface MultiSelectTriggerProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  error?: boolean;
+  asChild?: boolean;
 }
 
 const selectTriggerVariants = cva('select-trigger', {
@@ -194,39 +197,52 @@ const selectTriggerVariants = cva('select-trigger', {
       medium: 'select-trigger-medium',
       large: 'select-trigger-large',
     },
-    error: {
-      true: 'select-trigger-error',
-      false: '',
+    radius: {
+      small: 'select-trigger-radius-small',
+      medium: 'select-trigger-radius-medium',
+      large: 'select-trigger-radius-large',
     },
   },
-  defaultVariants: {
-    size: undefined,
-    error: false,
-  },
+  defaultVariants: { size: undefined, radius: undefined },
 });
 
 const MultiSelectTrigger = React.forwardRef<
   HTMLButtonElement,
   MultiSelectTriggerProps
->(function MultiSelectTrigger(
-  { className, children, error = false, ...props },
-  ref,
-) {
-  const { size } = useMultiSelectContext();
+>(function MultiSelectTrigger({ asChild, ...props }, ref) {
+  const Comp = asChild ? Slot : MultiSelectTriggerButton;
+
   return (
     <PopoverTrigger asChild>
-      <button
-        ref={ref}
-        type="button"
-        aria-haspopup="listbox"
-        className={cn(selectTriggerVariants({ size, error, className }))}
-        data-placeholder
-        {...props}
-      >
-        <Slottable>{children}</Slottable>
-        <Icon name="RiArrowDownSLine" size={ICON_SIZE[size]} />
-      </button>
+      <Comp ref={ref} {...props} />
     </PopoverTrigger>
+  );
+});
+
+interface MultiSelectTriggerButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  className?: string;
+  children?: React.ReactNode;
+}
+
+const MultiSelectTriggerButton = React.forwardRef<
+  HTMLButtonElement,
+  MultiSelectTriggerButtonProps
+>(function MultiSelectTrigger({ className, children, ...props }, ref) {
+  const { size, radius, disabled } = useMultiSelectContext();
+  return (
+    <button
+      ref={ref}
+      type="button"
+      aria-haspopup="listbox"
+      className={cn(selectTriggerVariants({ size, radius, className }))}
+      data-placeholder
+      disabled={disabled}
+      {...props}
+    >
+      <Slottable>{children}</Slottable>
+      <Icon name="RiArrowDownSLine" size={ICON_SIZE[size]} />
+    </button>
   );
 });
 
@@ -258,27 +274,15 @@ const MultiSelectContent = React.forwardRef<
 });
 
 const selectItemVariants = cva('select-item', {
-  variants: {
-    check: {
-      left: 'select-item-left',
-      right: 'select-item-right',
-    },
-  },
-  defaultVariants: {
-    check: 'left',
-  },
+  variants: { check: { left: 'select-item-left', right: 'select-item-right' } },
+  defaultVariants: { check: 'left' },
 });
 
 const selectItemCheckVariants = cva('select-item-check', {
   variants: {
-    check: {
-      left: 'select-item-check-left',
-      right: 'select-item-check-right',
-    },
+    check: { left: 'select-item-check-left', right: 'select-item-check-right' },
   },
-  defaultVariants: {
-    check: 'left',
-  },
+  defaultVariants: { check: 'left' },
 });
 
 interface MultiSelectItemProps {
@@ -363,62 +367,11 @@ const MultiSelectValue = React.forwardRef<
   );
 });
 
-const selectCaptionVariants = cva('select-caption', {
-  variants: {
-    variant: {
-      default: 'select-caption-default',
-      success: 'select-caption-success',
-      info: 'select-caption-info',
-      error: 'select-caption-error',
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  },
-});
-
-interface SelectCaptionProps extends React.ComponentPropsWithoutRef<'span'> {
-  variant?: CaptionType;
-  icon?: IconNameType;
-  asChild?: boolean;
-}
-
-const MultiSelectCaption = React.forwardRef<HTMLElement, SelectCaptionProps>(
-  (props, ref) => {
-    const {
-      icon = undefined,
-      variant = 'default',
-      className,
-      children,
-      asChild,
-      ...rest
-    } = props;
-    const { size } = useMultiSelectContext();
-    const Comp = asChild ? Slot : 'span';
-
-    return (
-      <Comp
-        ref={ref}
-        className={cn(selectCaptionVariants({ variant, className }))}
-        {...rest}
-      >
-        <Icon
-          name={icon ?? CAPTION_DEFAULT_ICON[variant]}
-          size={ICON_SIZE[size]}
-          className="select-caption-icon"
-        />
-        <Slottable>{children}</Slottable>
-      </Comp>
-    );
-  },
-);
-MultiSelectCaption.displayName = 'MultiSelectCaption';
-
 export {
   MultiSelect,
   MultiSelectTrigger,
+  MultiSelectTriggerButton,
   MultiSelectContent,
   MultiSelectItem,
   MultiSelectValue,
-  MultiSelectCaption,
 };

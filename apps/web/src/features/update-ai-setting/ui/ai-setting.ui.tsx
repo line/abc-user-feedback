@@ -16,13 +16,13 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { create } from 'zustand';
 
 import { Button, toast } from '@ufb/react';
 
 import {
-  HelpCardDocs,
   SettingAlert,
   useOAIMutation,
   useOAIQuery,
@@ -43,6 +43,7 @@ const useAISettingFormStore = create<AISettingStore>((set) => ({
 }));
 
 export const AISettingForm = ({ projectId }: { projectId: number }) => {
+  const { t } = useTranslation();
   const methods = useForm<AI>({
     resolver: zodResolver(aiSchema),
     defaultValues: {
@@ -82,10 +83,7 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
             { projectId },
           ],
         });
-        toast.success('AI 설정이 저장되었습니다.');
-      },
-      onError(error) {
-        toast.error(error.message);
+        toast.success(t('v2.toast.success'));
       },
     },
   });
@@ -115,7 +113,7 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
 
   return (
     <>
-      <SettingAlert description={<HelpCardDocs />} />
+      <SettingAlert description={t('help-card.ai-setting')} />
       <FormProvider {...methods}>
         <form id={formId} onSubmit={methods.handleSubmit(onSubmit)}>
           <AiSettingForm />
@@ -126,6 +124,8 @@ export const AISettingForm = ({ projectId }: { projectId: number }) => {
 };
 
 export const AISettingFormButton = () => {
+  const { t } = useTranslation();
+
   const { formId, isPending, isDirty } = useAISettingFormStore();
   const perms = usePermissions();
   return (
@@ -135,7 +135,7 @@ export const AISettingFormButton = () => {
       loading={isPending}
       disabled={!isDirty || !perms.includes('generative_ai_update')}
     >
-      저장
+      {t('v2.button.save')}
     </Button>
   );
 };

@@ -14,13 +14,14 @@
  * under the License.
  */
 
+import { useTranslation } from 'next-i18next';
+
 import { Icon } from '@ufb/react';
 
 import {
   Card,
   CardBody,
   GRADIENT_CSS,
-  HelpCardDocs,
   SettingAlert,
   useOAIQuery,
 } from '@/shared';
@@ -32,6 +33,7 @@ export const AIFieldTemplateSetting = ({
   onClick: (templateId?: number) => void;
   projectId: number;
 }) => {
+  const { t } = useTranslation();
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/fieldTemplates',
     variables: { projectId },
@@ -39,13 +41,11 @@ export const AIFieldTemplateSetting = ({
 
   return (
     <>
-      <SettingAlert
-        description={<HelpCardDocs i18nKey="help-card.api-key" />}
-      />
+      <SettingAlert description={t('help-card.ai-field-template')} />
       <div className="grid grid-cols-4 gap-4">
         <TemplateCard
           type="create"
-          title="New Template"
+          title="Create New"
           onClick={() => onClick()}
         />
         {data?.map(({ id, title, prompt }) => (
@@ -72,7 +72,7 @@ const TemplateCard = (props: {
   return (
     <Card
       onClick={onClick}
-      className="min-h-60 cursor-pointer hover:opacity-50"
+      className="!rounded-24 min-h-60 cursor-pointer transition-shadow duration-300 hover:shadow-lg"
     >
       <CardBody className="flex h-full flex-col justify-between">
         <div className="flex flex-col gap-1">
