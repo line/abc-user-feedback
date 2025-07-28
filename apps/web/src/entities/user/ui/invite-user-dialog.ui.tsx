@@ -17,7 +17,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
-import type { ZodType } from 'zod';
 import { z } from 'zod';
 
 import type { FormOverlayProps } from '@/shared';
@@ -30,17 +29,12 @@ import {
 } from '@/shared';
 import type { UserTypeEnum } from '@/entities/user';
 
-interface IForm {
-  email: string;
-  type: UserTypeEnum;
-  projectId?: number;
-  roleId?: number;
-}
-
-const scheme: ZodType<IForm> = z
+const scheme = z
   .object({
     email: z.string().email(),
-    type: z.literal('SUPER'),
+    type: z.literal('SUPER').or(z.literal('GENERAL')),
+    projectId: z.number(),
+    roleId: z.number(),
   })
   .or(
     z.object({
@@ -51,27 +45,30 @@ const scheme: ZodType<IForm> = z
     }),
   );
 
-const defaultValues: IForm = {
+type InvitationForm = z.infer<typeof scheme>;
+
+const defaultValues: InvitationForm = {
   email: '',
   type: 'GENERAL',
+  projectId: 0,
+  roleId: 0,
 };
 
-interface IProps extends FormOverlayProps<IForm> {}
+interface IProps extends FormOverlayProps<InvitationForm> {}
 
 const InviteUserDialog: React.FC<IProps> = (props) => {
   const { close, isOpen, onSubmit, disabledUpdate: updateDisabled } = props;
   const { t } = useTranslation();
-  const { register, watch, setValue, handleSubmit, formState } = useForm<IForm>(
-    { resolver: zodResolver(scheme), defaultValues },
-  );
+  const { register, watch, setValue, handleSubmit, formState } =
+    useForm<InvitationForm>({ resolver: zodResolver(scheme), defaultValues });
 
-  const { projectId, type } = watch();
+  const { type, projectId } = watch();
 
   const { data: projectData } = useAllProjects();
 
   const { data: roleData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/roles',
-    variables: { projectId: projectId ?? 0 },
+    variables: { projectId },
     queryOptions: { enabled: !!projectId && type === 'GENERAL' },
   });
 
