@@ -62,7 +62,7 @@ describe('IssueController', () => {
 
       await issueController.create(projectId, dto);
 
-      expect(MockIssueService.create).toBeCalledTimes(1);
+      expect(MockIssueService.create).toHaveBeenCalledTimes(1);
     });
   });
   describe('findById', () => {
@@ -73,7 +73,7 @@ describe('IssueController', () => {
 
       await issueController.findById(issueId);
 
-      expect(MockIssueService.findById).toBeCalledTimes(1);
+      expect(MockIssueService.findById).toHaveBeenCalledTimes(1);
     });
   });
   describe('findAllByProjectId', () => {
@@ -89,7 +89,7 @@ describe('IssueController', () => {
         limit: 10,
       });
 
-      expect(MockIssueService.findIssuesByProjectIdV2).toBeCalledTimes(1);
+      expect(MockIssueService.findIssuesByProjectIdV2).toHaveBeenCalledTimes(1);
     });
   });
   describe('update', () => {
@@ -103,7 +103,7 @@ describe('IssueController', () => {
 
       await issueController.update(projectId, issueId, dto);
 
-      expect(MockIssueService.update).toBeCalledTimes(1);
+      expect(MockIssueService.update).toHaveBeenCalledTimes(1);
     });
   });
   describe('delete', () => {
@@ -113,7 +113,7 @@ describe('IssueController', () => {
 
       await issueController.delete(issueId);
 
-      expect(MockIssueService.deleteById).toBeCalledTimes(1);
+      expect(MockIssueService.deleteById).toHaveBeenCalledTimes(1);
     });
   });
   describe('deleteMany', () => {
@@ -125,7 +125,7 @@ describe('IssueController', () => {
 
       await issueController.deleteMany(projectId, dto);
 
-      expect(MockIssueService.deleteByIds).toBeCalledTimes(1);
+      expect(MockIssueService.deleteByIds).toHaveBeenCalledTimes(1);
     });
   });
 });
