@@ -10,8 +10,8 @@ catalogs:
       specifier: ^9.32.0
       version: 9.32.0
     prettier:
-      specifier: ^3.5.3
-      version: 3.5.3
+      specifier: ^3.6.2
+      version: 3.6.2
     tailwindcss:
       specifier: ^3.4.17
       version: 3.4.17
@@ -28,7 +28,7 @@ importers:
         version: link:tooling/prettier
       prettier:
         specifier: 'catalog:'
-        version: 3.5.3
+        version: 3.6.2
       turbo:
         specifier: ^2.5.5
         version: 2.5.5
@@ -269,7 +269,7 @@ importers:
         version: 3.0.5
       prettier:
         specifier: 'catalog:'
-        version: 3.5.3
+        version: 3.6.2
       supertest:
         specifier: ^7.1.4
         version: 7.1.4
@@ -547,7 +547,7 @@ importers:
         version: 8.5.6
       prettier:
         specifier: 'catalog:'
-        version: 3.5.3
+        version: 3.6.2
       tailwindcss:
         specifier: ^3.4.17
         version: 3.4.17(ts-node@10.9.2(@swc/core@1.13.2(@swc/helpers@0.5.17))(@types/node@22.16.4)(typescript@5.8.3))
@@ -662,7 +662,7 @@ importers:
         version: 9.32.0(jiti@2.4.2)
       prettier:
         specifier: 'catalog:'
-        version: 3.5.3
+        version: 3.6.2
       react:
         specifier: ^19.1.1
         version: 19.1.1
@@ -689,7 +689,7 @@ importers:
         version: 9.32.0(jiti@2.4.2)
       prettier:
         specifier: 'catalog:'
-        version: 3.5.3
+        version: 3.6.2
       react:
         specifier: ^19.1.1
         version: 19.1.1
@@ -734,7 +734,7 @@ importers:
         version: 13.0.2(postcss@8.5.6)
       prettier:
         specifier: 'catalog:'
-        version: 3.5.3
+        version: 3.6.2
       tailwindcss:
         specifier: 'catalog:'
         version: 3.4.17(ts-node@10.9.2(@swc/core@1.13.2(@swc/helpers@0.5.17))(@types/node@22.16.4)(typescript@5.8.3))
@@ -783,7 +783,7 @@ importers:
         version: 9.32.0(jiti@2.4.2)
       prettier:
         specifier: 'catalog:'
-        version: 3.5.3
+        version: 3.6.2
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
@@ -796,13 +796,13 @@ importers:
     dependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.5.1
-        version: 4.5.1(prettier@3.5.3)
+        version: 4.5.1(prettier@3.6.2)
       prettier:
         specifier: 'catalog:'
-        version: 3.5.3
+        version: 3.6.2
       prettier-plugin-tailwindcss:
         specifier: ^0.6.14
-        version: 0.6.14(@ianvs/prettier-plugin-sort-imports@4.5.1(prettier@3.5.3))(prettier@3.5.3)
+        version: 0.6.14(@ianvs/prettier-plugin-sort-imports@4.5.1(prettier@3.6.2))(prettier@3.6.2)
     devDependencies:
       '@types/node':
         specifier: 22.16.4
@@ -8733,8 +8733,8 @@ packages:
       prettier-plugin-svelte:
         optional: true
 
-  prettier@3.5.3:
-    resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -12330,13 +12330,13 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.2': {}
 
-  '@ianvs/prettier-plugin-sort-imports@4.5.1(prettier@3.5.3)':
+  '@ianvs/prettier-plugin-sort-imports@4.5.1(prettier@3.6.2)':
     dependencies:
       '@babel/generator': 7.28.0
       '@babel/parser': 7.28.0
       '@babel/traverse': 7.28.0
       '@babel/types': 7.28.0
-      prettier: 3.5.3
+      prettier: 3.6.2
       semver: 7.7.2
     transitivePeerDependencies:
       - supports-color
@@ -19792,13 +19792,13 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-tailwindcss@0.6.14(@ianvs/prettier-plugin-sort-imports@4.5.1(prettier@3.5.3))(prettier@3.5.3):
+  prettier-plugin-tailwindcss@0.6.14(@ianvs/prettier-plugin-sort-imports@4.5.1(prettier@3.6.2))(prettier@3.6.2):
     dependencies:
-      prettier: 3.5.3
+      prettier: 3.6.2
     optionalDependencies:
-      '@ianvs/prettier-plugin-sort-imports': 4.5.1(prettier@3.5.3)
+      '@ianvs/prettier-plugin-sort-imports': 4.5.1(prettier@3.6.2)
 
-  prettier@3.5.3: {}
+  prettier@3.6.2: {}
 
   pretty-format@27.5.1:
     dependencies:
