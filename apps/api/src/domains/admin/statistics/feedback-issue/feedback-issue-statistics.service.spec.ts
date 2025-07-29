@@ -240,8 +240,8 @@ describe('FeedbackIssueStatisticsService suite', () => {
 
       await feedbackIssueStatsService.addCronJobByProjectId(projectId);
 
-      expect(schedulerRegistry.addCronJob).toBeCalledTimes(1);
-      expect(schedulerRegistry.addCronJob).toBeCalledWith(
+      expect(schedulerRegistry.addCronJob).toHaveBeenCalledTimes(1);
+      expect(schedulerRegistry.addCronJob).toHaveBeenCalledWith(
         `feedback-issue-statistics-${projectId}`,
         expect.anything(),
       );
@@ -273,7 +273,7 @@ describe('FeedbackIssueStatisticsService suite', () => {
         dayToCreate,
       );
 
-      expect(feedbackIssueStatsRepo.manager.transaction).toBeCalledTimes(
+      expect(feedbackIssueStatsRepo.manager.transaction).toHaveBeenCalledTimes(
         dayToCreate * issueCount,
       );
     });
@@ -300,9 +300,9 @@ describe('FeedbackIssueStatisticsService suite', () => {
         feedbackCount,
       });
 
-      expect(feedbackIssueStatsRepo.findOne).toBeCalledTimes(1);
-      expect(feedbackIssueStatsRepo.save).toBeCalledTimes(1);
-      expect(feedbackIssueStatsRepo.save).toBeCalledWith({
+      expect(feedbackIssueStatsRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(feedbackIssueStatsRepo.save).toHaveBeenCalledTimes(1);
+      expect(feedbackIssueStatsRepo.save).toHaveBeenCalledWith({
         feedbackCount: 1 + feedbackCount,
       });
     });
@@ -331,10 +331,12 @@ describe('FeedbackIssueStatisticsService suite', () => {
         feedbackCount,
       });
 
-      expect(feedbackIssueStatsRepo.findOne).toBeCalledTimes(1);
-      expect(feedbackIssueStatsRepo.createQueryBuilder).toBeCalledTimes(1);
-      expect(createQueryBuilder.values).toBeCalledTimes(1);
-      expect(createQueryBuilder.values).toBeCalledWith({
+      expect(feedbackIssueStatsRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(feedbackIssueStatsRepo.createQueryBuilder).toHaveBeenCalledTimes(
+        1,
+      );
+      expect(createQueryBuilder.values).toHaveBeenCalledTimes(1);
+      expect(createQueryBuilder.values).toHaveBeenCalledWith({
         date: new Date(
           DateTime.fromJSDate(date).plus({ hours: 9 }).toISO()?.split('T')[0] +
             'T00:00:00',

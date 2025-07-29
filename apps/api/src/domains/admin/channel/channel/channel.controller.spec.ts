@@ -58,7 +58,7 @@ describe('ChannelController', () => {
       dto.fields = [];
 
       await channelController.create(projectId, dto);
-      expect(MockChannelService.create).toBeCalledTimes(1);
+      expect(MockChannelService.create).toHaveBeenCalledTimes(1);
     });
   });
   describe('findAllByProjectId', () => {
@@ -71,7 +71,7 @@ describe('ChannelController', () => {
       dto.page = faker.number.int();
 
       await channelController.findAllByProjectId(projectId, dto);
-      expect(MockChannelService.findAllByProjectId).toBeCalledTimes(1);
+      expect(MockChannelService.findAllByProjectId).toHaveBeenCalledTimes(1);
     });
   });
   describe('delete', () => {
@@ -80,7 +80,7 @@ describe('ChannelController', () => {
       const channelId = faker.number.int();
 
       await channelController.delete(channelId);
-      expect(MockChannelService.deleteById).toBeCalledTimes(1);
+      expect(MockChannelService.deleteById).toHaveBeenCalledTimes(1);
     });
   });
 });
