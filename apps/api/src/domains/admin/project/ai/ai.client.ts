@@ -243,9 +243,8 @@ export class AIClient {
   }
 
   async executePromptInternal(params: PromptParameters): Promise<PromptResult> {
+    let response: ExecutePromptResponse = {} as ExecutePromptResponse;
     try {
-      let response: ExecutePromptResponse;
-
       const systemPrompt = getRefinedSystemPrompt(
         params.systemPrompt,
         params.projectName,
@@ -328,7 +327,7 @@ export class AIClient {
     } catch (error) {
       const result = new PromptResult();
       result.status = AIPromptStatusEnum.error;
-      result.content = `Error executing prompt: ${error}`;
+      result.content = `Error executing prompt: ${error.response.data.error.message}`;
       result.usedTokens = 0;
       result.statusCode = (error as ErrorResponse).status;
 
@@ -337,9 +336,8 @@ export class AIClient {
   }
 
   async executeIssueRecommend(params: IssueRecommendParameters) {
+    let response: ExecutePromptResponse = {} as ExecutePromptResponse;
     try {
-      let response: ExecutePromptResponse;
-
       const systemPrompt = getRefinedSystemPrompt(
         params.systemPrompt,
         params.projectName,
@@ -422,7 +420,7 @@ export class AIClient {
     } catch (error) {
       const result = new PromptResult();
       result.status = AIPromptStatusEnum.error;
-      result.content = `Error executing prompt: ${error}`;
+      result.content = `Error executing prompt: ${error.response.data.error.message}`;
       result.usedTokens = 0;
       result.statusCode = (error as ErrorResponse).status;
 
