@@ -125,6 +125,12 @@ export const useAITemplateForm = (projectId: number) => {
             original.temperature / temperatureMultiplier
           : original.temperature,
       });
+      if (!modelData?.models.some((model) => model.id === original.model)) {
+        methods.setError('model', {
+          type: 'manual',
+          message: 'Model is not available',
+        });
+      }
       return;
     }
 
@@ -147,6 +153,13 @@ export const useAITemplateForm = (projectId: number) => {
       methods.setError('title', {
         type: 'manual',
         message: 'A template with this title already exists.',
+      });
+      return;
+    }
+    if (!modelData?.models.some((model) => model.id === values.model)) {
+      methods.setError('model', {
+        type: 'manual',
+        message: 'Model is not available',
       });
       return;
     }

@@ -145,6 +145,13 @@ export const useAIIssueForm = (projectId: number) => {
             original.temperature / temperatureMultiplier
           : original.temperature,
       } as AIIssue);
+      if (!modelData?.models.some((model) => model.id === original.model)) {
+        methods.setError('model', {
+          type: 'manual',
+          message: 'Model is not available',
+        });
+      }
+
       return;
     }
 
@@ -172,6 +179,13 @@ export const useAIIssueForm = (projectId: number) => {
       methods.setError('channelId', {
         type: 'manual',
         message: 'A channel with this ID already exists.',
+      });
+      return;
+    }
+    if (!modelData?.models.some((model) => model.id === values.model)) {
+      methods.setError('model', {
+        type: 'manual',
+        message: 'Model is not available',
       });
       return;
     }

@@ -72,6 +72,8 @@ const FeedbackLineChartWrapper: React.FC<IProps> = (props) => {
     data?.channels ?? [],
   );
 
+  console.log('chartData: ', chartData);
+
   return (
     <SimpleLineChart
       title={t('chart.feedback-trend.title')}

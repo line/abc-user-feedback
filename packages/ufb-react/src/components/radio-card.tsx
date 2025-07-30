@@ -20,8 +20,6 @@ import { cva } from 'class-variance-authority';
 
 import { cn } from '../lib/utils';
 import type { Radius } from '../types';
-import type { IconNameType } from './icon';
-import { Icon } from './icon';
 import useTheme from './use-theme';
 
 const radioCardGroupVariants = cva('radio-card-group', {
@@ -103,7 +101,7 @@ const RadioCard = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> &
     VariantProps<typeof radioCardVariants> & {
-      icon?: IconNameType;
+      icon?: React.ReactNode;
       title?: React.ReactNode;
       description?: React.ReactNode;
     }
@@ -115,7 +113,7 @@ const RadioCard = React.forwardRef<
       className={cn(radioCardVariants({ type, radius, className }))}
       {...props}
     >
-      {icon && <Icon name={icon} size={24} />}
+      {icon}
       <span className="radio-card-text">
         {title && <strong className="radio-card-title">{title}</strong>}
         {description && (

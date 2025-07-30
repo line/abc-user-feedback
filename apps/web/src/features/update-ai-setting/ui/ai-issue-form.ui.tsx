@@ -118,7 +118,7 @@ export const AIIssueFormButton = ({ projectId }: { projectId: number }) => {
         disabled={!templateId}
         loading={isDeletePending}
       >
-        {t('v2.button.name.delete', { name: 'Template' })}
+        {t('v2.button.delete')}
       </Button>
       <Button
         form={formId}

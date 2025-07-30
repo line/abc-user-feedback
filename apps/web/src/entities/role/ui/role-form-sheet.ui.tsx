@@ -50,6 +50,7 @@ import {
   IssuePermissionText,
   PermissionList,
   ProjectApiKeyPermissionList,
+  ProjectGenerativeAIPermissionList,
   ProjectInfoPermissionList,
   ProjectMemberPermissionList,
   ProjectPermissionText,
@@ -255,6 +256,13 @@ const RoleFormSheet: React.FC<Props> = (props) => {
                 title="Webhook"
                 permmissionsText={ProjectPermissionText}
                 permissions={ProjectWebhookPermissionList}
+                currentPermissions={currentPerms}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Generative AI"
+                permmissionsText={ProjectPermissionText}
+                permissions={ProjectGenerativeAIPermissionList}
                 currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />

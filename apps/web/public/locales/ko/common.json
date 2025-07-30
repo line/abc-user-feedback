@@ -38,7 +38,7 @@
       "dialog": {
         "create-role": {
           "title": "Role 생성",
-          "description": "신규 Role Name을 입력해주세요."
+          "description": "신규 Role Name을 입력해 주세요."
         },
         "delete-option": {
           "title": "옵선 삭제",
@@ -243,7 +243,7 @@
   },
   "hint": {
     "required": "필수 입력 대상입니다.",
-    "max-length": "{{length}}자 이하로 입력해주세요.",
+    "max-length": "{{length}}자 이하로 입력해 주세요.",
     "name-already-exists": "이미 존재하는 {{name}}입니다.",
     "image-format": "Image URL을 입력하는 포맷입니다.",
     "invalid-domain": "도메인 형식이 아닙니다."
@@ -384,7 +384,7 @@
     },
     "placeholder": {
       "select": "선택해주세요.",
-      "text": "입력해주세요.",
+      "text": "입력해 주세요.",
       "text-or-generate": "입력 또는 생성해주세요.",
       "ai-endpoint-url": "별도의 Endpoint URL 설정이 필요한 경우에만 입력해 주세요.",
       "system-prompt": "생성형 AI가 추가적으로 참고해야 할 내용이 있다면 입력해 주세요.",

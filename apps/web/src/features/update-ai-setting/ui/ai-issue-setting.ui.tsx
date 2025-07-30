@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import { Icon, Tag } from '@ufb/react';
@@ -36,34 +37,60 @@ export const AiIssueSetting = ({
 }) => {
   const { t } = useTranslation();
 
-  const { data: issueTemplates } = useOAIQuery({
+  const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/issueTemplates',
     variables: { projectId },
   });
   const { data: channelData } = useAllChannels(projectId);
+  const { data: modelData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/ai/integrations/models',
+    variables: { projectId },
+  });
+  const [templates, setTemplates] = useState<
+    {
+      id: number;
+      title: string;
+      prompt: string;
+      isError?: boolean;
+      isEnabled?: boolean;
+    }[]
+  >([]);
 
+  useEffect(() => {
+    if (!data) return;
+    setTemplates(
+      data.map((template) => ({
+        id: template.id,
+        title:
+          channelData?.items.find(
+            (channel) => channel.id === template.channelId,
+          )?.name ?? 'Unknown Channel',
+        prompt: template.prompt,
+        isEnabled: template.isEnabled,
+        isError:
+          modelData ?
+            !modelData.models.some((model) => model.id === template.model)
+          : false,
+      })),
+    );
+  }, [data, modelData, channelData]);
   return (
     <>
       <SettingAlert description={t('help-card.ai-issue-recommendation')} />
       <div className="grid grid-cols-4 gap-4">
-        {issueTemplates?.length !== channelData?.items.length && (
+        {templates.length !== channelData?.items.length && (
           <TemplateCard
             type="create"
             title="Create New"
             onClick={() => onClick()}
           />
         )}
-        {issueTemplates?.map(({ id, prompt, channelId, isEnabled }) => (
+        {templates.map((template) => (
           <TemplateCard
-            key={id}
+            key={template.id}
             type="update"
-            title={
-              channelData?.items.find((channel) => channel.id === channelId)
-                ?.name ?? 'Unknown Channel'
-            }
-            isEnabled={isEnabled}
-            description={prompt}
-            onClick={() => onClick(id)}
+            {...template}
+            onClick={() => onClick(template.id)}
           />
         ))}
       </div>
@@ -73,12 +100,13 @@ export const AiIssueSetting = ({
 
 const TemplateCard = (props: {
   title: string;
-  description?: string;
+  prompt?: string;
   type: 'create' | 'update';
   isEnabled?: boolean;
+  isError?: boolean;
   onClick?: () => void;
 }) => {
-  const { title, description, type, onClick, isEnabled } = props;
+  const { title, prompt, type, onClick, isEnabled, isError } = props;
   return (
     <Card
       onClick={onClick}
@@ -90,24 +118,33 @@ const TemplateCard = (props: {
             {type === 'create' && (
               <Icon name="RiAddCircleFill" className="text-neutral-tertiary" />
             )}
-            <h4 className="text-title-h4">{title}</h4>
+            {type === 'update' && (
+              <Tag
+                className="text-small-normal"
+                variant={isEnabled ? 'primary' : 'secondary'}
+                radius="large"
+              >
+                {isEnabled ? 'Enabled' : 'Disabled'}
+              </Tag>
+            )}
+            <h4 className="text-title-h4">
+              {title}{' '}
+              {isError && (
+                <Icon
+                  name="RiErrorWarningFill"
+                  className="ml-1 text-red-500"
+                  size={16}
+                />
+              )}
+            </h4>
           </div>
-          {type === 'update' && (
-            <Tag
-              className="text-small-normal"
-              variant={isEnabled ? 'primary' : 'secondary'}
-              radius="large"
-            >
-              {isEnabled ? 'Enabled' : 'Disabled'}
-            </Tag>
-          )}
         </div>
-        {description && (
+        {prompt && (
           <div>
             <p className="text-small-normal">Prompt Preview</p>
             <div className="bg-neutral-tertiary rounded-12 relative p-3">
               <p className="text-small-normal line-clamp-2 break-all">
-                {description}
+                {prompt}
               </p>
               <div
                 className="rounded-12 absolute inset-0"

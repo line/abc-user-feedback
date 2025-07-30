@@ -17,6 +17,7 @@
 import { useRouter } from 'next/router';
 
 import {
+  Caption,
   Dropdown,
   DropdownContent,
   DropdownItem,
@@ -28,7 +29,7 @@ import {
 import { useOAIQuery } from '@/shared';
 
 interface Props {
-  aiFieldTemplateId: number | null;
+  aiFieldTemplateId?: number | null;
 }
 
 const AiFieldOptionPopover = ({ aiFieldTemplateId }: Props) => {
@@ -42,7 +43,7 @@ const AiFieldOptionPopover = ({ aiFieldTemplateId }: Props) => {
   const aiFieldTemplate = data?.find((v) => v.id === aiFieldTemplateId);
 
   if (!aiFieldTemplate) {
-    return null;
+    return <Caption variant="error">Template is not found</Caption>;
   }
   return (
     <Dropdown>

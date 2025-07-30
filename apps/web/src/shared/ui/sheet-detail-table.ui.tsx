@@ -352,7 +352,7 @@ const SheetDetailTable = (props: Props) => {
                 />
                 <span className="break-words">{name}</span>
               </th>
-              <td className="w-3/4 whitespace-normal break-words py-2.5">
+              <td className="w-3/4 whitespace-pre-wrap break-words py-2.5">
                 {mode === 'edit' && row.editable ?
                   renderEditModeField[format](value, row)
                 : renderViewModeField[format](value, row)}

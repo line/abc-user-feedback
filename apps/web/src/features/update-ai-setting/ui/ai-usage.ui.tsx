@@ -143,7 +143,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
           </div>
         </div>
         <div className="flex gap-4">
-          <Card className="!rounded-16 flex-[1]">
+          <Card className="!rounded-16 flex-[1]" size="lg">
             <CardHeader
               className="flex-1"
               action={
@@ -161,7 +161,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
               }
             >
               <CardTitle>Token Threshold</CardTitle>
-              <CardDescription>
+              <CardDescription className="text-base-normal">
                 {t('v2.description.token-threshold')}
               </CardDescription>
             </CardHeader>
@@ -174,7 +174,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
               />
             </CardBody>
           </Card>
-          <Card className="!rounded-16 flex-[1]">
+          <Card className="!rounded-16 flex-[1]" size="lg">
             <CardHeader
               className="flex-1"
               action={
@@ -190,7 +190,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
               }
             >
               <CardTitle>Pre-limit notification</CardTitle>
-              <CardDescription>
+              <CardDescription className="text-base-normal">
                 {t('v2.description.pre-limit-notification')}
               </CardDescription>
             </CardHeader>
@@ -293,7 +293,7 @@ const AIChartCard = ({ projectId }: { projectId: number }) => {
     while (currentDate.isBefore(endDate)) {
       const dateKey = currentDate.format('YYYY-MM-DD');
       result[dateKey] ??= {
-        date: dateKey,
+        date: currentDate.format('MM/DD'),
         Total: 0,
         'AI Field': 0,
         'AI Issue': 0,
@@ -315,9 +315,18 @@ const AIChartCard = ({ projectId }: { projectId: number }) => {
 
     return Object.values(result);
   }, [dailyData, dateRange]);
+  console.log('chartData: ', chartData);
 
   return (
     <SimpleLineChart
+      title={t('v2.text.token-usage')}
+      height={334}
+      dataKeys={[
+        { name: 'Total', color: '#4A90E2' },
+        { name: 'AI Field', color: '#50E3C2' },
+        { name: 'AI Issue', color: '#F5A623' },
+      ]}
+      data={chartData}
       filterContent={
         <DateRangePicker
           onChange={setDateRange}
@@ -326,15 +335,7 @@ const AIChartCard = ({ projectId }: { projectId: number }) => {
           numberOfMonths={1}
         />
       }
-      dataKeys={[
-        { name: 'Total', color: '#4A90E2' },
-        { name: 'AI Field', color: '#50E3C2' },
-        { name: 'AI Issue', color: '#F5A623' },
-      ]}
-      title={t('v2.text.token-usage')}
-      data={chartData}
       showLegend
-      height={334}
     />
   );
 };
@@ -380,7 +381,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
   );
 
   return (
-    <Card className="!rounded-16 h-full">
+    <Card className="!rounded-16 h-full" size="lg">
       <CardHeader>
         <CardTitle>{t('v2.text.remaining-token-amount')}</CardTitle>
       </CardHeader>

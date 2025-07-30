@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useOverlay } from '@toss/use-overlay';
@@ -22,6 +23,7 @@ import { useForm } from 'react-hook-form';
 
 import {
   Button,
+  Caption,
   Checkbox,
   Icon,
   Sheet,
@@ -43,6 +45,7 @@ import {
   CardTitle,
   DeleteDialog,
   MultiSelectInput,
+  Path,
   SelectInput,
   TextInput,
   useOAIQuery,
@@ -209,7 +212,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
           <form
             id="field-setting"
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
+            className="flex w-[450px] flex-col gap-4"
           >
             <TextInput
               label="Key"
@@ -304,26 +307,44 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
               )}
             {watch('format') === 'aiField' && (
               <>
-                <SelectInput
-                  label="Template"
-                  options={
-                    templates?.map(({ title, id }) => ({
-                      label: title,
-                      value: id.toString(),
-                    })) ?? []
-                  }
-                  disabled={isDefaultField}
-                  value={watch('aiFieldTemplateId')?.toString()}
-                  onChange={(value) =>
-                    setValue(
-                      'aiFieldTemplateId',
-                      value ? parseInt(value) : null,
-                      { shouldDirty: true },
-                    )
-                  }
-                  error={formState.errors.aiFieldTemplateId?.message}
-                  required
-                />
+                <div>
+                  <SelectInput
+                    label="Template"
+                    options={
+                      templates?.map(({ title, id }) => ({
+                        label: title,
+                        value: id.toString(),
+                      })) ?? []
+                    }
+                    disabled={isDefaultField}
+                    value={watch('aiFieldTemplateId')?.toString()}
+                    onChange={(value) =>
+                      setValue(
+                        'aiFieldTemplateId',
+                        value ? parseInt(value) : null,
+                        { shouldDirty: true },
+                      )
+                    }
+                    error={formState.errors.aiFieldTemplateId?.message}
+                    required
+                  />
+                  <Link
+                    target="_blank"
+                    href={{
+                      pathname: Path.SETTINGS,
+                      query: {
+                        menu: 'generative-ai',
+                        subMenu: 'field-template',
+                        projectId,
+                      },
+                    }}
+                  >
+                    <Caption className="mt-1 flex items-center gap-0.5">
+                      <Icon name="RiExternalLinkFill" size={16} />
+                      AI Field Template 설정하러 가기
+                    </Caption>
+                  </Link>
+                </div>
                 <MultiSelectInput
                   label="Target Field"
                   options={fieldRows.map(({ key, name }) => ({

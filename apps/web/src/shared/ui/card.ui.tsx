@@ -100,6 +100,7 @@ export const CardTitle = (
   return (
     <h4
       className={cn(
+        'mb-1',
         {
           'text-title-h4': (props.size ?? size) === 'lg',
           'text-title-h5': (props.size ?? size) === 'md',

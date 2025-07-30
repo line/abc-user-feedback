@@ -14,7 +14,6 @@
  * under the License.
  */
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
 import { useLocalStorage } from 'react-use';
@@ -25,7 +24,6 @@ import { useOAIQuery } from '@/shared';
 
 const useCheckAIUsageLimit = (projectId: number) => {
   const { t } = useTranslation();
-  const router = useRouter();
   const { data: aiIntegrations } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/integrations',
     variables: { projectId },
@@ -66,15 +64,6 @@ const useCheckAIUsageLimit = (projectId: number) => {
           setCheckedTotalLimitTime(dayjs().toISOString());
           const toastId = toast.error(t('v2.toast.ai-function-terminated'), {
             description: t('v2.toast.ai-function-terminated-description'),
-            action: {
-              label: t('v2.button.setting'),
-              onClick: () => {
-                void router.push({
-                  pathname: '/main/project/1/settings',
-                  query: { projectId, subMenu: 'usage', menu: 'generative-ai' },
-                });
-              },
-            },
             cancel: {
               label: <Icon name="RiCloseFill" size={20} />,
               onClick: () => {
@@ -91,9 +80,18 @@ const useCheckAIUsageLimit = (projectId: number) => {
       if (!notificationLimit) return;
       if (totalUsage >= notificationLimit) {
         if (!isCheckedNotificationLimit) {
-          toast.warning(t('v2.toast.ai-usage-limit-approaching'), {
-            duration: Infinity,
-          });
+          const toastId = toast.warning(
+            t('v2.toast.ai-usage-limit-approaching'),
+            {
+              cancel: {
+                label: <Icon name="RiCloseFill" size={20} />,
+                onClick: () => {
+                  toast.dismiss(toastId);
+                },
+              },
+              duration: Infinity,
+            },
+          );
           setIsCheckedNotificationLimit(true);
         }
         return;

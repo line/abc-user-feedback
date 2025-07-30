@@ -131,7 +131,6 @@ const RoleTable: React.FC<IProps> = (props) => {
           permissions={ProjectGenerativeAIPermissionList}
           roles={roles}
         />
-
         <RoleTitleRow colspan={colSpan} title="Channel" />
         <RoleTitleRow title="Channel Info" colspan={colSpan} sub />
         <PermissionRows

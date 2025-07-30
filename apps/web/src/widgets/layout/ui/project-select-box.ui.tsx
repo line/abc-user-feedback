@@ -51,10 +51,17 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   const { data } = useAllProjects();
 
   const onChangeProject = async (currentProjectId?: string) => {
-    await router.push({
-      pathname: router.pathname,
-      query: { projectId: currentProjectId },
-    });
+    if (router.pathname.includes('projectId')) {
+      await router.push({
+        pathname: router.pathname,
+        query: { projectId: currentProjectId },
+      });
+    } else {
+      await router.push({
+        pathname: Path.DASHBOARD,
+        query: { projectId: currentProjectId },
+      });
+    }
   };
 
   const openCreateProjectDialog = async () => {
