@@ -39,7 +39,7 @@ Channel Name: ${channelName}
 Channel Description: ${channelDesc}
 
 ## User's System Prompt
-The following is a specially entered System Prompt by the user, which should also be considered when responding.
+The following is a specially entered System Prompt by the user, which must also be considered when responding.
 
 ${systemPrompt}`.trim();
 }
@@ -111,10 +111,10 @@ export function getRefinedIssueRecommendationPrompt(
 ): string {
   return `
 ## Instructions
-IMPORTANT: If an Additional User Prompt exists, it should be followed first.
+IMPORTANT: If an Additional User Prompt exists, it must be followed first.
 IMPORTANT: Respond with the results of the AI Issue recommendation based on the following descriptions, feedback, and existing issues.
 IMPORTANT: When responding, return only the text format of the recommended Issues, excluding any unnecessary information such as special characters.
-IMPORTANT: If there are multiple issues, separate them with a comma (,), and the language of all the letters in the issues that are printed in response should be consistent.
+IMPORTANT: If there are multiple issues, separate them with a comma (,), and the language of all the letters in the issues that are printed in response must be consistent.
 IMPORTANT: Ensure each response value separated by a comma is no longer than 30 characters.
 IMPORTANT: Please recommend between 2 and 3 issues, but with high accuracy, preferably many non-overlapping issues.
 
