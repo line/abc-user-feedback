@@ -235,8 +235,8 @@ importers:
         specifier: ^30.0.0
         version: 30.0.0
       '@types/luxon':
-        specifier: ^3.7.0
-        version: 3.7.0
+        specifier: ^3.7.1
+        version: 3.7.1
       '@types/node':
         specifier: 22.16.4
         version: 22.16.4
@@ -4699,8 +4699,8 @@ packages:
   '@types/luxon@3.6.2':
     resolution: {integrity: sha512-R/BdP7OxEMc44l2Ex5lSXHoIXTB2JLNa3y2QISIbr58U/YcsffyQrYW//hZSdrfxrjRZj3GcUoxMPGdO8gSYuw==}
 
-  '@types/luxon@3.7.0':
-    resolution: {integrity: sha512-zNduyjkTXTttOp0KUG7ueFORgq6eyFsjbCZ/B8UfrVmfkHD1V9xC9wN/Vk0XUg0R/k/aIX1NeFwZgwe5hsDXfA==}
+  '@types/luxon@3.7.1':
+    resolution: {integrity: sha512-H3iskjFIAn5SlJU7OuxUmTEpebK6TKB8rxZShDslBMZJ5u9S//KM1sbdAisiSrqwLQncVjnpi2OK2J51h+4lsg==}
 
   '@types/methods@1.1.4':
     resolution: {integrity: sha512-ymXWVrDiCxTBE3+RIrrP533E70eA+9qu7zdWoHuOmGujkYtzf4HQF96b8nwHLqhuf4ykX61IGRIB38CC6/sImQ==}
@@ -14902,7 +14902,7 @@ snapshots:
 
   '@types/luxon@3.6.2': {}
 
-  '@types/luxon@3.7.0': {}
+  '@types/luxon@3.7.1': {}
 
   '@types/methods@1.1.4': {}
 

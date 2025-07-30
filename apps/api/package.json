@@ -93,7 +93,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
-    "@types/luxon": "^3.7.0",
+    "@types/luxon": "^3.7.1",
     "@types/node": "22.16.4",
     "@types/nodemailer": "^6.4.17",
     "@types/passport-jwt": "*",
