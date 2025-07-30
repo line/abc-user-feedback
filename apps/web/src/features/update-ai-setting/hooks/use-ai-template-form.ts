@@ -107,6 +107,19 @@ export const useAITemplateForm = (projectId: number) => {
     setIsDirty(formState.isDirty);
   }, [formState.isDirty, setIsDirty]);
 
+  const model = methods.watch('model');
+  useEffect(() => {
+    if (!modelData) return;
+    if (!modelData.models.some((m) => m.id === model)) {
+      methods.setError('model', {
+        type: 'manual',
+        message: 'Model is not available',
+      });
+    } else {
+      methods.clearErrors('model');
+    }
+  }, [modelData, model]);
+
   useEffect(() => {
     if (!templateData) return;
 
@@ -125,12 +138,6 @@ export const useAITemplateForm = (projectId: number) => {
             original.temperature / temperatureMultiplier
           : original.temperature,
       });
-      if (!modelData?.models.some((model) => model.id === original.model)) {
-        methods.setError('model', {
-          type: 'manual',
-          message: 'Model is not available',
-        });
-      }
       return;
     }
 

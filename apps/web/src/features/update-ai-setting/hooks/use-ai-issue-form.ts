@@ -127,6 +127,19 @@ export const useAIIssueForm = (projectId: number) => {
     setIsDirty(formState.isDirty);
   }, [formState.isDirty, setIsDirty]);
 
+  const model = methods.watch('model');
+  useEffect(() => {
+    if (!modelData) return;
+    if (!modelData.models.some((m) => m.id === model)) {
+      methods.setError('model', {
+        type: 'manual',
+        message: 'Model is not available',
+      });
+    } else {
+      methods.clearErrors('model');
+    }
+  }, [modelData, model]);
+
   useEffect(() => {
     if (!templateData) return;
 
