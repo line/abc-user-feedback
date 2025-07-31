@@ -553,6 +553,7 @@ export class AIService {
     aiField: FieldEntity,
     aiTargetFields: FieldEntity[],
     fields: FieldEntity[],
+    isAutoProcess: boolean = false,
   ): Promise<boolean> {
     const integration = await this.aiIntegrationsRepo.findOne({
       where: {
@@ -571,6 +572,7 @@ export class AIService {
     }
 
     if (!aiField.aiFieldTemplate.model) {
+      if (isAutoProcess) return false;
       throw new BadRequestException(
         'The model is not set for the AI field template',
       );

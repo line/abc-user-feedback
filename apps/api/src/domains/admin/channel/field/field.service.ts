@@ -65,7 +65,11 @@ export class FieldService {
           type: 'object',
           properties: {
             status: { type: 'text' },
-            message: { type: 'text' },
+            message: {
+              type: 'text',
+              analyzer: 'ngram_analyzer',
+              search_analyzer: 'ngram_analyzer',
+            },
           },
         } as Property;
       } else if (field.format === FieldFormatEnum.date) {
