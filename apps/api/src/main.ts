@@ -20,7 +20,7 @@ import { NestFactory } from '@nestjs/core';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Request } from 'express';
+import type { Request } from 'express';
 import fastify from 'fastify';
 import { Logger } from 'nestjs-pino';
 import pinoHttp from 'pino-http';
@@ -46,9 +46,12 @@ async function bootstrap() {
         const rawReqRefSymbol = Object.getOwnPropertySymbols(req).find(
           (symbol) => symbol.toString() === 'Symbol(pino-raw-req-ref)',
         );
-        let body = undefined;
+        type RawRequest = {
+          body?: object;
+        };
+        let body: object | undefined = undefined;
         if (rawReqRefSymbol) {
-          body = req[rawReqRefSymbol].body;
+          body = (req[rawReqRefSymbol] as RawRequest).body;
         }
         return {
           id: req.id,
