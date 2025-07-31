@@ -77,21 +77,19 @@ async function bootstrap() {
       if (sanitizedBody.password) {
         sanitizedBody.password = '***';
       }
-      request.body = sanitizedBody;
 
       const sanitizedHeaders = { ...request.headers };
       if (sanitizedHeaders.authorization) {
         sanitizedHeaders.authorization = '***';
       }
-      request.headers = sanitizedHeaders;
 
       pino.logger.info({
         req: {
           id: request.id,
           method: request.method,
           url: request.url,
-          headers: request.headers,
-          body: request.body,
+          headers: sanitizedHeaders,
+          body: sanitizedBody,
           params: request.params,
           query: request.query,
         },
