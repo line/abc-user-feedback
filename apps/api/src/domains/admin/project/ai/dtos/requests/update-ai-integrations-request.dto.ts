@@ -19,6 +19,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Max,
   MaxLength,
 } from 'class-validator';
 
@@ -46,6 +47,7 @@ export class UpdateAIIntegrationsRequestDto {
   @ApiProperty({ nullable: true, type: Number })
   @IsOptional()
   @IsNumber()
+  @Max(50000000)
   tokenThreshold?: number | null;
 
   @ApiProperty({ nullable: true, type: Number })
