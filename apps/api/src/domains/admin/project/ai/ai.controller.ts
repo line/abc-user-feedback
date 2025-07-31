@@ -194,7 +194,7 @@ export class AIController {
     await this.aiService.deleteIssueTemplateById(templateId);
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_read)
+  @RequirePermission(PermissionEnum.feedback_update)
   @ApiOkResponse()
   @ApiParam({ name: 'projectId', type: Number })
   @Post('process')
@@ -202,7 +202,7 @@ export class AIController {
     await this.aiService.processFeedbacksAIFields(body.feedbackIds);
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_read)
+  @RequirePermission(PermissionEnum.feedback_update)
   @ApiOkResponse()
   @ApiParam({ name: 'projectId', type: Number })
   @Post('process/field')
