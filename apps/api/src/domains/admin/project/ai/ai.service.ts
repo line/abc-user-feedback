@@ -1083,11 +1083,11 @@ export class AIService {
   async addPermissions() {
     const permissions: Record<string, PermissionEnum[]> = {
       Admin: [
-        PermissionEnum.generative_ai_read,
-        PermissionEnum.generative_ai_update,
+        PermissionEnum.project_genai_read,
+        PermissionEnum.project_genai_update,
       ],
-      Editor: [PermissionEnum.generative_ai_read],
-      Viewer: [PermissionEnum.generative_ai_read],
+      Editor: [PermissionEnum.project_genai_read],
+      Viewer: [],
     };
 
     const existingRoles = await this.roleRepo.find({

@@ -50,6 +50,9 @@ export enum PermissionEnum {
   project_webhook_update = 'project_webhook_update',
   project_webhook_delete = 'project_webhook_delete',
 
+  project_genai_read = 'project_genai_read',
+  project_genai_update = 'project_genai_update',
+
   channel_create = 'channel_create',
   channel_update = 'channel_update',
   channel_delete = 'channel_delete',
@@ -57,9 +60,6 @@ export enum PermissionEnum {
   channel_field_update = 'channel_field_update',
   channel_image_read = 'channel_image_read',
   channel_image_update = 'channel_image_update',
-
-  generative_ai_read = 'generative_ai_read',
-  generative_ai_update = 'generative_ai_update',
 }
 
 export const AllPermissions = Object.values(PermissionEnum);

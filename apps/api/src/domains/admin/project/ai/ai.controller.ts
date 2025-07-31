@@ -78,7 +78,7 @@ export class AIController {
     );
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_read)
+  @RequirePermission(PermissionEnum.project_genai_read)
   @ApiOkResponse({ type: GetAIIntegrationResponseDto })
   @Get('integrations')
   async getIntegration(@Param('projectId', ParseIntPipe) projectId: number) {
@@ -87,7 +87,7 @@ export class AIController {
     );
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_update)
+  @RequirePermission(PermissionEnum.project_genai_update)
   @ApiCreatedResponse({ type: CreateAIIntegrationsResponseDto })
   @Put('integrations')
   async updateIntegration(
@@ -101,7 +101,7 @@ export class AIController {
     );
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_read)
+  @RequirePermission(PermissionEnum.project_genai_read)
   @ApiOkResponse({ type: GetAIIntegrationsModelsResponseDto })
   @Get('integrations/models')
   async getModels(@Param('projectId', ParseIntPipe) projectId: number) {
@@ -110,7 +110,7 @@ export class AIController {
     });
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_read)
+  @RequirePermission(PermissionEnum.project_genai_read)
   @ApiOkResponse({ type: [GetAIFieldTemplatesResponseDto] })
   @Get('fieldTemplates')
   async getFieldTemplates(@Param('projectId', ParseIntPipe) projectId: number) {
@@ -119,7 +119,7 @@ export class AIController {
     );
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_update)
+  @RequirePermission(PermissionEnum.project_genai_update)
   @ApiCreatedResponse({ type: CreateAIFieldTemplateResponseDto })
   @ApiOkResponse()
   @Post('fieldTemplates/new')
@@ -132,7 +132,7 @@ export class AIController {
     );
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_update)
+  @RequirePermission(PermissionEnum.project_genai_update)
   @Put('fieldTemplates/:templateId')
   async updateFieldTemplate(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -146,7 +146,7 @@ export class AIController {
     });
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_update)
+  @RequirePermission(PermissionEnum.project_genai_update)
   @Delete('fieldTemplates/:templateId')
   async deleteFieldTemplate(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -155,7 +155,7 @@ export class AIController {
     await this.aiService.deleteFieldTemplateById(projectId, templateId);
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_read)
+  @RequirePermission(PermissionEnum.project_genai_read)
   @ApiOkResponse({ type: [GetAIIssueTemplatesResponseDto] })
   @Get('issueTemplates')
   async getIssueTemplates(@Param('projectId', ParseIntPipe) projectId: number) {
@@ -164,7 +164,7 @@ export class AIController {
     );
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_update)
+  @RequirePermission(PermissionEnum.project_genai_update)
   @ApiCreatedResponse({ type: CreateAIIssueTemplateResponseDto })
   @ApiOkResponse()
   @Post('issueTemplates/new')
@@ -174,7 +174,7 @@ export class AIController {
     );
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_update)
+  @RequirePermission(PermissionEnum.project_genai_update)
   @Put('issueTemplates/:templateId')
   async updateIssueTemplate(
     @Param('templateId', ParseIntPipe) templateId: number,
@@ -186,7 +186,7 @@ export class AIController {
     });
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_update)
+  @RequirePermission(PermissionEnum.project_genai_update)
   @Delete('issueTemplates/:templateId')
   async deleteIssueTemplate(
     @Param('templateId', ParseIntPipe) templateId: number,
@@ -210,7 +210,7 @@ export class AIController {
     await this.aiService.processAIField(body.feedbackId, body.aiFieldId);
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_read)
+  @RequirePermission(PermissionEnum.project_genai_read)
   @ApiOkResponse({ type: GetAIPlaygroundResultResponseDto })
   @Post('playground/test')
   async getPlaygroundResult(
@@ -225,7 +225,7 @@ export class AIController {
     });
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_read)
+  @RequirePermission(PermissionEnum.project_genai_read)
   @ApiOkResponse({ type: GetAIIssueRecommendResponseDto })
   @ApiParam({ name: 'projectId', type: Number })
   @Post('issueRecommend/:feedbackId')
@@ -237,7 +237,7 @@ export class AIController {
     );
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_read)
+  @RequirePermission(PermissionEnum.project_genai_read)
   @ApiOkResponse({ type: GetAIIssuePlaygroundResultResponseDto })
   @Post('issueRecommend/playground/test')
   async getAIIssuePlaygroundResult(
@@ -250,7 +250,7 @@ export class AIController {
     });
   }
 
-  @RequirePermission(PermissionEnum.generative_ai_read)
+  @RequirePermission(PermissionEnum.project_genai_read)
   @ApiOkResponse({ type: [GetAIUsagesResponseDto] })
   @Get('usages')
   async getUsages(
