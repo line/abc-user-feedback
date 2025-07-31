@@ -9,6 +9,6 @@
   "devDependencies": {
     "@playwright/test": "^1.54.1",
     "axios": "^1.11.0",
-    "mysql2": "^3.14.2"
+    "mysql2": "^3.14.3"
   }
 }
