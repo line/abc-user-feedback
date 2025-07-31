@@ -75,12 +75,12 @@ async function bootstrap() {
 
       const sanitizedBody: RequestBody = { ...request.body };
       if (sanitizedBody.password) {
-        sanitizedBody.password = '***';
+        sanitizedBody.password = '****';
       }
 
       const sanitizedHeaders = { ...request.headers };
       if (sanitizedHeaders.authorization) {
-        sanitizedHeaders.authorization = '***';
+        sanitizedHeaders.authorization = '****';
       }
 
       pino.logger.info({
