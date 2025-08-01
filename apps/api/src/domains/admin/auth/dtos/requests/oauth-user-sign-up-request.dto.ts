@@ -14,7 +14,7 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class OAuthUserSignUpRequestDto {
   @ApiProperty()
@@ -23,6 +23,7 @@ export class OAuthUserSignUpRequestDto {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   projectName: string;
 
   @ApiProperty()
