@@ -279,9 +279,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                   required
                 />
                 {watch('format') === 'images' && (
-                  <p className="text-small-normal mt-2">
-                    {t('hint.image-format')}
-                  </p>
+                  <Caption>{t('hint.image-format')}</Caption>
                 )}
               </div>
               {(watch('format') === 'select' ||
