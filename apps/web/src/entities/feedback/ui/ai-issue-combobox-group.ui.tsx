@@ -83,10 +83,6 @@ const AiIssueComboboxGroup = ({
           setErrorMessage(data.message);
         }
       },
-      onError(error) {
-        setStatus('error');
-        setErrorMessage(error.message ?? '');
-      },
     },
   });
 

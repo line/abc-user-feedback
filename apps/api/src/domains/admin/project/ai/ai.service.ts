@@ -896,11 +896,12 @@ export class AIService {
         feedback.channel.project.id,
         integration.provider,
       )
-    )
+    ) {
+      console.log(111);
       throw new BadRequestException(
         'Token threshold exceeded, cannot process AI Issue recommendation',
       );
-
+    }
     const issueTemplate = await this.aiIssueTemplatesRepo.findOne({
       where: {
         channel: {
