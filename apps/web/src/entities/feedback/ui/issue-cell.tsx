@@ -205,7 +205,7 @@ const IssueCell: React.FC<IProps> = (props) => {
           </button>
         </ComboboxTrigger>
         <ComboboxContent
-          commandProps={{ filter: commandFilter }}
+          options={{ filter: commandFilter }}
           className="w-[320px]"
         >
           <ComboboxInput

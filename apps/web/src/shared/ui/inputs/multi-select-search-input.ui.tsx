@@ -96,7 +96,7 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
           : t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
-        <ComboboxContent align="start" commandProps={{ filter: commandFilter }}>
+        <ComboboxContent align="start" options={{ filter: commandFilter }}>
           <ComboboxInput
             placeholder={t('v2.placeholder.select')}
             value={inputValue}

@@ -411,7 +411,8 @@ const AISheetDetailCell = ({
             });
           }}
           className={cn('cursor-pointer', {
-            'opacity-50': isPending || !perms.includes('feedback_update'),
+            '!opacity-50': isPending || !perms.includes('feedback_update'),
+            'cursor-not-allowed': !perms.includes('feedback_update'),
           })}
         >
           <Icon name="RiAiGenerate" />
