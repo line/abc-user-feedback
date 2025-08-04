@@ -19,12 +19,13 @@ import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import {
   Button,
   Caption,
   Checkbox,
+  FormField,
   Icon,
   Sheet,
   SheetBody,
@@ -44,12 +45,16 @@ import {
   CardHeader,
   CardTitle,
   DeleteDialog,
-  MultiSelectInput,
   Path,
   SelectInput,
   TextInput,
   useOAIQuery,
 } from '@/shared';
+import {
+  FormInput,
+  FormMultiSelect,
+  FormSelect,
+} from '@/shared/ui/form-inputs';
 
 import { FIELD_FORMAT_ICON_MAP, FIELD_FORMAT_LIST } from '../field.constant';
 import { fieldInfoSchema } from '../field.schema';
@@ -109,8 +114,11 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     [data, fieldRows],
   );
 
+  const methods = useForm<FieldInfo>({
+    resolver: zodResolver(fieldInfoSchema),
+    defaultValues: data ?? defaultValues,
+  });
   const {
-    register,
     watch,
     setValue,
     handleSubmit,
@@ -118,10 +126,8 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     setError,
     formState,
     clearErrors,
-  } = useForm<FieldInfo>({
-    resolver: zodResolver(fieldInfoSchema),
-    defaultValues: data ?? defaultValues,
-  });
+    control,
+  } = methods;
 
   useEffect(() => {
     if (isSameKey) setValue('name', watch('key'), { shouldDirty: true });
@@ -209,217 +215,239 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
           </SheetTitle>
         </SheetHeader>
         <SheetBody asChild>
-          <form
-            id="field-setting"
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex w-[450px] flex-col gap-4"
-          >
-            <TextInput
-              label="Key"
-              {...register('key')}
-              disabled={isOriginalData || isDefaultField}
-              error={formState.errors.key?.message}
-              required={!data}
-              maxLength={20}
-            />
-            <div className="flex flex-col gap-1.5">
-              <TextInput
-                label="Display Name"
-                {...register('name')}
-                error={formState.errors.name?.message}
-                disabled={isSameKey || isDefaultField}
-                required
-                maxLength={20}
-              />
-              <Checkbox
-                checked={isSameKey}
-                onCheckedChange={(checked) => setIsSameKey(!!checked)}
-                disabled={isDefaultField}
-              >
-                {t('main.setting.same-key')}
-              </Checkbox>
-            </div>
-            <div>
-              <SelectInput
-                label="Format"
-                onChange={(value) => {
-                  setValue('format', value as FieldInfo['format'], {
-                    shouldDirty: true,
-                  });
-                  setValue('options', undefined);
-                  setValue('aiFieldTemplateId', undefined);
-                  setValue('aiFieldTargetKeys', undefined);
-                  setValue('aiFieldAutoProcessing', undefined);
-                }}
-                options={FIELD_FORMAT_LIST.map((v) => ({
-                  label: v,
-                  value: v,
-                  icon: FIELD_FORMAT_ICON_MAP[v],
-                  disabled: v === 'aiField' && !aiIntegration?.apiKey,
-                }))}
-                value={watch('format')}
-                disabled={isOriginalData || isDefaultField}
-                required
-              />
-              {watch('format') === 'images' && (
-                <p className="text-small-normal mt-2">
-                  {t('hint.image-format')}
-                </p>
-              )}
-            </div>
-            {(watch('format') === 'select' ||
-              watch('format') === 'multiSelect') &&
-              !isDefaultField && (
-                <div>
-                  <TextInput
-                    label="Select Option"
-                    value={optionInput}
-                    maxLength={20}
-                    onChange={(e) => setOptionInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        addOption();
-                      }
-                    }}
-                    error={formState.errors.options?.message}
-                    rightButton={
-                      <Button onClick={addOption}>
-                        {t('button.register')}
-                      </Button>
-                    }
-                    required
+          <FormProvider {...methods}>
+            <form
+              id="field-setting"
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex w-[450px] flex-col gap-4"
+            >
+              <FormField
+                control={control}
+                name="key"
+                render={({ field }) => (
+                  <FormInput
+                    label="Key"
+                    {...field}
+                    disabled={isOriginalData || isDefaultField}
+                    required={!data}
                   />
-                  {(watch('options') ?? []).length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {watch('options')?.map((v, i) => (
-                        <Tag key={i} radius="large" variant="secondary">
-                          {v.name}
-                          <Icon
-                            name="RiCloseLargeLine"
-                            onClick={() => removeOption(i)}
-                          />
-                        </Tag>
-                      ))}
-                    </div>
+                )}
+              />
+
+              <div className="flex flex-col gap-1.5">
+                <FormField
+                  control={control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormInput
+                      label="Display Name"
+                      {...field}
+                      disabled={isSameKey || isDefaultField}
+                      required
+                    />
                   )}
-                </div>
-              )}
-            {watch('format') === 'aiField' && (
-              <>
-                <div>
-                  <SelectInput
-                    label="Template"
-                    options={
-                      templates?.map(({ title, id }) => ({
-                        label: title,
-                        value: id.toString(),
-                      })) ?? []
-                    }
-                    disabled={isDefaultField}
-                    value={watch('aiFieldTemplateId')?.toString()}
-                    onChange={(value) =>
-                      setValue(
-                        'aiFieldTemplateId',
-                        value ? parseInt(value) : null,
-                        { shouldDirty: true },
-                      )
-                    }
-                    error={formState.errors.aiFieldTemplateId?.message}
-                    required
-                  />
-                  <Link
-                    target="_blank"
-                    href={{
-                      pathname: Path.SETTINGS,
-                      query: {
-                        menu: 'generative-ai',
-                        subMenu: 'field-template',
-                        projectId,
-                      },
-                    }}
-                  >
-                    <Caption className="mt-1 flex items-center gap-0.5">
-                      <Icon name="RiExternalLinkFill" size={16} />
-                      AI Field Template 설정하러 가기
-                    </Caption>
-                  </Link>
-                </div>
-                <MultiSelectInput
-                  label="Target Field"
-                  options={fieldRows.map(({ key, name }) => ({
-                    label: name,
-                    value: key,
-                  }))}
-                  value={watch('aiFieldTargetKeys') ?? []}
-                  onChange={(values) =>
-                    setValue('aiFieldTargetKeys', values, {
-                      shouldDirty: true,
-                    })
-                  }
-                  error={formState.errors.aiFieldTargetKeys?.message}
+                />
+                <Checkbox
+                  checked={isSameKey}
+                  onCheckedChange={(checked) => setIsSameKey(!!checked)}
                   disabled={isDefaultField}
+                >
+                  {t('main.setting.same-key')}
+                </Checkbox>
+              </div>
+              <div>
+                <SelectInput
+                  label="Format"
+                  onChange={(value) => {
+                    setValue('format', value as FieldInfo['format'], {
+                      shouldDirty: true,
+                    });
+                    setValue('options', undefined);
+                    setValue('aiFieldTemplateId', undefined);
+                    setValue('aiFieldTargetKeys', undefined);
+                    setValue('aiFieldAutoProcessing', undefined);
+                  }}
+                  options={FIELD_FORMAT_LIST.map((v) => ({
+                    label: v,
+                    value: v,
+                    icon: FIELD_FORMAT_ICON_MAP[v],
+                    disabled: v === 'aiField' && !aiIntegration?.apiKey,
+                  }))}
+                  value={watch('format')}
+                  disabled={isOriginalData || isDefaultField}
                   required
                 />
-                <Card size="sm">
-                  <CardHeader
-                    action={
-                      <Switch
-                        checked={watch('aiFieldAutoProcessing') ?? false}
-                        onCheckedChange={(checked) =>
-                          setValue('aiFieldAutoProcessing', checked, {
-                            shouldDirty: true,
-                          })
+                {watch('format') === 'images' && (
+                  <p className="text-small-normal mt-2">
+                    {t('hint.image-format')}
+                  </p>
+                )}
+              </div>
+              {(watch('format') === 'select' ||
+                watch('format') === 'multiSelect') &&
+                !isDefaultField && (
+                  <div>
+                    <TextInput
+                      label="Select Option"
+                      value={optionInput}
+                      maxLength={20}
+                      onChange={(e) => setOptionInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          addOption();
                         }
+                      }}
+                      error={formState.errors.options?.message}
+                      rightButton={
+                        <Button onClick={addOption}>
+                          {t('button.register')}
+                        </Button>
+                      }
+                      required
+                    />
+                    {(watch('options') ?? []).length > 0 && (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {watch('options')?.map((v, i) => (
+                          <Tag key={i} radius="large" variant="secondary">
+                            {v.name}
+                            <Icon
+                              name="RiCloseLargeLine"
+                              onClick={() => removeOption(i)}
+                            />
+                          </Tag>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              {watch('format') === 'aiField' && (
+                <>
+                  <div>
+                    <FormField
+                      control={control}
+                      name="aiFieldTemplateId"
+                      render={({ field }) => (
+                        <>
+                          <FormSelect
+                            label="Template"
+                            options={
+                              templates?.map(({ title, id }) => ({
+                                label: title,
+                                value: id.toString(),
+                              })) ?? []
+                            }
+                            disabled={isDefaultField}
+                            value={field.value?.toString()}
+                            onChange={(value) => {
+                              field.onChange(value ? parseInt(value) : null);
+                            }}
+                            required
+                          />
+                          <Link
+                            target="_blank"
+                            href={{
+                              pathname: Path.SETTINGS,
+                              query: {
+                                menu: 'generative-ai',
+                                subMenu: 'field-template',
+                                projectId,
+                              },
+                            }}
+                          >
+                            <Caption className="mt-1 flex items-center gap-0.5">
+                              <Icon name="RiExternalLinkFill" size={16} />
+                              {t('v2.text.go-to-ai-field-template')}
+                            </Caption>
+                          </Link>
+                        </>
+                      )}
+                    />
+                  </div>
+                  <FormField
+                    control={control}
+                    name="aiFieldTargetKeys"
+                    render={({ field }) => (
+                      <FormMultiSelect
+                        label="Target Field"
+                        options={fieldRows
+                          .filter(({ key }) => key !== watch('key'))
+                          .map(({ key, name }) => ({
+                            label: name,
+                            value: key,
+                          }))}
+                        {...field}
+                        disabled={isDefaultField}
+                        required
                       />
-                    }
-                  >
-                    <CardTitle>AI Field Automation</CardTitle>
-                    <CardDescription>
-                      {t('v2.description.ai-field-template-auto-processing')}
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-              </>
-            )}
-            <SelectInput
-              label="Property"
-              options={[
-                { label: 'Read Only', value: 'READ_ONLY' },
-                { label: 'Editable', value: 'EDITABLE' },
-              ]}
-              value={watch('property')}
-              onChange={(value) =>
-                setValue('property', value as FieldInfo['property'], {
-                  shouldDirty: true,
-                })
-              }
-              disabled={isDefaultField}
-              required
-            />
-            <SelectInput
-              label="Status"
-              options={[
-                { label: 'Active', value: 'ACTIVE' },
-                { label: 'Inactive', value: 'INACTIVE' },
-              ]}
-              value={watch('status')}
-              onChange={(value) =>
-                setValue('status', value as FieldInfo['status'], {
-                  shouldDirty: true,
-                })
-              }
-              disabled={isDefaultField}
-              required
-            />
-            <TextInput
-              label="Description"
-              {...register('description')}
-              required={false}
-              maxLength={50}
-              disabled={isDefaultField}
-            />
-          </form>
+                    )}
+                  />
+                  <Card size="sm">
+                    <CardHeader
+                      action={
+                        <Switch
+                          checked={watch('aiFieldAutoProcessing') ?? false}
+                          onCheckedChange={(checked) =>
+                            setValue('aiFieldAutoProcessing', checked, {
+                              shouldDirty: true,
+                            })
+                          }
+                        />
+                      }
+                    >
+                      <CardTitle>AI Field Automation</CardTitle>
+                      <CardDescription>
+                        {t('v2.description.ai-field-template-auto-processing')}
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                </>
+              )}
+              <FormField
+                control={control}
+                name="property"
+                render={({ field }) => (
+                  <FormSelect
+                    label="Property"
+                    options={[
+                      { label: 'Read Only', value: 'READ_ONLY' },
+                      { label: 'Editable', value: 'EDITABLE' },
+                    ]}
+                    {...field}
+                    disabled={isDefaultField}
+                    required
+                  />
+                )}
+              />
+              <FormField
+                control={control}
+                name="status"
+                render={({ field }) => (
+                  <FormSelect
+                    label="Status"
+                    options={[
+                      { label: 'Active', value: 'ACTIVE' },
+                      { label: 'Inactive', value: 'INACTIVE' },
+                    ]}
+                    {...field}
+                    disabled={isDefaultField}
+                    required
+                  />
+                )}
+              />
+              <FormField
+                control={control}
+                name="description"
+                render={({ field }) => (
+                  <FormInput
+                    label="Description"
+                    {...field}
+                    disabled={isDefaultField}
+                  />
+                )}
+              />
+            </form>
+          </FormProvider>
         </SheetBody>
         <SheetFooter>
           {data && (

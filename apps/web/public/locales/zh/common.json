@@ -371,7 +371,8 @@
       "remaining-token-amount": "剩余Token量",
       "token-threshold-percentage": "达到上限的{{percentage}}%",
       "ai-issue-ready": "我将为反馈推荐相关问题。",
-      "ai-issue-pending": "AI正在分析问题..."
+      "ai-issue-pending": "AI正在分析问题...",
+      "go-to-ai-field-template": "前往AI Field Template设置"
     },
     "create-tenant": {
       "tenant": {

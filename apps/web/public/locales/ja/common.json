@@ -371,7 +371,8 @@
       "remaining-token-amount": "残りのトークン量",
       "token-threshold-percentage": "上限値の{{percentage}}%に達しました",
       "ai-issue-ready": "フィードバックに合ったイシューを推薦します",
-      "ai-issue-pending": "AIがイシューを分析中です..."
+      "ai-issue-pending": "AIがイシューを分析中です...",
+      "go-to-ai-field-template": "AI Field Template設定へ行く"
     },
     "create-tenant": {
       "tenant": {

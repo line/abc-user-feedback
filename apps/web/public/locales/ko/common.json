@@ -366,7 +366,8 @@
       "remaining-token-amount": "잔여 토큰량",
       "token-threshold-percentage": "상한값의 {{percentage}}% 도달",
       "ai-issue-ready": "피드백에 맞는 이슈를 추천해드릴게요",
-      "ai-issue-pending": "AI가 이슈를 분석하고 있어요..."
+      "ai-issue-pending": "AI가 이슈를 분석하고 있어요...",
+      "go-to-ai-field-template": "AI Field Template 설정하러 가기"
     },
     "create-tenant": {
       "tenant": {

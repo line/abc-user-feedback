@@ -37,7 +37,7 @@ export const aiTemplateSchema = z.object({
 
 export const aiIssueSchema = z.object({
   channelId: z.number().int(),
-  targetFieldKeys: z.array(z.string()),
+  targetFieldKeys: z.array(z.string()).min(1),
   prompt: z.string().trim(),
   isEnabled: z.boolean(),
   model: z.string(),

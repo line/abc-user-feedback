@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import {
+  Caption,
   Combobox,
   ComboboxContent,
   ComboboxEmpty,
@@ -26,9 +27,8 @@ import {
   ComboboxSelectItem,
   ComboboxTrigger,
   Icon,
-  InputCaption,
   InputField,
-  InputLabel,
+  Label,
   Tag,
 } from '@ufb/react';
 
@@ -78,9 +78,9 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
   return (
     <InputField>
       {label && (
-        <InputLabel>
+        <Label>
           {label} {required && <span className="text-tint-red">*</span>}
-        </InputLabel>
+        </Label>
       )}
       <Combobox open={open} onOpenChange={setOpen}>
         <ComboboxTrigger
@@ -165,7 +165,7 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
-      {error && <InputCaption variant="error">{error}</InputCaption>}
+      {error && <Caption variant="error">{error}</Caption>}
     </InputField>
   );
 };

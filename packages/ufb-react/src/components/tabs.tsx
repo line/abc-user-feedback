@@ -13,16 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import * as React from 'react';
-import * as TabsPrimitive from '@radix-ui/react-tabs';
 
-import { cn } from '../lib/utils';
+import * as React from "react";
+import * as TabsPrimitive from "@radix-ui/react-tabs";
+
+import { cn } from "../lib/utils";
 
 const Tabs = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root>
 >(({ className, ...props }, ref) => (
-  <TabsPrimitive.Root ref={ref} className={cn('tabs', className)} {...props} />
+  <TabsPrimitive.Root ref={ref} className={cn("tabs", className)} {...props} />
 ));
 
 Tabs.displayName = TabsPrimitive.Root.displayName;
@@ -33,7 +34,7 @@ const TabsList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.List
     ref={ref}
-    className={cn('tabs-list', className)}
+    className={cn("tabs-list", className)}
     {...props}
   />
 ));
@@ -45,7 +46,7 @@ const TabsTrigger = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
-    className={cn('tabs-trigger', className)}
+    className={cn("tabs-trigger", className)}
     {...props}
   />
 ));
@@ -57,7 +58,7 @@ const TabsContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Content
     ref={ref}
-    className={cn('tabs-content', className)}
+    className={cn("tabs-content", className)}
     {...props}
   />
 ));

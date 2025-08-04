@@ -17,7 +17,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 
-import { Icon, Tag } from '@ufb/react';
+import { Badge, Icon } from '@ufb/react';
 
 import {
   Card,
@@ -119,13 +119,13 @@ const TemplateCard = (props: {
               <Icon name="RiAddCircleFill" className="text-neutral-tertiary" />
             )}
             {type === 'update' && (
-              <Tag
-                className="text-small-normal"
-                variant={isEnabled ? 'primary' : 'secondary'}
+              <Badge
+                className="text-small-normal w-fit"
+                variant={isEnabled ? 'bold' : 'subtle'}
                 radius="large"
               >
                 {isEnabled ? 'Enabled' : 'Disabled'}
-              </Tag>
+              </Badge>
             )}
             <h4 className="text-title-h4">
               {title}{' '}

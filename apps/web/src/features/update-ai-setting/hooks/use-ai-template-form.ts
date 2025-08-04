@@ -125,18 +125,9 @@ export const useAITemplateForm = (projectId: number) => {
 
     const original = templateData.find((v) => v.id === templateId);
     if (original) {
-      const temperatureMultiplier =
-        integrationData?.provider === 'GEMINI' ?
-          PROVIDER_MODEL_CONFIG.GEMINI.temperatureMultiplier
-        : PROVIDER_MODEL_CONFIG.DEFAULT.temperatureMultiplier;
-
       methods.reset({
         ...AI_TEMPLATE_DEFAULT_VALUES,
         ...original,
-        temperature:
-          integrationData?.provider === 'GEMINI' ?
-            original.temperature / temperatureMultiplier
-          : original.temperature,
       });
       return;
     }
@@ -163,6 +154,7 @@ export const useAITemplateForm = (projectId: number) => {
       });
       return;
     }
+
     if (!modelData?.models.some((model) => model.id === values.model)) {
       methods.setError('model', {
         type: 'manual',
@@ -171,19 +163,10 @@ export const useAITemplateForm = (projectId: number) => {
       return;
     }
 
-    const input = {
-      ...values,
-      temperature:
-        integrationData?.provider === 'GEMINI' ?
-          values.temperature *
-          PROVIDER_MODEL_CONFIG.GEMINI.temperatureMultiplier
-        : values.temperature,
-    };
-
     if (templateId) {
-      updateTemplate({ ...input, templateId });
+      updateTemplate({ ...values, templateId });
     } else {
-      createTemplate(input);
+      createTemplate(values);
     }
   };
 

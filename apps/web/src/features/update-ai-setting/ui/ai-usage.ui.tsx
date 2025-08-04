@@ -18,7 +18,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import {
   Label,
   PolarGrid,
@@ -30,7 +30,7 @@ import {
 import { z } from 'zod';
 import { create } from 'zustand';
 
-import { Button, Switch, toast } from '@ufb/react';
+import { Button, FormField, Switch, toast } from '@ufb/react';
 
 import type { DateRangeType } from '@/shared';
 import {
@@ -43,11 +43,11 @@ import {
   SelectInput,
   SettingAlert,
   SimpleLineChart,
-  TextInput,
   useOAIMutation,
   useOAIQuery,
   useWarnIfUnsavedChanges,
 } from '@/shared';
+import { FormInput } from '@/shared/ui/form-inputs';
 
 import type { AISettingStore } from '../ai-setting-form.type';
 
@@ -67,8 +67,8 @@ type UsageForm = z.infer<typeof usageSchema>;
 export const AIUsageForm = ({ projectId }: { projectId: number }) => {
   const { t } = useTranslation();
 
-  const { register, formState, setValue, watch, handleSubmit, reset } =
-    useForm<UsageForm>({ resolver: zodResolver(usageSchema) });
+  const methods = useForm<UsageForm>({ resolver: zodResolver(usageSchema) });
+  const { formState, setValue, watch, handleSubmit, reset, control } = methods;
 
   const { formId, setIsPending, setIsDirty } = useAIUsageFormStore();
 
@@ -113,7 +113,6 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
       });
     }
   }, [integrationData]);
-  console.log(watch('percentage'));
 
   const onSubmit = (data: UsageForm) => {
     if (!integrationData) return;
@@ -133,121 +132,139 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
   return (
     <>
       <SettingAlert description={t('help-card.ai-usage')} />
-      <form id={formId} onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-row gap-4">
-          <div className="flex-[2]">
-            <AIChartCard projectId={projectId} />
+      <FormProvider {...methods}>
+        <form id={formId} onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-row gap-4">
+            <div className="flex-[2]">
+              <AIChartCard projectId={projectId} />
+            </div>
+            <div className="flex-[1]">
+              <AIChartUsageCard projectId={projectId} />
+            </div>
           </div>
-          <div className="flex-[1]">
-            <AIChartUsageCard projectId={projectId} />
+          <div className="flex gap-4">
+            <Card className="!rounded-16 flex-[1]" size="lg">
+              <CardHeader
+                className="flex-1"
+                action={
+                  <FormField
+                    control={control}
+                    name="tokenThreshold"
+                    render={({ field }) => (
+                      <Switch
+                        checked={field.value !== null}
+                        onCheckedChange={(checked) => {
+                          field.onChange(checked ? 0 : null);
+                          if (!checked) setValue('percentage', undefined);
+                        }}
+                      />
+                    )}
+                  />
+                }
+              >
+                <CardTitle>Token Threshold</CardTitle>
+                <CardDescription className="text-base-normal">
+                  {t('v2.description.token-threshold')}
+                </CardDescription>
+              </CardHeader>
+              <CardBody>
+                <FormField
+                  control={control}
+                  name="tokenThreshold"
+                  render={({ field }) => (
+                    <FormInput
+                      {...field}
+                      type="number"
+                      disabled={watch('tokenThreshold') === null}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                      required
+                    />
+                  )}
+                />
+              </CardBody>
+            </Card>
+            <Card className="!rounded-16 flex-[1]" size="lg">
+              <CardHeader
+                className="flex-1"
+                action={
+                  <FormField
+                    control={control}
+                    name="percentage"
+                    render={({ field }) => (
+                      <Switch
+                        disabled={watch('tokenThreshold') === null}
+                        checked={!!field.value}
+                        onCheckedChange={(checked) =>
+                          field.onChange(checked ? '50' : undefined)
+                        }
+                      />
+                    )}
+                  />
+                }
+              >
+                <CardTitle>Pre-limit notification</CardTitle>
+                <CardDescription className="text-base-normal">
+                  {t('v2.description.pre-limit-notification')}
+                </CardDescription>
+              </CardHeader>
+              <CardBody>
+                <FormField
+                  control={control}
+                  name="percentage"
+                  render={({ field }) => (
+                    <SelectInput
+                      disabled={!field.value}
+                      value={field.value}
+                      onChange={(value) => {
+                        if (!value) return;
+                        field.onChange(value);
+                      }}
+                      options={[
+                        {
+                          value: '50',
+                          label: t('v2.text.token-threshold-percentage', {
+                            percentage: 50,
+                          }),
+                        },
+                        {
+                          value: '60',
+                          label: t('v2.text.token-threshold-percentage', {
+                            percentage: 60,
+                          }),
+                        },
+                        {
+                          value: '70',
+                          label: t('v2.text.token-threshold-percentage', {
+                            percentage: 70,
+                          }),
+                        },
+                        {
+                          value: '80',
+                          label: t('v2.text.token-threshold-percentage', {
+                            percentage: 80,
+                          }),
+                        },
+                        {
+                          value: '90',
+                          label: t('v2.text.token-threshold-percentage', {
+                            percentage: 90,
+                          }),
+                        },
+                        {
+                          value: '95',
+                          label: t('v2.text.token-threshold-percentage', {
+                            percentage: 95,
+                          }),
+                        },
+                      ]}
+                    />
+                  )}
+                />
+              </CardBody>
+            </Card>
           </div>
-        </div>
-        <div className="flex gap-4">
-          <Card className="!rounded-16 flex-[1]" size="lg">
-            <CardHeader
-              className="flex-1"
-              action={
-                <Switch
-                  checked={watch('tokenThreshold') !== null}
-                  onCheckedChange={(checked) => {
-                    setValue('tokenThreshold', checked ? 0 : null, {
-                      shouldDirty: true,
-                    });
-                    if (!checked) {
-                      setValue('percentage', undefined, { shouldDirty: true });
-                    }
-                  }}
-                />
-              }
-            >
-              <CardTitle>Token Threshold</CardTitle>
-              <CardDescription className="text-base-normal">
-                {t('v2.description.token-threshold')}
-              </CardDescription>
-            </CardHeader>
-            <CardBody>
-              <TextInput
-                type="number"
-                disabled={watch('tokenThreshold') === null}
-                {...register('tokenThreshold', { valueAsNumber: true })}
-                error={formState.errors.tokenThreshold?.message}
-              />
-            </CardBody>
-          </Card>
-          <Card className="!rounded-16 flex-[1]" size="lg">
-            <CardHeader
-              className="flex-1"
-              action={
-                <Switch
-                  disabled={watch('tokenThreshold') === null}
-                  checked={!!watch('percentage')}
-                  onCheckedChange={(checked) =>
-                    setValue('percentage', checked ? '50' : undefined, {
-                      shouldDirty: true,
-                    })
-                  }
-                />
-              }
-            >
-              <CardTitle>Pre-limit notification</CardTitle>
-              <CardDescription className="text-base-normal">
-                {t('v2.description.pre-limit-notification')}
-              </CardDescription>
-            </CardHeader>
-            <CardBody>
-              <SelectInput
-                disabled={!watch('percentage')}
-                value={watch('percentage')}
-                onChange={(value) => {
-                  if (!value) {
-                    console.log('value: ', value);
-                    return;
-                  }
-                  setValue('percentage', value, { shouldDirty: true });
-                }}
-                options={[
-                  {
-                    value: '50',
-                    label: t('v2.text.token-threshold-percentage', {
-                      percentage: 50,
-                    }),
-                  },
-                  {
-                    value: '60',
-                    label: t('v2.text.token-threshold-percentage', {
-                      percentage: 60,
-                    }),
-                  },
-                  {
-                    value: '70',
-                    label: t('v2.text.token-threshold-percentage', {
-                      percentage: 70,
-                    }),
-                  },
-                  {
-                    value: '80',
-                    label: t('v2.text.token-threshold-percentage', {
-                      percentage: 80,
-                    }),
-                  },
-                  {
-                    value: '90',
-                    label: t('v2.text.token-threshold-percentage', {
-                      percentage: 90,
-                    }),
-                  },
-                  {
-                    value: '95',
-                    label: t('v2.text.token-threshold-percentage', {
-                      percentage: 95,
-                    }),
-                  },
-                ]}
-              />
-            </CardBody>
-          </Card>
-        </div>
-      </form>
+        </form>
+      </FormProvider>
     </>
   );
 };
@@ -315,7 +332,6 @@ const AIChartCard = ({ projectId }: { projectId: number }) => {
 
     return Object.values(result);
   }, [dailyData, dateRange]);
-  console.log('chartData: ', chartData);
 
   return (
     <SimpleLineChart

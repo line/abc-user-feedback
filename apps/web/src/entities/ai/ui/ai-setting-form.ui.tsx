@@ -17,22 +17,15 @@ import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import {
-  Caption,
-  InputField,
-  InputLabel,
-  RadioCard,
-  RadioCardGroup,
-  Textarea,
-} from '@ufb/react';
+import { FormField, RadioCard, RadioCardGroup } from '@ufb/react';
 
-import { TextInput } from '@/shared';
+import { FormInput, FormTextarea } from '@/shared/ui/form-inputs';
 
 import { GeminiIcon, OpenAIIcon } from '@/assets';
 import type { AI } from '../ai.type';
 
 const AiSettingForm = () => {
-  const { register, setValue, watch, formState } = useFormContext<AI>();
+  const { setValue, watch, control } = useFormContext<AI>();
   const { t } = useTranslation();
   const [previousValues, setPreviousValues] = useState<
     Record<AI['provider'], { apiKey: string; endpointUrl: string }>
@@ -68,31 +61,40 @@ const AiSettingForm = () => {
         <RadioCard value="OPEN_AI" icon={<OpenAIIcon />} title="Open AI" />
         <RadioCard value="GEMINI" icon={<GeminiIcon />} title="Gemini" />
       </RadioCardGroup>
-      <TextInput
-        label="API Key"
-        placeholder={t('v2.placeholder.text')}
-        {...register('apiKey')}
-        error={formState.errors.apiKey?.message}
-        required
-      />
-      <TextInput
-        label="Endpoint URL"
-        placeholder={t('v2.placeholder.ai-endpoint-url')}
-        {...register('endpointUrl')}
-        error={formState.errors.endpointUrl?.message}
-      />
-      <InputField>
-        <InputLabel>System Prompt</InputLabel>
-        <Textarea
-          placeholder={t('v2.placeholder.system-prompt')}
-          {...register('systemPrompt')}
-        />
-        {formState.errors.systemPrompt?.message && (
-          <Caption variant="error">
-            {formState.errors.systemPrompt.message}
-          </Caption>
+      <FormField
+        control={control}
+        name="apiKey"
+        render={({ field }) => (
+          <FormInput
+            label="API Key"
+            placeholder={t('v2.placeholder.text')}
+            {...field}
+            required
+          />
         )}
-      </InputField>
+      />
+      <FormField
+        control={control}
+        name="endpointUrl"
+        render={({ field }) => (
+          <FormInput
+            label="Endpoint URL"
+            placeholder={t('v2.placeholder.ai-endpoint-url')}
+            {...field}
+          />
+        )}
+      />
+      <FormField
+        control={control}
+        name="systemPrompt"
+        render={({ field }) => (
+          <FormTextarea
+            label="System Prompt"
+            placeholder={t('v2.placeholder.system-prompt')}
+            {...field}
+          />
+        )}
+      />
     </div>
   );
 };

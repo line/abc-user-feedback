@@ -59,10 +59,8 @@ export const DATA_REFERENCE_CONFIG = {
 export const PROVIDER_MODEL_CONFIG = {
   GEMINI: {
     defaultModel: 'gemini-2.5-flash',
-    temperatureMultiplier: 2,
   },
   DEFAULT: {
     defaultModel: 'gpt-4o',
-    temperatureMultiplier: 1,
   },
 } as const;

@@ -145,18 +145,9 @@ export const useAIIssueForm = (projectId: number) => {
 
     const original = templateData.find((v) => v.id === templateId);
     if (original) {
-      const temperatureMultiplier =
-        integrationData?.provider === 'GEMINI' ?
-          PROVIDER_MODEL_CONFIG.GEMINI.temperatureMultiplier
-        : PROVIDER_MODEL_CONFIG.DEFAULT.temperatureMultiplier;
-
       methods.reset({
         ...AI_ISSUE_DEFAULT_VALUES,
         ...original,
-        temperature:
-          integrationData?.provider === 'GEMINI' ?
-            original.temperature / temperatureMultiplier
-          : original.temperature,
       } as AIIssue);
       if (!modelData?.models.some((model) => model.id === original.model)) {
         methods.setError('model', {
@@ -203,19 +194,10 @@ export const useAIIssueForm = (projectId: number) => {
       return;
     }
 
-    const input = {
-      ...values,
-      temperature:
-        integrationData?.provider === 'GEMINI' ?
-          values.temperature *
-          PROVIDER_MODEL_CONFIG.GEMINI.temperatureMultiplier
-        : values.temperature,
-    };
-
     if (templateId) {
-      updateTemplate({ ...input, templateId });
+      updateTemplate({ ...values, templateId });
     } else {
-      createTemplate(input);
+      createTemplate(values);
     }
   };
 

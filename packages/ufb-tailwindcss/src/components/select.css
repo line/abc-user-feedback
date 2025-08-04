@@ -13,31 +13,29 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 .select {
+  /* default */
+  @apply select-small;
+}
+
+.select-trigger {
   --select-fg: var(--fg-neutral-tertiary);
   --select-fg-pressed: var(--fg-neutral-primary);
   --select-fg-filled: var(--fg-neutral-primary);
-  --select-caption-fg: var(--fg-neutral-tertiary);
-  --select-caption-fg-success: var(--fg-tint-green);
-  --select-caption-fg-error: var(--fg-tint-red);
   --select-border: var(--border-neutral-tertiary);
   --select-border-pressed: var(--tint, var(--border-neutral-primary));
   --select-border-error: var(--border-tint-red);
   --select-bg: var(--bg-neutral-primary);
   --select-bg-pressed: var(--bg-neutral-tertiary);
 
-  /* default */
-  @apply select-small;
-}
-
-.select-trigger {
-  @apply rounded-8 before:rounded-8 relative flex w-full items-center justify-start bg-[var(--select-bg)] text-left text-[var(--select-fg-filled)] transition-transform before:absolute before:inset-0 before:flex before:border before:border-[var(--select-border)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-[var(--select-fg)] data-[state=open]:text-[var(--select-fg-pressed)] data-[state=open]:before:border-2 data-[state=open]:before:border-[var(--select-border-pressed)] [&>span]:flex [&>span]:flex-1 [&>span]:items-center [&>span]:overflow-hidden [&>svg:last-of-type]:data-[state=open]:rotate-180;
+  @apply relative flex w-full items-center justify-start bg-[var(--select-bg)] text-left text-[var(--select-fg-filled)] transition-transform before:absolute before:inset-0 before:flex before:border before:border-[var(--select-border)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-[var(--select-fg)] data-[state=open]:text-[var(--select-fg-pressed)] data-[state=open]:before:border-2 data-[state=open]:before:border-[var(--select-border-pressed)] [&>span]:flex [&>span]:flex-1 [&>span]:items-center [&>span]:overflow-hidden [&>svg:last-of-type]:data-[state=open]:rotate-180;
 
   /* default */
-  @apply select-trigger-medium;
+  @apply select-trigger-medium select-trigger-radius-medium;
 }
 
-.select-trigger-error {
+.select-trigger[aria-invalid='true'] {
   @apply before:!border-2 before:!border-[var(--select-border-error)];
 }
 
@@ -45,9 +43,6 @@
   --select-fg: var(--fg-neutral-tertiary);
   --select-fg-pressed: var(--fg-neutral-primary);
   --select-fg-filled: var(--fg-neutral-primary);
-  --select-caption-fg: var(--fg-neutral-tertiary);
-  --select-caption-fg-success: var(--fg-tint-green);
-  --select-caption-fg-error: var(--fg-tint-red);
   --select-border: var(--border-neutral-tertiary);
   --select-border-pressed: var(--tint, var(--border-neutral-primary));
   --select-border-error: var(--border-tint-red);
@@ -88,19 +83,4 @@
 
 .select-tag {
   @apply mr-2.5 !gap-0;
-}
-
-.select-label {
-  @apply text-base-normal font-normal text-[var(--select-fg-filled)];
-}
-
-.select-caption {
-  @apply text-base-normal flex items-center gap-1;
-
-  /* default */
-  @apply select-caption-default;
-}
-
-.select-caption-icon {
-  @apply flex-shrink-0;
 }

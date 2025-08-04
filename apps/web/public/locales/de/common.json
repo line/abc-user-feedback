@@ -371,7 +371,8 @@
       "remaining-token-amount": "Verbleibende Token-Menge",
       "token-threshold-percentage": "{{percentage}}% der Obergrenze erreicht",
       "ai-issue-ready": "Ich werde passende Probleme für das Feedback empfehlen.",
-      "ai-issue-pending": "AI analysiert die Probleme..."
+      "ai-issue-pending": "AI analysiert die Probleme...",
+      "go-to-ai-field-template": "Gehe zu AI Field Template Einstellungen"
     },
     "create-tenant": {
       "tenant": {

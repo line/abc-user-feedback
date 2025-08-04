@@ -59,9 +59,7 @@ import { ValidateAPIKeyResponseDto } from './dtos/responses';
 import { UpdateAIFieldTemplateDto } from './dtos/update-ai-field-template.dto';
 import { UpdateAIIssueTemplateDto } from './dtos/update-ai-issue-template.dto';
 
-type FieldType = {
-  [key: string]: string;
-};
+type FieldType = Record<string, string>;
 
 @Injectable()
 export class AIService {

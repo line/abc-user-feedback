@@ -21,10 +21,10 @@ import { useForm } from 'react-hook-form';
 
 import {
   Button,
+  Caption,
   TextInput as Input,
-  InputCaption,
   InputField,
-  InputLabel,
+  Label,
   Sheet,
   SheetBody,
   SheetClose,
@@ -225,7 +225,7 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
               required
             />
             <InputField>
-              <InputLabel>Token</InputLabel>
+              <Label>Token</Label>
               <div className="flex gap-2">
                 <Input
                   placeholder={t('v2.placeholder.text-or-generate')}
@@ -245,9 +245,9 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
                 </Button>
               </div>
               {formState.errors.token?.message && (
-                <InputCaption variant="error">
+                <Caption variant="error">
                   {formState.errors.token.message}
-                </InputCaption>
+                </Caption>
               )}
             </InputField>
             <div className="flex flex-col gap-2">

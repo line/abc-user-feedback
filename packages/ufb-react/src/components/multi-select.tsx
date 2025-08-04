@@ -13,20 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-'use client';
+"use client";
 
-import * as React from 'react';
-import { Slot, Slottable } from '@radix-ui/react-slot';
-import { cva } from 'class-variance-authority';
+import * as React from "react";
+import { Slot, Slottable } from "@radix-ui/react-slot";
+import { cva } from "class-variance-authority";
 
-import { ICON_SIZE } from '../constants';
-import { cn } from '../lib/utils';
-import type { Radius, Size } from '../types';
-import { Icon } from './icon';
-import { Popover, PopoverContent, PopoverTrigger } from './popover';
-import { ScrollArea, ScrollBar } from './scroll-area';
-import { Tag } from './tag';
-import useTheme from './use-theme';
+import type { Radius, Size } from "../types";
+import { ICON_SIZE } from "../constants";
+import { cn } from "../lib/utils";
+import { Icon } from "./icon";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { ScrollArea, ScrollBar } from "./scroll-area";
+import { Tag } from "./tag";
+import useTheme from "./use-theme";
 
 type MultiSelectItemType = { value: string; label: React.ReactNode };
 
@@ -50,7 +50,7 @@ const MultiSelectContext = React.createContext<
 function useMultiSelectContext() {
   const ctx = React.useContext(MultiSelectContext);
   if (!ctx)
-    throw new Error('MultiSelect components must be used within <MultiSelect>');
+    throw new Error("MultiSelect components must be used within <MultiSelect>");
   return ctx;
 }
 
@@ -65,12 +65,12 @@ interface MultiSelectProps {
   disabled?: boolean;
 }
 
-const selectVariants = cva('select', {
+const selectVariants = cva("select", {
   variants: {
     size: {
-      small: 'select-small',
-      medium: 'select-medium',
-      large: 'select-large',
+      small: "select-small",
+      medium: "select-medium",
+      large: "select-large",
     },
     defaultVariants: { size: undefined },
   },
@@ -121,19 +121,19 @@ const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
 
     const toggleOption = (item: MultiSelectItemType) => {
       setValues(
-        values.includes(item.value) ?
-          values.filter((v) => v !== item.value)
-        : [...values, item.value],
+        values.includes(item.value)
+          ? values.filter((v) => v !== item.value)
+          : [...values, item.value],
       );
     };
 
     const hiddenRegisterItems = (
-      <div style={{ display: 'none' }}>
+      <div style={{ display: "none" }}>
         {React.Children.map(children, (child) => {
           if (
             React.isValidElement(child) &&
             (child.type as React.ForwardRefExoticComponent<HTMLElement>)
-              .displayName === 'MultiSelectItem'
+              .displayName === "MultiSelectItem"
           ) {
             return child;
           }
@@ -190,17 +190,17 @@ interface MultiSelectTriggerProps
   asChild?: boolean;
 }
 
-const selectTriggerVariants = cva('select-trigger', {
+const selectTriggerVariants = cva("select-trigger", {
   variants: {
     size: {
-      small: 'select-trigger-small',
-      medium: 'select-trigger-medium',
-      large: 'select-trigger-large',
+      small: "select-trigger-small",
+      medium: "select-trigger-medium",
+      large: "select-trigger-large",
     },
     radius: {
-      small: 'select-trigger-radius-small',
-      medium: 'select-trigger-radius-medium',
-      large: 'select-trigger-radius-large',
+      small: "select-trigger-radius-small",
+      medium: "select-trigger-radius-medium",
+      large: "select-trigger-radius-large",
     },
   },
   defaultVariants: { size: undefined, radius: undefined },
@@ -254,16 +254,16 @@ const MultiSelectContent = React.forwardRef<
   HTMLDivElement,
   MultiSelectContentProps
 >(function MultiSelectContent(
-  { className, children, maxHeight = 'auto', ...props },
+  { className, children, maxHeight = "auto", ...props },
   ref,
 ) {
   return (
     <PopoverContent
       ref={ref}
-      className={cn('select-content', className)}
+      className={cn("select-content", className)}
       {...props}
     >
-      <div className={cn('select-viewport')}>
+      <div className={cn("select-viewport")}>
         <ScrollArea maxHeight={maxHeight}>
           {children}
           <ScrollBar />
@@ -273,16 +273,16 @@ const MultiSelectContent = React.forwardRef<
   );
 });
 
-const selectItemVariants = cva('select-item', {
-  variants: { check: { left: 'select-item-left', right: 'select-item-right' } },
-  defaultVariants: { check: 'left' },
+const selectItemVariants = cva("select-item", {
+  variants: { check: { left: "select-item-left", right: "select-item-right" } },
+  defaultVariants: { check: "left" },
 });
 
-const selectItemCheckVariants = cva('select-item-check', {
+const selectItemCheckVariants = cva("select-item-check", {
   variants: {
-    check: { left: 'select-item-check-left', right: 'select-item-check-right' },
+    check: { left: "select-item-check-left", right: "select-item-check-right" },
   },
-  defaultVariants: { check: 'left' },
+  defaultVariants: { check: "left" },
 });
 
 interface MultiSelectItemProps {
@@ -309,13 +309,13 @@ const MultiSelectItem = React.forwardRef<HTMLDivElement, MultiSelectItemProps>(
         tabIndex={0}
         className={cn(
           selectItemVariants({
-            check: typeof children === 'string' ? 'left' : 'right',
+            check: typeof children === "string" ? "left" : "right",
             className,
           }),
         )}
         onClick={() => toggleOption({ value, label: children })}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ')
+          if (e.key === "Enter" || e.key === " ")
             toggleOption({ value, label: children });
         }}
       >
@@ -323,7 +323,7 @@ const MultiSelectItem = React.forwardRef<HTMLDivElement, MultiSelectItemProps>(
           <span
             className={cn(
               selectItemCheckVariants({
-                check: typeof children === 'string' ? 'left' : 'right',
+                check: typeof children === "string" ? "left" : "right",
               }),
             )}
           >
@@ -335,7 +335,7 @@ const MultiSelectItem = React.forwardRef<HTMLDivElement, MultiSelectItemProps>(
     );
   },
 );
-MultiSelectItem.displayName = 'MultiSelectItem';
+MultiSelectItem.displayName = "MultiSelectItem";
 
 const MultiSelectValue = React.forwardRef<
   HTMLSpanElement,

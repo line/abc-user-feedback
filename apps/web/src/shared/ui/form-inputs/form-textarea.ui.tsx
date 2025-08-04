@@ -13,21 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export type Radius = "small" | "medium" | "large";
-export type Size = "small" | "medium" | "large";
-export type Color = "default" | "blue" | "orange" | "red" | "green";
-export type ButtonVariant =
-  | "primary"
-  | "secondary"
-  | "destructive"
-  | "ghost"
-  | "outline";
-export type ButtonState = "default" | "loading" | "disabled";
-export type CaptionType = "default" | "success" | "info" | "error";
-export type AlertVariantType =
-  | "default"
-  | "warning"
-  | "success"
-  | "error"
-  | "informative";
-export type TriggerType = "click" | "hover";
+import { FormItem, FormLabel, Textarea } from '@ufb/react';
+
+import type { CommonFormItemType } from '@/shared/types';
+
+interface Props extends CommonFormItemType<string> {}
+
+const FormTextarea = ({ label, required, value, ...props }: Props) => {
+  return (
+    <FormItem>
+      <FormLabel>
+        {label} {required && <span className="text-red-500">*</span>}
+      </FormLabel>
+      <Textarea value={value ?? ''} {...props} />
+    </FormItem>
+  );
+};
+
+export default FormTextarea;
