@@ -327,9 +327,13 @@ export class AIClient {
     } catch (error) {
       const result = new PromptResult();
       result.status = AIPromptStatusEnum.error;
-      result.content = `Error executing prompt: ${error.response.data.error.message}`;
+
+      const errorMessage =
+        error?.response?.data?.error?.message || 'Unknown error';
+
+      result.content = `Error executing prompt: ${errorMessage}`;
       result.usedTokens = 0;
-      result.statusCode = (error as ErrorResponse).status;
+      result.statusCode = (error as ErrorResponse).status || 500;
 
       return result;
     }
