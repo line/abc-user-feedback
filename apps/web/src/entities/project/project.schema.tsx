@@ -27,7 +27,7 @@ export const projectSchema = z.object({
     .string()
     .trim()
     .max(50, { message: i18n?.t('v2.error.lessThenNcharacters', { n: 50 }) })
-    .optional(),
+    .nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
   timezone: z.object({

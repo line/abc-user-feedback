@@ -230,7 +230,6 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
                 <Input
                   placeholder={t('v2.placeholder.text-or-generate')}
                   {...register('token')}
-                  error={!!formState.errors.token?.message}
                 />
                 <Button
                   type="button"

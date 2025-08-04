@@ -339,7 +339,7 @@ const PermissionRows = <T extends PermissionType>(
   } = props;
 
   return (
-    <AccordionItem value={title} className="border-none">
+    <AccordionItem value={title} divider={false}>
       <AccordionTrigger className="h-9 py-0">{title}</AccordionTrigger>
       <AccordionContent className="py-0">
         <div className="flex flex-col">
