@@ -350,6 +350,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                             value={field.value?.toString()}
                             onChange={(value) => {
                               field.onChange(value ? parseInt(value) : null);
+                              clearErrors('aiFieldTemplateId');
                             }}
                             required
                           />
