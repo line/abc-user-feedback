@@ -897,7 +897,6 @@ export class AIService {
         integration.provider,
       )
     ) {
-      console.log(111);
       throw new BadRequestException(
         'Token threshold exceeded, cannot process AI Issue recommendation',
       );

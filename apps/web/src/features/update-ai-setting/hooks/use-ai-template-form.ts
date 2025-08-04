@@ -63,7 +63,6 @@ export const useAITemplateForm = (projectId: number) => {
     variables: { projectId },
   });
 
-  // Mutations
   const { mutate: createTemplate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/fieldTemplates/new',

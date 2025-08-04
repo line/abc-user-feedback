@@ -213,7 +213,6 @@ const IssueCell: React.FC<IProps> = (props) => {
             onValueChange={(value) => setInputValue(value)}
             value={inputValue}
           />
-          <ComboboxEmpty>{t('v2.text.no-data.default')}</ComboboxEmpty>
           {!!feedbackId && !inputValue && (
             <AiIssueComboboxGroup
               projectId={projectId}
@@ -231,56 +230,57 @@ const IssueCell: React.FC<IProps> = (props) => {
             />
           )}
           <ComboboxList maxHeight="333px">
-            {!!allIssues.length && (
-              <ComboboxGroup
-                heading={
-                  <span className="text-neutral-tertiary text-base-normal">
-                    Issue List
-                  </span>
-                }
-              >
-                {allIssues.map((issue) => (
-                  <ComboboxItem
+            <ComboboxGroup
+              heading={
+                <span className="text-neutral-tertiary text-base-normal">
+                  Issue List
+                </span>
+              }
+            >
+              <ComboboxEmpty>{t('v2.text.no-data.default')}</ComboboxEmpty>
+              {allIssues.map((issue) => (
+                <ComboboxItem
+                  key={issue.id}
+                  onSelect={() => onClickIssue(issue.id)}
+                  value={issue.name}
+                  className="group justify-between"
+                  disabled={!perms.includes('feedback_issue_update')}
+                >
+                  <IssueBadge
                     key={issue.id}
-                    onSelect={() => onClickIssue(issue.id)}
-                    value={issue.name}
-                    className="group justify-between"
-                    disabled={!perms.includes('feedback_issue_update')}
-                  >
-                    <IssueBadge
-                      key={issue.id}
-                      name={issue.name}
-                      status={issue.status}
-                    />
-                    {currentIssues.some((v) => v.id === issue.id) ?
-                      <Icon name="RiCheckLine" size={16} />
-                    : <span className="text-small-normal text-neutral-tertiary opacity-0 transition-opacity group-hover:opacity-100">
-                        Add
-                      </span>
-                    }
-                  </ComboboxItem>
-                ))}
-                <InfiniteScrollArea
-                  fetchNextPage={fetchNextPage}
-                  hasNextPage={hasNextPage}
-                  isFetchingNextPage={isFetchingNextPage}
-                />
-              </ComboboxGroup>
-            )}
+                    name={issue.name}
+                    status={issue.status}
+                  />
+                  {currentIssues.some((v) => v.id === issue.id) ?
+                    <Icon name="RiCheckLine" size={16} />
+                  : <span className="text-small-normal text-neutral-tertiary opacity-0 transition-opacity group-hover:opacity-100">
+                      Add
+                    </span>
+                  }
+                </ComboboxItem>
+              ))}
+
+              <InfiniteScrollArea
+                fetchNextPage={fetchNextPage}
+                hasNextPage={hasNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+              />
+            </ComboboxGroup>
           </ComboboxList>
           {!!inputValue &&
             perms.includes('issue_create') &&
             !currentIssues.some((issue) => issue.name === inputValue) &&
             !allIssues.some((issue) => issue.name === inputValue) && (
-              <div
-                className="combobox-item border-neutral-tertiary justify-between border-t"
-                onClick={() => onCreateIssue(inputValue)}
+              <ComboboxItem
+                value={inputValue}
+                className="justify-between"
+                onSelect={() => onCreateIssue(inputValue)}
               >
                 <IssueBadge name={inputValue} status="INIT" />
                 <span className="text-neutral-tertiary text-small-normal">
                   Create
                 </span>
-              </div>
+              </ComboboxItem>
             )}
         </ComboboxContent>
       </Combobox>
