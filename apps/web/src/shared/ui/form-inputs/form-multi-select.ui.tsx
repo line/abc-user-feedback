@@ -64,7 +64,7 @@ const FormMultiSelect = (props: Props) => {
             </MultiSelectTriggerButton>
           </FormControl>
         </MultiSelectTrigger>
-        <MultiSelectContent className="max-h-60">
+        <MultiSelectContent className="max-h-60 overflow-auto">
           {options.map(({ label, value, icon }) => (
             <MultiSelectItem key={value} value={value}>
               {icon && <Icon name={icon} size={16} className="mr-2" />}

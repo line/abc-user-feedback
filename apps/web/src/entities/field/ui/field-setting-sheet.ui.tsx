@@ -88,6 +88,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     disabledUpdate,
     disabledDelete,
   } = props;
+
   const router = useRouter();
   const projectId = parseInt(router.query.projectId as string, 10);
   const { t } = useTranslation();

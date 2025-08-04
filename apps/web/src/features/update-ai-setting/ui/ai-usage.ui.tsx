@@ -80,6 +80,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
       async onSuccess() {
         toast.success(t('v2.toast.success'));
         await refetch();
+        setIsDirty(false);
       },
     },
   });
@@ -126,7 +127,6 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
           tokenThreshold * (parseInt(percentage, 10) / 100)
         : null,
     });
-    setIsDirty(false);
   };
 
   return (
@@ -272,6 +272,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
 export const AIUsageFormButton = () => {
   const { t } = useTranslation();
   const { formId, isPending, isDirty } = useAIUsageFormStore();
+
   return (
     <Button form={formId} type="submit" disabled={!isDirty} loading={isPending}>
       {t('v2.button.save')}
