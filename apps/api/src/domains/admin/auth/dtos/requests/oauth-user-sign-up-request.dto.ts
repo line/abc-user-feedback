@@ -28,5 +28,6 @@ export class OAuthUserSignUpRequestDto {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   roleName: string;
 }
