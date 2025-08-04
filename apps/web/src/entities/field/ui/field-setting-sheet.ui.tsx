@@ -119,6 +119,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     resolver: zodResolver(fieldInfoSchema),
     defaultValues: data ?? defaultValues,
   });
+
   const {
     watch,
     setValue,
@@ -200,10 +201,19 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     path: '/api/admin/projects/{projectId}/ai/integrations',
     variables: { projectId },
   });
+
   const { data: templates } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/fieldTemplates',
     variables: { projectId },
   });
+  useEffect(() => {
+    if (!data) return;
+    if (data.format === 'aiField' && !data.aiFieldTemplateId) {
+      setError('aiFieldTemplateId', {
+        message: 'AI Field Template is required',
+      });
+    }
+  }, [data]);
 
   return (
     <Sheet open={isOpen} onOpenChange={close}>
