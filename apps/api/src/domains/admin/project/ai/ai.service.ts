@@ -551,6 +551,7 @@ export class AIService {
     aiField: FieldEntity,
     aiTargetFields: FieldEntity[],
     fields: FieldEntity[],
+    isAutoProcess: boolean = false,
   ): Promise<boolean> {
     const integration = await this.aiIntegrationsRepo.findOne({
       where: {
@@ -569,6 +570,7 @@ export class AIService {
     }
 
     if (!aiField.aiFieldTemplate.model) {
+      if (isAutoProcess) return false;
       throw new BadRequestException(
         'The model is not set for the AI field template',
       );
@@ -1081,11 +1083,11 @@ export class AIService {
   async addPermissions() {
     const permissions: Record<string, PermissionEnum[]> = {
       Admin: [
-        PermissionEnum.generative_ai_read,
-        PermissionEnum.generative_ai_update,
+        PermissionEnum.project_genai_read,
+        PermissionEnum.project_genai_update,
       ],
-      Editor: [PermissionEnum.generative_ai_read],
-      Viewer: [PermissionEnum.generative_ai_read],
+      Editor: [PermissionEnum.project_genai_read],
+      Viewer: [],
     };
 
     const existingRoles = await this.roleRepo.find({

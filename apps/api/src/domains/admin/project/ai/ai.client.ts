@@ -309,7 +309,7 @@ export class AIClient {
               },
             ],
             generationConfig: {
-              temperature: params.temperature,
+              temperature: params.temperature * 2,
             },
           },
           {
@@ -402,7 +402,7 @@ export class AIClient {
               },
             ],
             generationConfig: {
-              temperature: params.temperature,
+              temperature: params.temperature * 2,
             },
           },
           {

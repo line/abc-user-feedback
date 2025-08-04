@@ -16,7 +16,7 @@
 
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance } from 'class-transformer';
-import { IsEnum, IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsString, Max } from 'class-validator';
 
 import { AIProvidersEnum } from '@/common/enums/ai-providers.enum';
 
@@ -49,6 +49,7 @@ export class GetAIIntegrationResponseDto {
   @ApiProperty({ type: Number, nullable: true })
   @IsNumber()
   @Expose()
+  @Max(50000000)
   tokenThreshold: number | null;
 
   @ApiProperty({ type: Number, nullable: true })

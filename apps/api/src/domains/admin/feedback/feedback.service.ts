@@ -298,6 +298,10 @@ export class FeedbackService {
           .setZone(timezone)
           .toFormat('yyyy-MM-dd HH:mm:ss');
       }
+
+      if (fieldsByKey[key].format === FieldFormatEnum.aiField) {
+        convertedFeedback[fieldsByKey[key].name] = feedback[key].message;
+      }
     }
 
     return Object.keys(convertedFeedback)

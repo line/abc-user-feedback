@@ -78,6 +78,7 @@ export class AIListener {
             field,
             targetFields,
             fields,
+            true,
           );
         }
       }
