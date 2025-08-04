@@ -18,7 +18,12 @@ import { useTranslation } from 'next-i18next';
 
 import { Button, Divider } from '@ufb/react';
 
-import { CardDescription, CardTitle, useOAIQuery } from '@/shared';
+import {
+  CardDescription,
+  CardTitle,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
 
 import { useAIIssueDelete } from '../hooks/use-ai-issue-delete';
 import { useAIIssueForm } from '../hooks/use-ai-issue-form';
@@ -109,13 +114,15 @@ export const AIIssueFormButton = ({ projectId }: { projectId: number }) => {
     openDeleteTemplateConfirm,
     templateId,
   } = useAIIssueDelete(projectId);
+  const perms = usePermissions(projectId);
+
   return (
     <div className="flex items-center gap-2">
       <Button
         variant="outline"
         className="!text-tint-red"
         onClick={openDeleteTemplateConfirm}
-        disabled={!templateId}
+        disabled={!templateId || !perms.includes('project_genai_update')}
         loading={isDeletePending}
       >
         {t('v2.button.delete')}
@@ -124,7 +131,7 @@ export const AIIssueFormButton = ({ projectId }: { projectId: number }) => {
         form={formId}
         type="submit"
         loading={isPending}
-        disabled={!isDirty}
+        disabled={!isDirty || !perms.includes('project_genai_update')}
       >
         {t('v2.button.save')}
       </Button>

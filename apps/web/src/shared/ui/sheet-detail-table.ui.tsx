@@ -37,7 +37,7 @@ import IssueCell from '@/entities/feedback/ui/issue-cell';
 import { DATE_TIME_FORMAT, GRADIENT_CSS } from '../constants';
 import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
-import { useOAIMutation } from '../lib';
+import { useOAIMutation, usePermissions } from '../lib';
 import { cn } from '../utils';
 import ImagePreviewButton from './image-preview-button';
 import { DatePicker, MultiSelectInput, SelectInput } from './inputs';
@@ -383,6 +383,7 @@ const AISheetDetailCell = ({
   const { t } = useTranslation();
   const router = useRouter();
   const projectId = +(router.query.projectId as string);
+  const perms = usePermissions(projectId);
 
   const { mutateAsync: processAI, isPending } = useOAIMutation({
     method: 'post',
@@ -402,6 +403,7 @@ const AISheetDetailCell = ({
           size="small"
           style={GRADIENT_CSS.primaryAlt}
           onClick={() => {
+            if (!perms.includes('feedback_update')) return;
             if (isPending) return;
             toast.promise(processAI({ feedbackId, aiFieldId: fieldId }), {
               loading: 'Loading',
@@ -409,7 +411,7 @@ const AISheetDetailCell = ({
             });
           }}
           className={cn('cursor-pointer', {
-            'opacity-50': isPending,
+            'opacity-50': isPending || !perms.includes('feedback_update'),
           })}
         >
           <Icon name="RiAiGenerate" />

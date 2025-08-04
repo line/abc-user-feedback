@@ -20,10 +20,7 @@ export const aiSchema = z.object({
   provider: z.enum(['OPEN_AI', 'GEMINI']),
   apiKey: z.string().trim().min(1, { message: 'API Key is required' }),
   endpointUrl: z.string().trim(),
-  systemPrompt: z
-    .string()
-    .trim()
-    .max(1000, { message: 'System prompt must be less than 1000 characters' }),
+  systemPrompt: z.string().trim(),
   tokenThreshold: z.number().nullable(),
   notificationThreshold: z.number().nullable(),
 });

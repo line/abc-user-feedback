@@ -23,6 +23,7 @@ import {
   CardDescription,
   CardTitle,
   Slider,
+  usePermissions,
   useWarnIfUnsavedChanges,
 } from '@/shared';
 import { FormInput, FormSelect, FormTextarea } from '@/shared/ui/form-inputs';
@@ -157,6 +158,7 @@ export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
     isPending: isDeletePending,
     openDeleteConfirmDialog,
   } = useAITemplateDelete(projectId);
+  const perms = usePermissions(projectId);
 
   return (
     <div className="flex items-center gap-2">
@@ -164,7 +166,7 @@ export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
         variant="outline"
         className="!text-tint-red"
         onClick={openDeleteConfirmDialog}
-        disabled={!templateId}
+        disabled={!templateId || !perms.includes('project_genai_update')}
         loading={isDeletePending}
       >
         {t('v2.button.name.delete', { name: 'Template' })}
@@ -173,7 +175,7 @@ export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
         form={formId}
         type="submit"
         loading={isPending}
-        disabled={!isDirty}
+        disabled={!isDirty || !perms.includes('project_genai_update')}
       >
         {t('v2.button.save')}
       </Button>

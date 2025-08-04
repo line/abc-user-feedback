@@ -72,6 +72,7 @@ export const useAIIssueForm = (projectId: number) => {
   const { mutate: createTemplate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/issueTemplates/new',
+    pathParams: { projectId },
     queryOptions: {
       async onSuccess(data) {
         toast.success(t('v2.toast.success'));
@@ -194,11 +195,8 @@ export const useAIIssueForm = (projectId: number) => {
       return;
     }
 
-    if (templateId) {
-      updateTemplate({ ...values, templateId });
-    } else {
-      createTemplate(values);
-    }
+    if (templateId) updateTemplate({ ...values, templateId });
+    else createTemplate(values);
   };
 
   return {

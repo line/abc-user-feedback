@@ -1368,15 +1368,15 @@ export interface components {
       | 'project_webhook_create'
       | 'project_webhook_update'
       | 'project_webhook_delete'
+      | 'project_genai_read'
+      | 'project_genai_update'
       | 'channel_create'
       | 'channel_update'
       | 'channel_delete'
       | 'channel_field_read'
       | 'channel_field_update'
       | 'channel_image_read'
-      | 'channel_image_update'
-      | 'generative_ai_read'
-      | 'generative_ai_update';
+      | 'channel_image_update';
     RoleProjectDto: {
       id: number;
       createdAt: string;
@@ -4604,7 +4604,9 @@ export interface operations {
     parameters: {
       query?: never;
       header?: never;
-      path?: never;
+      path: {
+        projectId: number;
+      };
       cookie?: never;
     };
     requestBody: {

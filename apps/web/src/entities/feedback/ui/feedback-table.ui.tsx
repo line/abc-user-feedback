@@ -306,7 +306,9 @@ const FeedbackTable = (props: Props) => {
                       success: () => 'Success',
                     });
                   }}
-                  disabled={isPendingAIProcess}
+                  disabled={
+                    isPendingAIProcess || !perms.includes('feedback_update')
+                  }
                 >
                   <AISparklingIcon />
                   {t('v2.button.process-ai')}
