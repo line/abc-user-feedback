@@ -213,7 +213,7 @@ const IssueCell: React.FC<IProps> = (props) => {
             onValueChange={(value) => setInputValue(value)}
             value={inputValue}
           />
-          <ComboboxEmpty>{t('v2.text.no-data.empty')}</ComboboxEmpty>
+          <ComboboxEmpty>{t('v2.text.no-data.default')}</ComboboxEmpty>
           {!!feedbackId && !inputValue && (
             <AiIssueComboboxGroup
               projectId={projectId}

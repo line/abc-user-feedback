@@ -31,26 +31,23 @@
       },
       "same-key": "Key 정보와 동일하게 입력",
       "feedback-request-code": "피드백 요청 코드",
-      "option-info": "옵션 정보",
       "field-mgmt": {
         "preview": "미리보기"
       },
       "dialog": {
-        "create-role": {
-          "title": "Role 생성",
-          "description": "신규 Role Name을 입력해 주세요."
-        },
         "delete-option": {
           "title": "옵선 삭제",
           "description": "옵션을 삭제하면 기존에 저장된 옵션에는 적용되지 않습니다."
         },
-        "delete-role": {
-          "title": "Role 삭제",
-          "description": "Role을 삭제하시겠어요?\n해당 Role을 가진 Member도 같이 없어집니다."
+        "add-field": {
+          "title": "Field 추가"
         },
-        "add-field": { "title": "Field 추가" },
-        "edit-field": { "title": "Field 수정" },
-        "invite-user": { "title": "User 초대" }
+        "edit-field": {
+          "title": "Field 수정"
+        },
+        "invite-user": {
+          "title": "User 초대"
+        }
       }
     },
     "create-project": {
@@ -289,7 +286,6 @@
       "previous": "이전",
       "addFilter": "필터 추가",
       "edit": "편집",
-      "process-ai": "AI 실행",
       "process-ai-test": "AI 테스트 실행",
       "setting": "설정하기"
     },
@@ -334,6 +330,7 @@
     },
     "text": {
       "no-data": {
+        "default": "아직 데이터가 없습니다.",
         "channel": "생성된 Channel이 없습니다.",
         "feedback": "생성된 피드백이 없습니다.",
         "member": "등록된 Member가 없습니다.",
@@ -362,12 +359,9 @@
       "all-image-url-allow": "모든 Image URL의 도메인을 허용합니다.",
       "select-project": "프로젝트를 선택해 주세요.",
       "no-category": "카테고리 미등록",
-      "token-usage": "토큰 사용량",
-      "remaining-token-amount": "잔여 토큰량",
       "token-threshold-percentage": "상한값의 {{percentage}}% 도달",
       "ai-issue-ready": "피드백에 맞는 이슈를 추천해드릴게요",
-      "ai-issue-pending": "AI가 이슈를 분석하고 있어요...",
-      "go-to-ai-field-template": "AI Field Template 설정하러 가기"
+      "ai-issue-pending": "AI가 이슈를 분석하고 있어요..."
     },
     "create-tenant": {
       "tenant": {
@@ -425,9 +419,9 @@
     "description": {
       "create-project": "성공적으로 Project를 생성했습니다.\n다음은 피드백을 수집하기 위해 Channel을 생성해 줘야 합니다.\n‘Channel 생성'을 통해 다음 단계로 진행해 보세요.",
       "create-channel": "성공적으로 Channel을 생성했습니다.\n이제 유저 피드백을 수집하고 관리할 준비가 되었습니다.\n‘시작하기'를 통해 본격적으로 경험해 보세요.",
-      "remaining-token-amount": "잔여 토큰량을 확인하려면 상한값을 설정해 주세요.",
+      "remaining-token-amount": "월 잔여 토큰량을 확인하려면 상한값을 먼저 설정해 주세요.",
       "token-threshold": "월 토큰 사용량에 대한 상한값을 설정합니다. 상한을 초과하면 AI 기능이 중지됩니다.",
-      "pre-limit-notification": "설정한 기준값에 도달하면 토큰 사용량 알림을 받습니다. (사용량은 매월 1일 초기화됩니다.)",
+      "pre-limit-notification": "상한값을 기준으로 특정 수준에 도달하면 토큰 사용량 알림을 받습니다.",
       "ai-field-template-form": "템플릿의 기본 정보를 설정합니다.",
       "ai-field-template-advanced-configuration": "템플릿의 연동 Model과 Temperature를 변경할 수 있습니다.",
       "ai-field-template-playground": "템플릿과 테스트 데이터를 활용해 AI 결과를 미리 확인할 수 있습니다.",

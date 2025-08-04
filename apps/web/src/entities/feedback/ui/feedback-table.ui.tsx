@@ -311,7 +311,7 @@ const FeedbackTable = (props: Props) => {
                   }
                 >
                   <AISparklingIcon />
-                  {t('v2.button.process-ai')}
+                  Run AI
                   <Badge variant="subtle">{selectedRowIds.length}</Badge>
                 </Button>
               </>

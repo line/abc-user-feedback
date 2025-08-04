@@ -380,7 +380,6 @@ const AISheetDetailCell = ({
   refetch?: () => Promise<void>;
   showButton?: boolean;
 }) => {
-  const { t } = useTranslation();
   const router = useRouter();
   const projectId = +(router.query.projectId as string);
   const perms = usePermissions(projectId);
@@ -416,7 +415,7 @@ const AISheetDetailCell = ({
           })}
         >
           <Icon name="RiAiGenerate" />
-          {t('v2.button.process-ai')}
+          Run AI
         </Tag>
       )}
       <div className="py-2">

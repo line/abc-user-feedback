@@ -46,7 +46,7 @@ const PlaygroundInputCard = () => {
         {inputItems.length === 0 ?
           <EmptyState
             image={<NodataImage width={120} height={120} />}
-            message="No Data"
+            message={t('v2.text.no-data.default')}
           />
         : inputItems.map(({ id }) => <PlaygroundInputData key={id} id={id} />)}
       </CardBody>

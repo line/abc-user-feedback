@@ -209,9 +209,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
   useEffect(() => {
     if (!data) return;
     if (data.format === 'aiField' && !data.aiFieldTemplateId) {
-      setError('aiFieldTemplateId', {
-        message: 'AI Field Template is required',
-      });
+      setError('aiFieldTemplateId', { message: 'Template is required' });
     }
   }, [data]);
 
@@ -367,7 +365,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                           >
                             <Caption className="mt-1 flex items-center gap-0.5">
                               <Icon name="RiExternalLinkFill" size={16} />
-                              {t('v2.text.go-to-ai-field-template')}
+                              Go to Template Settings
                             </Caption>
                           </Link>
                         </>

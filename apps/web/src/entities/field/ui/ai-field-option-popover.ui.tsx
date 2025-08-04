@@ -49,7 +49,7 @@ const AiFieldOptionPopover = ({ aiFieldTemplateId }: Props) => {
     <Dropdown>
       <DropdownTrigger asChild data-state="close">
         <Tag onClick={(e) => e.stopPropagation()}>
-          AI Template Option
+          Template Option
           <Icon name="RiInformation2Line" />
         </Tag>
       </DropdownTrigger>

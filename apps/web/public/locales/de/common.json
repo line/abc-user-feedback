@@ -31,22 +31,13 @@
       },
       "same-key": "Geben Sie den gleichen Wert wie den Schlüssel ein",
       "feedback-request-code": "Feedback-Anforderungscode",
-      "option-info": "Optionsinformationen",
       "field-mgmt": {
         "preview": "Vorschau"
       },
       "dialog": {
-        "create-role": {
-          "title": "Rolle erstellen",
-          "description": "Bitte geben Sie einen neuen Rollennamen ein."
-        },
         "delete-option": {
           "title": "Option löschen",
           "description": "Dies wird keine Auswirkungen auf Optionen in vorherigem Feedback haben."
-        },
-        "delete-role": {
-          "title": "Rolle löschen",
-          "description": "Sind Sie sicher, dass Sie diese Rolle löschen möchten?\nMitglieder, die dieser Rolle zugewiesen sind, werden ebenfalls entfernt."
         },
         "add-field": {
           "title": "Feld hinzufügen"
@@ -294,7 +285,6 @@
       "previous": "Zurück",
       "addFilter": "Filter hinzufügen",
       "edit": "Bearbeiten",
-      "process-ai": "AI ausführen",
       "process-ai-test": "AI Test ausführen",
       "setting": "Einstellungen"
     },
@@ -339,6 +329,7 @@
     },
     "text": {
       "no-data": {
+        "default": "Es liegen noch keine Daten vor.",
         "api-key": "Es wurde noch kein API Key generiert.",
         "member": "Es wurden noch keine Member registriert.",
         "channel": "Es wurde noch kein Channel erstellt.",
@@ -367,12 +358,9 @@
       "all-image-url-allow": "Alle Image-URLs sind erlaubt.",
       "select-project": "Bitte wählen Sie ein Projekt aus.",
       "no-category": "Keine Kategorie",
-      "token-usage": "Token-Nutzung",
-      "remaining-token-amount": "Verbleibende Token-Menge",
       "token-threshold-percentage": "{{percentage}}% der Obergrenze erreicht",
       "ai-issue-ready": "Ich werde passende Probleme für das Feedback empfehlen.",
-      "ai-issue-pending": "AI analysiert die Probleme...",
-      "go-to-ai-field-template": "Gehe zu AI Field Template Einstellungen"
+      "ai-issue-pending": "AI analysiert die Probleme..."
     },
     "create-tenant": {
       "tenant": {
@@ -430,9 +418,9 @@
     "description": {
       "create-project": "Project wurde erfolgreich erstellt.\nAls Nächstes müssen Sie einen Channel erstellen, um Feedback zu sammeln.\nFahren Sie mit 'Channel erstellen' zum nächsten Schritt fort.",
       "create-channel": "Channel wurde erfolgreich erstellt.\nSie können jetzt Benutzerfeedback sammeln und verwalten.\nKlicken Sie auf 'Starten', um die vollständige Funktionalität zu nutzen.",
-      "remaining-token-amount": "Um die verbleibende Tokenmenge zu überprüfen, legen Sie bitte einen Höchstwert fest.",
+      "remaining-token-amount": "Monatliche verbleibende Tokenmenge überprüfen, bitte zuerst ein Limit festlegen.",
       "token-threshold": "Monatliches Token-Nutzungsobergrenze festlegen. Wenn die Obergrenze überschritten wird, wird die KI-Funktionalität gestoppt.",
-      "pre-limit-notification": "Wenn der festgelegte Schwellenwert erreicht ist, erhalten Sie eine Benachrichtigung über den Tokenverbrauch. (Der Verbrauch wird am 1. jedes Monats zurückgesetzt.)",
+      "pre-limit-notification": "Wenn die Token-Nutzung 80% der festgelegten Obergrenze erreicht, wird eine Benachrichtigung gesendet.",
       "ai-field-template-form": "Grundlegende Informationen für die Vorlage festlegen.",
       "ai-field-template-advanced-configuration": "Sie können das verbundene Modell und die Temperatur der Vorlage ändern.",
       "ai-field-template-playground": "Sie können die AI-Ergebnisse im Voraus überprüfen, indem Sie die Vorlage und Testdaten verwenden.",

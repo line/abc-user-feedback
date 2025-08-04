@@ -193,7 +193,7 @@ const AiIssueComboboxGroup = ({
             loading={isPending}
           >
             <Icon name="RiSparklingFill" />
-            {t('v2.button.process-ai')}
+            Run AI
           </Button>
         </div>
       )}

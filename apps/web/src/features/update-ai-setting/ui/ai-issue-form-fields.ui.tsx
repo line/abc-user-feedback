@@ -89,7 +89,7 @@ export const FieldSelect: React.FC<FieldSelectProps> = ({ fields }) => {
               ?.filter((v) => v.key !== 'issues')
               .map(({ name, key }) => ({ value: key, label: name })) ?? []
           }
-          label="Field"
+          label="Target Field"
           placeholder="Select a field"
           {...field}
           required

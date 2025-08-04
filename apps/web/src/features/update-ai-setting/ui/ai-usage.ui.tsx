@@ -202,7 +202,7 @@ export const AIUsageForm = ({ projectId }: { projectId: number }) => {
                   />
                 }
               >
-                <CardTitle>Pre-limit notification</CardTitle>
+                <CardTitle>Usage Notification</CardTitle>
                 <CardDescription className="text-base-normal">
                   {t('v2.description.pre-limit-notification')}
                 </CardDescription>
@@ -281,7 +281,6 @@ export const AIUsageFormButton = () => {
 };
 
 const AIChartCard = ({ projectId }: { projectId: number }) => {
-  const { t } = useTranslation();
   const [dateRange, setDateRange] = useState<DateRangeType>({
     startDate: dayjs().startOf('month').toDate(),
     endDate: dayjs().toDate(),
@@ -336,7 +335,7 @@ const AIChartCard = ({ projectId }: { projectId: number }) => {
 
   return (
     <SimpleLineChart
-      title={t('v2.text.token-usage')}
+      title="Token Usage"
       height={334}
       dataKeys={[
         { name: 'Total', color: '#4A90E2' },
@@ -400,7 +399,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
   return (
     <Card className="!rounded-16 h-full" size="lg">
       <CardHeader>
-        <CardTitle>{t('v2.text.remaining-token-amount')}</CardTitle>
+        <CardTitle>Monthly Remaining Token</CardTitle>
       </CardHeader>
       <CardBody className="flex flex-col items-center gap-8">
         <RadialBarChart
@@ -505,7 +504,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
               </div>
             </div>
             <div className="flex justify-between">
-              <div>Monthly tokens reset in</div>
+              <div>Tokens reset in</div>
               <div>1st of every month</div>
             </div>
           </div>

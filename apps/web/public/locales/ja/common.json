@@ -31,22 +31,13 @@
       },
       "same-key": "Key と同様に入力",
       "feedback-request-code": "フィードバック要求コード",
-      "option-info": "オプション情報",
       "field-mgmt": {
         "preview": "プレビュー"
       },
       "dialog": {
-        "create-role": {
-          "title": "Role 生成",
-          "description": "新規Role Nameを入力してください。"
-        },
         "delete-option": {
           "title": "オプションの削除",
           "description": "以前のフィードバックのオプションには適用されません。"
-        },
-        "delete-role": {
-          "title": "Role 削除",
-          "description": "Roleを削除しますか？\n該当Roleを持つ会員も一緒にいなくなります。"
         },
         "add-field": {
           "title": "Field 追加"
@@ -294,7 +285,6 @@
       "previous": "前へ",
       "addFilter": "フィルタ追加",
       "edit": "編集",
-      "process-ai": "AI処理",
       "process-ai-test": "AIテスト実行",
       "setting": "設定する"
     },
@@ -339,6 +329,7 @@
     },
     "text": {
       "no-data": {
+        "default": "まだデータはありません。",
         "api-key": "生成されたAPI Keyがありません。",
         "member": "登録されたMemberがいません。",
         "channel": "作成されたChannelがありません。",
@@ -367,12 +358,9 @@
       "all-image-url-allow": "すべてのImage URLを許可します。",
       "select-project": "Projectを選択してください。",
       "no-category": "カテゴリがありません。",
-      "token-usage": "トークン使用量",
-      "remaining-token-amount": "残りのトークン量",
       "token-threshold-percentage": "上限値の{{percentage}}%に達しました",
       "ai-issue-ready": "フィードバックに合ったイシューを推薦します",
-      "ai-issue-pending": "AIがイシューを分析中です...",
-      "go-to-ai-field-template": "AI Field Template設定へ行く"
+      "ai-issue-pending": "AIがイシューを分析中です..."
     },
     "create-tenant": {
       "tenant": {
@@ -430,9 +418,9 @@
     "description": {
       "create-project": "Projectの作成が完了しました。\n次は、フィードバックを収集するためにChannelを作成する必要があります。\n「Channel作成」から次のステップへ進んでください。",
       "create-channel": "Channelの作成が完了しました。\nこれでユーザーフィードバックの収集・管理の準備が整いました。\n「はじめる」から本格的にご利用ください。",
-      "remaining-token-amount": "残りのトークン量を確認するには、上限値を設定してください。",
+      "remaining-token-amount": "月間残りトークン量を確認するには、まず上限値を設定してください。",
       "token-threshold": "月間トークン使用量に対する上限値を設定します。上限を超えるとAI機能が停止します。",
-      "pre-limit-notification": "設定した基準値に達すると、トークン使用量の通知を受け取ります。(使用量は毎月1日にリセットされます。)",
+      "pre-limit-notification": "設定した上限値の80%に達すると通知が送信されます。",
       "ai-field-template-form": "テンプレートの基本情報を設定します。",
       "ai-field-template-advanced-configuration": "テンプレートの連携ModelとTemperatureを変更できます。",
       "ai-field-template-playground": "テンプレートとテストデータを活用してAI結果を事前に確認できます。",
