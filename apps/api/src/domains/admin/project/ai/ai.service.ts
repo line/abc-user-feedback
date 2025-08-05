@@ -121,7 +121,7 @@ export class AIService {
     }
   }
 
-  async getOrCreateIntegration(projectId: number) {
+  async getIntegration(projectId: number) {
     const integration = await this.aiIntegrationsRepo.findOne({
       where: {
         project: {
@@ -130,30 +130,7 @@ export class AIService {
       },
     });
 
-    if (!integration) {
-      const newIntegration = await this.upsertIntegration(
-        CreateAIIntegrationsDto.from({
-          projectId,
-          provider: 'OPEN_AI',
-          apiKey: '',
-          endpointUrl: '',
-          systemPrompt: '',
-        }),
-      );
-      await this.createDefaultFieldTemplates(projectId);
-
-      return newIntegration;
-    }
-
-    return {
-      id: integration.id,
-      provider: integration.provider,
-      apiKey: integration.apiKey,
-      endpointUrl: integration.endpointUrl,
-      systemPrompt: integration.systemPrompt,
-      tokenThreshold: integration.tokenThreshold,
-      notificationThreshold: integration.notificationThreshold,
-    };
+    return integration;
   }
 
   @Transactional()
@@ -170,6 +147,9 @@ export class AIService {
       const newIntegration =
         CreateAIIntegrationsDto.toAIIntegrationsEntity(dto);
       await this.aiIntegrationsRepo.save(newIntegration);
+
+      await this.createDefaultFieldTemplates(dto.projectId);
+
       return newIntegration;
     }
 
