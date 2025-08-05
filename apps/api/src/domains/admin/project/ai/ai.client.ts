@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Logger } from '@nestjs/common';
 import axios from 'axios';
 import type { AxiosInstance, AxiosResponse } from 'axios';
@@ -328,9 +329,9 @@ export class AIClient {
       const result = new PromptResult();
       result.status = AIPromptStatusEnum.error;
 
-      const errorMessage =
-        error?.response?.data?.error?.message ||
-        error?.message ||
+      const errorMessage: string =
+        (error?.response?.data?.error?.message as string) ||
+        (error?.message as string) ||
         'Unknown error';
 
       result.content = `Error executing prompt: ${errorMessage}`;
@@ -427,9 +428,9 @@ export class AIClient {
       const result = new PromptResult();
       result.status = AIPromptStatusEnum.error;
 
-      const errorMessage =
-        error?.response?.data?.error?.message ||
-        error?.message ||
+      const errorMessage: string =
+        (error?.response?.data?.error?.message as string) ||
+        (error?.message as string) ||
         'Unknown error';
 
       result.content = `Error executing prompt: ${errorMessage}`;

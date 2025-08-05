@@ -491,7 +491,7 @@ export class AIService {
       if (field.format === FieldFormatEnum.aiField) {
         if (data[field.key] && typeof data[field.key] === 'string') {
           try {
-            data[field.key] = JSON.parse(data[field.key]);
+            data[field.key] = JSON.parse(data[field.key] as string) as object;
           } catch (e) {
             this.logger.error(
               `Failed to parse AI field data for key ${field.key}: ${e}`,
@@ -877,6 +877,12 @@ export class AIService {
       throw new NotFoundException('No issue templates found');
     }
 
+    if (!issueTemplate.model) {
+      throw new BadRequestException(
+        `The model is not set for the AI issue template (channelId: ${feedback.channel.id})`,
+      );
+    }
+
     const client = new AIClient({
       apiKey: integration.apiKey,
       provider: integration.provider,
@@ -886,7 +892,7 @@ export class AIService {
     const targetFeedback = JSON.stringify(
       issueTemplate.targetFieldKeys.reduce((acc: FieldType[], key) => {
         if (feedback.data[key] !== undefined) {
-          acc.push({ [key]: feedback.data[key] });
+          acc.push({ [key]: feedback.data[key] as string });
           return acc;
         }
         return acc;
@@ -910,7 +916,7 @@ export class AIService {
     const existingIssues = issues.map((issue) => issue.name).join(',');
 
     const param = new IssueRecommendParameters(
-      issueTemplate.model!,
+      issueTemplate.model,
       issueTemplate.temperature,
       integration.systemPrompt,
       targetFeedback,

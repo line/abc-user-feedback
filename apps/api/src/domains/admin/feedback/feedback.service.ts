@@ -300,7 +300,9 @@ export class FeedbackService {
       }
 
       if (fieldsByKey[key].format === FieldFormatEnum.aiField) {
-        convertedFeedback[fieldsByKey[key].name] = feedback[key].message;
+        convertedFeedback[fieldsByKey[key].name] = (
+          feedback[key] as { status: string; message: string }
+        ).message;
       }
     }
 
