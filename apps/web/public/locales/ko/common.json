@@ -389,9 +389,14 @@
     "toast": {
       "success": "성공적으로 처리되었습니다.",
       "copy": "클립보드에 복사되었습니다.",
-      "ai-usage-limit-approaching": "이번 달 AI 사용량이 상한에 도달할 예정입니다.",
-      "ai-function-terminated": "AI 기능이 중단되었습니다.",
-      "ai-function-terminated-description": "AI 실행이 토큰 사용량 한도를 초과하여 중단되었습니다."
+      "ai-usage-limit-approaching": {
+        "title": "AI 사용량 도달",
+        "description": "토큰 사용량이 상한값의 {{percentage}}%에 도달했습니다."
+      },
+      "ai-function-terminated": {
+        "title": "AI 기능 중단",
+        "description": "토큰 사용량이 한도를 초과해서 AI 실행이 중지되었습니다."
+      }
     },
     "webhook-card": {
       "feedback-creation": {

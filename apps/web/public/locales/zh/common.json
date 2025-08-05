@@ -388,9 +388,14 @@
     "toast": {
       "success": "处理成功。",
       "copy": "已复制到剪贴板。",
-      "ai-usage-limit-approaching": "本月AI使用量接近上限。",
-      "ai-function-terminated": "AI功能已终止。",
-      "ai-function-terminated-description": "由于超过令牌使用限制，AI执行已停止。"
+      "ai-usage-limit-approaching": {
+        "title": "AI使用量接近上限",
+        "description": "令牌使用量已达到上限的{{percentage}}%。"
+      },
+      "ai-function-terminated": {
+        "title": "AI功能已终止",
+        "description": "由于超过令牌使用限制，AI执行已停止。"
+      }
     },
     "webhook-card": {
       "feedback-creation": {

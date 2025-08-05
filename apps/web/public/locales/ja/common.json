@@ -388,9 +388,14 @@
     "toast": {
       "success": "正常に処理されました",
       "copy": "クリップボードにコピーしました",
-      "ai-usage-limit-approaching": "今月のAI使用量が上限に近づいています",
-      "ai-function-terminated": "AI機能が終了しました。",
-      "ai-function-terminated-description": "AI実行がトークン使用量制限を超えたため停止されました。"
+      "ai-usage-limit-approaching": {
+        "title": "AI使用量の上限に近づいています",
+        "description": "トークン使用量が上限の{{percentage}}%に達しました。"
+      },
+      "ai-function-terminated": {
+        "title": "AI機能が中断されました",
+        "description": "AI実行がトークン使用量制限を超えたため停止されました。"
+      }
     },
     "webhook-card": {
       "feedback-creation": {

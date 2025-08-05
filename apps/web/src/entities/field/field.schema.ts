@@ -117,6 +117,6 @@ export const fieldInfoSchema = fieldSchema
       : true,
     {
       path: ['aiFieldTargetKeys'],
-      message: 'Field Targets are required.',
+      message: 'Target Fields are required.',
     },
   );

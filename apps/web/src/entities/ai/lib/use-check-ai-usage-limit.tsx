@@ -36,6 +36,7 @@ const useCheckAIUsageLimit = (projectId: number) => {
       to: dayjs().endOf('month').toISOString(),
     },
   });
+
   const [checkedTotalLimitTime, setCheckedTotalLimitTime] =
     useLocalStorage<string>(
       `totalLimit-${projectId}-${dayjs().format('YYYY-MM')}`,
@@ -62,16 +63,19 @@ const useCheckAIUsageLimit = (projectId: number) => {
           dayjs(checkedTotalLimitTime).add(1, 'day').isBefore(dayjs())
         ) {
           setCheckedTotalLimitTime(dayjs().toISOString());
-          const toastId = toast.error(t('v2.toast.ai-function-terminated'), {
-            description: t('v2.toast.ai-function-terminated-description'),
-            cancel: {
-              label: <Icon name="RiCloseFill" size={20} />,
-              onClick: () => {
-                toast.dismiss(toastId);
+          const toastId = toast.error(
+            t('v2.toast.ai-function-terminated.title'),
+            {
+              description: t('v2.toast.ai-function-terminated.description'),
+              cancel: {
+                label: <Icon name="RiCloseFill" size={20} />,
+                onClick: () => {
+                  toast.dismiss(toastId);
+                },
               },
+              duration: Infinity,
             },
-            duration: Infinity,
-          });
+          );
         }
         return;
       }
@@ -81,8 +85,16 @@ const useCheckAIUsageLimit = (projectId: number) => {
       if (totalUsage >= notificationLimit) {
         if (!isCheckedNotificationLimit) {
           const toastId = toast.warning(
-            t('v2.toast.ai-usage-limit-approaching'),
+            t('v2.toast.ai-usage-limit-approaching.title'),
             {
+              description: t(
+                'v2.toast.ai-usage-limit-approaching.description',
+                {
+                  percentage: Math.round(
+                    (notificationLimit / totalLimit) * 100,
+                  ),
+                },
+              ),
               cancel: {
                 label: <Icon name="RiCloseFill" size={20} />,
                 onClick: () => {

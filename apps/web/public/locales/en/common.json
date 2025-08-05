@@ -388,9 +388,14 @@
     "toast": {
       "success": "Successfully processed.",
       "copy": "Copied to clipboard.",
-      "ai-usage-limit-approaching": "AI usage limit approaching for this month.",
-      "ai-function-terminated": "AI function terminated.",
-      "ai-function-terminated-description": "AI execution has been stopped due to exceeding token usage limit."
+      "ai-usage-limit-approaching": {
+        "title": "AI Usage Limit Approaching",
+        "description": "Token usage has reached {{percentage}}% of the limit."
+      },
+      "ai-function-terminated": {
+        "title": "AI Function Terminated",
+        "description": "AI execution has been stopped due to exceeding token usage limit."
+      }
     },
     "webhook-card": {
       "feedback-creation": {
