@@ -20,15 +20,9 @@ import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 import { useThrottle } from 'react-use';
 
-import { Form, FormField } from '@ufb/react';
-
 import type { FormOverlayProps } from '@/shared';
-import { FormDialog } from '@/shared';
-import {
-  FormInput,
-  FormSelect,
-  FormSelectSearch,
-} from '@/shared/ui/form-inputs';
+import { AsyncSelectSearchInput, FormDialog, TextInput } from '@/shared';
+import { SelectInput } from '@/shared/ui/inputs';
 import type { ProjectInfo } from '@/entities/project';
 import type { Role } from '@/entities/role';
 import { useUserSearch } from '@/entities/user';
@@ -72,11 +66,12 @@ const MemberFormDialog: React.FC<Props> = (props) => {
     ],
   });
 
-  const methods = useForm<MemberInfoForm>({
-    defaultValues: data,
-    resolver: zodResolver(memberInfoFormSchema),
-  });
-  const { handleSubmit, formState, control } = methods;
+  const { setValue, handleSubmit, formState, register, getValues, watch } =
+    useForm<MemberInfoForm>({
+      defaultValues: data,
+      resolver: zodResolver(memberInfoFormSchema),
+    });
+  const user = watch('user');
 
   return (
     <FormDialog
@@ -91,126 +86,66 @@ const MemberFormDialog: React.FC<Props> = (props) => {
       submitBtn={{ disabled: updateDisabled, form: 'memberForm' }}
       formState={formState}
     >
-      <Form {...methods}>
-        <form
-          id="memberForm"
-          className="flex flex-col gap-4"
-          onSubmit={handleSubmit((value) => {
-            const { role, user, createdAt, id } = value;
-            if (!user || !role) return;
-            onSubmit({ role, user, createdAt, id });
-          })}
-        >
-          {!data && <FormInput label="Project" value={project.name} disabled />}
-          <FormField
-            control={control}
-            name="user"
-            render={({ field }) => (
-              <FormSelectSearch
-                label="Email"
-                value={field.value?.email}
-                onChange={(value) => {
-                  const user = userData?.items.find(
-                    (user) => user.email === value,
-                  );
-                  field.onChange(user);
-                }}
-                options={
-                  userData?.items
-                    .filter(
-                      (v) => !members.some((member) => member.user.id === v.id),
-                    )
-                    .map((v) => ({ label: v.email, value: v.email })) ?? []
-                }
-                required
-                disabled={!!data}
-                fetchNextPage={() => setPage((prev) => prev + 1)}
-                hasNextPage={
-                  (userData?.meta.itemCount ?? 0) <
-                  (userData?.meta.totalItems ?? 0)
-                }
-                isFetchingNextPage={isLoading}
-                inputValue={inputValue}
-                setInputValue={(v) => {
-                  setInputValue(v);
-                  setPage(1);
-                }}
-              />
-            )}
+      <form
+        id="memberForm"
+        className="flex flex-col gap-4"
+        onSubmit={handleSubmit((value) => {
+          const { role, user, createdAt, id } = value;
+          if (!user || !role) return;
+          onSubmit({ role, user, createdAt, id });
+        })}
+      >
+        {!data && <TextInput label="Project" value={project.name} disabled />}
+        <AsyncSelectSearchInput
+          label="Email"
+          value={user ? { label: user.email, value: user.email } : null}
+          onChange={(value) => {
+            const user = userData?.items.find(
+              (user) => user.email === value?.value,
+            );
+            setValue('user', user, { shouldDirty: true });
+          }}
+          options={
+            userData?.items
+              .filter((v) => !members.some((member) => member.user.id === v.id))
+              .map((v) => ({ label: v.email, value: v.email })) ?? []
+          }
+          error={formState.errors.user?.message}
+          required
+          disabled={!!data}
+          fetchNextPage={() => setPage((prev) => prev + 1)}
+          hasNextPage={
+            (userData?.meta.itemCount ?? 0) < (userData?.meta.totalItems ?? 0)
+          }
+          isFetchingNextPage={isLoading}
+          inputValue={inputValue}
+          setInputValue={(v) => {
+            setInputValue(v);
+            setPage(1);
+          }}
+        />
+        {data && <TextInput label="Name" disabled {...register('user.name')} />}
+        {data && (
+          <TextInput
+            label="Department"
+            {...register('user.department')}
+            disabled
           />
-          {data && (
-            <FormField
-              name="user.id"
-              control={control}
-              render={({ field }) => (
-                <FormInput
-                  label="ID"
-                  type="number"
-                  placeholder={t('v2.placeholder.text')}
-                  disabled
-                  {...field}
-                />
-              )}
-            />
-          )}
-          {data && (
-            <>
-              <FormField
-                name="user.name"
-                control={control}
-                render={({ field }) => (
-                  <FormInput label="Name" disabled value={field.value ?? ''} />
-                )}
-              />
-              <FormField
-                name="user.department"
-                control={control}
-                render={({ field }) => (
-                  <FormInput
-                    label="Department"
-                    disabled
-                    value={field.value ?? ''}
-                  />
-                )}
-              />
-            </>
-          )}
-          <FormField
-            control={control}
-            name="role"
-            render={({ field }) => (
-              <FormSelect
-                label="Role"
-                value={field.value?.id.toString()}
-                placeholder={t('v2.placeholder.select')}
-                onChange={(v) => {
-                  const role = roles.find((role) => String(role.id) === v);
-                  if (!role) return;
-                  field.onChange(role);
-                }}
-                required
-                options={roles.map((v) => ({
-                  label: v.name,
-                  value: `${v.id}`,
-                }))}
-              />
-            )}
-          />
-          {/* <SelectInput
-            label="Role"
-            placeholder={t('v2.placeholder.select')}
-            value={(getValues('role.id') as number | undefined)?.toString()}
-            options={roles.map((v) => ({ label: v.name, value: `${v.id}` }))}
-            onChange={(v) => {
-              const role = roles.find((role) => String(role.id) === v);
-              if (!role) return;
-              setValue('role', role, { shouldDirty: true });
-            }}
-            error={formState.errors.role?.message}
-            required
-          /> */}
-        </form>
-      </Form>
+        )}
+        <SelectInput
+          label="Role"
+          placeholder={t('v2.placeholder.select')}
+          value={(getValues('role.id') as number | undefined)?.toString()}
+          options={roles.map((v) => ({ label: v.name, value: `${v.id}` }))}
+          onChange={(v) => {
+            const role = roles.find((role) => String(role.id) === v);
+            if (!role) return;
+            setValue('role', role, { shouldDirty: true });
+          }}
+          error={formState.errors.role?.message}
+          required
+        />
+      </form>
     </FormDialog>
   );
 };

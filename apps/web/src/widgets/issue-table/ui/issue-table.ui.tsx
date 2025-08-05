@@ -157,7 +157,6 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                 onChange={updateDateRage}
                 value={dateRange}
                 maxDate={new Date()}
-                clearable
               />
             </TooltipTrigger>
             <TooltipContent>

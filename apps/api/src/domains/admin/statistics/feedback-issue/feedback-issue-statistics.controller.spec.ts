@@ -62,6 +62,6 @@ describe('FeedbackIssue Statistics Controller', () => {
 
     expect(
       MockFeedbackIssueStatisticsService.getCountByDateByIssue,
-    ).toBeCalledTimes(1);
+    ).toHaveBeenCalledTimes(1);
   });
 });

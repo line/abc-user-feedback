@@ -16,7 +16,6 @@
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import Linkify from 'linkify-react';
-import { useTranslation } from 'next-i18next';
 
 import type { IconNameType } from '@ufb/react';
 import {
@@ -40,7 +39,11 @@ import { BADGE_COLOR_MAP } from '../constants/color-map';
 import { useOAIMutation, usePermissions } from '../lib';
 import { cn } from '../utils';
 import ImagePreviewButton from './image-preview-button';
-import { DatePicker, MultiSelectInput, SelectInput } from './inputs';
+import {
+  DatePicker,
+  MultiSelectSearchInput,
+  SelectSearchInput,
+} from './inputs';
 
 interface PlainRow {
   format: 'text' | 'keyword' | 'number' | 'date' | 'images';
@@ -123,7 +126,6 @@ type RenderFieldMap<T extends SheetDetailTableRow> = Record<
 
 const SheetDetailTable = (props: Props) => {
   const { rows, data, mode = 'view', onChange } = props;
-  const { t } = useTranslation();
 
   const renderViewModeField: RenderFieldMap<SheetDetailTableRow> = {
     text: (value) =>
@@ -276,34 +278,25 @@ const SheetDetailTable = (props: Props) => {
     ),
     select: (value, row) => {
       return (
-        <SelectInput
+        <SelectSearchInput
           options={(row as SelectableRow).options.map((option) => ({
-            value: option.name,
+            value: option.key,
             label: option.name,
           }))}
-          value={
-            (row as SelectableRow).options.find((v) => v.key === value)?.name
-          }
-          onChange={(value) => {
-            onChange?.(
-              row.key,
-              (row as SelectableRow).options.find((v) => v.name === value)
-                ?.key ?? null,
-            );
-          }}
+          value={(value as string | null) ?? undefined}
+          onChange={(key) => onChange?.(row.key, key ?? null)}
           disabled={row.disabled}
         />
       );
     },
     multiSelect: (value, row) => (
-      <MultiSelectInput
+      <MultiSelectSearchInput
         options={(row as SelectableRow).options.map((option) => ({
           value: option.key,
           label: option.name,
         }))}
         value={value as string[]}
         onChange={(value) => onChange?.(row.key, value)}
-        placeholder={t('v2.placeholder.select')}
         disabled={row.disabled}
       />
     ),

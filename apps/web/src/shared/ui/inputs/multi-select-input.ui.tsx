@@ -13,81 +13,135 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { IconNameType, Size } from '@ufb/react';
+import { useTranslation } from 'next-i18next';
+
 import {
-  Button,
-  Caption,
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxList,
+  ComboboxSelectItem,
+  ComboboxTrigger,
   Icon,
-  Label,
-  MultiSelect,
-  MultiSelectContent,
-  MultiSelectItem,
-  MultiSelectTrigger,
-  MultiSelectValue,
+  Tag,
 } from '@ufb/react';
 
+import { commandFilter } from '@/shared/utils';
+
 interface Props {
-  placeholder?: string;
-  options: { label: string; value: string; icon?: IconNameType }[];
-  label?: string;
-  value: string[];
+  value?: string[];
   onChange?: (value: string[]) => void;
-  disabled?: boolean;
+  options: { label: string; value: string }[];
   required?: boolean;
+  disabled?: boolean;
   error?: string;
-  size?: Size;
-  clearable?: boolean;
+  inputValue?: string;
+  setInputValue?: (value: string) => void;
 }
 
-const MultiSelectInput: React.FC<Props> = (props) => {
+const MultiSelectSearchInput: React.FC<Props> = (props) => {
   const {
-    placeholder,
-    options,
-    label,
-    value,
     onChange,
-    disabled,
-    required,
-    error,
-    size,
-    clearable = false,
+    value,
+    options,
+    disabled = false,
+    inputValue,
+    setInputValue,
   } = props;
 
+  const { t } = useTranslation();
+
+  const currentOptions = options.filter(
+    (option) => !value?.some((v) => v === option.value),
+  );
+  const currentValues = options.filter((option) =>
+    value?.some((v) => v === option.value),
+  );
+
   return (
-    <MultiSelect
-      value={value}
-      onValueChange={onChange}
-      disabled={disabled}
-      size={size}
-    >
-      {label && (
-        <Label>
-          {label} {required && <span className="text-tint-red">*</span>}
-        </Label>
-      )}
-      <MultiSelectTrigger>
-        <MultiSelectValue placeholder={placeholder} />
-        {clearable && value.length > 0 && (
-          <Button variant="ghost" onClick={(e) => e.stopPropagation()}>
-            <Icon
-              name="RiCloseCircleFill"
-              className="z-20"
-              onClick={() => onChange?.([])}
-            />
-          </Button>
-        )}
-      </MultiSelectTrigger>
-      <MultiSelectContent className="max-h-[200px] overflow-auto">
-        {options.map(({ label, value, icon }) => (
-          <MultiSelectItem key={value} value={value}>
-            {icon && <Icon name={icon} size={16} className="mr-2" />}
-            {label}
-          </MultiSelectItem>
-        ))}
-      </MultiSelectContent>
-      {error && <Caption variant="error">{error}</Caption>}
-    </MultiSelect>
+    <Combobox>
+      <ComboboxTrigger
+        disabled={disabled}
+        className="scrollbar-hide overflow-auto font-normal"
+      >
+        {currentValues.length > 0 ?
+          currentValues
+            .sort((a, b) => a.value.localeCompare(b.value))
+            .map((v) => (
+              <Tag key={v.value} variant="outline" size="small">
+                {v.label}
+              </Tag>
+            ))
+        : t('v2.placeholder.select')}
+        <Icon name="RiArrowDownSLine" />
+      </ComboboxTrigger>
+      <ComboboxContent align="start" options={{ filter: commandFilter }}>
+        <ComboboxInput
+          placeholder={t('v2.placeholder.select')}
+          value={inputValue}
+          onValueChange={setInputValue}
+        />
+        <ComboboxList maxHeight="200px">
+          <ComboboxEmpty>No results found.</ComboboxEmpty>
+          {currentValues.length > 0 && (
+            <ComboboxGroup
+              heading={
+                <span className="text-neutral-tertiary text-base-normal">
+                  Selected
+                </span>
+              }
+            >
+              {currentValues.map((currentValue) => (
+                <ComboboxSelectItem
+                  key={currentValue.value}
+                  value={currentValue.value}
+                  keywords={[currentValue.label]}
+                  onSelect={(input) => {
+                    onChange?.(
+                      currentValues
+                        .filter((v) => v.value !== input)
+                        .map((v) => v.value),
+                    );
+                  }}
+                  checked
+                >
+                  {currentValue.label}
+                </ComboboxSelectItem>
+              ))}
+            </ComboboxGroup>
+          )}
+          {currentOptions.length > 0 && (
+            <ComboboxGroup
+              heading={
+                <span className="text-neutral-tertiary text-base-normal">
+                  List
+                </span>
+              }
+            >
+              {options
+                .filter((option) => !value?.some((v) => v === option.value))
+                .map((option) => {
+                  return (
+                    <ComboboxSelectItem
+                      key={option.value}
+                      value={option.value}
+                      keywords={[option.label]}
+                      onSelect={() =>
+                        onChange?.([...(value ?? []), option.value])
+                      }
+                    >
+                      {option.label}
+                    </ComboboxSelectItem>
+                  );
+                })}
+            </ComboboxGroup>
+          )}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
   );
 };
 
-export default MultiSelectInput;
+export default MultiSelectSearchInput;

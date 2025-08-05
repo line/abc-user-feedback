@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -44,7 +43,7 @@ interface Props extends CommonFormItemType<string> {
   inputValue?: string;
   setInputValue?: (value: string) => void;
   isFetchingNextPage?: boolean;
-  onChange: (value?: string) => void;
+  onChange: (value?: string | null) => void;
 }
 
 const FormSelectSearch = ({
@@ -63,19 +62,8 @@ const FormSelectSearch = ({
 }: Props) => {
   const { t } = useTranslation();
 
-  const [currentOption, setCurrentOption] = useState<{
-    label: string;
-    value: string;
-  }>();
-
-  useEffect(() => {
-    const option = options.find((v) => v.value === value);
-    setCurrentOption(option);
-  }, [value]);
-
-  const currentOptions = options.filter(
-    (option) => option.value !== currentOption?.value,
-  );
+  const currentOptions = options.filter((option) => option.value !== value);
+  const selectedValue = options.find((option) => option.value === value);
 
   return (
     <FormItem>
@@ -85,7 +73,7 @@ const FormSelectSearch = ({
       <Combobox>
         <FormControl>
           <ComboboxTrigger disabled={disabled} className="w-full font-normal">
-            {currentOption?.label ??
+            {selectedValue?.label ??
               value ??
               placeholder ??
               t('v2.placeholder.select')}
@@ -100,7 +88,7 @@ const FormSelectSearch = ({
           />
           <ComboboxList maxHeight="200px">
             <ComboboxEmpty>No results found.</ComboboxEmpty>
-            {(currentOption?.label ?? value) && (
+            {(selectedValue?.label ?? value) && (
               <ComboboxGroup
                 heading={
                   <span className="text-neutral-tertiary text-base-normal">
@@ -109,14 +97,11 @@ const FormSelectSearch = ({
                 }
               >
                 <ComboboxSelectItem
-                  value={currentOption?.label ?? value ?? undefined}
-                  onSelect={() => {
-                    onChange(undefined);
-                    setCurrentOption(undefined);
-                  }}
+                  value={selectedValue?.label ?? value ?? undefined}
+                  onSelect={() => onChange(null)}
                   checked
                 >
-                  {currentOption?.label ?? value}
+                  {selectedValue?.label ?? value}
                 </ComboboxSelectItem>
               </ComboboxGroup>
             )}
@@ -133,12 +118,9 @@ const FormSelectSearch = ({
                     key={option.value}
                     value={option.value}
                     checked={option.value === value}
-                    onSelect={() => {
-                      const newValue =
-                        option.value === value ? undefined : option.value;
-                      setCurrentOption(option);
-                      onChange(newValue);
-                    }}
+                    onSelect={(input) =>
+                      onChange(input === value ? null : input)
+                    }
                   >
                     {option.label}
                   </ComboboxSelectItem>

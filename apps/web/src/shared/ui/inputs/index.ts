@@ -14,10 +14,14 @@
  * under the License.
  */
 export { default as TextInput } from './text-input.ui';
+
 export { default as SelectInput } from './select-input.ui';
 export { default as SelectSearchInput } from './select-search-input.ui';
+export { default as AsyncSelectSearchInput } from './async-select-search-input.ui';
+
 export { default as ComboboxInputbox } from './combobox-input-box.ui';
 export { default as DatePicker } from './date-picker.ui';
 export { default as MultiSelectSearchInput } from './multi-select-search-input.ui';
 export { default as SliderInput } from './slider-input.ui';
 export { default as MultiSelectInput } from './multi-select-input.ui';
+export { default as AsyncMultiSelectSearchInput } from './async-multi-select-search-input.ui';

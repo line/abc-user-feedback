@@ -21,8 +21,8 @@
     "@ufb/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "react": "^19.0.0",
-    "tsup": "^8.0.2",
+    "react": "^19.1.1",
+    "tsup": "^8.5.0",
     "typescript": "catalog:"
   }
 }

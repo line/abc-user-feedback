@@ -13,19 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-"use client";
+'use client';
 
-import * as React from "react";
-import * as SelectPrimitive from "@radix-ui/react-select";
-import { Slottable } from "@radix-ui/react-slot";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import * as SelectPrimitive from '@radix-ui/react-select';
+import { Slottable } from '@radix-ui/react-slot';
+import { cva } from 'class-variance-authority';
 
-import type { Radius, Size } from "../lib/types";
-import { ICON_SIZE } from "../constants";
-import { cn } from "../lib/utils";
-import { Icon } from "./icon";
-import { ScrollArea, ScrollBar } from "./scroll-area";
-import useTheme from "./use-theme";
+import { ICON_SIZE } from '../constants';
+import type { Radius, Size } from '../lib/types';
+import { cn } from '../lib/utils';
+import { Icon } from './icon';
+import { ScrollArea, ScrollBar } from './scroll-area';
+import useTheme from './use-theme';
 
 type SelectContextType = { size: Size; radius: Radius };
 
@@ -35,7 +35,7 @@ const SelectContext = React.createContext<SelectContextType | undefined>(
 
 function useSelectContext() {
   const ctx = React.useContext(SelectContext);
-  if (!ctx) throw new Error("Select components must be used within <Select>");
+  if (!ctx) throw new Error('Select components must be used within <Select>');
   return ctx;
 }
 interface SelectProps
@@ -45,12 +45,12 @@ interface SelectProps
   radius?: Radius;
 }
 
-const selectVariants = cva("select", {
+const selectVariants = cva('select', {
   variants: {
     size: {
-      small: "select-small",
-      medium: "select-medium",
-      large: "select-large",
+      small: 'select-small',
+      medium: 'select-medium',
+      large: 'select-large',
     },
     defaultVariants: { size: undefined },
   },
@@ -75,17 +75,17 @@ const SelectGroup = SelectPrimitive.Group;
 
 const SelectValue = SelectPrimitive.Value;
 
-const selectTriggerVariants = cva("select-trigger", {
+const selectTriggerVariants = cva('select-trigger', {
   variants: {
     size: {
-      small: "select-trigger-small",
-      medium: "select-trigger-medium",
-      large: "select-trigger-large",
+      small: 'select-trigger-small',
+      medium: 'select-trigger-medium',
+      large: 'select-trigger-large',
     },
     radius: {
-      small: "select-trigger-radius-small",
-      medium: "select-trigger-radius-medium",
-      large: "select-trigger-radius-large",
+      small: 'select-trigger-radius-small',
+      medium: 'select-trigger-radius-medium',
+      large: 'select-trigger-radius-large',
     },
   },
   defaultVariants: { size: undefined, radius: undefined },
@@ -125,17 +125,17 @@ const SelectContent = React.forwardRef<
   SelectContentProps
 >(
   (
-    { maxHeight = "auto", className, children, position = "popper", ...props },
+    { maxHeight = 'auto', className, children, position = 'popper', ...props },
     ref,
   ) => (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         ref={ref}
-        className={cn("select-content", className)}
+        className={cn('select-content', className)}
         position={position}
         {...props}
       >
-        <SelectPrimitive.Viewport className={cn("select-viewport")}>
+        <SelectPrimitive.Viewport className={cn('select-viewport')}>
           <ScrollArea maxHeight={maxHeight}>
             {children}
             <ScrollBar />
@@ -153,22 +153,22 @@ const SelectGroupLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
-    className={cn("select-group-label", className)}
+    className={cn('select-group-label', className)}
     {...props}
   />
 ));
-SelectGroupLabel.displayName = "SelectGroupLabel";
+SelectGroupLabel.displayName = 'SelectGroupLabel';
 
-const selectItemVariants = cva("select-item", {
-  variants: { check: { left: "select-item-left", right: "select-item-right" } },
-  defaultVariants: { check: "left" },
+const selectItemVariants = cva('select-item', {
+  variants: { check: { left: 'select-item-left', right: 'select-item-right' } },
+  defaultVariants: { check: 'left' },
 });
 
-const selectItemCheckVariants = cva("select-item-check", {
+const selectItemCheckVariants = cva('select-item-check', {
   variants: {
-    check: { left: "select-item-check-left", right: "select-item-check-right" },
+    check: { left: 'select-item-check-left', right: 'select-item-check-right' },
   },
-  defaultVariants: { check: "left" },
+  defaultVariants: { check: 'left' },
 });
 
 type SelectItemProps = React.ComponentPropsWithoutRef<
@@ -182,7 +182,7 @@ const SelectItem = React.forwardRef<
     ref={ref}
     className={cn(
       selectItemVariants({
-        check: typeof children === "string" ? "left" : "right",
+        check: typeof children === 'string' ? 'left' : 'right',
         className,
       }),
     )}
@@ -191,7 +191,7 @@ const SelectItem = React.forwardRef<
     <SelectPrimitive.ItemIndicator
       className={cn(
         selectItemCheckVariants({
-          check: typeof children === "string" ? "left" : "right",
+          check: typeof children === 'string' ? 'left' : 'right',
         }),
       )}
     >
@@ -208,7 +208,7 @@ const SelectSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Separator
     ref={ref}
-    className={cn("select-separator", className)}
+    className={cn('select-separator', className)}
     {...props}
   />
 ));

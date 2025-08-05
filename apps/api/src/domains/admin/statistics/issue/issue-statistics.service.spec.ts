@@ -104,7 +104,7 @@ describe('IssueStatisticsService suite', () => {
 
       const countByDateByChannel = await issueStatsService.getCountByDate(dto);
 
-      expect(issueStatsRepo.find).toBeCalledTimes(1);
+      expect(issueStatsRepo.find).toHaveBeenCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         statistics: [
           {
@@ -144,7 +144,7 @@ describe('IssueStatisticsService suite', () => {
 
       const countByDateByChannel = await issueStatsService.getCountByDate(dto);
 
-      expect(issueStatsRepo.find).toBeCalledTimes(1);
+      expect(issueStatsRepo.find).toHaveBeenCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         statistics: [
           {
@@ -179,7 +179,7 @@ describe('IssueStatisticsService suite', () => {
 
       const countByDateByChannel = await issueStatsService.getCountByDate(dto);
 
-      expect(issueStatsRepo.find).toBeCalledTimes(1);
+      expect(issueStatsRepo.find).toHaveBeenCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         statistics: [
           {
@@ -212,7 +212,7 @@ describe('IssueStatisticsService suite', () => {
 
       const countByDateByChannel = await issueStatsService.getCount(dto);
 
-      expect(issueRepo.count).toBeCalledTimes(1);
+      expect(issueRepo.count).toHaveBeenCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         count: issueStatsFixture.length,
       });
@@ -233,8 +233,8 @@ describe('IssueStatisticsService suite', () => {
 
       await issueStatsService.addCronJobByProjectId(projectId);
 
-      expect(schedulerRegistry.addCronJob).toBeCalledTimes(1);
-      expect(schedulerRegistry.addCronJob).toBeCalledWith(
+      expect(schedulerRegistry.addCronJob).toHaveBeenCalledTimes(1);
+      expect(schedulerRegistry.addCronJob).toHaveBeenCalledWith(
         `issue-statistics-${projectId}`,
         expect.anything(),
       );
@@ -258,7 +258,9 @@ describe('IssueStatisticsService suite', () => {
 
       await issueStatsService.createIssueStatistics(projectId, dayToCreate);
 
-      expect(issueStatsRepo.manager.transaction).toBeCalledTimes(dayToCreate);
+      expect(issueStatsRepo.manager.transaction).toHaveBeenCalledTimes(
+        dayToCreate,
+      );
     });
   });
 
@@ -283,9 +285,9 @@ describe('IssueStatisticsService suite', () => {
         count,
       });
 
-      expect(issueStatsRepo.findOne).toBeCalledTimes(1);
-      expect(issueStatsRepo.save).toBeCalledTimes(1);
-      expect(issueStatsRepo.save).toBeCalledWith({
+      expect(issueStatsRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(issueStatsRepo.save).toHaveBeenCalledTimes(1);
+      expect(issueStatsRepo.save).toHaveBeenCalledWith({
         count: 1 + count,
       });
     });
@@ -314,10 +316,10 @@ describe('IssueStatisticsService suite', () => {
         count,
       });
 
-      expect(issueStatsRepo.findOne).toBeCalledTimes(1);
-      expect(issueStatsRepo.createQueryBuilder).toBeCalledTimes(1);
-      expect(createQueryBuilder.values).toBeCalledTimes(1);
-      expect(createQueryBuilder.values).toBeCalledWith({
+      expect(issueStatsRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(issueStatsRepo.createQueryBuilder).toHaveBeenCalledTimes(1);
+      expect(createQueryBuilder.values).toHaveBeenCalledTimes(1);
+      expect(createQueryBuilder.values).toHaveBeenCalledWith({
         date: new Date(
           DateTime.fromJSDate(date).plus({ hours: 9 }).toISO()?.split('T')[0] +
             'T00:00:00',

@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -30,18 +29,15 @@ import {
 
 import { commandFilter } from '@/shared/utils';
 
-import InfiniteScrollArea from '../infinite-scroll-area.ui';
-
 interface Props {
   value?: string | null;
-  onChange?: (value?: string) => void;
+  onChange?: (value: string | null) => void;
   options: { label: string; value: string }[];
+  required?: boolean;
   disabled?: boolean;
-  fetchNextPage?: () => void;
-  hasNextPage?: boolean;
+  error?: string;
   inputValue?: string;
   setInputValue?: (value: string) => void;
-  isFetchingNextPage?: boolean;
 }
 
 const SelectSearchInput: React.FC<Props> = (props) => {
@@ -50,34 +46,19 @@ const SelectSearchInput: React.FC<Props> = (props) => {
     value,
     options,
     disabled = false,
-    fetchNextPage,
-    hasNextPage,
     inputValue,
     setInputValue,
-    isFetchingNextPage,
   } = props;
 
   const { t } = useTranslation();
 
-  const [open, setOpen] = useState(false);
-  const [currentOption, setCurrentOption] = useState<{
-    label: string;
-    value: string;
-  }>();
-
-  useEffect(() => {
-    const option = options.find((v) => v.value === value);
-    setCurrentOption(option);
-  }, [value]);
-
-  const currentOptions = options.filter(
-    (option) => option.value !== currentOption?.value,
-  );
+  const currentOptions = options.filter((option) => option.value !== value);
+  const selectedValue = options.find((option) => option.value === value);
 
   return (
-    <Combobox open={open} onOpenChange={setOpen}>
+    <Combobox>
       <ComboboxTrigger disabled={disabled} className="w-full font-normal">
-        {currentOption?.label ?? value ?? t('v2.placeholder.select')}
+        {selectedValue?.label ?? t('v2.placeholder.select')}
         <Icon name="RiArrowDownSLine" />
       </ComboboxTrigger>
       <ComboboxContent align="start" options={{ filter: commandFilter }}>
@@ -88,7 +69,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
         />
         <ComboboxList maxHeight="200px">
           <ComboboxEmpty>No results found.</ComboboxEmpty>
-          {(currentOption?.label ?? value) && (
+          {selectedValue && (
             <ComboboxGroup
               heading={
                 <span className="text-neutral-tertiary text-base-normal">
@@ -97,14 +78,12 @@ const SelectSearchInput: React.FC<Props> = (props) => {
               }
             >
               <ComboboxSelectItem
-                value={currentOption?.label ?? value ?? undefined}
-                onSelect={() => {
-                  onChange?.(undefined);
-                  setCurrentOption(undefined);
-                }}
+                value={selectedValue.value}
+                keywords={[selectedValue.label]}
+                onSelect={() => onChange?.(null)}
                 checked
               >
-                {currentOption?.label ?? value}
+                {selectedValue.label}
               </ComboboxSelectItem>
             </ComboboxGroup>
           )}
@@ -120,24 +99,17 @@ const SelectSearchInput: React.FC<Props> = (props) => {
                 <ComboboxSelectItem
                   key={option.value}
                   value={option.value}
+                  keywords={[option.label]}
                   checked={option.value === value}
-                  onSelect={() => {
-                    const newValue =
-                      option.value === value ? undefined : option.value;
-                    setCurrentOption(option);
-                    onChange?.(newValue);
-                  }}
+                  onSelect={(input) =>
+                    onChange?.(input === value ? null : input)
+                  }
                 >
                   {option.label}
                 </ComboboxSelectItem>
               ))}
             </ComboboxGroup>
           )}
-          <InfiniteScrollArea
-            hasNextPage={hasNextPage}
-            fetchNextPage={fetchNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-          />
         </ComboboxList>
       </ComboboxContent>
     </Combobox>

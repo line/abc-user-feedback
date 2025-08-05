@@ -173,13 +173,13 @@ const BasicTable = <T,>(props: IProps<T>) => {
                     {isFiltered ?
                       <>
                         <NoDataWithSearchImage />
-                        <p className="text-small-normal text-neutral-tertiary">
+                        <p className="text-small text-neutral-tertiary whitespace-pre-wrap text-center">
                           {t('v2.text.no-data.filter')}
                         </p>
                       </>
                     : <>
                         <NodataImage />
-                        <p className="text-small-normal text-neutral-tertiary">
+                        <p className="text-small text-neutral-tertiary whitespace-pre-wrap text-center">
                           {t('v2.text.no-data.default')}
                         </p>
                         {createButton}
