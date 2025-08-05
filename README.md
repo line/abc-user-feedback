@@ -49,6 +49,7 @@ For more detailed setup instructions, refer to the [Getting Started](#getting-st
 | ------------------------------------------- | ----------------------------------------- |
 | ![Image 3](./assets/03-issue-tracker.png)   | ![Image 4](./assets/04-single-signon.png) |
 | ![Image 5](./assets/05-role-management.png) | ![Image 6](./assets/06-dashboard.png)     |
+| ![Image 7](./assets/07-ai-field.png)        | ![Image 8](./assets/08-ai-issue.png)      |
 
 - **Feedback Tag**: You can assign tags to each feedback to categorize them by topic.
 - **Kanban Mode**: Experience the advantage of organizing and visualizing issue groups efficiently with Kanban mode.
