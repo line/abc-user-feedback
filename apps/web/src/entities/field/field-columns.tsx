@@ -82,10 +82,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
             <SelectOptionListPopover options={row.original.options ?? []} />
           );
         }
-        if (
-          row.original.format === 'aiField' &&
-          row.original.aiFieldTemplateId
-        ) {
+        if (row.original.format === 'aiField') {
           return (
             <AiFieldOptionPopover
               aiFieldTemplateId={row.original.aiFieldTemplateId}
@@ -97,17 +94,6 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
       enableSorting: false,
       meta: { truncate: false },
     }),
-    // columnHelper.accessor('options', {
-    //   header: 'Select Option',
-    //   cell: ({ getValue }) => {
-    //     const options = getValue() ?? [];
-    //     return options.length > 0 ?
-    //         <OptionListPopover options={options} />
-    //       : '-';
-    //   },
-    //   enableSorting: false,
-    //   meta: { truncate: false },
-    // }),
     columnHelper.accessor('property', {
       header: 'Property',
       cell: ({ getValue }) => (

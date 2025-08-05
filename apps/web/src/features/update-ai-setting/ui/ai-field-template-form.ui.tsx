@@ -15,24 +15,18 @@
  */
 
 import { useTranslation } from 'next-i18next';
+import { FormProvider } from 'react-hook-form';
 
-import {
-  Button,
-  Divider,
-  InputCaption,
-  InputField,
-  InputLabel,
-  Textarea,
-} from '@ufb/react';
+import { Button, Divider, FormField, InputField, Label } from '@ufb/react';
 
 import {
   CardDescription,
   CardTitle,
-  SelectInput,
   Slider,
-  TextInput,
+  usePermissions,
   useWarnIfUnsavedChanges,
 } from '@/shared';
+import { FormInput, FormSelect, FormTextarea } from '@/shared/ui/form-inputs';
 
 import { TEMPERATURE_CONFIG } from '../constants';
 import { useAITemplateDelete } from '../hooks/use-ai-template-deletion';
@@ -46,7 +40,7 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
   const { t } = useTranslation();
   const { methods, modelData, handleFormSubmit } = useAITemplateForm(projectId);
 
-  const { register, formState, setValue, watch, handleSubmit } = methods;
+  const { setValue, watch, handleSubmit } = methods;
   const { formId } = useAITemplateFormStore();
 
   useWarnIfUnsavedChanges(
@@ -60,77 +54,84 @@ export const AIFieldTemplateForm = ({ projectId }: { projectId: number }) => {
       description={t('v2.description.ai-field-template-form')}
       playground={<AIFieldPlayground projectId={projectId} />}
     >
-      <form
-        id={formId}
-        className="flex flex-col gap-4"
-        onSubmit={handleSubmit(handleFormSubmit)}
-      >
-        <TextInput
-          label="Title"
-          {...register('title')}
-          required
-          error={formState.errors.title?.message}
-        />
-        <InputField>
-          <InputLabel>
-            Prompt <span className="text-tint-red">*</span>
-          </InputLabel>
-          <Textarea
-            {...register('prompt')}
-            placeholder={t('v2.placeholder.ai-field-template-prompt')}
+      <FormProvider {...methods}>
+        <form
+          id={formId}
+          className="flex flex-col gap-4"
+          onSubmit={handleSubmit(handleFormSubmit)}
+        >
+          <FormField
+            control={methods.control}
+            name="title"
+            render={({ field }) => (
+              <FormInput
+                label="Title"
+                {...field}
+                placeholder={t('v2.placeholder.text')}
+                required
+              />
+            )}
           />
-          {formState.errors.prompt?.message && (
-            <InputCaption variant="error">
-              {formState.errors.prompt.message}
-            </InputCaption>
-          )}
-        </InputField>
-        <Divider variant="subtle" />
-        <div className="flex flex-col gap-4">
-          <div>
-            <CardTitle size="lg">Advanced Configuration</CardTitle>
-            <CardDescription>
-              {t('v2.description.ai-field-template-advanced-configuration')}
-            </CardDescription>
+          <FormField
+            control={methods.control}
+            name="prompt"
+            render={({ field }) => (
+              <FormTextarea
+                label="Prompt"
+                placeholder={t('v2.placeholder.ai-field-template-prompt')}
+                {...field}
+                required
+              />
+            )}
+          />
+          <Divider variant="subtle" />
+          <div className="flex flex-col gap-4">
+            <div>
+              <CardTitle size="lg">Advanced Configuration</CardTitle>
+              <CardDescription>
+                {t('v2.description.ai-field-template-advanced-configuration')}
+              </CardDescription>
+            </div>
+            <div className="flex flex-col gap-2">
+              <FormField
+                control={methods.control}
+                name="model"
+                render={({ field }) => (
+                  <FormSelect
+                    options={
+                      modelData?.models.map(({ id }) => ({
+                        value: id,
+                        label: id,
+                      })) ?? []
+                    }
+                    label="Model"
+                    placeholder="Select a model"
+                    {...field}
+                  />
+                )}
+              />
+              <InputField>
+                <Label>Temperature</Label>
+                <div className="border-neutral-tertiary rounded-8 flex gap-4 border p-6">
+                  <div>Precise</div>
+                  <Slider
+                    min={TEMPERATURE_CONFIG.min}
+                    max={TEMPERATURE_CONFIG.max}
+                    step={TEMPERATURE_CONFIG.step}
+                    value={[watch('temperature')]}
+                    onValueChange={(value) => {
+                      setValue('temperature', value[0] ?? 0, {
+                        shouldDirty: true,
+                      });
+                    }}
+                  />
+                  <div>Creative</div>
+                </div>
+              </InputField>
+            </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <SelectInput
-              options={
-                modelData?.models.map(({ id }) => ({
-                  value: id,
-                  label: id,
-                })) ?? []
-              }
-              label="Model"
-              placeholder="Select a model"
-              onChange={(value) => {
-                if (!value) return;
-                setValue('model', value, { shouldDirty: true });
-              }}
-              value={watch('model')}
-              error={formState.errors.model?.message}
-            />
-            <InputField>
-              <InputLabel>Temperature</InputLabel>
-              <div className="border-neutral-tertiary rounded-8 flex gap-4 border p-6">
-                <div>Precise</div>
-                <Slider
-                  min={TEMPERATURE_CONFIG.min}
-                  max={TEMPERATURE_CONFIG.max}
-                  step={TEMPERATURE_CONFIG.step}
-                  value={[watch('temperature')]}
-                  onValueChange={(value) => {
-                    setValue('temperature', value[0] ?? 0, {
-                      shouldDirty: true,
-                    });
-                  }}
-                />
-                <div>Creative</div>
-              </div>
-            </InputField>
-          </div>
-        </div>
-      </form>
+        </form>
+      </FormProvider>
     </AiFormTemplate>
   );
 };
@@ -157,6 +158,7 @@ export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
     isPending: isDeletePending,
     openDeleteConfirmDialog,
   } = useAITemplateDelete(projectId);
+  const perms = usePermissions(projectId);
 
   return (
     <div className="flex items-center gap-2">
@@ -164,7 +166,7 @@ export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
         variant="outline"
         className="!text-tint-red"
         onClick={openDeleteConfirmDialog}
-        disabled={!templateId}
+        disabled={!templateId || !perms.includes('project_genai_update')}
         loading={isDeletePending}
       >
         {t('v2.button.name.delete', { name: 'Template' })}
@@ -173,7 +175,7 @@ export const AITemplateFormButton = ({ projectId }: { projectId: number }) => {
         form={formId}
         type="submit"
         loading={isPending}
-        disabled={!isDirty}
+        disabled={!isDirty || !perms.includes('project_genai_update')}
       >
         {t('v2.button.save')}
       </Button>

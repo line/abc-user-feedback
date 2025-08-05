@@ -26,9 +26,6 @@ import {
   ComboboxSelectItem,
   ComboboxTrigger,
   Icon,
-  InputCaption,
-  InputField,
-  InputLabel,
 } from '@ufb/react';
 
 import { commandFilter } from '@/shared/utils';
@@ -36,13 +33,10 @@ import { commandFilter } from '@/shared/utils';
 import InfiniteScrollArea from '../infinite-scroll-area.ui';
 
 interface Props {
-  label?: string;
   value?: string | null;
   onChange?: (value?: string) => void;
   options: { label: string; value: string }[];
-  required?: boolean;
   disabled?: boolean;
-  error?: string;
   fetchNextPage?: () => void;
   hasNextPage?: boolean;
   inputValue?: string;
@@ -55,10 +49,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
     onChange,
     value,
     options,
-    label,
-    required,
     disabled = false,
-    error,
     fetchNextPage,
     hasNextPage,
     inputValue,
@@ -84,80 +75,72 @@ const SelectSearchInput: React.FC<Props> = (props) => {
   );
 
   return (
-    <InputField>
-      {label && (
-        <InputLabel>
-          {label} {required && <span className="text-tint-red">*</span>}
-        </InputLabel>
-      )}
-      <Combobox open={open} onOpenChange={setOpen}>
-        <ComboboxTrigger disabled={disabled} className="font-normal">
-          {currentOption?.label ?? value ?? t('v2.placeholder.select')}
-          <Icon name="RiArrowDownSLine" />
-        </ComboboxTrigger>
-        <ComboboxContent align="start" commandProps={{ filter: commandFilter }}>
-          <ComboboxInput
-            placeholder={t('v2.placeholder.select')}
-            value={inputValue}
-            onValueChange={setInputValue}
-          />
-          <ComboboxList maxHeight="200px">
-            <ComboboxEmpty>No results found.</ComboboxEmpty>
-            {(currentOption?.label ?? value) && (
-              <ComboboxGroup
-                heading={
-                  <span className="text-neutral-tertiary text-base-normal">
-                    Selected
-                  </span>
-                }
+    <Combobox open={open} onOpenChange={setOpen}>
+      <ComboboxTrigger disabled={disabled} className="w-full font-normal">
+        {currentOption?.label ?? value ?? t('v2.placeholder.select')}
+        <Icon name="RiArrowDownSLine" />
+      </ComboboxTrigger>
+      <ComboboxContent align="start" options={{ filter: commandFilter }}>
+        <ComboboxInput
+          placeholder={t('v2.placeholder.select')}
+          value={inputValue}
+          onValueChange={setInputValue}
+        />
+        <ComboboxList maxHeight="200px">
+          <ComboboxEmpty>No results found.</ComboboxEmpty>
+          {(currentOption?.label ?? value) && (
+            <ComboboxGroup
+              heading={
+                <span className="text-neutral-tertiary text-base-normal">
+                  Selected
+                </span>
+              }
+            >
+              <ComboboxSelectItem
+                value={currentOption?.label ?? value ?? undefined}
+                onSelect={() => {
+                  onChange?.(undefined);
+                  setCurrentOption(undefined);
+                }}
+                checked
               >
+                {currentOption?.label ?? value}
+              </ComboboxSelectItem>
+            </ComboboxGroup>
+          )}
+          {currentOptions.length > 0 && (
+            <ComboboxGroup
+              heading={
+                <span className="text-neutral-tertiary text-base-normal">
+                  List
+                </span>
+              }
+            >
+              {currentOptions.map((option) => (
                 <ComboboxSelectItem
-                  value={currentOption?.label ?? value ?? undefined}
+                  key={option.value}
+                  value={option.value}
+                  checked={option.value === value}
                   onSelect={() => {
-                    onChange?.(undefined);
-                    setCurrentOption(undefined);
+                    const newValue =
+                      option.value === value ? undefined : option.value;
+                    setCurrentOption(option);
+                    onChange?.(newValue);
                   }}
-                  checked
                 >
-                  {currentOption?.label ?? value}
+                  {option.label}
                 </ComboboxSelectItem>
-              </ComboboxGroup>
-            )}
-            {currentOptions.length > 0 && (
-              <ComboboxGroup
-                heading={
-                  <span className="text-neutral-tertiary text-base-normal">
-                    List
-                  </span>
-                }
-              >
-                {currentOptions.map((option) => (
-                  <ComboboxSelectItem
-                    key={option.value}
-                    value={option.value}
-                    checked={option.value === value}
-                    onSelect={() => {
-                      const newValue =
-                        option.value === value ? undefined : option.value;
-                      setCurrentOption(option);
-                      onChange?.(newValue);
-                    }}
-                  >
-                    {option.label}
-                  </ComboboxSelectItem>
-                ))}
-              </ComboboxGroup>
-            )}
-            <InfiniteScrollArea
-              hasNextPage={hasNextPage}
-              fetchNextPage={fetchNextPage}
-              isFetchingNextPage={isFetchingNextPage}
-            />
-          </ComboboxList>
-        </ComboboxContent>
-      </Combobox>
-      {error && <InputCaption variant="error">{error}</InputCaption>}
-    </InputField>
+              ))}
+            </ComboboxGroup>
+          )}
+          <InfiniteScrollArea
+            hasNextPage={hasNextPage}
+            fetchNextPage={fetchNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+          />
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
   );
 };
 

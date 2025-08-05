@@ -31,22 +31,13 @@
       },
       "same-key": "输入与键值相同的内容",
       "feedback-request-code": "反馈请求码",
-      "option-info": "选项信息",
       "field-mgmt": {
         "preview": "预览"
       },
       "dialog": {
-        "create-role": {
-          "title": "创建角色",
-          "description": "请输入一个新的角色名称。"
-        },
         "delete-option": {
           "title": "删除选项",
           "description": "这不会影响之前反馈中的选项。"
-        },
-        "delete-role": {
-          "title": "删除角色",
-          "description": "您确定要删除这个角色吗？\n分配给这个角色的成员也将被移除。"
         },
         "add-field": {
           "title": "添加字段"
@@ -294,7 +285,6 @@
       "previous": "上一步",
       "addFilter": "添加过滤器",
       "edit": "编辑",
-      "process-ai": "处理AI",
       "process-ai-test": "AI测试执行",
       "setting": "设置"
     },
@@ -339,6 +329,7 @@
     },
     "text": {
       "no-data": {
+        "default": "还没有数据。",
         "api-key": "尚未生成API Key。",
         "member": "尚未注册Member。",
         "channel": "尚未创建Channel。",
@@ -367,8 +358,6 @@
       "all-image-url-allow": "允许所有图片URL。",
       "select-project": "选择Project",
       "no-category": "无类别",
-      "token-usage": "Token使用量",
-      "remaining-token-amount": "剩余Token量",
       "token-threshold-percentage": "达到上限的{{percentage}}%",
       "ai-issue-ready": "我将为反馈推荐相关问题。",
       "ai-issue-pending": "AI正在分析问题..."
@@ -399,9 +388,14 @@
     "toast": {
       "success": "处理成功。",
       "copy": "已复制到剪贴板。",
-      "ai-usage-limit-approaching": "本月AI使用量接近上限。",
-      "ai-function-terminated": "AI功能已终止。",
-      "ai-function-terminated-description": "由于超过令牌使用限制，AI执行已停止。"
+      "ai-usage-limit-approaching": {
+        "title": "AI使用量接近上限",
+        "description": "令牌使用量已达到上限的{{percentage}}%。"
+      },
+      "ai-function-terminated": {
+        "title": "AI功能已终止",
+        "description": "由于超过令牌使用限制，AI执行已停止。"
+      }
     },
     "webhook-card": {
       "feedback-creation": {
@@ -429,9 +423,9 @@
     "description": {
       "create-project": "Project创建成功。\n接下来，需要创建Channel来收集反馈。\n请通过'创建Channel'继续下一步。",
       "create-channel": "Channel创建成功。\n现在您可以开始收集和管理用户反馈了。\n请通过'开始使用'来全面体验。",
-      "remaining-token-amount": "要检查剩余的令牌数量，请设置上限。",
+      "remaining-token-amount": "要查看月度剩余令牌量，请先设置上限值。",
       "token-threshold": "设置每月令牌使用的上限。如果超过上限，AI功能将被停止。",
-      "pre-limit-notification": "当达到设定的阈值时，您将收到有关令牌使用的通知。（使用量将在每月的第一天重置。）",
+      "pre-limit-notification": "如果令牌使用量达到设置上限的80%，将发送通知。",
       "ai-field-template-form": "设置模板的基本信息。",
       "ai-field-template-advanced-configuration": "可以更改模板的集成模型和温度。",
       "ai-field-template-playground": "可以使用模板和测试数据预览AI结果。",

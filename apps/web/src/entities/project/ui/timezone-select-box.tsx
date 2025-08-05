@@ -16,7 +16,7 @@
 import { useMemo } from 'react';
 import { getCountry } from 'countries-and-timezones';
 
-import { SelectSearchInput } from '@/shared';
+import FormSelectSearch from '@/shared/ui/form-inputs/form-select-search.ui';
 
 import type { Timezone } from '../project.type';
 import { getTimezoneOptions } from '../timezone.util';
@@ -46,11 +46,16 @@ interface IProps {
   disabled?: boolean;
 }
 
-const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
+const TimezoneSelectBox: React.FC<IProps> = ({
+  onChange,
+  value,
+  disabled,
+  ...props
+}) => {
   const options = useMemo(() => getTimezoneOptions(), []);
 
   return (
-    <SelectSearchInput
+    <FormSelectSearch
       label="Time Zone"
       options={options.map((option) => ({
         label: getLabel(option),
@@ -58,11 +63,12 @@ const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
       }))}
       value={getSelectValue(value)}
       onChange={(v) => {
-        if (!v) return;
+        if (!v || typeof v !== 'string') return;
         onChange?.(getTimezonValue(v));
       }}
       disabled={disabled}
       required
+      {...props}
     />
   );
 };

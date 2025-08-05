@@ -72,6 +72,7 @@ export const useAIIssueForm = (projectId: number) => {
   const { mutate: createTemplate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/issueTemplates/new',
+    pathParams: { projectId },
     queryOptions: {
       async onSuccess(data) {
         toast.success(t('v2.toast.success'));
@@ -127,24 +128,35 @@ export const useAIIssueForm = (projectId: number) => {
     setIsDirty(formState.isDirty);
   }, [formState.isDirty, setIsDirty]);
 
+  const model = methods.watch('model');
+  useEffect(() => {
+    if (!modelData) return;
+    if (!modelData.models.some((m) => m.id === model)) {
+      methods.setError('model', {
+        type: 'manual',
+        message: 'Model is not available',
+      });
+    } else {
+      methods.clearErrors('model');
+    }
+  }, [modelData, model]);
+
   useEffect(() => {
     if (!templateData) return;
 
     const original = templateData.find((v) => v.id === templateId);
     if (original) {
-      const temperatureMultiplier =
-        integrationData?.provider === 'GEMINI' ?
-          PROVIDER_MODEL_CONFIG.GEMINI.temperatureMultiplier
-        : PROVIDER_MODEL_CONFIG.DEFAULT.temperatureMultiplier;
-
       methods.reset({
         ...AI_ISSUE_DEFAULT_VALUES,
         ...original,
-        temperature:
-          integrationData?.provider === 'GEMINI' ?
-            original.temperature / temperatureMultiplier
-          : original.temperature,
       } as AIIssue);
+      if (!modelData?.models.some((model) => model.id === original.model)) {
+        methods.setError('model', {
+          type: 'manual',
+          message: 'Model is not available',
+        });
+      }
+
       return;
     }
 
@@ -175,21 +187,16 @@ export const useAIIssueForm = (projectId: number) => {
       });
       return;
     }
-
-    const input = {
-      ...values,
-      temperature:
-        integrationData?.provider === 'GEMINI' ?
-          values.temperature *
-          PROVIDER_MODEL_CONFIG.GEMINI.temperatureMultiplier
-        : values.temperature,
-    };
-
-    if (templateId) {
-      updateTemplate({ ...input, templateId });
-    } else {
-      createTemplate(input);
+    if (!modelData?.models.some((model) => model.id === values.model)) {
+      methods.setError('model', {
+        type: 'manual',
+        message: 'Model is not available',
+      });
+      return;
     }
+
+    if (templateId) updateTemplate({ ...values, templateId });
+    else createTemplate(values);
   };
 
   return {

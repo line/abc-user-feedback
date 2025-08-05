@@ -168,7 +168,10 @@ export class AIController {
   @ApiCreatedResponse({ type: CreateAIIssueTemplateResponseDto })
   @ApiOkResponse()
   @Post('issueTemplates/new')
-  async createNewIssueTemplate(@Body() body: CreateAIIssueTemplateRequestDto) {
+  async createNewIssueTemplate(
+    @Param('projectId', ParseIntPipe) _projectId: number,
+    @Body() body: CreateAIIssueTemplateRequestDto,
+  ) {
     return CreateAIIssueTemplateResponseDto.transform(
       await this.aiService.createNewIssueTemplate({ ...body }),
     );

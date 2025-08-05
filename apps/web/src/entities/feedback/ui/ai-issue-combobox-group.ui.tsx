@@ -54,6 +54,10 @@ const AiIssueComboboxGroup = ({
   const { t } = useTranslation();
   const [issues, setIssues] = useState<AIIssueRecommendationItem[]>([]);
   const [searchedIssues, setSearchedIssues] = useState<Issue[]>([]);
+  const [status, setStatus] = useState<
+    'success' | 'error' | 'pending' | 'idle'
+  >('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { data: aiIntegrations } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/ai/integrations',
@@ -63,20 +67,29 @@ const AiIssueComboboxGroup = ({
     path: '/api/admin/projects/{projectId}/ai/issueTemplates',
     variables: { projectId },
   });
-  const { mutateAsync, isPending, status } = useOAIMutation({
+  const { mutateAsync: recommendIssues, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/issueRecommend/{feedbackId}',
     pathParams: { projectId, feedbackId },
+    queryOptions: {
+      async onSuccess(data) {
+        if (!data) return;
+        if (data.success) {
+          setStatus('success');
+          await getIssueRecommendationItems(data.result);
+        }
+        if (!data.success) {
+          setStatus('error');
+          setErrorMessage(data.message);
+        }
+      },
+    },
   });
 
-  const recommendIssues = async () => {
-    const data = await mutateAsync(undefined);
-    if (!data) {
-      setIssues([]);
-      return;
-    }
-
-    const issueNames = data.result.map((v) => v.issueName);
+  const getIssueRecommendationItems = async (
+    input: { issueName: string }[],
+  ) => {
+    const issueNames = input.map((v) => v.issueName);
     const { data: searchedIssuesResponse } = await client.post({
       path: '/api/admin/projects/{projectId}/issues/search',
       pathParams: { projectId },
@@ -93,35 +106,33 @@ const AiIssueComboboxGroup = ({
     const searchedIssuesList = searchedIssuesResponse?.items ?? [];
     setSearchedIssues(searchedIssuesList);
 
-    const result: AIIssueRecommendationItem[] = data.result.map(
-      ({ issueName }) => {
-        const existingIssue = currentIssues.find(
-          ({ name }) => name === issueName,
-        );
-        if (existingIssue) {
-          return {
-            id: existingIssue.id,
-            name: issueName,
-            option: 'ADDED',
-            status: existingIssue.status,
-          };
-        }
+    const result: AIIssueRecommendationItem[] = input.map(({ issueName }) => {
+      const existingIssue = currentIssues.find(
+        ({ name }) => name === issueName,
+      );
+      if (existingIssue) {
+        return {
+          id: existingIssue.id,
+          name: issueName,
+          option: 'ADDED',
+          status: existingIssue.status,
+        };
+      }
 
-        const matchedIssue = searchedIssuesList.find(
-          ({ name }) => name === issueName,
-        );
-        if (matchedIssue) {
-          return {
-            id: matchedIssue.id,
-            name: issueName,
-            option: 'EXISTING',
-            status: matchedIssue.status,
-          };
-        }
+      const matchedIssue = searchedIssuesList.find(
+        ({ name }) => name === issueName,
+      );
+      if (matchedIssue) {
+        return {
+          id: matchedIssue.id,
+          name: issueName,
+          option: 'EXISTING',
+          status: matchedIssue.status,
+        };
+      }
 
-        return { name: issueName, option: 'CREATE' };
-      },
-    );
+      return { name: issueName, option: 'CREATE' };
+    });
 
     setIssues(result);
   };
@@ -140,7 +151,7 @@ const AiIssueComboboxGroup = ({
         return { ...issue, option: 'CREATE' };
       }),
     );
-  }, [currentIssues, searchedIssues, issues]);
+  }, [currentIssues, searchedIssues]);
 
   const aiIssue = aiIssueTemplates?.find((v) => v.channelId === channelId);
 
@@ -159,7 +170,7 @@ const AiIssueComboboxGroup = ({
             </span>
             <p
               className="text-small-normal cursor-pointer"
-              onClick={recommendIssues}
+              onClick={() => recommendIssues(undefined)}
             >
               Retry
             </p>
@@ -172,13 +183,13 @@ const AiIssueComboboxGroup = ({
           <Button
             size="small"
             className="w-full"
-            onClick={recommendIssues}
+            onClick={() => recommendIssues(undefined)}
             style={GRADIENT_CSS.primary}
             disabled={!aiIssue?.isEnabled}
             loading={isPending}
           >
             <Icon name="RiSparklingFill" />
-            {t('v2.button.process-ai')}
+            Run AI
           </Button>
         </div>
       )}
@@ -212,6 +223,9 @@ const AiIssueComboboxGroup = ({
             }
           </ComboboxItem>
         ))}
+      {status === 'error' && (
+        <div className="px-2 py-1 text-red-500">{errorMessage}</div>
+      )}
     </ComboboxGroup>
   );
 };

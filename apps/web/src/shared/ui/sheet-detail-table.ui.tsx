@@ -37,7 +37,7 @@ import IssueCell from '@/entities/feedback/ui/issue-cell';
 import { DATE_TIME_FORMAT, GRADIENT_CSS } from '../constants';
 import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
-import { useOAIMutation } from '../lib';
+import { useOAIMutation, usePermissions } from '../lib';
 import { cn } from '../utils';
 import ImagePreviewButton from './image-preview-button';
 import { DatePicker, MultiSelectInput, SelectInput } from './inputs';
@@ -352,7 +352,7 @@ const SheetDetailTable = (props: Props) => {
                 />
                 <span className="break-words">{name}</span>
               </th>
-              <td className="w-3/4 whitespace-normal break-words py-2.5">
+              <td className="w-3/4 whitespace-pre-wrap break-words py-2.5">
                 {mode === 'edit' && row.editable ?
                   renderEditModeField[format](value, row)
                 : renderViewModeField[format](value, row)}
@@ -380,9 +380,9 @@ const AISheetDetailCell = ({
   refetch?: () => Promise<void>;
   showButton?: boolean;
 }) => {
-  const { t } = useTranslation();
   const router = useRouter();
   const projectId = +(router.query.projectId as string);
+  const perms = usePermissions(projectId);
 
   const { mutateAsync: processAI, isPending } = useOAIMutation({
     method: 'post',
@@ -402,6 +402,7 @@ const AISheetDetailCell = ({
           size="small"
           style={GRADIENT_CSS.primaryAlt}
           onClick={() => {
+            if (!perms.includes('feedback_update')) return;
             if (isPending) return;
             toast.promise(processAI({ feedbackId, aiFieldId: fieldId }), {
               loading: 'Loading',
@@ -409,11 +410,12 @@ const AISheetDetailCell = ({
             });
           }}
           className={cn('cursor-pointer', {
-            'opacity-50': isPending,
+            '!opacity-50': isPending || !perms.includes('feedback_update'),
+            'cursor-not-allowed': !perms.includes('feedback_update'),
           })}
         >
           <Icon name="RiAiGenerate" />
-          {t('v2.button.process-ai')}
+          Run AI
         </Tag>
       )}
       <div className="py-2">

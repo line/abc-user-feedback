@@ -57,6 +57,7 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
         label="Maximum period for feedback search"
         value={String(watch('feedbackSearchMaxDays'))}
         onChange={(value) => {
+          if (!value) return;
           setValue('feedbackSearchMaxDays', Number(value), {
             shouldDirty: true,
           });

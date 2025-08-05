@@ -13,17 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import * as React from 'react';
+"use client";
 
-import type { TextInputProps } from './input';
-import { InputBox, InputField, TextInput } from './input';
+import * as React from "react";
+
+import type { TextInputProps } from "./input";
+import { InputBox, InputField, TextInput } from "./input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from './select';
+} from "./select";
 
 interface PeriodSelectorProps {
   period: Period;
@@ -52,8 +54,8 @@ const TimePeriodSelect = React.forwardRef<
     ref,
   ) => {
     const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-      if (e.key === 'ArrowRight') onRightFocus?.();
-      if (e.key === 'ArrowLeft') onLeftFocus?.();
+      if (e.key === "ArrowRight") onRightFocus?.();
+      if (e.key === "ArrowLeft") onLeftFocus?.();
     };
 
     const handleValueChange = (value: Period) => {
@@ -70,8 +72,8 @@ const TimePeriodSelect = React.forwardRef<
           setDateByType(
             tempDate,
             hours.toString(),
-            '12hours',
-            period === 'AM' ? 'PM' : 'AM',
+            "12hours",
+            period === "AM" ? "PM" : "AM",
           ),
         );
       }
@@ -98,7 +100,7 @@ const TimePeriodSelect = React.forwardRef<
   },
 );
 
-TimePeriodSelect.displayName = 'TimePeriodSelect';
+TimePeriodSelect.displayName = "TimePeriodSelect";
 
 interface TimePickerInputProps extends React.PropsWithoutRef<TextInputProps> {
   picker: TimePickerType;
@@ -116,7 +118,7 @@ const TimePickerInput = React.forwardRef<
   (
     {
       className,
-      type = 'tel',
+      type = "tel",
       value,
       id,
       name,
@@ -133,7 +135,7 @@ const TimePickerInput = React.forwardRef<
     ref,
   ) => {
     const [flag, setFlag] = React.useState<boolean>(false);
-    const [prevIntKey, setPrevIntKey] = React.useState<string>('0');
+    const [prevIntKey, setPrevIntKey] = React.useState<string>("0");
 
     /**
      * allow the user to enter the second digit within 2 seconds
@@ -158,8 +160,8 @@ const TimePickerInput = React.forwardRef<
        * If picker is '12hours' and the first digit is 0, then the second digit is automatically set to 1.
        * The second entered digit will break the condition and the value will be set to 10-12.
        */
-      if (picker === '12hours') {
-        if (flag && calculatedValue.slice(1, 2) === '1' && prevIntKey === '0')
+      if (picker === "12hours") {
+        if (flag && calculatedValue.slice(1, 2) === "1" && prevIntKey === "0")
           return `0${key}`;
       }
 
@@ -167,19 +169,19 @@ const TimePickerInput = React.forwardRef<
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Tab') return;
+      if (e.key === "Tab") return;
       e.preventDefault();
-      if (e.key === 'ArrowRight') onRightFocus?.();
-      if (e.key === 'ArrowLeft') onLeftFocus?.();
-      if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
-        const step = e.key === 'ArrowUp' ? 1 : -1;
+      if (e.key === "ArrowRight") onRightFocus?.();
+      if (e.key === "ArrowLeft") onLeftFocus?.();
+      if (["ArrowUp", "ArrowDown"].includes(e.key)) {
+        const step = e.key === "ArrowUp" ? 1 : -1;
         const newValue = getArrowByType(calculatedValue, step, picker);
         if (flag) setFlag(false);
         const tempDate = date ? new Date(date) : new Date();
         onDateChange?.(setDateByType(tempDate, newValue, picker, period));
       }
-      if (e.key >= '0' && e.key <= '9') {
-        if (picker === '12hours') setPrevIntKey(e.key);
+      if (e.key >= "0" && e.key <= "9") {
+        if (picker === "12hours") setPrevIntKey(e.key);
 
         const newValue = calculateNewValue(e.key);
         if (flag) onRightFocus?.();
@@ -216,7 +218,7 @@ const TimePickerInput = React.forwardRef<
   },
 );
 
-TimePickerInput.displayName = 'TimePickerInput';
+TimePickerInput.displayName = "TimePickerInput";
 
 // ---------- utils start ----------
 /**
@@ -256,10 +258,10 @@ function getValidNumber(
       if (numericValue > max) numericValue = min;
       if (numericValue < min) numericValue = max;
     }
-    return numericValue.toString().padStart(2, '0');
+    return numericValue.toString().padStart(2, "0");
   }
 
-  return '00';
+  return "00";
 }
 
 function getValidHour(value: string) {
@@ -292,7 +294,7 @@ function getValidArrowNumber(
     numericValue += step;
     return getValidNumber(String(numericValue), { min, max, loop: true });
   }
-  return '00';
+  return "00";
 }
 
 function getValidArrowHour(value: string, step: number) {
@@ -332,8 +334,8 @@ function set12Hours(date: Date, value: string, period: Period) {
   return date;
 }
 
-type TimePickerType = 'minutes' | 'seconds' | 'hours' | '12hours';
-export type Period = 'AM' | 'PM';
+type TimePickerType = "minutes" | "seconds" | "hours" | "12hours";
+export type Period = "AM" | "PM";
 
 function setDateByType(
   date: Date,
@@ -342,13 +344,13 @@ function setDateByType(
   period?: Period,
 ) {
   switch (type) {
-    case 'minutes':
+    case "minutes":
       return setMinutes(date, value);
-    case 'seconds':
+    case "seconds":
       return setSeconds(date, value);
-    case 'hours':
+    case "hours":
       return setHours(date, value);
-    case '12hours': {
+    case "12hours": {
       if (!period) return date;
       return set12Hours(date, value, period);
     }
@@ -358,33 +360,33 @@ function setDateByType(
 }
 
 function getDateByType(date: Date | null, type: TimePickerType) {
-  if (!date) return '00';
+  if (!date) return "00";
   switch (type) {
-    case 'minutes':
+    case "minutes":
       return getValidMinuteOrSecond(String(date.getMinutes()));
-    case 'seconds':
+    case "seconds":
       return getValidMinuteOrSecond(String(date.getSeconds()));
-    case 'hours':
+    case "hours":
       return getValidHour(String(date.getHours()));
-    case '12hours':
+    case "12hours":
       return getValid12Hour(String(display12HourValue(date.getHours())));
     default:
-      return '00';
+      return "00";
   }
 }
 
 function getArrowByType(value: string, step: number, type: TimePickerType) {
   switch (type) {
-    case 'minutes':
+    case "minutes":
       return getValidArrowMinuteOrSecond(value, step);
-    case 'seconds':
+    case "seconds":
       return getValidArrowMinuteOrSecond(value, step);
-    case 'hours':
+    case "hours":
       return getValidArrowHour(value, step);
-    case '12hours':
+    case "12hours":
       return getValidArrow12Hour(value, step);
     default:
-      return '00';
+      return "00";
   }
 }
 
@@ -394,7 +396,7 @@ function getArrowByType(value: string, step: number, type: TimePickerType) {
  * 12:00 AM is 00:00
  */
 function convert12HourTo24Hour(hour: number, period: Period) {
-  if (period === 'PM') {
+  if (period === "PM") {
     if (hour <= 11) {
       return hour + 12;
     }
@@ -411,7 +413,7 @@ function convert12HourTo24Hour(hour: number, period: Period) {
  * in its 12-hour representation
  */
 function display12HourValue(hours: number) {
-  if (hours === 0 || hours === 12) return '12';
+  if (hours === 0 || hours === 12) return "12";
   if (hours >= 22) return `${hours - 12}`;
   if (hours % 12 > 9) return `${hours}`;
   return `0${hours % 12}`;

@@ -59,10 +59,11 @@ const GenerativeAiSetting = ({ projectId }: { projectId: number }) => {
   });
   const isSettingsEmpty = !data || data.apiKey === '';
   useEffect(() => {
-    if (isSettingsEmpty) {
+    if (!data) return;
+    if (data.apiKey === '') {
       void setSubMenu('setting');
     }
-  }, [subMenu, isSettingsEmpty]);
+  }, [data]);
 
   return (
     <>

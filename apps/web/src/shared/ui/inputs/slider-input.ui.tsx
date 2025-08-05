@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { InputField, InputLabel } from '@ufb/react';
+import { InputField, Label } from '@ufb/react';
 
 import { Slider } from '../slider.ui';
 
@@ -32,7 +32,7 @@ const SliderInput = (props: Props) => {
 
   return (
     <InputField>
-      <InputLabel>{label}</InputLabel>
+      <Label>{label}</Label>
       <div>
         <Slider
           value={value}

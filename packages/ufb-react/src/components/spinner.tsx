@@ -13,11 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { cva } from 'class-variance-authority';
 
-import { cn } from '../lib/utils';
-import type { Size } from '../types';
-import useTheme from './use-theme';
+import { cva } from "class-variance-authority";
+
+import type { Size } from "../types";
+import { cn } from "../lib/utils";
+import useTheme from "./use-theme";
 
 export interface SpinnerProps extends React.HTMLAttributes<HTMLSpanElement> {
   size?: Size;
@@ -29,12 +30,12 @@ const defaultVariants: {
   size: undefined,
 };
 
-const spinnerVariants = cva('spinner', {
+const spinnerVariants = cva("spinner", {
   variants: {
     size: {
-      small: 'spinner-small',
-      medium: 'spinner-medium',
-      large: 'spinner-large',
+      small: "spinner-small",
+      medium: "spinner-medium",
+      large: "spinner-large",
     },
   },
   defaultVariants,

@@ -59,9 +59,7 @@ import { ValidateAPIKeyResponseDto } from './dtos/responses';
 import { UpdateAIFieldTemplateDto } from './dtos/update-ai-field-template.dto';
 import { UpdateAIIssueTemplateDto } from './dtos/update-ai-issue-template.dto';
 
-type FieldType = {
-  [key: string]: string;
-};
+type FieldType = Record<string, string>;
 
 @Injectable()
 export class AIService {
@@ -426,16 +424,12 @@ export class AIService {
     await this.aiUsagesRepo.save(usage);
   }
 
-  private async hasTokenThresholdExceeded(
-    projectId: number,
-    provider: AIProvidersEnum,
-  ): Promise<boolean> {
+  private async hasTokenThresholdExceeded(projectId: number): Promise<boolean> {
     const integration = await this.aiIntegrationsRepo.findOne({
       where: {
         project: {
           id: projectId,
         },
-        provider,
       },
     });
 
@@ -448,7 +442,6 @@ export class AIService {
         .createQueryBuilder('usage')
         .select('SUM(usage.usedTokens)', 'total')
         .where('usage.project.id = :projectId', { projectId })
-        .andWhere('usage.provider = :provider', { provider })
         .andWhere('usage.year = :year AND usage.month = :month', {
           year: getCurrentYear(),
           month: getCurrentMonth(),
@@ -570,12 +563,7 @@ export class AIService {
       baseUrl: integration.endpointUrl,
     });
 
-    if (
-      await this.hasTokenThresholdExceeded(
-        feedback.channel.project.id,
-        integration.provider,
-      )
-    )
+    if (await this.hasTokenThresholdExceeded(feedback.channel.project.id))
       return false;
 
     this.convertAiFieldToString(feedback.data, fields);
@@ -772,9 +760,7 @@ export class AIService {
         `;
     }, '');
 
-    if (
-      await this.hasTokenThresholdExceeded(dto.projectId, integration.provider)
-    )
+    if (await this.hasTokenThresholdExceeded(dto.projectId))
       return 'Token threshold exceeded.';
 
     const client = new AIClient({
@@ -873,20 +859,11 @@ export class AIService {
       throw new BadRequestException('Integration not found');
     }
 
-    if (
-      await this.hasTokenThresholdExceeded(
-        feedback.channel.project.id,
-        integration.provider,
-      )
-    ) {
-      return {
-        success: false,
-        message:
-          'Token threshold exceeded, cannot process AI Issue recommendation',
-        result: [],
-      };
+    if (await this.hasTokenThresholdExceeded(feedback.channel.project.id)) {
+      throw new BadRequestException(
+        'Token threshold exceeded, cannot process AI Issue recommendation',
+      );
     }
-
     const issueTemplate = await this.aiIssueTemplatesRepo.findOne({
       where: {
         channel: {

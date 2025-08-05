@@ -31,22 +31,13 @@
       },
       "same-key": "Enter the same value as the key",
       "feedback-request-code": "Feedback Request Code",
-      "option-info": "Option Information",
       "field-mgmt": {
         "preview": "Preview"
       },
       "dialog": {
-        "create-role": {
-          "title": "Create Role",
-          "description": "Please enter a new role name."
-        },
         "delete-option": {
           "title": "Delete Option",
           "description": "This will not affect options in previous feedback."
-        },
-        "delete-role": {
-          "title": "Delete Role",
-          "description": "Are you sure you want to delete this role?\nMembers assigned to this role will also be removed."
         },
         "add-field": {
           "title": "Add Field"
@@ -295,7 +286,6 @@
       "previous": "Previous",
       "addFilter": "Add Filter",
       "edit": "Edit",
-      "process-ai": "Process AI",
       "process-ai-test": "AI test execution",
       "setting": "Setting"
     },
@@ -340,12 +330,12 @@
     },
     "text": {
       "no-data": {
+        "default": "There is no data yet.",
         "api-key": "No API Key has been generated.",
         "member": "No Member has been registered.",
         "channel": "No Channel has been created.",
         "webhook": "No Webhook has been registered.",
         "feedback": "No Feedback has been collected.",
-        "empty": "There is no data yet.",
         "filter": "There is no results. Try changing the query or filter conditions."
       },
       "required-step": "This is a required input step. Please enter the required information.",
@@ -368,8 +358,6 @@
       "all-image-url-allow": "All Image URLs are allowed.",
       "select-project": "Please select a project.",
       "no-category": "No Category",
-      "token-usage": "Token Usage",
-      "remaining-token-amount": "Remaining Token Amount",
       "token-threshold-percentage": "Reached {{percentage}}% of the limit",
       "ai-issue-ready": "I will recommend issues for the feedback.",
       "ai-issue-pending": "AI is analyzing the issues..."
@@ -400,9 +388,14 @@
     "toast": {
       "success": "Successfully processed.",
       "copy": "Copied to clipboard.",
-      "ai-usage-limit-approaching": "AI usage limit approaching for this month.",
-      "ai-function-terminated": "AI function terminated.",
-      "ai-function-terminated-description": "AI execution has been stopped due to exceeding token usage limit."
+      "ai-usage-limit-approaching": {
+        "title": "AI Usage Limit Approaching",
+        "description": "Token usage has reached {{percentage}}% of the limit."
+      },
+      "ai-function-terminated": {
+        "title": "AI Function Terminated",
+        "description": "AI execution has been stopped due to exceeding token usage limit."
+      }
     },
     "webhook-card": {
       "feedback-creation": {
@@ -430,9 +423,9 @@
     "description": {
       "create-project": "Project has been created successfully.\nNext, you need to create a Channel to collect feedback.\nProceed to the next step through 'Create Channel'.",
       "create-channel": "Channel has been created successfully.\nNow you're ready to collect and manage user feedback.\nStart experiencing it in full through 'Get Started'.",
-      "remaining-token-amount": "To check the remaining token amount, please set a limit.",
+      "remaining-token-amount": "To check the monthly remaining token amount, please set a limit first.",
       "token-threshold": "Set a limit for monthly token usage. If the limit is exceeded, AI functionality will be stopped.",
-      "pre-limit-notification": "When the set threshold is reached, you will receive a notification about token usage. (Usage is reset on the 1st of every month.)",
+      "pre-limit-notification": "You will receive a token usage notification when a certain level is reached based on the upper limit.",
       "ai-field-template-form": "Set the basic information for the template.",
       "ai-field-template-advanced-configuration": "You can change the connected model and temperature of the template.",
       "ai-field-template-playground": "You can preview AI results in advance using the template and test data.",

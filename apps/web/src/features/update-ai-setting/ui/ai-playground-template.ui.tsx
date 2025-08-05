@@ -61,11 +61,11 @@ const AiPlaygroundTemplate = (props: Props) => {
             >
               <ToggleGroupItem value="vertical">
                 <Icon name="RiFlipVerticalLine" />
-                List View
+                Horizontal View
               </ToggleGroupItem>
               <ToggleGroupItem value="horizontal">
                 <Icon name="RiFlipHorizontalLine" />
-                Grid View
+                Vertical View
               </ToggleGroupItem>
             </ToggleGroup>
           }

@@ -53,6 +53,7 @@ import {
 import type { Channel } from '@/entities/channel';
 import type { Field } from '@/entities/field';
 
+import { AISparklingIcon } from '@/assets';
 import { getColumns } from '../feedback-table-columns';
 import {
   useAIFIeldFeedbackCellLoading,
@@ -305,9 +306,12 @@ const FeedbackTable = (props: Props) => {
                       success: () => 'Success',
                     });
                   }}
-                  disabled={isPendingAIProcess}
+                  disabled={
+                    isPendingAIProcess || !perms.includes('feedback_update')
+                  }
                 >
-                  {t('v2.button.process-ai')}
+                  <AISparklingIcon />
+                  Run AI
                   <Badge variant="subtle">{selectedRowIds.length}</Badge>
                 </Button>
               </>

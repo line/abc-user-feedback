@@ -18,13 +18,7 @@ import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import {
-  InputCaption,
-  InputField,
-  InputLabel,
-  Switch,
-  Textarea,
-} from '@ufb/react';
+import { FormField, InputField, Label, Switch } from '@ufb/react';
 
 import {
   Card,
@@ -32,10 +26,13 @@ import {
   CardHeader,
   CardTitle,
   DescriptionTooltip,
-  MultiSelectInput,
-  SelectInput,
   Slider,
 } from '@/shared';
+import {
+  FormMultiSelect,
+  FormSelect,
+  FormTextarea,
+} from '@/shared/ui/form-inputs';
 import type { AIIssue } from '@/entities/ai';
 
 import { DATA_REFERENCE_CONFIG, TEMPERATURE_CONFIG } from '../constants';
@@ -45,26 +42,31 @@ interface ChannelSelectProps {
 }
 
 export const ChannelSelect: React.FC<ChannelSelectProps> = ({ channels }) => {
-  const { setValue, watch, formState } = useFormContext<AIIssue>();
+  const { setValue, control } = useFormContext<AIIssue>();
 
   return (
-    <SelectInput
-      options={
-        channels?.map(({ id, name }) => ({
-          value: String(id),
-          label: name,
-        })) ?? []
-      }
-      label="Channel"
-      placeholder="Select a channel"
-      onChange={(value) => {
-        if (!value) return;
-        setValue('channelId', +value, { shouldDirty: true });
-        setValue('targetFieldKeys', [], { shouldDirty: true });
-      }}
-      value={watch('channelId') ? String(watch('channelId')) : ''}
-      error={formState.errors.channelId?.message}
-      required
+    <FormField
+      control={control}
+      name="channelId"
+      render={({ field }) => (
+        <FormSelect
+          options={
+            channels?.map(({ id, name }) => ({
+              value: String(id),
+              label: name,
+            })) ?? []
+          }
+          label="Channel"
+          placeholder="Select a channel"
+          onChange={(value) => {
+            if (!value) return;
+            field.onChange(+value);
+            setValue('targetFieldKeys', []);
+          }}
+          value={field.value ? String(field.value) : ''}
+          required
+        />
+      )}
     />
   );
 };
@@ -74,59 +76,64 @@ interface FieldSelectProps {
 }
 
 export const FieldSelect: React.FC<FieldSelectProps> = ({ fields }) => {
-  const { setValue, watch, formState } = useFormContext<AIIssue>();
+  const { control } = useFormContext<AIIssue>();
 
   return (
-    <MultiSelectInput
-      options={
-        fields
-          ?.filter((v) => v.key !== 'issues')
-          .map(({ name, key }) => ({ value: key, label: name })) ?? []
-      }
-      label="Field"
-      placeholder="Select a field"
-      onChange={(value) => {
-        setValue('targetFieldKeys', value, { shouldDirty: true });
-      }}
-      value={watch('targetFieldKeys')}
-      error={formState.errors.targetFieldKeys?.message}
-      required
+    <FormField
+      name="targetFieldKeys"
+      control={control}
+      render={({ field }) => (
+        <FormMultiSelect
+          options={
+            fields
+              ?.filter((v) => v.key !== 'issues')
+              .map(({ name, key }) => ({ value: key, label: name })) ?? []
+          }
+          label="Target Field"
+          placeholder="Select a field"
+          {...field}
+          required
+        />
+      )}
     />
   );
 };
 
 export const PromptField: React.FC = () => {
-  const { register, formState } = useFormContext<AIIssue>();
+  const { control } = useFormContext<AIIssue>();
   const { t } = useTranslation();
   return (
-    <InputField>
-      <InputLabel>Prompt</InputLabel>
-      <Textarea
-        {...register('prompt')}
-        placeholder={t('v2.placeholder.ai-field-reccommendation-prompt')}
-      />
-      {formState.errors.prompt?.message && (
-        <InputCaption variant="error">
-          {formState.errors.prompt.message}
-        </InputCaption>
+    <FormField
+      name="prompt"
+      control={control}
+      render={({ field }) => (
+        <FormTextarea
+          label="Prompt"
+          {...field}
+          placeholder={t('v2.placeholder.ai-field-reccommendation-prompt')}
+        />
       )}
-    </InputField>
+    />
   );
 };
 
 export const EnableTemplateCard: React.FC = () => {
   const { t } = useTranslation();
-  const { setValue, watch } = useFormContext<AIIssue>();
+  const { control } = useFormContext<AIIssue>();
 
   return (
     <Card size="sm">
       <CardHeader
         action={
-          <Switch
-            checked={watch('isEnabled')}
-            onCheckedChange={(checked) =>
-              setValue('isEnabled', checked, { shouldDirty: true })
-            }
+          <FormField
+            control={control}
+            name="isEnabled"
+            render={({ field }) => (
+              <Switch
+                defaultChecked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            )}
           />
         }
       >
@@ -144,24 +151,26 @@ interface ModelSelectProps {
 }
 
 export const ModelSelect: React.FC<ModelSelectProps> = ({ models }) => {
-  const { setValue, watch, formState } = useFormContext<AIIssue>();
+  const { control } = useFormContext<AIIssue>();
 
   return (
-    <SelectInput
-      options={
-        models?.map(({ id }) => ({
-          value: id,
-          label: id,
-        })) ?? []
-      }
-      label="Model"
-      placeholder="Select a model"
-      onChange={(value) => {
-        if (!value) return;
-        setValue('model', value, { shouldDirty: true });
-      }}
-      value={watch('model')}
-      error={formState.errors.model?.message}
+    <FormField
+      control={control}
+      name="model"
+      render={({ field }) => (
+        <FormSelect
+          options={
+            models?.map(({ id }) => ({
+              value: id,
+              label: id,
+            })) ?? []
+          }
+          label="Model"
+          placeholder="Select a model"
+          onChange={field.onChange}
+          value={field.value}
+        />
+      )}
     />
   );
 };
@@ -171,7 +180,7 @@ export const TemperatureSlider: React.FC = () => {
 
   return (
     <InputField>
-      <InputLabel>Temperature</InputLabel>
+      <Label>Temperature</Label>
       <div className="border-neutral-tertiary rounded-8 flex gap-4 border p-6">
         <div>{TEMPERATURE_CONFIG.labels.min}</div>
         <Slider
@@ -197,14 +206,14 @@ export const DataReferenceSlider: React.FC = () => {
 
   return (
     <InputField>
-      <InputLabel>
+      <Label>
         Data Reference Amount
         <DescriptionTooltip
           description={t(
             'v2.description.ai-issue-recommendation-data-reference-amount',
           )}
         />
-      </InputLabel>
+      </Label>
       <div className="border-neutral-tertiary rounded-8 flex gap-4 border p-6">
         <div>{DATA_REFERENCE_CONFIG.labels.min}</div>
         <Slider

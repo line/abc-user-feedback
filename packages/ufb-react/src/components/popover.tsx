@@ -13,27 +13,36 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import * as React from 'react';
-import * as PopoverPrimitive from '@radix-ui/react-popover';
 
-import { cn } from '../lib/utils';
+import * as React from "react";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
 
-const Popover = PopoverPrimitive.Root;
+import { cn } from "../lib/utils";
 
-const PopoverTrigger = PopoverPrimitive.Trigger;
+const Popover = ({
+  ...props
+}: React.ComponentProps<typeof PopoverPrimitive.Root>) => {
+  return <PopoverPrimitive.Root data-slot="popover" {...props} />;
+};
+
+const PopoverTrigger = ({
+  ...props
+}: React.ComponentProps<typeof PopoverPrimitive.Trigger>) => {
+  return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />;
+};
 
 const PopoverClose = PopoverPrimitive.Close;
 
 const PopoverContent = React.forwardRef<
-  React.ElementRef<typeof PopoverPrimitive.Content>,
+  React.ComponentRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
->(({ className, align = 'center', sideOffset = 4, ...props }, ref) => (
+>(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
   <PopoverPrimitive.Portal>
     <PopoverPrimitive.Content
       ref={ref}
       align={align}
       sideOffset={sideOffset}
-      className={cn('popover', className)}
+      className={cn("popover", className)}
       {...props}
     />
   </PopoverPrimitive.Portal>

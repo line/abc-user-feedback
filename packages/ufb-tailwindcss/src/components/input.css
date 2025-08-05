@@ -17,11 +17,6 @@
   --input-fg: var(--fg-neutral-tertiary);
   --input-fg-typing: var(--fg-neutral-primary);
   --input-fg-filled: var(--fg-neutral-primary);
-  --input-fg-error: var(--fg-neutral-primary);
-  --input-label-fg: var(--fg-neutral-primary);
-  --input-caption-fg: var(--fg-neutral-tertiary);
-  --input-caption-fg-success: var(--fg-tint-green);
-  --input-caption-fg-error: var(--fg-tint-red);
   --input-border: var(--border-neutral-tertiary);
   --input-border-typing: var(--tint, var(--border-neutral-primary));
   --input-border-filled: var(--border-neutral-tertiary);
@@ -29,7 +24,6 @@
   --input-bg: var(--bg-neutral-primary);
   --input-bg-typing: var(--bg-neutral-tertiary);
   --input-bg-filled: var(--bg-neutral-primary);
-  --input-bg-error: var(--bg-neutral-primary);
 
   @apply flex flex-col gap-1.5;
 }
@@ -50,6 +44,9 @@
 
   /* default */
   @apply input-small input-radius-medium;
+}
+.input[aria-invalid='true'] {
+  @apply !border-2 !border-[var(--input-border-error)] !bg-[var(--input-bg-error)];
 }
 
 .input-button {
@@ -74,19 +71,4 @@
 
   /* default */
   @apply input-icon-small;
-}
-
-.input-label {
-  @apply text-base-normal font-normal text-[var(--input-label-fg)];
-}
-
-.input-caption {
-  @apply flex items-center gap-1;
-
-  /* default */
-  @apply input-caption-default input-caption-small;
-}
-
-.input-caption-icon {
-  @apply flex-shrink-0;
 }

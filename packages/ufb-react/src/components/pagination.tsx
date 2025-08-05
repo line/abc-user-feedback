@@ -13,56 +13,56 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import * as React from 'react';
+"use client";
 
-import { cn } from '../lib/utils';
-import type { ButtonProps } from './button';
-import { Button } from './button';
-import { Icon } from './icon';
+import * as React from "react";
 
-const DefaultValue = {
-  size: 'small',
-  radius: 'medium',
-} as const;
+import type { ButtonProps } from "./button";
+import { cn } from "../lib/utils";
+import { Button } from "./button";
+import { Icon } from "./icon";
+import useTheme from "./use-theme";
+
 const PaginationContext = React.createContext<ButtonProps>({
-  size: DefaultValue.size,
-  radius: DefaultValue.radius,
+  size: undefined,
+  radius: undefined,
 });
 
-type PaginationProps = React.ComponentProps<'nav'> &
-  Pick<ButtonProps, 'size' | 'radius'>;
-const Pagination = ({
-  size = DefaultValue.size,
-  radius = DefaultValue.radius,
-  className,
-  ...props
-}: PaginationProps) => (
-  <PaginationContext.Provider value={{ size, radius }}>
-    <nav
-      role="navigation"
-      aria-label="pagination"
-      className={cn('pagination', className)}
-      {...props}
-    />
-  </PaginationContext.Provider>
-);
-Pagination.displayName = 'Pagination';
+type PaginationProps = React.ComponentProps<"nav"> &
+  Pick<ButtonProps, "size" | "radius">;
+const Pagination = ({ size, radius, className, ...props }: PaginationProps) => {
+  const { themeSize, themeRadius } = useTheme();
+
+  return (
+    <PaginationContext.Provider
+      value={{ size: size ?? themeSize, radius: radius ?? themeRadius }}
+    >
+      <nav
+        role="navigation"
+        aria-label="pagination"
+        className={cn("pagination", className)}
+        {...props}
+      />
+    </PaginationContext.Provider>
+  );
+};
+Pagination.displayName = "Pagination";
 
 const PaginationContent = React.forwardRef<
   HTMLUListElement,
-  React.ComponentProps<'ul'>
+  React.ComponentProps<"ul">
 >(({ className, ...props }, ref) => (
-  <ul ref={ref} className={cn('pagination-content', className)} {...props} />
+  <ul ref={ref} className={cn("pagination-content", className)} {...props} />
 ));
-PaginationContent.displayName = 'PaginationContent';
+PaginationContent.displayName = "PaginationContent";
 
 const PaginationItem = React.forwardRef<
   HTMLLIElement,
-  React.ComponentProps<'li'>
+  React.ComponentProps<"li">
 >(({ className, ...props }, ref) => (
-  <li ref={ref} className={cn('pagination-item', className)} {...props} />
+  <li ref={ref} className={cn("pagination-item", className)} {...props} />
 ));
-PaginationItem.displayName = 'PaginationItem';
+PaginationItem.displayName = "PaginationItem";
 
 type PaginationLinkProps = {
   isActive?: boolean;
@@ -76,17 +76,17 @@ const PaginationLink = ({
   const { size, radius } = React.useContext(PaginationContext);
   return (
     <Button
-      variant={isActive ? 'outline' : 'ghost'}
-      size={size ?? DefaultValue.size}
-      radius={radius ?? DefaultValue.radius}
-      className={cn('pagination-link', className)}
+      variant={isActive ? "outline" : "ghost"}
+      size={size}
+      radius={radius}
+      className={cn("pagination-link", className)}
       asChild
     >
-      <a {...props} aria-current={isActive ? 'page' : undefined} />
+      <a {...props} aria-current={isActive ? "page" : undefined} />
     </Button>
   );
 };
-PaginationLink.displayName = 'PaginationLink';
+PaginationLink.displayName = "PaginationLink";
 
 const PaginationPrevious = ({
   className,
@@ -96,10 +96,10 @@ const PaginationPrevious = ({
   return (
     <Button
       variant="ghost"
-      size={size ?? DefaultValue.size}
-      radius={radius ?? DefaultValue.radius}
+      size={size}
+      radius={radius}
       aria-label="Go to previous page"
-      className={cn('pagination-previous', className)}
+      className={cn("pagination-previous", className)}
       asChild
     >
       <a {...props}>
@@ -109,7 +109,7 @@ const PaginationPrevious = ({
     </Button>
   );
 };
-PaginationPrevious.displayName = 'PaginationPrevious';
+PaginationPrevious.displayName = "PaginationPrevious";
 
 const PaginationNext = ({
   className,
@@ -119,10 +119,10 @@ const PaginationNext = ({
   return (
     <Button
       variant="ghost"
-      size={size ?? DefaultValue.size}
-      radius={radius ?? DefaultValue.radius}
+      size={size}
+      radius={radius}
       aria-label="Go to next page"
-      className={cn('pagination-next', className)}
+      className={cn("pagination-next", className)}
       asChild
     >
       <a {...props}>
@@ -132,27 +132,27 @@ const PaginationNext = ({
     </Button>
   );
 };
-PaginationNext.displayName = 'PaginationNext';
+PaginationNext.displayName = "PaginationNext";
 
 const PaginationEllipsis = ({
   className,
   ...props
-}: React.ComponentProps<'button'>) => {
+}: React.ComponentProps<"button">) => {
   const { size, radius } = React.useContext(PaginationContext);
   return (
     <Button
       {...props}
       variant="ghost"
       aria-label="More Pages"
-      size={size ?? DefaultValue.size}
-      radius={radius ?? DefaultValue.radius}
-      className={cn('pagination-ellipsis', className)}
+      size={size}
+      radius={radius}
+      className={cn("pagination-ellipsis", className)}
     >
       <Icon name="RiMoreLine" />
     </Button>
   );
 };
-PaginationEllipsis.displayName = 'PaginationEllipsis';
+PaginationEllipsis.displayName = "PaginationEllipsis";
 
 export {
   Pagination,

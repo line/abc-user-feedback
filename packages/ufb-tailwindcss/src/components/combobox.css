@@ -33,10 +33,6 @@
   @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center p-2 outline-none transition-colors hover:bg-[var(--combobox-bg-hover)] data-[selected=true]:bg-[var(--combobox-bg-hover)];
 }
 
-.combobox-item-inset {
-  @apply pl-8;
-}
-
 .combobox-item ~ .combobox-item {
   @apply mt-1;
 }
@@ -70,5 +66,11 @@
 }
 
 .combobox-trigger {
-  @apply data-[state=open]:bg-[var(--combobox-bg-hover)] [&>svg:last-of-type]:!ml-auto;
+  --combobox-border-error: var(--border-tint-red);
+
+  @apply [&>svg:last-of-type]:!ml-auto;
+}
+
+.combobox-trigger[aria-invalid='true'] {
+  @apply !border-2 !border-[var(--combobox-border-error)];
 }

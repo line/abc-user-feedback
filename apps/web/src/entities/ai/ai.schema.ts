@@ -20,10 +20,7 @@ export const aiSchema = z.object({
   provider: z.enum(['OPEN_AI', 'GEMINI']),
   apiKey: z.string().trim().min(1, { message: 'API Key is required' }),
   endpointUrl: z.string().trim(),
-  systemPrompt: z
-    .string()
-    .trim()
-    .max(1000, { message: 'System prompt must be less than 1000 characters' }),
+  systemPrompt: z.string().trim(),
   tokenThreshold: z.number().nullable(),
   notificationThreshold: z.number().nullable(),
 });
@@ -37,7 +34,7 @@ export const aiTemplateSchema = z.object({
 
 export const aiIssueSchema = z.object({
   channelId: z.number().int(),
-  targetFieldKeys: z.array(z.string()),
+  targetFieldKeys: z.array(z.string()).min(1),
   prompt: z.string().trim(),
   isEnabled: z.boolean(),
   model: z.string(),

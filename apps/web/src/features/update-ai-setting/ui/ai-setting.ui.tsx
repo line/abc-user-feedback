@@ -133,7 +133,7 @@ export const AISettingFormButton = () => {
       form={formId}
       type="submit"
       loading={isPending}
-      disabled={!isDirty || !perms.includes('generative_ai_update')}
+      disabled={!isDirty || !perms.includes('project_genai_update')}
     >
       {t('v2.button.save')}
     </Button>

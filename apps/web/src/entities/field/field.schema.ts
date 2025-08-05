@@ -107,7 +107,7 @@ export const fieldInfoSchema = fieldSchema
     (data) => (data.format === 'aiField' ? !!data.aiFieldTemplateId : true),
     {
       path: ['aiFieldTemplateId'],
-      message: 'AI Template is required for AI Field format.',
+      message: 'Template is required.',
     },
   )
   .refine(
@@ -117,6 +117,6 @@ export const fieldInfoSchema = fieldSchema
       : true,
     {
       path: ['aiFieldTargetKeys'],
-      message: 'AI Field Targets are required for AI Field format.',
+      message: 'Target Fields are required.',
     },
   );

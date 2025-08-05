@@ -19,9 +19,9 @@ import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
-import { Button, Icon, toast } from '@ufb/react';
+import { Button, Form, Icon, toast } from '@ufb/react';
 import { ErrorCode } from '@ufb/shared';
 
 import {
@@ -99,7 +99,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 
   const onSubmit = (input: ProjectInfo) => {
-    mutate({ ...data, ...input });
+    mutate({ ...data, ...input, description: input.description ?? '' });
   };
 
   const openDeleteDialog = () => {
@@ -139,11 +139,11 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
         </>
       }
     >
-      <FormProvider {...methods}>
+      <Form {...methods}>
         <form id="form" onSubmit={methods.handleSubmit(onSubmit)}>
           <ProjectInfoForm type="update" />
         </form>
-      </FormProvider>
+      </Form>
     </SettingTemplate>
   );
 };

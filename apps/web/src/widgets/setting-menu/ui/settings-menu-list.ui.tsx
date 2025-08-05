@@ -122,10 +122,14 @@ const SettingsMenuList: React.FC<Props> = (props) => {
         type="single"
         iconAlign="left"
         collapsible
-        divider={false}
+        border={false}
         defaultValue="channel-list"
       >
-        <AccordionItem value="channel-list" className="bg-primary">
+        <AccordionItem
+          value="channel-list"
+          className="bg-primary"
+          divider={false}
+        >
           <AccordionTrigger className="p-2">Channel List</AccordionTrigger>
           <AccordionContent className="p-0">
             {data?.meta.totalItems === 0 ?

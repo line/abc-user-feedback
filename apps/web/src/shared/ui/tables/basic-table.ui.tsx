@@ -180,7 +180,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
                     : <>
                         <NodataImage />
                         <p className="text-small-normal text-neutral-tertiary">
-                          {t('v2.text.no-data.empty')}
+                          {t('v2.text.no-data.default')}
                         </p>
                         {createButton}
                       </>

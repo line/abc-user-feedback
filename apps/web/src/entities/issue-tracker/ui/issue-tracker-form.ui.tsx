@@ -16,7 +16,7 @@
 
 import { useFormContext } from 'react-hook-form';
 
-import { Icon, InputField, InputLabel } from '@ufb/react';
+import { Icon, InputField, Label } from '@ufb/react';
 
 import { cn, SelectInput, TextInput } from '@/shared';
 
@@ -51,7 +51,7 @@ const IssueTrackerForm: React.FC<IProps> = ({ readOnly }) => {
         {...register('ticketKey')}
       />
       <InputField>
-        <InputLabel>Preview</InputLabel>
+        <Label>Preview</Label>
         <div
           className={cn(
             'bg-neutral-tertiary flex items-center gap-2 rounded p-4',
