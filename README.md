@@ -2,7 +2,7 @@
 
 ![cover image](./assets/cover.png)
 
-ABC User Feedback is a standalone web application designed to manage Voice of Customer (VoC) data. It enables you to efficiently gather and categorize customer feedback with AI-powered insights. The application is currently utilized in services with a reach of 10 million MAU.
+ABC User Feedback is a standalone web application designed to manage Voice of Customer (VoC) data. It enables you to efficiently gather and categorize customer feedback. The application is currently utilized in services with a reach of 10 million MAU.
 
 ## Quick Start
 
