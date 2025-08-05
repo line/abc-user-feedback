@@ -15,7 +15,6 @@
  */
 
 import { useMemo } from 'react';
-import { useTranslation } from 'next-i18next';
 
 import { Tooltip, TooltipContent, TooltipTrigger } from '@ufb/react';
 
@@ -45,8 +44,6 @@ const WebhookEventCard: React.FC<Props> = (props) => {
     description,
   } = props;
 
-  const { t } = useTranslation();
-
   const selectedValues = useMemo(
     () => eventChannels.map((v) => String(v.id)),
     [eventChannels],
@@ -74,7 +71,6 @@ const WebhookEventCard: React.FC<Props> = (props) => {
           </div>
           <div onClick={(e) => e.stopPropagation()}>
             <MultiSelectInput
-              placeholder={t('v2.placeholder.select')}
               options={channels.map((channel) => ({
                 label: channel.name,
                 value: String(channel.id),

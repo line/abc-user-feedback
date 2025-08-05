@@ -13,10 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import * as React from "react";
-import * as LabelPrimitive from "@radix-ui/react-label";
+import * as React from 'react';
+import * as LabelPrimitive from '@radix-ui/react-label';
 
-import { cn } from "../lib/utils";
+import { cn } from '../lib/utils';
 
 interface LabelProps extends React.ComponentProps<typeof LabelPrimitive.Root> {}
 
@@ -24,7 +24,7 @@ function Label({ className, ...props }: LabelProps) {
   return (
     <LabelPrimitive.Root
       data-slot="label"
-      className={cn("label", className)}
+      className={cn('label', className)}
       {...props}
     />
   );

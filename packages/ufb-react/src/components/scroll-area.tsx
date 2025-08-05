@@ -14,21 +14,21 @@
  * under the License.
  */
 
-import * as React from "react";
-import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
+import { cva } from 'class-variance-authority';
 
-import { cn } from "../lib/utils";
+import { cn } from '../lib/utils';
 
-const scrollBarVariants = cva("scroll-bar", {
+const scrollBarVariants = cva('scroll-bar', {
   variants: {
     orientation: {
-      vertical: "scroll-bar-vertical",
-      horizontal: "scroll-bar-horizontal",
+      vertical: 'scroll-bar-vertical',
+      horizontal: 'scroll-bar-horizontal',
     },
   },
   defaultVariants: {
-    orientation: "vertical",
+    orientation: 'vertical',
   },
 });
 
@@ -41,7 +41,7 @@ const ScrollArea = React.forwardRef<
 >(
   (
     {
-      type = "auto",
+      type = 'auto',
       maxWidth,
       maxHeight,
       className,
@@ -54,7 +54,7 @@ const ScrollArea = React.forwardRef<
     <ScrollAreaPrimitive.Root
       ref={ref}
       type={type}
-      className={cn("scroll-area", className)}
+      className={cn('scroll-area', className)}
       style={{ ...style, maxWidth }}
       {...props}
     >
@@ -74,7 +74,7 @@ ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName;
 const ScrollBar = React.forwardRef<
   React.ElementRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,
   React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>
->(({ className, orientation = "vertical", ...props }, ref) => (
+>(({ className, orientation = 'vertical', ...props }, ref) => (
   <ScrollAreaPrimitive.ScrollAreaScrollbar
     ref={ref}
     orientation={orientation}

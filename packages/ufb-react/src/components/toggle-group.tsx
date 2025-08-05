@@ -13,29 +13,29 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-"use client";
+'use client';
 
-import type * as TogglePrimitive from "@radix-ui/react-toggle";
-import type { VariantProps } from "class-variance-authority";
-import * as React from "react";
-import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import type * as TogglePrimitive from '@radix-ui/react-toggle';
+import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
-import type { Radius, Size } from "../lib/types";
-import { cn } from "../lib/utils";
-import useTheme from "./use-theme";
+import type { Radius, Size } from '../lib/types';
+import { cn } from '../lib/utils';
+import useTheme from './use-theme';
 
-const toggleVariants = cva("toggle-group-item", {
+const toggleVariants = cva('toggle-group-item', {
   variants: {
     size: {
-      small: "toggle-group-item-small",
-      medium: "toggle-group-item-medium",
-      large: "toggle-group-item-large",
+      small: 'toggle-group-item-small',
+      medium: 'toggle-group-item-medium',
+      large: 'toggle-group-item-large',
     },
     radius: {
-      small: "toggle-group-item-radius-small",
-      medium: "toggle-group-item-radius-medium",
-      large: "toggle-group-item-radius-large",
+      small: 'toggle-group-item-radius-small',
+      medium: 'toggle-group-item-radius-medium',
+      large: 'toggle-group-item-radius-large',
     },
   },
   defaultVariants: {
@@ -61,7 +61,7 @@ const ToggleGroup = React.forwardRef<
   return (
     <ToggleGroupPrimitive.Root
       ref={ref}
-      className={cn("toggle-group", className)}
+      className={cn('toggle-group', className)}
       {...props}
     >
       <ToggleGroupContext.Provider
@@ -77,7 +77,7 @@ ToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName;
 
 interface ToggleGroupItemProps
   extends React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root>,
-    Omit<VariantProps<typeof toggleVariants>, "disabled"> {
+    Omit<VariantProps<typeof toggleVariants>, 'disabled'> {
   size?: Size;
   radius?: Radius;
   value: string;

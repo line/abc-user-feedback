@@ -13,21 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-"use client";
+'use client';
 
-import type * as LabelPrimitive from "@radix-ui/react-label";
-import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import * as React from 'react';
+import type * as LabelPrimitive from '@radix-ui/react-label';
+import { Slot } from '@radix-ui/react-slot';
+import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 import {
   Controller,
   FormProvider,
   useFormContext,
   useFormState,
-} from "react-hook-form";
+} from 'react-hook-form';
 
-import { Caption } from "./caption";
-import { Label } from "./label";
+import { Caption } from './caption';
+import { Label } from './label';
 
 const Form = FormProvider;
 
@@ -82,7 +82,7 @@ const FormItemContext = React.createContext<FormItemContextValue>(
   {} as FormItemContextValue,
 );
 
-function FormItem({ ...props }: React.ComponentProps<"div">) {
+function FormItem({ ...props }: React.ComponentProps<'div'>) {
   const id = React.useId();
 
   return (
@@ -116,9 +116,9 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
       data-slot="form-control"
       id={formItemId}
       aria-describedby={
-        !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
+        !error ?
+          `${formDescriptionId}`
+        : `${formDescriptionId} ${formMessageId}`
       }
       aria-invalid={!!error}
       {...props}
@@ -139,7 +139,7 @@ function FormMessage({
   ...props
 }: React.ComponentProps<typeof Caption>) {
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error.message ?? "") : children;
+  const body = error ? String(error.message ?? '') : children;
 
   if (!body) {
     return null;

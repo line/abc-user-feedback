@@ -13,16 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React from "react";
-import * as remixIcons from "@remixicon/react";
+import React from 'react';
+import * as remixIcons from '@remixicon/react';
 
-import { cn } from "../lib/utils";
+import { cn } from '../lib/utils';
 
 const Icons = remixIcons;
 const IconNames = Object.keys(Icons) as (keyof typeof Icons)[];
 type IconNameType = keyof typeof Icons;
 
-interface IconProps extends Omit<React.SVGProps<SVGSVGElement>, "children"> {
+interface IconProps extends Omit<React.SVGProps<SVGSVGElement>, 'children'> {
   name?: IconNameType;
   color?: string;
   size?: number | string;
@@ -30,7 +30,7 @@ interface IconProps extends Omit<React.SVGProps<SVGSVGElement>, "children"> {
 
 const Icon: React.FC<IconProps> = ({
   name,
-  color = "currentColor",
+  color = 'currentColor',
   size = 24,
   className,
   onClick,
@@ -43,7 +43,7 @@ const Icon: React.FC<IconProps> = ({
   return React.createElement(Icons[name], {
     color,
     size,
-    className: cn("icon", onClick && "icon-clickable", className),
+    className: cn('icon', onClick && 'icon-clickable', className),
     onClick,
     ...props,
   });

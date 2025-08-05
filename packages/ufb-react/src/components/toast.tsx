@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Toaster as Sonner, toast } from "sonner";
+import { Toaster as Sonner, toast } from 'sonner';
 
-import { cn } from "../lib/utils";
-import { Icon } from "./icon";
-import { Spinner } from "./spinner";
+import { cn } from '../lib/utils';
+import { Icon } from './icon';
+import { Spinner } from './spinner';
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
@@ -29,33 +29,33 @@ const Toaster = ({
 }: ToasterProps) => {
   return (
     <Sonner
-      className={cn("toaster", className)}
+      className={cn('toaster', className)}
       toastOptions={{
         unstyled: true,
         classNames: {
-          toast: cn("toast", toastOptions?.classNames?.toast ?? ""),
-          title: cn("toast-title", toastOptions?.classNames?.title ?? ""),
+          toast: cn('toast', toastOptions?.classNames?.toast ?? ''),
+          title: cn('toast-title', toastOptions?.classNames?.title ?? ''),
           description: cn(
-            "toast-description",
-            toastOptions?.classNames?.description ?? "",
+            'toast-description',
+            toastOptions?.classNames?.description ?? '',
           ),
-          loader: cn("toast-loader", toastOptions?.classNames?.loader ?? ""),
+          loader: cn('toast-loader', toastOptions?.classNames?.loader ?? ''),
           cancelButton: cn(
-            "toast-close button button-ghost button-medium button-radius-medium",
-            toastOptions?.classNames?.cancelButton ?? "",
+            'toast-close button button-ghost button-medium button-radius-medium',
+            toastOptions?.classNames?.cancelButton ?? '',
           ),
           actionButton: cn(
-            "toast-button button button-outline button-medium button-radius-medium",
-            toastOptions?.classNames?.actionButton ?? "",
+            'toast-button button button-outline button-medium button-radius-medium',
+            toastOptions?.classNames?.actionButton ?? '',
           ),
-          success: cn("toast-success", toastOptions?.classNames?.success ?? ""),
-          error: cn("toast-error", toastOptions?.classNames?.error ?? ""),
-          info: cn("toast-info", toastOptions?.classNames?.info ?? ""),
-          warning: cn("toast-warning", toastOptions?.classNames?.warning ?? ""),
-          loading: "",
-          default: cn("toast-default", toastOptions?.classNames?.default ?? ""),
-          content: cn("toast-content", toastOptions?.classNames?.content ?? ""),
-          icon: cn("toast-icon", toastOptions?.classNames?.icon ?? ""),
+          success: cn('toast-success', toastOptions?.classNames?.success ?? ''),
+          error: cn('toast-error', toastOptions?.classNames?.error ?? ''),
+          info: cn('toast-info', toastOptions?.classNames?.info ?? ''),
+          warning: cn('toast-warning', toastOptions?.classNames?.warning ?? ''),
+          loading: '',
+          default: cn('toast-default', toastOptions?.classNames?.default ?? ''),
+          content: cn('toast-content', toastOptions?.classNames?.content ?? ''),
+          icon: cn('toast-icon', toastOptions?.classNames?.icon ?? ''),
         },
       }}
       icons={{

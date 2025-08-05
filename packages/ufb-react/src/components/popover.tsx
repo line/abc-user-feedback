@@ -14,10 +14,10 @@
  * under the License.
  */
 
-import * as React from "react";
-import * as PopoverPrimitive from "@radix-ui/react-popover";
+import * as React from 'react';
+import * as PopoverPrimitive from '@radix-ui/react-popover';
 
-import { cn } from "../lib/utils";
+import { cn } from '../lib/utils';
 
 const Popover = ({
   ...props
@@ -36,13 +36,13 @@ const PopoverClose = PopoverPrimitive.Close;
 const PopoverContent = React.forwardRef<
   React.ComponentRef<typeof PopoverPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
->(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
+>(({ className, align = 'center', sideOffset = 4, ...props }, ref) => (
   <PopoverPrimitive.Portal>
     <PopoverPrimitive.Content
       ref={ref}
       align={align}
       sideOffset={sideOffset}
-      className={cn("popover", className)}
+      className={cn('popover', className)}
       {...props}
     />
   </PopoverPrimitive.Portal>

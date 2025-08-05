@@ -13,17 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-"use client";
+'use client';
 
-import type { VariantProps } from "class-variance-authority";
-import * as React from "react";
-import { Slot, Slottable } from "@radix-ui/react-slot";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import { Slot, Slottable } from '@radix-ui/react-slot';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
-import type { ButtonVariant, Radius, Size } from "../lib/types";
-import { cn, composeRefs } from "../lib/utils";
-import { Spinner } from "./spinner";
-import useTheme from "./use-theme";
+import type { ButtonVariant, Radius, Size } from '../lib/types';
+import { cn, composeRefs } from '../lib/utils';
+import { Spinner } from './spinner';
+import useTheme from './use-theme';
 
 const defaultVariants: {
   variant: ButtonVariant;
@@ -31,47 +31,47 @@ const defaultVariants: {
   radius?: Radius;
   loading?: boolean;
 } = {
-  variant: "primary",
+  variant: 'primary',
   size: undefined,
   radius: undefined,
   loading: false,
 };
 
-const buttonVariants = cva("button", {
+const buttonVariants = cva('button', {
   variants: {
     variant: {
-      primary: "button-primary",
-      secondary: "button-secondary",
-      destructive: "button-destructive",
-      ghost: "button-ghost",
-      outline: "button-outline",
+      primary: 'button-primary',
+      secondary: 'button-secondary',
+      destructive: 'button-destructive',
+      ghost: 'button-ghost',
+      outline: 'button-outline',
     },
     size: {
-      small: "button-small",
-      medium: "button-medium",
-      large: "button-large",
+      small: 'button-small',
+      medium: 'button-medium',
+      large: 'button-large',
     },
     radius: {
-      small: "button-radius-small",
-      medium: "button-radius-medium",
-      large: "button-radius-large",
+      small: 'button-radius-small',
+      medium: 'button-radius-medium',
+      large: 'button-radius-large',
     },
     loading: {
-      true: "!text-transparent [&>*:not(.button-loading)]:!invisible",
-      false: "",
+      true: '!text-transparent [&>*:not(.button-loading)]:!invisible',
+      false: '',
     },
   },
   defaultVariants,
 });
 
-const buttonLoadingVariants = cva("button-loading", {
+const buttonLoadingVariants = cva('button-loading', {
   variants: {
     variant: {
-      primary: "button-loading-primary",
-      secondary: "button-loading-secondary",
-      destructive: "button-loading-destructive",
-      ghost: "button-loading-ghost",
-      outline: "button-loading-outline",
+      primary: 'button-loading-primary',
+      secondary: 'button-loading-secondary',
+      destructive: 'button-loading-destructive',
+      ghost: 'button-loading-ghost',
+      outline: 'button-loading-outline',
     },
   },
   defaultVariants,
@@ -91,8 +91,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
-      type = "button",
-      variant = "primary",
+      type = 'button',
+      variant = 'primary',
       size,
       radius,
       disabled = false,
@@ -103,7 +103,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
-    const Comp = asChild ? Slot : "button";
+    const Comp = asChild ? Slot : 'button';
     const { themeSize, themeRadius } = useTheme();
     const buttonRef = React.useRef<HTMLButtonElement>(null);
 
@@ -114,13 +114,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       const isSvgOnly = Array.from(childNodes).every(
         (node) =>
           ((node as HTMLElement).nodeType === Node.ELEMENT_NODE &&
-            (node as HTMLElement).tagName.toLowerCase() === "svg") ||
+            (node as HTMLElement).tagName.toLowerCase() === 'svg') ||
           ((node as HTMLElement).nodeType === Node.TEXT_NODE &&
             !(node as HTMLElement).textContent?.trim()),
       );
 
       if (isSvgOnly) {
-        buttonRef.current.classList.add("svg-only");
+        buttonRef.current.classList.add('svg-only');
       }
     }, []);
 
@@ -151,6 +151,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   },
 );
 
-Button.displayName = "Button";
+Button.displayName = 'Button';
 
 export { Button, type ButtonProps, buttonVariants };

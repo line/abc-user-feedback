@@ -14,17 +14,17 @@
  * under the License.
  */
 
-import type { VariantProps } from "class-variance-authority";
-import * as React from "react";
-import * as SheetPrimitive from "@radix-ui/react-dialog";
-import { Slot } from "@radix-ui/react-slot";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import * as SheetPrimitive from '@radix-ui/react-dialog';
+import { Slot } from '@radix-ui/react-slot';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
-import type { IconNameType } from "./icon";
-import { cn } from "../lib/utils";
-import { Button } from "./button";
-import { Icon } from "./icon";
-import { ScrollArea, ScrollBar } from "./scroll-area";
+import { cn } from '../lib/utils';
+import { Button } from './button';
+import type { IconNameType } from './icon';
+import { Icon } from './icon';
+import { ScrollArea, ScrollBar } from './scroll-area';
 
 const Sheet = SheetPrimitive.Root;
 
@@ -32,11 +32,11 @@ const SheetTrigger = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Trigger>,
   SheetPrimitive.DialogTriggerProps &
     React.ComponentPropsWithoutRef<typeof Button>
->(({ variant = "outline", className, children, ...props }, ref) => {
+>(({ variant = 'outline', className, children, ...props }, ref) => {
   if (props.asChild) {
     return (
       <SheetPrimitive.Trigger
-        className={cn("sheet-trigger", className)}
+        className={cn('sheet-trigger', className)}
         ref={ref}
         {...props}
       >
@@ -48,7 +48,7 @@ const SheetTrigger = React.forwardRef<
     <SheetPrimitive.Trigger asChild>
       <Button
         variant={variant}
-        className={cn("sheet-trigger", className)}
+        className={cn('sheet-trigger', className)}
         ref={ref}
         {...props}
       >
@@ -64,10 +64,10 @@ const SheetClose = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof Button>
 >(({ variant, ...props }, ref) => (
   <SheetPrimitive.Close asChild>
-    <Button ref={ref} variant={variant ?? "outline"} {...props} />
+    <Button ref={ref} variant={variant ?? 'outline'} {...props} />
   </SheetPrimitive.Close>
 ));
-SheetClose.displayName = "SheetClose";
+SheetClose.displayName = 'SheetClose';
 
 const SheetPortal = SheetPrimitive.Portal;
 
@@ -76,30 +76,30 @@ const SheetOverlay = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Overlay
-    className={cn("sheet-overlay", className)}
+    className={cn('sheet-overlay', className)}
     {...props}
     ref={ref}
   />
 ));
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName;
 
-const sheetVariants = cva("sheet", {
+const sheetVariants = cva('sheet', {
   variants: {
     side: {
-      top: "sheet-side-top",
-      bottom: "sheet-side-bottom",
-      left: "sheet-side-left",
-      right: "sheet-side-right",
+      top: 'sheet-side-top',
+      bottom: 'sheet-side-bottom',
+      left: 'sheet-side-left',
+      right: 'sheet-side-right',
     },
     radius: {
-      small: "sheet-radius-small",
-      medium: "sheet-radius-medium",
-      large: "sheet-radius-large",
+      small: 'sheet-radius-small',
+      medium: 'sheet-radius-medium',
+      large: 'sheet-radius-large',
     },
   },
   defaultVariants: {
-    side: "right",
-    radius: "small",
+    side: 'right',
+    radius: 'small',
   },
 });
 
@@ -112,7 +112,7 @@ const SheetContent = React.forwardRef<
   SheetContentProps
 >(
   (
-    { side = "right", radius = "small", className, children, ...props },
+    { side = 'right', radius = 'small', className, children, ...props },
     ref,
   ) => (
     <SheetPortal>
@@ -149,18 +149,18 @@ const SheetHeader = ({
   className,
   ...props
 }: SheetHeaderProps) => (
-  <div className={cn("sheet-header", className)} {...props}>
+  <div className={cn('sheet-header', className)} {...props}>
     {icon && <Icon name={icon} size={38} className="sheet-icon" />}
     {children}
   </div>
 );
-SheetHeader.displayName = "SheetHeader";
+SheetHeader.displayName = 'SheetHeader';
 
 interface SheetBodyProps extends React.HTMLAttributes<HTMLDivElement> {
   asChild?: boolean;
 }
 const SheetBody = ({ asChild, className, ...props }: SheetBodyProps) => {
-  const Comp = asChild ? Slot : "div";
+  const Comp = asChild ? Slot : 'div';
   return (
     <ScrollArea>
       <Comp className={cn(className)} {...props} />
@@ -168,15 +168,15 @@ const SheetBody = ({ asChild, className, ...props }: SheetBodyProps) => {
     </ScrollArea>
   );
 };
-SheetBody.displayName = "SheetBody";
+SheetBody.displayName = 'SheetBody';
 
 const SheetFooter = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("sheet-footer", className)} {...props} />
+  <div className={cn('sheet-footer', className)} {...props} />
 );
-SheetFooter.displayName = "SheetFooter";
+SheetFooter.displayName = 'SheetFooter';
 
 const SheetTitle = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Title>,
@@ -184,7 +184,7 @@ const SheetTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Title
     ref={ref}
-    className={cn("sheet-title", className)}
+    className={cn('sheet-title', className)}
     {...props}
   />
 ));
@@ -196,7 +196,7 @@ const SheetDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SheetPrimitive.Description
     ref={ref}
-    className={cn("sheet-description", className)}
+    className={cn('sheet-description', className)}
     {...props}
   />
 ));

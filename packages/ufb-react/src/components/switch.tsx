@@ -14,25 +14,25 @@
  * under the License.
  */
 
-import * as React from "react";
-import * as SwitchPrimitives from "@radix-ui/react-switch";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import * as SwitchPrimitives from '@radix-ui/react-switch';
+import { cva } from 'class-variance-authority';
 
-import type { Color } from "../lib/types";
-import { cn } from "../lib/utils";
+import type { Color } from '../lib/types';
+import { cn } from '../lib/utils';
 
-const switchVariants = cva("switch", {
+const switchVariants = cva('switch', {
   variants: {
     color: {
-      default: "switch-default",
-      blue: "switch-blue",
-      orange: "switch-orange",
-      red: "switch-red",
-      green: "switch-green",
+      default: 'switch-default',
+      blue: 'switch-blue',
+      orange: 'switch-orange',
+      red: 'switch-red',
+      green: 'switch-green',
     },
   },
   defaultVariants: {
-    color: "default",
+    color: 'default',
   },
 });
 
@@ -50,7 +50,7 @@ const Switch = React.forwardRef<
     {...props}
     ref={ref}
   >
-    <SwitchPrimitives.Thumb className={cn("switch-thumb")} />
+    <SwitchPrimitives.Thumb className={cn('switch-thumb')} />
     {children}
   </SwitchPrimitives.Root>
 ));

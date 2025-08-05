@@ -13,18 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-"use client";
+'use client';
 
-import * as React from "react";
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { Slottable } from "@radix-ui/react-slot";
-import { cva } from "class-variance-authority";
+import * as React from 'react';
+import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
+import { Slottable } from '@radix-ui/react-slot';
+import { cva } from 'class-variance-authority';
 
-import type { Size } from "../lib/types";
-import { CHECK_ICON_SIZE } from "../constants";
-import { cn } from "../lib/utils";
-import { Icon } from "./icon";
-import useTheme from "./use-theme";
+import { CHECK_ICON_SIZE } from '../constants';
+import type { Size } from '../lib/types';
+import { cn } from '../lib/utils';
+import { Icon } from './icon';
+import useTheme from './use-theme';
 
 const defaultVariants: {
   size?: Size;
@@ -32,23 +32,23 @@ const defaultVariants: {
   size: undefined,
 };
 
-const checkboxVariants = cva("checkbox", {
+const checkboxVariants = cva('checkbox', {
   variants: {
     size: {
-      small: "checkbox-small",
-      medium: "checkbox-medium",
-      large: "checkbox-large",
+      small: 'checkbox-small',
+      medium: 'checkbox-medium',
+      large: 'checkbox-large',
     },
   },
   defaultVariants,
 });
 
-const checkVariants = cva("check", {
+const checkVariants = cva('check', {
   variants: {
     size: {
-      small: "check-small",
-      medium: "check-medium",
-      large: "check-large",
+      small: 'check-small',
+      medium: 'check-medium',
+      large: 'check-large',
     },
   },
   defaultVariants,
@@ -81,12 +81,12 @@ const Checkbox = React.forwardRef<
       {...props}
     >
       <span className={cn(checkVariants({ size }))}>
-        <CheckboxPrimitive.Indicator className={cn("checkbox-icon")}>
+        <CheckboxPrimitive.Indicator className={cn('checkbox-icon')}>
           <Icon
             name={
-              (checked ?? currentChecked) === "indeterminate"
-                ? "RiSubtractLine"
-                : "RiCheckLine"
+              (checked ?? currentChecked) === 'indeterminate' ?
+                'RiSubtractLine'
+              : 'RiCheckLine'
             }
             size={CHECK_ICON_SIZE[size ?? themeSize]}
           />
