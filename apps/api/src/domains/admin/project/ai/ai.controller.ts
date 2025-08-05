@@ -83,7 +83,7 @@ export class AIController {
   @Get('integrations')
   async getIntegration(@Param('projectId', ParseIntPipe) projectId: number) {
     return GetAIIntegrationResponseDto.transform(
-      await this.aiService.getOrCreateIntegration(projectId),
+      await this.aiService.getIntegration(projectId),
     );
   }
 
