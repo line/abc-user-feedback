@@ -26,12 +26,6 @@
   @apply sheet-radius-small [&:not([class*=sheet-side])]:sheet-side-right;
 }
 
-.sheet-trigger {
-  --sheet-bg-open: var(--bg-neutral-tertiary);
-
-  @apply data-[state=open]:bg-[var(--sheet-bg-open)];
-}
-
 .sheet-close {
   @apply !absolute right-2 top-2 !m-0;
 }

@@ -111,6 +111,7 @@ export const getRandomValue = (
 ): string | number | string[] | number[] => {
   switch (format) {
     case FieldFormatEnum.text:
+    case FieldFormatEnum.aiField:
       return faker.string.sample();
     case FieldFormatEnum.keyword:
       return faker.string.sample();

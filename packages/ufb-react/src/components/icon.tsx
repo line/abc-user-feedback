@@ -22,12 +22,10 @@ const Icons = remixIcons;
 const IconNames = Object.keys(Icons) as (keyof typeof Icons)[];
 type IconNameType = keyof typeof Icons;
 
-interface IconProps {
+interface IconProps extends Omit<React.SVGProps<SVGSVGElement>, 'children'> {
   name?: IconNameType;
   color?: string;
   size?: number | string;
-  className?: string;
-  onClick?: React.MouseEventHandler<SVGSVGElement>;
 }
 
 const Icon: React.FC<IconProps> = ({

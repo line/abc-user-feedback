@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+'use client';
+
 import * as React from 'react';
 import { Slottable } from '@radix-ui/react-slot';
 import { Command as CommandPrimitive } from 'cmdk';
@@ -63,13 +65,13 @@ const Combobox = ({
 };
 
 const ComboboxContent = React.forwardRef<
-  React.ElementRef<typeof PopoverContent>,
+  React.ComponentRef<typeof PopoverContent>,
   React.ComponentPropsWithoutRef<typeof PopoverContent> & {
-    commandProps?: React.ComponentPropsWithoutRef<typeof CommandPrimitive>;
+    options?: React.ComponentPropsWithoutRef<typeof CommandPrimitive>;
   }
 >(
   (
-    { className, children, onMouseEnter, onMouseLeave, commandProps, ...props },
+    { className, children, onMouseEnter, onMouseLeave, options, ...props },
     ref,
   ) => {
     const { trigger, setIsHover } = React.useContext(ComboboxContext);
@@ -96,7 +98,7 @@ const ComboboxContent = React.forwardRef<
         {...props}
         className={cn('combobox-content', className)}
       >
-        <CommandPrimitive {...commandProps}>{children}</CommandPrimitive>
+        <CommandPrimitive {...options}>{children}</CommandPrimitive>
       </PopoverContent>
     );
   },
@@ -109,7 +111,7 @@ interface ComboboxInputProps
 }
 
 const ComboboxInput = React.forwardRef<
-  React.ElementRef<typeof CommandPrimitive.Input>,
+  React.ComponentRef<typeof CommandPrimitive.Input>,
   ComboboxInputProps
 >(({ icon, className, ...props }, ref) => (
   <div className="combobox-input-box" cmdk-input-wrapper="">
@@ -125,7 +127,7 @@ const ComboboxInput = React.forwardRef<
 ComboboxInput.displayName = CommandPrimitive.Input.displayName;
 
 const ComboboxList = React.forwardRef<
-  React.ElementRef<typeof CommandPrimitive.List>,
+  React.ComponentRef<typeof CommandPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.List> & {
     maxHeight?: string;
   }
@@ -143,7 +145,7 @@ const ComboboxList = React.forwardRef<
 ComboboxList.displayName = CommandPrimitive.List.displayName;
 
 const ComboboxEmpty = React.forwardRef<
-  React.ElementRef<typeof CommandPrimitive.Empty>,
+  React.ComponentRef<typeof CommandPrimitive.Empty>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Empty>
 >((props, ref) => (
   <CommandPrimitive.Empty ref={ref} className="combobox-empty" {...props} />
@@ -152,7 +154,7 @@ const ComboboxEmpty = React.forwardRef<
 ComboboxEmpty.displayName = CommandPrimitive.Empty.displayName;
 
 const ComboboxGroup = React.forwardRef<
-  React.ElementRef<typeof CommandPrimitive.Group>,
+  React.ComponentRef<typeof CommandPrimitive.Group>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Group>
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Group
@@ -165,7 +167,7 @@ const ComboboxGroup = React.forwardRef<
 ComboboxGroup.displayName = CommandPrimitive.Group.displayName;
 
 const ComboboxSeparator = React.forwardRef<
-  React.ElementRef<typeof CommandPrimitive.Separator>,
+  React.ComponentRef<typeof CommandPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Separator>
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Separator
@@ -177,14 +179,12 @@ const ComboboxSeparator = React.forwardRef<
 ComboboxSeparator.displayName = CommandPrimitive.Separator.displayName;
 
 const ComboboxItem = React.forwardRef<
-  React.ElementRef<typeof CommandPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item> & {
-    inset?: boolean;
-  }
->(({ inset, children, className, ...props }, ref) => (
+  React.ComponentRef<typeof CommandPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
+>(({ children, className, ...props }, ref) => (
   <CommandPrimitive.Item
     ref={ref}
-    className={cn('combobox-item', inset && 'combobox-item-inset', className)}
+    className={cn('combobox-item', className)}
     {...props}
   >
     {children}
@@ -194,7 +194,7 @@ const ComboboxItem = React.forwardRef<
 ComboboxItem.displayName = CommandPrimitive.Item.displayName;
 
 const ComboboxCaption = React.forwardRef<
-  React.ElementRef<'span'>,
+  React.ComponentRef<'span'>,
   React.ComponentPropsWithoutRef<'span'>
 >(({ className, ...props }, ref) => (
   <span ref={ref} className={cn('combobox-caption', className)} {...props} />
@@ -203,7 +203,7 @@ const ComboboxCaption = React.forwardRef<
 ComboboxCaption.displayName = 'ComboboxCaption';
 
 const ComboboxSelectItem = React.forwardRef<
-  React.ElementRef<typeof CommandPrimitive.Item>,
+  React.ComponentRef<typeof CommandPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item> & {
     checked?: boolean;
   }
@@ -226,7 +226,7 @@ const ComboboxSelectItem = React.forwardRef<
 ComboboxSelectItem.displayName = 'ComboboxSelectItem';
 
 const ComboboxTrigger = React.forwardRef<
-  React.ElementRef<typeof Button>,
+  React.ComponentRef<typeof Button>,
   React.ComponentPropsWithoutRef<typeof Button> & {
     trigger?: TriggerType;
   }

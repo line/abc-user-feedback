@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+'use client';
+
 import * as React from 'react';
 import type { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu';
 import * as DropdownPrimitive from '@radix-ui/react-dropdown-menu';
@@ -61,7 +63,7 @@ const Dropdown = ({
 };
 
 const DropdownTrigger = React.forwardRef<
-  React.ElementRef<typeof DropdownPrimitive.Trigger>,
+  React.ComponentRef<typeof DropdownPrimitive.Trigger>,
   DropdownPrimitive.DropdownMenuTriggerProps &
     React.ComponentPropsWithoutRef<typeof Button> & {
       trigger?: TriggerType;
@@ -142,19 +144,13 @@ const DropdownSub = DropdownPrimitive.Sub;
 const DropdownRadioGroup = DropdownPrimitive.RadioGroup;
 
 const DropdownSubTrigger = React.forwardRef<
-  React.ElementRef<typeof DropdownPrimitive.SubTrigger>,
-  React.ComponentPropsWithoutRef<typeof DropdownPrimitive.SubTrigger> & {
-    inset?: boolean;
-  }
->(({ className, inset, children, ...props }, ref) => {
+  React.ComponentRef<typeof DropdownPrimitive.SubTrigger>,
+  React.ComponentPropsWithoutRef<typeof DropdownPrimitive.SubTrigger>
+>(({ className, children, ...props }, ref) => {
   return (
     <DropdownPrimitive.SubTrigger
       ref={ref}
-      className={cn(
-        'dropdown-sub-trigger',
-        inset && 'dropdown-sub-trigger-inset',
-        className,
-      )}
+      className={cn('dropdown-sub-trigger', className)}
       {...props}
     >
       {children}
@@ -164,7 +160,7 @@ const DropdownSubTrigger = React.forwardRef<
 DropdownSubTrigger.displayName = DropdownPrimitive.SubTrigger.displayName;
 
 const DropdownCaption = React.forwardRef<
-  React.ElementRef<'span'>,
+  React.ComponentRef<'span'>,
   React.ComponentPropsWithoutRef<'span'>
 >(({ className, ...props }, ref) => (
   <span ref={ref} className={cn('dropdown-caption', className)} {...props} />
@@ -172,7 +168,7 @@ const DropdownCaption = React.forwardRef<
 DropdownCaption.displayName = 'DropdownCaption';
 
 const DropdownSubContent = React.forwardRef<
-  React.ElementRef<typeof DropdownPrimitive.SubContent>,
+  React.ComponentRef<typeof DropdownPrimitive.SubContent>,
   React.ComponentPropsWithoutRef<typeof DropdownPrimitive.SubContent>
 >(({ className, ...props }, ref) => (
   <DropdownPrimitive.SubContent
@@ -184,7 +180,7 @@ const DropdownSubContent = React.forwardRef<
 DropdownSubContent.displayName = DropdownPrimitive.SubContent.displayName;
 
 const DropdownContent = React.forwardRef<
-  React.ElementRef<typeof DropdownPrimitive.Content>,
+  React.ComponentRef<typeof DropdownPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Content> & {
     maxHeight?: string;
   }
@@ -239,14 +235,12 @@ const DropdownContent = React.forwardRef<
 DropdownContent.displayName = DropdownPrimitive.Content.displayName;
 
 const DropdownItem = React.forwardRef<
-  React.ElementRef<typeof DropdownPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Item> & {
-    inset?: boolean;
-  }
->(({ children, className, inset, ...props }, ref) => (
+  React.ComponentRef<typeof DropdownPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Item>
+>(({ children, className, ...props }, ref) => (
   <DropdownPrimitive.Item
     ref={ref}
-    className={cn('dropdown-item', inset && 'dropdown-item-inset', className)}
+    className={cn('dropdown-item', className)}
     {...props}
   >
     {children}
@@ -255,7 +249,7 @@ const DropdownItem = React.forwardRef<
 DropdownItem.displayName = DropdownPrimitive.Item.displayName;
 
 const DropdownCheckboxItem = React.forwardRef<
-  React.ElementRef<typeof DropdownPrimitive.CheckboxItem>,
+  React.ComponentRef<typeof DropdownPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof DropdownPrimitive.CheckboxItem>
 >(({ className, children, checked, ...props }, ref) => (
   <DropdownPrimitive.CheckboxItem
@@ -273,7 +267,7 @@ const DropdownCheckboxItem = React.forwardRef<
 DropdownCheckboxItem.displayName = DropdownPrimitive.CheckboxItem.displayName;
 
 const DropdownRadioItem = React.forwardRef<
-  React.ElementRef<typeof DropdownPrimitive.RadioItem>,
+  React.ComponentRef<typeof DropdownPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof DropdownPrimitive.RadioItem>
 >(({ className, children, ...props }, ref) => (
   <DropdownPrimitive.RadioItem
@@ -290,21 +284,19 @@ const DropdownRadioItem = React.forwardRef<
 DropdownRadioItem.displayName = DropdownPrimitive.RadioItem.displayName;
 
 const DropdownLabel = React.forwardRef<
-  React.ElementRef<typeof DropdownPrimitive.Label>,
-  React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Label> & {
-    inset?: boolean;
-  }
->(({ className, inset, ...props }, ref) => (
+  React.ComponentRef<typeof DropdownPrimitive.Label>,
+  React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Label>
+>(({ className, ...props }, ref) => (
   <DropdownPrimitive.Label
     ref={ref}
-    className={cn('dropdown-label', inset && 'dropdown-label-inset', className)}
+    className={cn('dropdown-label', className)}
     {...props}
   />
 ));
 DropdownLabel.displayName = DropdownPrimitive.Label.displayName;
 
 const DropdownSeparator = React.forwardRef<
-  React.ElementRef<typeof DropdownPrimitive.Separator>,
+  React.ComponentRef<typeof DropdownPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Separator>
 >(({ className, ...props }, ref) => (
   <DropdownPrimitive.Separator

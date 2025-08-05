@@ -30,16 +30,8 @@
   @apply border-[var(--dropdown-border)] bg-[var(--dropdown-bg)] text-[var(--dropdown-fg)];
 }
 
-.dropdown-trigger {
-  @apply data-[state=open]:bg-[var(--dropdown-bg-pressed)];
-}
-
 .dropdown-sub-trigger {
   @apply rounded-6 text-base-normal flex cursor-pointer select-none items-center p-2 outline-none focus:bg-[var(--dropdown-bg-hover)] data-[state=open]:bg-[var(--dropdown-bg-pressed)] data-[state=open]:text-[var(--dropdown-fg-pressed)];
-}
-
-.dropdown-sub-trigger-inset {
-  @apply pl-8;
 }
 
 .dropdown-sub-content {
@@ -65,10 +57,6 @@
   @apply [&>svg]:h-4 [&>svg]:w-4;
 }
 
-.dropdown-item-inset {
-  @apply pl-8;
-}
-
 .dropdown-checkbox {
   @apply rounded-8 text-base-normal relative flex cursor-pointer select-none items-center py-2 pl-8 outline-none transition-colors focus:bg-[var(--dropdown-bg-hover)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 }
@@ -91,10 +79,6 @@
 
 .dropdown-label {
   @apply text-base-strong space-x-2 p-2;
-}
-
-.dropdown-label-inset {
-  @apply pl-8;
 }
 
 .dropdown-caption {

@@ -36,7 +36,7 @@ import ChartCard from './chart-card';
 
 interface IProps {
   title: string;
-  description: string;
+  description?: string;
   height?: number;
   data: unknown[];
   dataKeys: { color: string; name: string }[];

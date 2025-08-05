@@ -13,31 +13,29 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 .select {
+  /* default */
+  @apply select-small;
+}
+
+.select-trigger {
   --select-fg: var(--fg-neutral-tertiary);
   --select-fg-pressed: var(--fg-neutral-primary);
   --select-fg-filled: var(--fg-neutral-primary);
-  --select-caption-fg: var(--fg-neutral-tertiary);
-  --select-caption-fg-success: var(--fg-tint-green);
-  --select-caption-fg-error: var(--fg-tint-red);
   --select-border: var(--border-neutral-tertiary);
   --select-border-pressed: var(--tint, var(--border-neutral-primary));
   --select-border-error: var(--border-tint-red);
   --select-bg: var(--bg-neutral-primary);
   --select-bg-pressed: var(--bg-neutral-tertiary);
 
-  /* default */
-  @apply select-small;
-}
-
-.select-trigger {
-  @apply rounded-8 before:rounded-8 relative flex w-full items-center justify-start bg-[var(--select-bg)] text-left text-[var(--select-fg-filled)] transition-transform before:absolute before:inset-0 before:flex before:border before:border-[var(--select-border)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-[var(--select-fg)] data-[state=open]:text-[var(--select-fg-pressed)] data-[state=open]:before:border-2 data-[state=open]:before:border-[var(--select-border-pressed)] [&>span]:flex [&>span]:flex-1 [&>span]:items-center [&>span]:overflow-hidden [&>svg:last-of-type]:data-[state=open]:rotate-180;
+  @apply relative flex w-full items-center justify-start bg-[var(--select-bg)] text-left text-[var(--select-fg-filled)] transition-transform before:absolute before:inset-0 before:flex before:border before:border-[var(--select-border)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-[var(--select-fg)] data-[state=open]:text-[var(--select-fg-pressed)] data-[state=open]:before:border-2 data-[state=open]:before:border-[var(--select-border-pressed)] [&>span]:flex [&>span]:flex-1 [&>span]:items-center [&>span]:overflow-hidden [&>svg:last-of-type]:data-[state=open]:rotate-180;
 
   /* default */
-  @apply select-trigger-medium;
+  @apply select-trigger-medium select-trigger-radius-medium;
 }
 
-.select-trigger-error {
+.select-trigger[aria-invalid='true'] {
   @apply before:!border-2 before:!border-[var(--select-border-error)];
 }
 
@@ -45,9 +43,6 @@
   --select-fg: var(--fg-neutral-tertiary);
   --select-fg-pressed: var(--fg-neutral-primary);
   --select-fg-filled: var(--fg-neutral-primary);
-  --select-caption-fg: var(--fg-neutral-tertiary);
-  --select-caption-fg-success: var(--fg-tint-green);
-  --select-caption-fg-error: var(--fg-tint-red);
   --select-border: var(--border-neutral-tertiary);
   --select-border-pressed: var(--tint, var(--border-neutral-primary));
   --select-border-error: var(--border-tint-red);
@@ -57,7 +52,7 @@
   @apply data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95;
   @apply data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
   @apply data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[side=bottom]:mt-1 data-[side=top]:mb-1;
-  @apply rounded-8 relative z-50 min-w-[--radix-select-trigger-width] overflow-hidden border border-[var(--select-border)] bg-[var(--select-bg)] p-1 text-[var(--select-fg-filled)] shadow-md;
+  @apply rounded-8 relative z-50 !min-w-[var(--radix-select-trigger-width,_var(--radix-popper-anchor-width))] overflow-hidden border border-[var(--select-border)] bg-[var(--select-bg)] p-1 text-[var(--select-fg-filled)] shadow-md;
 }
 
 .select-viewport {
@@ -69,14 +64,10 @@
 }
 
 .select-item {
-  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center py-2 outline-none transition-colors focus:bg-[var(--select-bg-pressed)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center py-2 outline-none transition-colors hover:bg-[var(--select-bg-pressed)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 
   /* default */
   @apply [&:not(.select-item-right)]:select-item-left;
-}
-
-.select-item-icon {
-  @apply mr-1;
 }
 
 .select-item-check {
@@ -91,20 +82,5 @@
 }
 
 .select-tag {
-  @apply mr-2.5;
-}
-
-.select-label {
-  @apply text-base-normal font-normal text-[var(--select-fg-filled)];
-}
-
-.select-caption {
-  @apply text-base-normal flex items-center gap-1;
-
-  /* default */
-  @apply select-caption-default;
-}
-
-.select-caption-icon {
-  @apply flex-shrink-0;
+  @apply mr-2.5 !gap-0;
 }

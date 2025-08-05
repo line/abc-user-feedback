@@ -46,6 +46,15 @@ export class CreateFieldDto {
 
   @Expose()
   order?: number | null;
+
+  @Expose()
+  aiFieldTemplateId?: number | null;
+
+  @Expose()
+  aiFieldTargetKeys?: string[] | null;
+
+  @Expose()
+  aiFieldAutoProcessing?: boolean | null;
 }
 
 class Option {

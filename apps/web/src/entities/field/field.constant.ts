@@ -26,6 +26,7 @@ export const FIELD_FORMAT_LIST = [
   'select',
   'multiSelect',
   'images',
+  'aiField',
 ] as const;
 
 export const FIELD_FORMAT_ICON_MAP: Record<FieldFormat, IconNameType> = {
@@ -36,6 +37,7 @@ export const FIELD_FORMAT_ICON_MAP: Record<FieldFormat, IconNameType> = {
   select: 'RiCheckboxCircleLine',
   multiSelect: 'RiListCheck',
   images: 'RiImageLine',
+  aiField: 'RiSparklingFill',
 };
 
 export const FIELD_STATUS_COLOR_MAP: Record<Field['status'], Color> = {

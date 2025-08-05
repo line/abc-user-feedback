@@ -25,6 +25,7 @@ import { Button, Icon } from '@ufb/react';
 import type { TableFilterField } from '@/shared';
 import { useAllChannels, useOAIQuery } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
+import { useCheckAIUsageLimit } from '@/entities/ai';
 import { useRoutingChannelCreation } from '@/entities/channel/lib';
 import { FeedbackTable } from '@/entities/feedback';
 import { ProjectGuard } from '@/entities/project';
@@ -41,6 +42,8 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
 
   const router = useRouter();
   const { t } = useTranslation();
+
+  useCheckAIUsageLimit(projectId);
 
   const { data: channels, isLoading } = useAllChannels(projectId);
   const { openChannelInProgress } = useRoutingChannelCreation(projectId);
@@ -126,6 +129,14 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             format: field.format,
             options: field.options,
             matchType: ['CONTAINS', 'IS'],
+          };
+        }
+        if (field.format === 'aiField') {
+          return {
+            key: field.key,
+            name: field.name,
+            format: 'string',
+            matchType: ['CONTAINS'],
           };
         }
       })

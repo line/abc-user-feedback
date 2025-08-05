@@ -13,19 +13,31 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import Linkify from 'linkify-react';
 
 import type { IconNameType } from '@ufb/react';
-import { Badge, Icon, InputField, Tag, Textarea, TextInput } from '@ufb/react';
+import {
+  Badge,
+  Icon,
+  InputField,
+  Tag,
+  Textarea,
+  TextInput,
+  toast,
+} from '@ufb/react';
 
+import { AICell } from '@/entities/ai';
 import { CategoryCombobox } from '@/entities/category';
 import type { Category } from '@/entities/category';
 import IssueCell from '@/entities/feedback/ui/issue-cell';
 
-import { DATE_TIME_FORMAT } from '../constants';
+import { DATE_TIME_FORMAT, GRADIENT_CSS } from '../constants';
 import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
+import { useOAIMutation, usePermissions } from '../lib';
+import { cn } from '../utils';
 import ImagePreviewButton from './image-preview-button';
 import {
   DatePicker,
@@ -51,22 +63,38 @@ interface TicketRow {
   format: 'ticket';
   issueTracker?: { ticketDomain: string | null; ticketKey: string | null };
 }
+
 interface IssueRow {
   format: 'issue';
   feedbackId: number;
   editable?: false;
 }
+
 interface CategoryRow {
   format: 'cateogry';
   issueId: number;
 }
+interface AIFieldRow {
+  format: 'aiField';
+  refetch?: () => Promise<void>;
+  status: 'ACTIVE' | 'INACTIVE';
+}
 
 export type SheetDetailTableRow = {
+  id?: number;
   key: string;
   name: string;
   editable?: boolean;
   disabled?: boolean;
-} & (PlainRow | SelectableRow | TicketRow | ImageRow | IssueRow | CategoryRow);
+} & (
+  | PlainRow
+  | SelectableRow
+  | TicketRow
+  | ImageRow
+  | IssueRow
+  | CategoryRow
+  | AIFieldRow
+);
 
 type Format = SheetDetailTableRow['format'];
 
@@ -81,6 +109,7 @@ const FIELD_FORMAT_ICON_MAP: Record<Format, IconNameType> = {
   images: 'RiImageLine',
   ticket: 'RiTicketLine',
   cateogry: 'RiListOrdered2',
+  aiField: 'RiSparklingFill',
 };
 
 interface Props {
@@ -159,7 +188,10 @@ const SheetDetailTable = (props: Props) => {
         }
       </div>
     ),
-    images: (value) => <ImagePreviewButton urls={value as string[]} />,
+    images: (value) =>
+      value && (value as string[]).length > 0 ?
+        <ImagePreviewButton urls={value as string[]} />
+      : '-',
     ticket: (value, row) => {
       const { issueTracker } = row as TicketRow;
       return issueTracker?.ticketDomain && issueTracker.ticketKey && value ?
@@ -188,6 +220,22 @@ const SheetDetailTable = (props: Props) => {
             </Tag>
           </CategoryCombobox>
         </div>
+      );
+    },
+    aiField: (value, row) => {
+      if (!row.id || row.format !== 'aiField') return <></>;
+      return (
+        <AISheetDetailCell
+          value={
+            value as
+              | { status: 'loading' | 'success' | 'error'; message: string }
+              | undefined
+          }
+          feedbackId={data.id as number}
+          fieldId={row.id}
+          refetch={row.refetch}
+          showButton={row.status === 'ACTIVE'}
+        />
       );
     },
   };
@@ -235,7 +283,7 @@ const SheetDetailTable = (props: Props) => {
             value: option.key,
             label: option.name,
           }))}
-          value={value as string | null}
+          value={(value as string | null) ?? undefined}
           onChange={(key) => onChange?.(row.key, key ?? null)}
           disabled={row.disabled}
         />
@@ -278,6 +326,7 @@ const SheetDetailTable = (props: Props) => {
     images: () => <></>,
     issue: () => <></>,
     cateogry: () => <></>,
+    aiField: () => <></>,
   };
 
   return (
@@ -288,17 +337,17 @@ const SheetDetailTable = (props: Props) => {
           const value = data[key];
           return (
             <tr key={key}>
-              <th className="text-neutral-tertiary w-1/4 py-2.5 align-top font-normal">
-                <div className="flex items-center gap-1 text-left">
-                  <Icon name={FIELD_FORMAT_ICON_MAP[format]} size={16} />
-                  {name}
-                </div>
+              <th className="text-neutral-tertiary w-1/4 py-2.5 pr-3 text-left align-top font-normal">
+                <Icon
+                  className="mr-2"
+                  name={FIELD_FORMAT_ICON_MAP[format]}
+                  size={16}
+                />
+                <span className="break-words">{name}</span>
               </th>
-              <td className="w-3/4 whitespace-normal break-words py-2.5">
+              <td className="w-3/4 whitespace-pre-wrap break-words py-2.5">
                 {mode === 'edit' && row.editable ?
                   renderEditModeField[format](value, row)
-                : typeof value === 'undefined' ?
-                  '-'
                 : renderViewModeField[format](value, row)}
               </td>
             </tr>
@@ -306,6 +355,73 @@ const SheetDetailTable = (props: Props) => {
         })}
       </tbody>
     </table>
+  );
+};
+
+const AISheetDetailCell = ({
+  value,
+  feedbackId,
+  fieldId,
+  refetch,
+  showButton,
+}: {
+  value:
+    | { status: 'loading' | 'success' | 'error'; message: string }
+    | undefined;
+  feedbackId: number;
+  fieldId: number;
+  refetch?: () => Promise<void>;
+  showButton?: boolean;
+}) => {
+  const router = useRouter();
+  const projectId = +(router.query.projectId as string);
+  const perms = usePermissions(projectId);
+
+  const { mutateAsync: processAI, isPending } = useOAIMutation({
+    method: 'post',
+    path: '/api/admin/projects/{projectId}/ai/process/field',
+    pathParams: { projectId },
+    queryOptions: {
+      async onSuccess() {
+        await refetch?.();
+      },
+    },
+  });
+
+  return (
+    <div>
+      {showButton && (
+        <Tag
+          size="small"
+          style={GRADIENT_CSS.primaryAlt}
+          onClick={() => {
+            if (!perms.includes('feedback_update')) return;
+            if (isPending) return;
+            toast.promise(processAI({ feedbackId, aiFieldId: fieldId }), {
+              loading: 'Loading',
+              success: () => 'Success',
+            });
+          }}
+          className={cn('cursor-pointer', {
+            '!opacity-50': isPending || !perms.includes('feedback_update'),
+            'cursor-not-allowed': !perms.includes('feedback_update'),
+          })}
+        >
+          <Icon name="RiAiGenerate" />
+          Run AI
+        </Tag>
+      )}
+      <div className="py-2">
+        <AICell
+          value={
+            value as
+              | { status: 'loading' | 'success' | 'error'; message: string }
+              | undefined
+          }
+          isLoading={isPending}
+        />
+      </div>
+    </div>
   );
 };
 

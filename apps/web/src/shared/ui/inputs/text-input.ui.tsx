@@ -17,12 +17,12 @@ import React, { useState } from 'react';
 
 import type { TextInputProps } from '@ufb/react';
 import {
+  Caption,
   TextInput as Input,
   InputBox,
-  InputCaption,
   InputEyeButton,
   InputField,
-  InputLabel,
+  Label,
 } from '@ufb/react';
 
 interface Props extends Omit<TextInputProps, 'error' | 'required' | 'value'> {
@@ -56,9 +56,9 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
   return (
     <InputField className="w-full">
       {label && (
-        <InputLabel>
+        <Label>
           {label} {required && <span className="text-tint-red">*</span>}
-        </InputLabel>
+        </Label>
       )}
       <div className="input-container flex gap-2">
         <InputBox className="w-full flex-1">
@@ -70,7 +70,6 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
             {...textInputProps}
             value={textInputProps.value ?? undefined}
             className="flex-1"
-            error={typeof error !== 'undefined'}
             size={size}
             type={inputType}
           />
@@ -87,20 +86,10 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
         </InputBox>
         {rightButton}
       </div>
-      {!!error && (
-        <InputCaption variant="error" size={size}>
-          {error}
-        </InputCaption>
-      )}
-      {!!infoCaption && (
-        <InputCaption variant="info" size={size}>
-          {infoCaption}
-        </InputCaption>
-      )}
+      {!!error && <Caption variant="error">{error}</Caption>}
+      {!!infoCaption && <Caption variant="info">{infoCaption}</Caption>}
       {!!successCaption && (
-        <InputCaption variant="success" size={size}>
-          {successCaption}
-        </InputCaption>
+        <Caption variant="success">{successCaption}</Caption>
       )}
     </InputField>
   );
