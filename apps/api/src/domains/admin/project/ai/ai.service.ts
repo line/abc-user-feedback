@@ -526,7 +526,7 @@ export class AIService {
     aiField: FieldEntity,
     aiTargetFields: FieldEntity[],
     fields: FieldEntity[],
-    isAutoProcess: boolean = false,
+    isAutoProcess = false,
   ): Promise<boolean> {
     const integration = await this.aiIntegrationsRepo.findOne({
       where: {
