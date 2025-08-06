@@ -301,7 +301,10 @@ export class FeedbackService {
 
       if (fieldsByKey[key].format === FieldFormatEnum.aiField) {
         convertedFeedback[fieldsByKey[key].name] = (
-          feedback[key] as { status: string; message: string }
+          JSON.parse(feedback[key] as string) as {
+            status: string;
+            message: string;
+          }
         ).message;
       }
     }
