@@ -300,9 +300,16 @@ export class FeedbackService {
       }
 
       if (fieldsByKey[key].format === FieldFormatEnum.aiField) {
-        convertedFeedback[fieldsByKey[key].name] = (
-          feedback[key] as { status: string; message: string }
-        ).message;
+        try {
+          convertedFeedback[fieldsByKey[key].name] = (
+            JSON.parse(feedback[key] as string) as {
+              status: string;
+              message: string;
+            }
+          ).message;
+        } catch {
+          convertedFeedback[fieldsByKey[key].name] = feedback[key] as string;
+        }
       }
     }
 
