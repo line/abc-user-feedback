@@ -174,7 +174,7 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
                 </Button>
               }
               successCaption={
-                watch('emailState') === 'VERIFIED' ? '인증되었습니다.' : (
+                watch('emailState') === 'VERIFIED' ? 'Authenticated.' : (
                   undefined
                 )
               }

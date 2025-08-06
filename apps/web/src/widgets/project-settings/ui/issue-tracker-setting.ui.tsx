@@ -93,7 +93,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <SettingTemplate
-      title={t('project-setting-menu.issue-tracker-mgmt')}
+      title={t('v2.project-setting-menu.issue-tracker-mgmt')}
       action={
         <Button
           type="submit"

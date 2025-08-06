@@ -26,7 +26,7 @@ import {
   FIELD_STATUS_COLOR_MAP,
 } from './field.constant';
 import type { FieldInfo } from './field.type';
-import OptionListPopover from './ui/option-list-popover.ui';
+import { AiFieldOptionPopover, SelectOptionListPopover } from './ui';
 
 const DEFAULT_FIELD_COLUMNS_KEYS = ['id', 'createdAt', 'updatedAt', 'issues'];
 
@@ -53,7 +53,6 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
           )}
         </div>
       ),
-
       enableSorting: false,
     }),
     columnHelper.accessor('name', {
@@ -71,13 +70,26 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
       ),
       enableSorting: false,
     }),
-    columnHelper.accessor('options', {
-      header: 'Select Option',
-      cell: ({ getValue }) => {
-        const options = getValue() ?? [];
-        return options.length > 0 ?
-            <OptionListPopover options={options} />
-          : '-';
+    columnHelper.display({
+      header: 'Option',
+      cell: ({ row }) => {
+        if (
+          (row.original.format === 'select' ||
+            row.original.format === 'multiSelect') &&
+          (row.original.options ?? []).length > 0
+        ) {
+          return (
+            <SelectOptionListPopover options={row.original.options ?? []} />
+          );
+        }
+        if (row.original.format === 'aiField') {
+          return (
+            <AiFieldOptionPopover
+              aiFieldTemplateId={row.original.aiFieldTemplateId}
+            />
+          );
+        }
+        return '-';
       },
       enableSorting: false,
       meta: { truncate: false },

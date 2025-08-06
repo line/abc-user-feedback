@@ -100,8 +100,8 @@ describe('UserService', () => {
       );
 
       expect(result).toMatchObject({});
-      expect(userRepo.findOne).toBeCalledTimes(1);
-      expect(userRepo.findOne).toBeCalledWith({
+      expect(userRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(userRepo.findOne).toHaveBeenCalledWith({
         where: { email, signUpMethod },
         withDeleted: true,
       });
@@ -116,8 +116,8 @@ describe('UserService', () => {
 
       const result = await userService.findById(userId);
 
-      expect(userRepo.findOne).toBeCalledTimes(1);
-      expect(userRepo.findOne).toBeCalledWith({
+      expect(userRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(userRepo.findOne).toHaveBeenCalledWith({
         where: { id: userId },
       });
       expect(result).toMatchObject({ id: userId });
@@ -130,8 +130,8 @@ describe('UserService', () => {
         UserNotFoundException,
       );
 
-      expect(userRepo.findOne).toBeCalledTimes(1);
-      expect(userRepo.findOne).toBeCalledWith({
+      expect(userRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(userRepo.findOne).toHaveBeenCalledWith({
         where: { id: userId },
       });
     });
@@ -154,10 +154,10 @@ describe('UserService', () => {
         }),
       ).rejects.toThrow(UserAlreadyExistsException);
 
-      expect(userRepo.findOneBy).toBeCalledTimes(1);
-      expect(userRepo.findOneBy).toBeCalledWith({ email });
-      expect(MockCodeService.setCode).not.toBeCalled();
-      expect(MockUserInvitationMailingService.send).not.toBeCalled();
+      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
+      expect(userRepo.findOneBy).toHaveBeenCalledWith({ email });
+      expect(MockCodeService.setCode).not.toHaveBeenCalled();
+      expect(MockUserInvitationMailingService.send).not.toHaveBeenCalled();
     });
   });
 });

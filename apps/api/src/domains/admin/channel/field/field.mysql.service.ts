@@ -25,6 +25,7 @@ import {
   isSelectFieldFormat,
 } from '@/common/enums';
 import { validateUnique } from '@/utils/validate-unique';
+import { AIFieldTemplatesEntity } from '../../project/ai/ai-field-templates.entity';
 import { OptionService } from '../option/option.service';
 import type { CreateFieldDto, ReplaceFieldDto } from './dtos';
 import { CreateManyFieldsDto, ReplaceManyFieldsDto } from './dtos';
@@ -189,7 +190,12 @@ export class FieldMySQLService {
       if (key !== fieldEntity.key) {
         throw new BadRequestException('field key cannot be changed');
       }
-      await this.repository.save(Object.assign(fieldEntity, rest));
+      const field = Object.assign(fieldEntity, rest);
+      if (rest.aiFieldTemplateId) {
+        field.aiFieldTemplate = new AIFieldTemplatesEntity();
+        field.aiFieldTemplate.id = rest.aiFieldTemplateId;
+      }
+      await this.repository.save(field);
       if (isSelectFieldFormat(format)) {
         await this.optionService.replaceMany({ fieldId: id, options });
       }

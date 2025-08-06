@@ -52,7 +52,7 @@ describe('ApiKeyController', () => {
 
       await apiKeyController.create(projectId, {});
 
-      expect(MockApiKeyService.create).toBeCalledTimes(1);
+      expect(MockApiKeyService.create).toHaveBeenCalledTimes(1);
     });
     it('creating succeeds with an api key', async () => {
       jest.spyOn(MockApiKeyService, 'create');
@@ -61,7 +61,7 @@ describe('ApiKeyController', () => {
 
       await apiKeyController.create(projectId, { value });
 
-      expect(MockApiKeyService.create).toBeCalledTimes(1);
+      expect(MockApiKeyService.create).toHaveBeenCalledTimes(1);
     });
   });
   describe('findAll', () => {
@@ -71,7 +71,7 @@ describe('ApiKeyController', () => {
 
       await apiKeyController.findAll(projectId);
 
-      expect(MockApiKeyService.findAllByProjectId).toBeCalledTimes(1);
+      expect(MockApiKeyService.findAllByProjectId).toHaveBeenCalledTimes(1);
     });
   });
   describe('softDelete', () => {
@@ -81,7 +81,7 @@ describe('ApiKeyController', () => {
 
       await apiKeyController.softDelete(apiKeyId);
 
-      expect(MockApiKeyService.softDeleteById).toBeCalledTimes(1);
+      expect(MockApiKeyService.softDeleteById).toHaveBeenCalledTimes(1);
     });
   });
   describe('recover', () => {
@@ -91,7 +91,7 @@ describe('ApiKeyController', () => {
 
       await apiKeyController.recover(apiKeyId);
 
-      expect(MockApiKeyService.recoverById).toBeCalledTimes(1);
+      expect(MockApiKeyService.recoverById).toHaveBeenCalledTimes(1);
     });
   });
   describe('delete', () => {
@@ -101,7 +101,7 @@ describe('ApiKeyController', () => {
 
       await apiKeyController.delete(apiKeyId);
 
-      expect(MockApiKeyService.deleteById).toBeCalledTimes(1);
+      expect(MockApiKeyService.deleteById).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -40,7 +40,7 @@ import {
   FieldStatusEnum,
   IssueStatusEnum,
 } from '@/common/enums';
-import calculateDaysBetweenDates from '@/utils/date-utils';
+import { calculateDaysBetweenDates } from '@/utils/date-utils';
 import { ChannelService } from '../channel/channel/channel.service';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import type { FieldEntity } from '../channel/field/field.entity';
@@ -175,6 +175,7 @@ export class FeedbackService {
             throw new BadRequestException(`${fieldKey} must be string`);
           break;
         case FieldFormatEnum.text:
+        case FieldFormatEnum.aiField:
           if (typeof query[fieldKey] !== 'string')
             throw new BadRequestException(`${fieldKey} must be string`);
           break;
@@ -261,6 +262,7 @@ export class FeedbackService {
             throw new BadRequestException(`${fieldKey} must be string`);
           break;
         case FieldFormatEnum.text:
+        case FieldFormatEnum.aiField:
           if (typeof fieldValue !== 'string')
             throw new BadRequestException(`${fieldKey} must be string`);
           break;
@@ -295,6 +297,19 @@ export class FeedbackService {
         )
           .setZone(timezone)
           .toFormat('yyyy-MM-dd HH:mm:ss');
+      }
+
+      if (fieldsByKey[key].format === FieldFormatEnum.aiField) {
+        try {
+          convertedFeedback[fieldsByKey[key].name] = (
+            JSON.parse(feedback[key] as string) as {
+              status: string;
+              message: string;
+            }
+          ).message;
+        } catch {
+          convertedFeedback[fieldsByKey[key].name] = feedback[key] as string;
+        }
       }
     }
 
@@ -680,6 +695,17 @@ export class FeedbackService {
 
     feedbacksByPagination.items.forEach((feedback: Feedback) => {
       feedback.issues = issuesByFeedbackIds[feedback.id as number];
+      fields.forEach((field) => {
+        if (field.format === FieldFormatEnum.aiField) {
+          try {
+            feedback[field.key] = JSON.parse(
+              feedback[field.key] as string,
+            ) as object;
+          } catch {
+            // do nothing when JSON parsing fails
+          }
+        }
+      });
     });
 
     return feedbacksByPagination;
@@ -718,6 +744,17 @@ export class FeedbackService {
 
     feedbacksByPagination.items.forEach((feedback: Feedback) => {
       feedback.issues = issuesByFeedbackIds[feedback.id as number];
+      fields.forEach((field) => {
+        if (field.format === FieldFormatEnum.aiField) {
+          try {
+            feedback[field.key] = JSON.parse(
+              feedback[field.key] as string,
+            ) as object;
+          } catch {
+            // do nothing when JSON parsing fails
+          }
+        }
+      });
     });
 
     return feedbacksByPagination;

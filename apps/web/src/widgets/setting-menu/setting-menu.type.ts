@@ -20,6 +20,7 @@ export type SettingMenu =
   | 'api-key'
   | 'issue-tracker'
   | 'webhook'
+  | 'generative-ai'
   | 'channel-info'
   | 'field-mgmt'
   | 'image-mgmt';

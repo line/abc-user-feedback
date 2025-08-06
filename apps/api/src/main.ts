@@ -20,7 +20,10 @@ import { NestFactory } from '@nestjs/core';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import type { Request } from 'express';
+import fastify from 'fastify';
 import { Logger } from 'nestjs-pino';
+import pinoHttp from 'pino-http';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule, domainModules } from './app.module';
@@ -34,9 +37,73 @@ const globalPrefix = 'api';
 
 async function bootstrap() {
   initializeTransactionalContext();
+  const server = fastify();
+
+  const pino = pinoHttp({
+    transport: { target: 'pino-pretty', options: { singleLine: true } },
+    serializers: {
+      req: (req: Request) => {
+        const rawReqRefSymbol = Object.getOwnPropertySymbols(req).find(
+          (symbol) => symbol.toString() === 'Symbol(pino-raw-req-ref)',
+        );
+        type RawRequest = {
+          body?: object;
+        };
+        let body: object | undefined = undefined;
+        if (rawReqRefSymbol) {
+          body = (req[rawReqRefSymbol] as RawRequest).body;
+        }
+        return {
+          id: req.id,
+          method: req.method,
+          url: req.url,
+          headers: req.headers,
+          body,
+          params: req.params,
+          query: req.query,
+        };
+      },
+    },
+  });
+
+  server.addHook('onSend', (request, reply, payload, done) => {
+    if (request.body) {
+      interface RequestBody {
+        password?: string;
+        [key: string]: any;
+      }
+
+      const sanitizedBody: RequestBody = { ...request.body };
+      if (sanitizedBody.password) {
+        sanitizedBody.password = '****';
+      }
+
+      const sanitizedHeaders = { ...request.headers };
+      if (sanitizedHeaders.authorization) {
+        sanitizedHeaders.authorization = '****';
+      }
+
+      pino.logger.info({
+        req: {
+          id: request.id,
+          method: request.method,
+          url: request.url,
+          headers: sanitizedHeaders,
+          body: sanitizedBody,
+          params: request.params,
+          query: request.query,
+        },
+        res: {
+          statusCode: reply.statusCode,
+        },
+      });
+    }
+    done();
+  });
+
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter({}),
+    new FastifyAdapter(server),
     { bufferLogs: true },
   );
 

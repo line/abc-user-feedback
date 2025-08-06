@@ -80,7 +80,7 @@ describe('FeedbackController', () => {
     } as ChannelEntity);
 
     await feedbackController.create(projectId, channelId, {});
-    expect(MockFeedbackService.create).toBeCalledTimes(1);
+    expect(MockFeedbackService.create).toHaveBeenCalledTimes(1);
   });
   it('findByChannelId', async () => {
     const channelId = faker.number.int();
@@ -92,7 +92,7 @@ describe('FeedbackController', () => {
     );
 
     await feedbackController.findByChannelId(channelId, dto);
-    expect(MockFeedbackService.findByChannelIdV2).toBeCalledTimes(1);
+    expect(MockFeedbackService.findByChannelIdV2).toHaveBeenCalledTimes(1);
   });
   it('exportFeedbacks', async () => {
     const projectId = faker.number.int();
@@ -123,7 +123,7 @@ describe('FeedbackController', () => {
       userDto,
     );
 
-    expect(MockFeedbackService.generateFile).toBeCalledTimes(1);
+    expect(MockFeedbackService.generateFile).toHaveBeenCalledTimes(1);
   });
   it('updateFeedback', async () => {
     const channelId = faker.number.int();
@@ -131,7 +131,7 @@ describe('FeedbackController', () => {
     const body = { [faker.string.sample()]: faker.string.sample() };
 
     await feedbackController.updateFeedback(channelId, feedbackId, body);
-    expect(MockFeedbackService.updateFeedback).toBeCalledTimes(1);
+    expect(MockFeedbackService.updateFeedback).toHaveBeenCalledTimes(1);
   });
 
   it('delete Feedback', async () => {
@@ -142,6 +142,6 @@ describe('FeedbackController', () => {
     dto.feedbackIds = feedbackIds;
 
     await feedbackController.deleteMany(channelId, dto);
-    expect(MockFeedbackService.deleteByIds).toBeCalledTimes(1);
+    expect(MockFeedbackService.deleteByIds).toHaveBeenCalledTimes(1);
   });
 });

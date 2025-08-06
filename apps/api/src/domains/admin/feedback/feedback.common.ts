@@ -25,6 +25,7 @@ export function validateValue(field: FieldEntity, value: any) {
     case FieldFormatEnum.number:
       return typeof value === 'number';
     case FieldFormatEnum.text:
+    case FieldFormatEnum.aiField:
       return typeof value === 'string';
     case FieldFormatEnum.keyword:
       return typeof value === 'string';

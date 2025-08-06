@@ -117,6 +117,7 @@ export class FeedbackMySQLService {
             [
               FieldFormatEnum.keyword,
               FieldFormatEnum.text,
+              FieldFormatEnum.aiField,
               FieldFormatEnum.number,
               FieldFormatEnum.select,
               FieldFormatEnum.multiSelect,
@@ -135,7 +136,18 @@ export class FeedbackMySQLService {
                 const field = searchableFields[i];
                 const jsonExtractExpression = `JSON_EXTRACT(feedbacks.data, '$."${field.key}"')`;
 
-                if (
+                if (field.format === FieldFormatEnum.aiField) {
+                  const jsonExtractExpression = `JSON_EXTRACT(JSON_UNQUOTE(JSON_EXTRACT(feedbacks.data, '$.${field.key}')), '$.message')`;
+                  if (i === 0) {
+                    qb.where(`${jsonExtractExpression} like :likeValue`, {
+                      likeValue: `%${value as string | number}%`,
+                    });
+                  } else {
+                    qb.orWhere(`${jsonExtractExpression} like :likeValue`, {
+                      likeValue: `%${value as string | number}%`,
+                    });
+                  }
+                } else if (
                   field.format === FieldFormatEnum.keyword ||
                   field.format === FieldFormatEnum.select ||
                   field.format === FieldFormatEnum.date ||
@@ -224,6 +236,11 @@ export class FeedbackMySQLService {
                 '$')`,
             );
           }
+        } else if (format === FieldFormatEnum.aiField) {
+          const jsonExtractExpression = `JSON_EXTRACT(JSON_UNQUOTE(JSON_EXTRACT(feedbacks.data, '$.${fieldKey}')), '$.message')`;
+          queryBuilder.andWhere(`${jsonExtractExpression} like :value`, {
+            value: `%${value as string}%`,
+          });
         } else if (
           [FieldFormatEnum.text, FieldFormatEnum.images].includes(format)
         ) {
@@ -448,6 +465,11 @@ export class FeedbackMySQLService {
                   qb[method]('1 = 0');
                 }
               }
+            } else if (format === FieldFormatEnum.aiField) {
+              const jsonExtractExpression = `JSON_EXTRACT(JSON_UNQUOTE(JSON_EXTRACT(feedbacks.data, '$.${fieldKey}')), '$.message')`;
+              qb[method](`${jsonExtractExpression} like :${paramName}`, {
+                [paramName]: `%${value as string}%`,
+              });
             } else if (format === FieldFormatEnum.text) {
               qb[method](
                 `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') like :${paramName}`,

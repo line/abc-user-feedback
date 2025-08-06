@@ -36,5 +36,6 @@ export const memberInfoSchema = memberSchema.partial({
 });
 
 export const memberInfoFormSchema = memberSchema
-  .partial({ id: true, createdAt: true, user: true })
-  .refine((data) => !!data.user, { path: ['user'] });
+  .partial({ id: true, createdAt: true, user: true, role: true })
+  .refine((data) => !!data.user, { path: ['user'] })
+  .refine((data) => !!data.role, { path: ['role'] });
