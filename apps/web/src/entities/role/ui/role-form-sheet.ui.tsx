@@ -149,10 +149,11 @@ const RoleFormSheet: React.FC<Props> = (props) => {
         current.delete(relatedPerm);
       });
     }
-
-    setValue('permissions', Array.from(current.values()), {
-      shouldDirty: true,
-    });
+    setValue(
+      'permissions',
+      Array.from(current.values()).filter((v) => PermissionList.includes(v)),
+      { shouldDirty: true },
+    );
   };
 
   const openDeleteDialog = () => {
