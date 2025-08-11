@@ -42,7 +42,6 @@ import type { PermissionType } from '../permission.type';
 import {
   ChannelFieldPermissionList,
   ChannelImageSettingPermissionList,
-  ChannelInfoPermissionList,
   ChannelPermissionText,
   FeedbackPermissionList,
   FeedbackPermissionText,
@@ -270,7 +269,7 @@ const RoleFormSheet: React.FC<Props> = (props) => {
               <PermissionRows
                 title="Channel Info"
                 permmissionsText={ChannelPermissionText}
-                permissions={ChannelInfoPermissionList}
+                permissions={['channel_update', 'channel_delete']}
                 currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
@@ -285,6 +284,13 @@ const RoleFormSheet: React.FC<Props> = (props) => {
                 title="Image Setting"
                 permmissionsText={ChannelPermissionText}
                 permissions={ChannelImageSettingPermissionList}
+                currentPermissions={currentPerms}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Create Channel"
+                permmissionsText={ChannelPermissionText}
+                permissions={['channel_create']}
                 currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
