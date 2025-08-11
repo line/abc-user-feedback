@@ -904,6 +904,11 @@ export class AIService {
       relations: {
         feedbacks: true,
       },
+      where: {
+        project: {
+          id: feedback.channel.project.id,
+        },
+      },
       order: {
         feedbackCount: 'DESC',
       },
@@ -996,6 +1001,11 @@ export class AIService {
     const issues = await this.issueRepo.find({
       relations: {
         feedbacks: true,
+      },
+      where: {
+        project: {
+          id: channel.project.id,
+        },
       },
       order: {
         feedbackCount: 'DESC',
