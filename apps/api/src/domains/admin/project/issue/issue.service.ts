@@ -344,7 +344,7 @@ export class IssueService {
 
     if (
       await this.repository.findOne({
-        where: { name, id: Not(issueId) },
+        where: { name, id: Not(issueId), project: { id: issue.project.id } },
         select: ['id'],
       })
     ) {
