@@ -546,8 +546,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(next@15.4.6(@babel/core@7.28.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.54.2)(babel-plugin-macros@3.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
       openapi-typescript:
-        specifier: ^7.8.0
-        version: 7.8.0(typescript@5.8.3)
+        specifier: ^7.9.0
+        version: 7.9.0(typescript@5.8.3)
       postcss:
         specifier: ^8.5.6
         version: 8.5.6
@@ -3923,8 +3923,8 @@ packages:
   '@redocly/config@0.22.2':
     resolution: {integrity: sha512-roRDai8/zr2S9YfmzUfNhKjOF0NdcOIqF7bhf4MVC5UxpjIysDjyudvlAiVbpPHp3eDRWbdzUgtkK1a7YiDNyQ==}
 
-  '@redocly/openapi-core@1.34.3':
-    resolution: {integrity: sha512-3arRdUp1fNx55itnjKiUhO6t4Mf91TsrTIYINDNLAZPS0TPd5YpiXRctwjel0qqWoOOhjA34cZ3m4dksLDFUYg==}
+  '@redocly/openapi-core@1.34.5':
+    resolution: {integrity: sha512-0EbE8LRbkogtcCXU7liAyC00n9uNG9hJ+eMyHFdUsy9lB/WGqnEBgwjA9q2cyzAVcdTkQqTBBU1XePNnN3OijA==}
     engines: {node: '>=18.17.0', npm: '>=9.5.0'}
 
   '@remixicon/react@4.6.0':
@@ -8461,8 +8461,8 @@ packages:
     resolution: {integrity: sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q==}
     engines: {node: '>=8'}
 
-  openapi-typescript@7.8.0:
-    resolution: {integrity: sha512-1EeVWmDzi16A+siQlo/SwSGIT7HwaFAVjvMA7/jG5HMLSnrUOzPL7uSTRZZa4v/LCRxHTApHKtNY6glApEoiUQ==}
+  openapi-typescript@7.9.0:
+    resolution: {integrity: sha512-y0MWNGQgS8VvxaU2fIqb9bKTacxJUGoCqhgpYRlO3NvnMEWjJ8lI3EuFnTsK7nIMiYj7Jobr0WY1G79spK4Q6w==}
     hasBin: true
     peerDependencies:
       typescript: ^5.x
@@ -9678,8 +9678,8 @@ packages:
     resolution: {integrity: sha512-tjLPs7dVyqgItVFirHYqe2T+MfWc2VOBQ8QFKKbWTA3PU7liZR8zoSpAi/C1k1ilm9RsXIKYf197oap9wXGVYg==}
     engines: {node: '>=14.18.0'}
 
-  supports-color@10.0.0:
-    resolution: {integrity: sha512-HRVVSbCCMbj7/kdWF9Q+bbckjBHLtHMEoJWlkmYzzdwhYMkjkOwubLM6t7NbWKjgKamGDrWL1++KrjUO1t9oAQ==}
+  supports-color@10.1.0:
+    resolution: {integrity: sha512-GBuewsPrhJPftT+fqDa9oI/zc5HNsG9nREqwzoSFDOIqf0NggOZbHQj2TE1P1CDJK8ZogFnlZY9hWoUiur7I/A==}
     engines: {node: '>=18'}
 
   supports-color@7.2.0:
@@ -11082,7 +11082,7 @@ snapshots:
       '@babel/traverse': 7.28.0
       '@babel/types': 7.28.2
       convert-source-map: 2.0.0
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -11153,7 +11153,7 @@ snapshots:
       '@babel/core': 7.28.0
       '@babel/helper-compilation-targets': 7.27.2
       '@babel/helper-plugin-utils': 7.27.1
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       lodash.debounce: 4.0.8
       resolve: 1.22.10
     transitivePeerDependencies:
@@ -11949,7 +11949,7 @@ snapshots:
       '@babel/parser': 7.28.0
       '@babel/template': 7.27.2
       '@babel/types': 7.28.2
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -12277,7 +12277,7 @@ snapshots:
   '@eslint/config-array@0.21.0':
     dependencies:
       '@eslint/object-schema': 2.1.6
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -12291,7 +12291,7 @@ snapshots:
   '@eslint/eslintrc@3.3.1':
     dependencies:
       ajv: 6.12.6
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       espree: 10.4.0
       globals: 14.0.0
       ignore: 5.3.2
@@ -13508,7 +13508,7 @@ snapshots:
   '@opensearch-project/opensearch@3.5.1':
     dependencies:
       aws4: 1.13.2
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       hpagent: 1.2.0
       json11: 2.0.2
       ms: 2.1.3
@@ -14158,12 +14158,12 @@ snapshots:
 
   '@redocly/config@0.22.2': {}
 
-  '@redocly/openapi-core@1.34.3(supports-color@10.0.0)':
+  '@redocly/openapi-core@1.34.5(supports-color@10.1.0)':
     dependencies:
       '@redocly/ajv': 8.11.2
       '@redocly/config': 0.22.2
       colorette: 1.4.0
-      https-proxy-agent: 7.0.6(supports-color@10.0.0)
+      https-proxy-agent: 7.0.6(supports-color@10.1.0)
       js-levenshtein: 1.1.6
       js-yaml: 4.1.0
       minimatch: 5.1.6
@@ -14734,7 +14734,7 @@ snapshots:
       '@swc-node/sourcemap-support': 0.5.1
       '@swc/core': 1.13.3(@swc/helpers@0.5.17)
       colorette: 2.0.20
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       oxc-resolver: 5.0.1
       pirates: 4.0.6
       tslib: 2.8.1
@@ -14960,7 +14960,7 @@ snapshots:
 
   '@tokenizer/inflate@0.2.7':
     dependencies:
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       fflate: 0.8.2
       token-types: 6.0.0
     transitivePeerDependencies:
@@ -15264,7 +15264,7 @@ snapshots:
       '@typescript-eslint/types': 8.39.0
       '@typescript-eslint/typescript-estree': 8.39.0(typescript@5.8.3)
       '@typescript-eslint/visitor-keys': 8.39.0
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       eslint: 9.33.0(jiti@2.4.2)
       typescript: 5.8.3
     transitivePeerDependencies:
@@ -15274,7 +15274,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/tsconfig-utils': 8.39.0(typescript@5.8.3)
       '@typescript-eslint/types': 8.39.0
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       typescript: 5.8.3
     transitivePeerDependencies:
       - supports-color
@@ -15293,7 +15293,7 @@ snapshots:
       '@typescript-eslint/types': 8.39.0
       '@typescript-eslint/typescript-estree': 8.39.0(typescript@5.8.3)
       '@typescript-eslint/utils': 8.39.0(eslint@9.33.0(jiti@2.4.2))(typescript@5.8.3)
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       eslint: 9.33.0(jiti@2.4.2)
       ts-api-utils: 2.1.0(typescript@5.8.3)
       typescript: 5.8.3
@@ -15308,7 +15308,7 @@ snapshots:
       '@typescript-eslint/tsconfig-utils': 8.39.0(typescript@5.8.3)
       '@typescript-eslint/types': 8.39.0
       '@typescript-eslint/visitor-keys': 8.39.0
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
@@ -15995,7 +15995,7 @@ snapshots:
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       http-errors: 2.0.0
       iconv-lite: 0.6.3
       on-finished: 2.4.1
@@ -16591,11 +16591,11 @@ snapshots:
     dependencies:
       ms: 2.1.3
 
-  debug@4.4.1(supports-color@10.0.0):
+  debug@4.4.1(supports-color@10.1.0):
     dependencies:
       ms: 2.1.3
     optionalDependencies:
-      supports-color: 10.0.0
+      supports-color: 10.1.0
 
   decimal.js-light@2.5.1: {}
 
@@ -17170,7 +17170,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       escape-string-regexp: 4.0.0
       eslint-scope: 8.4.0
       eslint-visitor-keys: 4.2.1
@@ -17212,7 +17212,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       escape-string-regexp: 4.0.0
       eslint-scope: 8.4.0
       eslint-visitor-keys: 4.2.1
@@ -17330,7 +17330,7 @@ snapshots:
       content-type: 1.0.5
       cookie: 0.7.2
       cookie-signature: 1.2.2
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
@@ -17514,7 +17514,7 @@ snapshots:
 
   finalhandler@2.1.0:
     dependencies:
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       encodeurl: 2.0.0
       escape-html: 1.0.3
       on-finished: 2.4.1
@@ -17914,7 +17914,7 @@ snapshots:
   http-proxy-agent@7.0.2:
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -17923,10 +17923,10 @@ snapshots:
       quick-lru: 5.1.1
       resolve-alpn: 1.2.1
 
-  https-proxy-agent@7.0.6(supports-color@10.0.0):
+  https-proxy-agent@7.0.6(supports-color@10.1.0):
     dependencies:
       agent-base: 7.1.3
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -18195,7 +18195,7 @@ snapshots:
   istanbul-lib-source-maps@5.0.6:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       istanbul-lib-coverage: 3.2.2
     transitivePeerDependencies:
       - supports-color
@@ -18698,7 +18698,7 @@ snapshots:
       decimal.js: 10.6.0
       html-encoding-sniffer: 4.0.0
       http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6(supports-color@10.0.0)
+      https-proxy-agent: 7.0.6(supports-color@10.1.0)
       is-potential-custom-element-name: 1.0.1
       nwsapi: 2.2.21
       parse5: 7.3.0
@@ -19744,13 +19744,13 @@ snapshots:
       is-wsl: 2.2.0
     optional: true
 
-  openapi-typescript@7.8.0(typescript@5.8.3):
+  openapi-typescript@7.9.0(typescript@5.8.3):
     dependencies:
-      '@redocly/openapi-core': 1.34.3(supports-color@10.0.0)
+      '@redocly/openapi-core': 1.34.5(supports-color@10.1.0)
       ansi-colors: 4.1.3
       change-case: 5.4.4
       parse-json: 8.3.0
-      supports-color: 10.0.0
+      supports-color: 10.1.0
       typescript: 5.8.3
       yargs-parser: 21.1.1
 
@@ -20608,7 +20608,7 @@ snapshots:
 
   router@2.2.0:
     dependencies:
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       depd: 2.0.0
       is-promise: 4.0.0
       parseurl: 1.3.3
@@ -20726,7 +20726,7 @@ snapshots:
 
   send@1.2.0:
     dependencies:
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
@@ -21116,7 +21116,7 @@ snapshots:
     dependencies:
       component-emitter: 1.3.1
       cookiejar: 2.1.4
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       fast-safe-stringify: 2.1.1
       form-data: 4.0.4
       formidable: 3.5.4
@@ -21133,7 +21133,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  supports-color@10.0.0: {}
+  supports-color@10.1.0: {}
 
   supports-color@7.2.0:
     dependencies:
@@ -21472,7 +21472,7 @@ snapshots:
       cac: 6.7.14
       chokidar: 4.0.3
       consola: 3.4.2
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       esbuild: 0.25.0
       fix-dts-default-cjs-exports: 1.0.1
       joycon: 3.1.1
@@ -21599,7 +21599,7 @@ snapshots:
       app-root-path: 3.1.0
       buffer: 6.0.3
       dayjs: 1.11.13
-      debug: 4.4.1(supports-color@10.0.0)
+      debug: 4.4.1(supports-color@10.1.0)
       dedent: 1.6.0(babel-plugin-macros@3.1.0)
       dotenv: 16.5.0
       glob: 10.4.5
