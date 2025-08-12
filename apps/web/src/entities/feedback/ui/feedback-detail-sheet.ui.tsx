@@ -142,7 +142,7 @@ const FeedbackDetailSheet = (props: Props) => {
 
   return (
     <Sheet open={isOpen} onOpenChange={close}>
-      <SheetContent className="max-w-[600px]">
+      <SheetContent className="max-w-[800px]">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             {t('v2.text.name.detail', { name: 'Feedback' })}

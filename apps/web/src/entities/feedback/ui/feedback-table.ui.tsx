@@ -280,23 +280,23 @@ const FeedbackTable = (props: Props) => {
           totalItems={feedbackData?.meta.totalItems ?? 0}
         />
         <div className="flex flex-shrink-0 gap-2 [&>button]:min-w-20 [&>button]:flex-shrink-0">
-          {selectedRowIds.length > 0 &&
-            fields.filter(
-              (v) => v.format === 'aiField' && v.status === 'ACTIVE',
-            ).length > 0 && (
-              <>
-                <Button
-                  variant="outline"
-                  className="!text-tint-red"
-                  onClick={openDeleteFeedbacksDialog}
-                  disabled={!perms.includes('feedback_delete')}
-                >
-                  <Icon name="RiDeleteBin6Line" />
-                  {t('v2.button.name.delete', { name: 'Feedback' })}
-                  <Badge variant="subtle" className="!text-tint-red">
-                    {selectedRowIds.length}
-                  </Badge>
-                </Button>
+          {selectedRowIds.length > 0 && (
+            <>
+              <Button
+                variant="outline"
+                className="!text-tint-red"
+                onClick={openDeleteFeedbacksDialog}
+                disabled={!perms.includes('feedback_delete')}
+              >
+                <Icon name="RiDeleteBin6Line" />
+                {t('v2.button.name.delete', { name: 'Feedback' })}
+                <Badge variant="subtle" className="!text-tint-red">
+                  {selectedRowIds.length}
+                </Badge>
+              </Button>
+              {fields.filter(
+                (v) => v.format === 'aiField' && v.status === 'ACTIVE',
+              ).length > 0 && (
                 <Button
                   variant="outline"
                   onClick={() => {
@@ -314,8 +314,9 @@ const FeedbackTable = (props: Props) => {
                   Run AI
                   <Badge variant="subtle">{selectedRowIds.length}</Badge>
                 </Button>
-              </>
-            )}
+              )}
+            </>
+          )}
           <Tooltip>
             <TooltipTrigger>
               <DateRangePicker
