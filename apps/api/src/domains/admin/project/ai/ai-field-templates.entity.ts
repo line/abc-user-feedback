@@ -30,7 +30,7 @@ export class AIFieldTemplatesEntity extends CommonEntity {
   @Column('varchar')
   model: string | null;
 
-  @Column('float', { default: 0.7 })
+  @Column('float', { default: 0.5 })
   temperature: number;
 
   @ManyToOne(() => ProjectEntity, (project) => project.aiFieldTemplates, {
