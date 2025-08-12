@@ -208,27 +208,27 @@ export class AIService {
         title: 'Feedback Summary',
         prompt: 'Summarize the following feedback within a sentences',
         model: model,
-        temperature: 0.7,
+        temperature: 0.5,
       },
       {
         title: 'Feedback Sentiment Analysis',
         prompt:
           'Analyze the sentiment of the following feedback and express it both as a sentiment label (e.g., positive, negative, neutral) and as a number from 0 to 10.',
         model: model,
-        temperature: 0.7,
+        temperature: 0.5,
       },
       {
         title: 'Feedback Translation',
         prompt: 'Translate the following feedback to English',
         model: model,
-        temperature: 0.7,
+        temperature: 0.5,
       },
       {
         title: 'Feedback Keyword Extraction',
         prompt:
           'Extract the 2-3 most important keywords from the following feedback.',
         model: model,
-        temperature: 0.7,
+        temperature: 0.5,
       },
     ];
 
