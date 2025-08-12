@@ -297,10 +297,13 @@ export class IssueService {
   }
 
   async findById({ issueId }: FindByIssueIdDto) {
-    const issue = await this.repository.findOneBy({ id: issueId });
-    if (!issue) throw new IssueNotFoundException();
+    const issue = await this.repository.find({
+      where: { id: issueId },
+      relations: { project: true },
+    });
+    if (issue.length === 0) throw new IssueNotFoundException();
 
-    return issue;
+    return issue[0];
   }
 
   async findByName({ name }: { name: string }) {
@@ -344,7 +347,7 @@ export class IssueService {
 
     if (
       await this.repository.findOne({
-        where: { name, id: Not(issueId) },
+        where: { name, id: Not(issueId), project: { id: issue.project.id } },
         select: ['id'],
       })
     ) {
