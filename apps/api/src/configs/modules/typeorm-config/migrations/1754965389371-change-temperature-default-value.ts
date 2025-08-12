@@ -34,11 +34,11 @@ export class ChangeTemperatureDefaultValue1754965389371
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `ALTER TABLE \`ai_field_templates\`
-        MODIFY COLUMN \`temperature\` float NOT NULL DEFAULT 0.5`,
+        MODIFY COLUMN \`temperature\` float NOT NULL DEFAULT 0.7`,
     );
     await queryRunner.query(
       `ALTER TABLE \`ai_issue_templates\`
-        MODIFY COLUMN \`temperature\` float NOT NULL DEFAULT 0.5`,
+        MODIFY COLUMN \`temperature\` float NOT NULL DEFAULT 0.7`,
     );
   }
 }
