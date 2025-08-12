@@ -244,6 +244,7 @@ export class AIController {
   @ApiOkResponse({ type: GetAIIssuePlaygroundResultResponseDto })
   @Post('issueRecommend/playground/test')
   async getAIIssuePlaygroundResult(
+    @Param('projectId', ParseIntPipe) _projectId: number,
     @Body() body: GetAIIssuePlaygroundResultRequestDto,
   ) {
     return GetAIIssuePlaygroundResultResponseDto.transform({
