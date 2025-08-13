@@ -29,7 +29,7 @@ export class AIIssueTemplatesEntity extends CommonEntity {
   @Column('json', { nullable: false, default: [] })
   targetFieldKeys: string[];
 
-  @Column('varchar')
+  @Column('mediumtext')
   prompt: string;
 
   @Column('boolean', { default: true })

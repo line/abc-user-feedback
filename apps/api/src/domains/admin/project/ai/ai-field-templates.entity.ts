@@ -24,7 +24,7 @@ export class AIFieldTemplatesEntity extends CommonEntity {
   @Column('varchar', { default: '' })
   title: string;
 
-  @Column('varchar')
+  @Column('mediumtext')
   prompt: string;
 
   @Column('varchar')
