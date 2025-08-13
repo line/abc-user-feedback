@@ -30,7 +30,7 @@ export class AIIntegrationsEntity extends CommonEntity {
   @Column('varchar', { default: '' })
   endpointUrl: string;
 
-  @Column('text')
+  @Column('mediumtext')
   systemPrompt: string;
 
   @Column('int', { nullable: true, default: null })
