@@ -460,7 +460,7 @@ export class AIService {
   ): string | null {
     let fieldValues = '';
     const result = aiTargetFields.reduce((acc, field) => {
-      if (field.key === aiField.key) return acc;
+      if (field.key === aiField.key || !feedback.data[field.key]) return acc;
       if (field.key === 'issues') {
         const issues = feedback.issues
           .map((issue) => `${issue.name}: ${issue.description}`)
@@ -569,7 +569,7 @@ export class AIService {
       if (isAutoProcess) {
         this.convertAiFieldToString(feedback.data, fields);
         feedback.data[aiField.key] =
-          `{"status": "${AIPromptStatusEnum.error}", "message": "Target field values are not set for the AI field template."}`;
+          `{"status": "${AIPromptStatusEnum.error}", "message": "The content of target fields are empty."}`;
 
         await this.feedbackMySQLService.updateFeedback({
           feedbackId: feedback.id,
@@ -587,7 +587,7 @@ export class AIService {
         return true;
       } else {
         throw new BadRequestException(
-          'Target field values are not set for the AI field template.',
+          'The content of target fields are empty.',
         );
       }
     }
@@ -938,9 +938,7 @@ export class AIService {
     );
 
     if (!targetFieldValues.trim()) {
-      throw new BadRequestException(
-        `Target field values are not set for the AI issue template.`,
-      );
+      throw new BadRequestException(`The content of target fields are empty.`);
     }
 
     const count = await this.issueRepo.count();
