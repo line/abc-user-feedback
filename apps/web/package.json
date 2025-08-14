@@ -75,7 +75,7 @@
     "@svgr/webpack": "^8.1.0",
     "@swc/core": "^1.4.16",
     "@swc/jest": "^0.2.39",
-    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/jest-dom": "^6.7.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^30.0.0",
