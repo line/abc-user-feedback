@@ -29,7 +29,7 @@ export class AIIssueTemplatesEntity extends CommonEntity {
   @Column('json', { nullable: false, default: [] })
   targetFieldKeys: string[];
 
-  @Column('varchar')
+  @Column('mediumtext')
   prompt: string;
 
   @Column('boolean', { default: true })
@@ -38,7 +38,7 @@ export class AIIssueTemplatesEntity extends CommonEntity {
   @Column('varchar')
   model: string | null;
 
-  @Column('float', { default: 0.7 })
+  @Column('float', { default: 0.5 })
   temperature: number;
 
   @Column('int', { default: 3 })

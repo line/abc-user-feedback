@@ -15,6 +15,7 @@
  */
 
 import { useCallback, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useFormContext } from 'react-hook-form';
 
 import { toast } from '@ufb/react';
@@ -27,10 +28,13 @@ import type { PlaygroundInputItem } from '../playground-input-item.schema';
 export const useAIIssueTest = () => {
   const [result, setResult] = useState<string[] | undefined>();
   const { getValues, watch } = useFormContext<AIIssue>();
+  const router = useRouter();
+  const projectId = Number(router.query.projectId);
 
   const { mutateAsync, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/ai/issueRecommend/playground/test',
+    pathParams: { projectId },
     queryOptions: {
       onSuccess: (data) => {
         setResult(data?.result);

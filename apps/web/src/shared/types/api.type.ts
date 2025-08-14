@@ -4770,7 +4770,9 @@ export interface operations {
     parameters: {
       query?: never;
       header?: never;
-      path?: never;
+      path: {
+        projectId: number;
+      };
       cookie?: never;
     };
     requestBody: {

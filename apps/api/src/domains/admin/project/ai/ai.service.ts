@@ -205,30 +205,30 @@ export class AIService {
 
     const templates = [
       {
-        title: 'Feedback Summary',
+        title: 'Summary',
         prompt: 'Summarize the following feedback within a sentences',
         model: model,
-        temperature: 0.7,
+        temperature: 0.5,
       },
       {
-        title: 'Feedback Sentiment Analysis',
+        title: 'Sentiment Analysis',
         prompt:
           'Analyze the sentiment of the following feedback and express it both as a sentiment label (e.g., positive, negative, neutral) and as a number from 0 to 10.',
         model: model,
-        temperature: 0.7,
+        temperature: 0.5,
       },
       {
-        title: 'Feedback Translation',
+        title: 'Translation',
         prompt: 'Translate the following feedback to English',
         model: model,
-        temperature: 0.7,
+        temperature: 0.5,
       },
       {
-        title: 'Feedback Keyword Extraction',
+        title: 'Keyword Extraction',
         prompt:
           'Extract the 2-3 most important keywords from the following feedback.',
         model: model,
-        temperature: 0.7,
+        temperature: 0.5,
       },
     ];
 
@@ -457,9 +457,10 @@ export class AIService {
     feedback: FeedbackEntity,
     aiTargetFields: FieldEntity[],
     aiField: FieldEntity,
-  ): string {
-    return aiTargetFields.reduce((acc, field) => {
-      if (field.key === aiField.key) return acc;
+  ): string | null {
+    let fieldValues = '';
+    const result = aiTargetFields.reduce((acc, field) => {
+      if (field.key === aiField.key || !feedback.data[field.key]) return acc;
       if (field.key === 'issues') {
         const issues = feedback.issues
           .map((issue) => `${issue.name}: ${issue.description}`)
@@ -474,6 +475,7 @@ export class AIService {
       } else if (field.key === 'updatedAt') {
         fieldValue = feedback.updatedAt.toISOString();
       }
+      fieldValues += fieldValue;
 
       return `${acc}
         fieldName: ${field.name}
@@ -481,6 +483,12 @@ export class AIService {
         fieldValue: ${fieldValue}
         `;
     }, '');
+
+    if (!fieldValues.trim()) {
+      return null;
+    }
+
+    return result;
   }
 
   private convertAiFieldToJson(
@@ -556,6 +564,33 @@ export class AIService {
       aiTargetFields,
       aiField,
     );
+
+    if (!promptTargetText) {
+      if (isAutoProcess) {
+        this.convertAiFieldToString(feedback.data, fields);
+        feedback.data[aiField.key] =
+          `{"status": "${AIPromptStatusEnum.error}", "message": "The content of target fields are empty."}`;
+
+        await this.feedbackMySQLService.updateFeedback({
+          feedbackId: feedback.id,
+          data: feedback.data,
+        });
+
+        if (this.configService.get('opensearch.use')) {
+          this.convertAiFieldToJson(feedback.data, fields);
+          await this.feedbackOSService.upsertFeedbackItem({
+            feedbackId: feedback.id,
+            data: feedback.data,
+            channelId: feedback.channel.id,
+          });
+        }
+        return true;
+      } else {
+        throw new BadRequestException(
+          'The content of target fields are empty.',
+        );
+      }
+    }
 
     const client = new AIClient({
       apiKey: integration.apiKey,
@@ -889,20 +924,32 @@ export class AIService {
       baseUrl: integration.endpointUrl,
     });
 
+    let targetFieldValues = '';
+
     const targetFeedback = JSON.stringify(
       issueTemplate.targetFieldKeys.reduce((acc: FieldType[], key) => {
         if (feedback.data[key] !== undefined) {
           acc.push({ [key]: feedback.data[key] as string });
+          targetFieldValues += feedback.data[key] as string;
           return acc;
         }
         return acc;
       }, []),
     );
 
+    if (!targetFieldValues.trim()) {
+      throw new BadRequestException(`The content of target fields are empty.`);
+    }
+
     const count = await this.issueRepo.count();
     const issues = await this.issueRepo.find({
       relations: {
         feedbacks: true,
+      },
+      where: {
+        project: {
+          id: feedback.channel.project.id,
+        },
       },
       order: {
         feedbackCount: 'DESC',
@@ -996,6 +1043,11 @@ export class AIService {
     const issues = await this.issueRepo.find({
       relations: {
         feedbacks: true,
+      },
+      where: {
+        project: {
+          id: channel.project.id,
+        },
       },
       order: {
         feedbackCount: 'DESC',
