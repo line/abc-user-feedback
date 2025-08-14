@@ -217,12 +217,23 @@ export class OpensearchRepository {
   }
 
   async updateData({ id, index, data }: UpdateDataDto) {
-    await this.opensearchClient.update({
-      id,
-      index,
-      body: { doc: data },
-      refresh: true,
-    });
+    try {
+      await this.opensearchClient.update({
+        id,
+        index,
+        body: { doc: data },
+        refresh: true,
+        retry_on_conflict: 5,
+      });
+    } catch (error) {
+      this.logger.error(`Error updating data: ${error}`);
+      if (error?.meta?.body) {
+        this.logger.error(
+          `OpenSearch error details: ${JSON.stringify(error.meta.body, null, 2)}`,
+        );
+      }
+      throw error;
+    }
   }
 
   async deleteBulkData({ ids, index }: DeleteBulkDataDto) {
