@@ -16,6 +16,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
+import { ImageDownloadSecurityEnum } from '@/common/enums/image-download-security.enum';
+
 export class ImageConfigResponseDto {
   @Expose()
   @ApiProperty()
@@ -40,4 +42,8 @@ export class ImageConfigResponseDto {
   @Expose()
   @ApiProperty()
   domainWhiteList: string[];
+
+  @Expose()
+  @ApiProperty({ enum: ImageDownloadSecurityEnum })
+  imageDownloadSecurity: ImageDownloadSecurityEnum | undefined;
 }

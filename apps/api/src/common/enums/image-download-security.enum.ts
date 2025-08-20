@@ -13,11 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
-export class ImageUploadUrlTestDto {
-  accessKeyId: string;
-  secretAccessKey: string;
-  endpoint: string;
-  region: string;
-  bucket: string;
+export enum ImageDownloadSecurityEnum {
+  DIRECT_URL = 'DIRECT_URL',
+  PRESIGNED_URL = 'PRESIGNED_URL',
 }

@@ -13,40 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsString } from 'class-validator';
 
-import { ImageDownloadSecurityEnum } from '@/common/enums/image-download-security.enum';
-
-export class ImageConfigRequestDto {
-  @ApiProperty()
-  @IsString()
+export class CreateImageDownloadUrlDto {
   accessKeyId: string;
-
-  @ApiProperty()
-  @IsString()
   secretAccessKey: string;
-
-  @ApiProperty()
-  @IsString()
   endpoint: string;
-
-  @ApiProperty()
-  @IsString()
   region: string;
-
-  @ApiProperty()
-  @IsString()
   bucket: string;
-
-  @ApiProperty({ nullable: true, type: [String] })
-  @IsString({ each: true })
-  domainWhiteList: string[];
-
-  @ApiProperty({
-    enum: ImageDownloadSecurityEnum,
-    enumName: 'ImageDownloadSecurityEnum',
-  })
-  @IsEnum(ImageDownloadSecurityEnum)
-  imageDownloadSecurity: ImageDownloadSecurityEnum;
+  imageKey: string;
 }
