@@ -170,10 +170,7 @@ export class ChannelController {
     description: 'Image Key for the pre-signed url download',
     example: 'test-image-key.jpg',
   })
-  @ApiOkResponse({
-    type: String,
-    description: 'Presigned url for image upload',
-  })
+  @ApiOkResponse({ type: String })
   @UseGuards(JwtAuthGuard)
   @Get('/:channelId/image-download-url')
   async getImageDownloadUrl(
