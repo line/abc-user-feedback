@@ -357,7 +357,7 @@ importers:
         version: 1.3.6(@types/react-dom@19.1.7(@types/react@19.1.11))(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@t3-oss/env-nextjs':
         specifier: ^0.13.8
-        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@4.0.17)
+        version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@4.1.0)
       '@tanstack/react-query':
         specifier: ^5.85.5
         version: 5.85.5(react@19.1.1)
@@ -473,8 +473,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.13.4(@swc/helpers@0.5.17))(@types/node@22.17.0)(typescript@5.8.3)))
       zod:
-        specifier: ^4.0.17
-        version: 4.0.17
+        specifier: ^4.1.0
+        version: 4.1.0
       zustand:
         specifier: ^5.0.8
         version: 5.0.8(@types/react@19.1.11)(immer@10.1.1)(react@19.1.1)(use-sync-external-store@1.4.0(react@19.1.1))
@@ -10558,8 +10558,8 @@ packages:
   zod@3.24.4:
     resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
 
-  zod@4.0.17:
-    resolution: {integrity: sha512-1PHjlYRevNxxdy2JZ8JcNAw7rX8V9P1AKkP+x/xZfxB0K5FYfuV+Ug6P/6NVSR2jHQ+FzDDoDHS04nYUsOIyLQ==}
+  zod@4.1.0:
+    resolution: {integrity: sha512-UWxluYj2IDX9MHRXTMbB/2eeWrAMmmMSESM+MfT9MQw8U1qo9q5ASW08anoJh6AJ7pkt099fLdNFmfI+4aChHg==}
 
   zustand@5.0.8:
     resolution: {integrity: sha512-gyPKpIaxY9XcO2vSMrLbiER7QMAMGOQZVRdJ6Zi782jkbzZygq5GI9nG8g+sMgitRtndwaBSl7uiqC49o1SSiw==}
@@ -15234,19 +15234,19 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@t3-oss/env-core@0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@4.0.17)':
+  '@t3-oss/env-core@0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@4.1.0)':
     optionalDependencies:
       arktype: 2.1.20
       typescript: 5.8.3
-      zod: 4.0.17
+      zod: 4.1.0
 
-  '@t3-oss/env-nextjs@0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@4.0.17)':
+  '@t3-oss/env-nextjs@0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@4.1.0)':
     dependencies:
-      '@t3-oss/env-core': 0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@4.0.17)
+      '@t3-oss/env-core': 0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@4.1.0)
     optionalDependencies:
       arktype: 2.1.20
       typescript: 5.8.3
-      zod: 4.0.17
+      zod: 4.1.0
 
   '@tanstack/query-core@5.85.5': {}
 
@@ -22284,7 +22284,7 @@ snapshots:
 
   zod@3.24.4: {}
 
-  zod@4.0.17: {}
+  zod@4.1.0: {}
 
   zustand@5.0.8(@types/react@19.1.11)(immer@10.1.1)(react@19.1.1)(use-sync-external-store@1.4.0(react@19.1.1)):
     optionalDependencies:

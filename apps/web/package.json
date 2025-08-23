@@ -66,7 +66,7 @@
     "swiper": "^11.2.10",
     "tailwind-merge": "^3.3.1",
     "tailwind-scrollbar-hide": "^4.0.0",
-    "zod": "^4.0.17",
+    "zod": "^4.1.0",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
