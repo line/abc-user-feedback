@@ -277,8 +277,8 @@ importers:
         specifier: ^29.4.1
         version: 29.4.1(@babel/core@7.28.3)(@jest/transform@30.0.5)(@jest/types@30.0.5)(babel-jest@30.0.5(@babel/core@7.28.3))(jest-util@30.0.5)(jest@30.0.5(@types/node@22.17.0)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.4(@swc/helpers@0.5.17))(@types/node@22.17.0)(typescript@5.8.3)))(typescript@5.8.3)
       ts-loader:
-        specifier: ^9.5.2
-        version: 9.5.2(typescript@5.8.3)(webpack@5.100.2(@swc/core@1.13.4(@swc/helpers@0.5.17)))
+        specifier: ^9.5.4
+        version: 9.5.4(typescript@5.8.3)(webpack@5.100.2(@swc/core@1.13.4(@swc/helpers@0.5.17)))
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.13.4(@swc/helpers@0.5.17))(@types/node@22.17.0)(typescript@5.8.3)
@@ -9975,8 +9975,8 @@ packages:
       jest-util:
         optional: true
 
-  ts-loader@9.5.2:
-    resolution: {integrity: sha512-Qo4piXvOTWcMGIgRiuFa6nHNm+54HbYaZCKqc9eeZCLRy3XqafQgwX2F7mofrbJG3g7EEb+lkiR+z2Lic2s3Zw==}
+  ts-loader@9.5.4:
+    resolution: {integrity: sha512-nCz0rEwunlTZiy6rXFByQU1kVVpCIgUpc/psFiKVrUwrizdnIbRFu8w7bxhUF0X613DYwT4XzrZHpVyMe758hQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       typescript: '*'
@@ -21642,7 +21642,7 @@ snapshots:
       babel-jest: 30.0.5(@babel/core@7.28.3)
       jest-util: 30.0.5
 
-  ts-loader@9.5.2(typescript@5.8.3)(webpack@5.100.2(@swc/core@1.13.4(@swc/helpers@0.5.17))):
+  ts-loader@9.5.4(typescript@5.8.3)(webpack@5.100.2(@swc/core@1.13.4(@swc/helpers@0.5.17))):
     dependencies:
       chalk: 4.1.2
       enhanced-resolve: 5.18.1
