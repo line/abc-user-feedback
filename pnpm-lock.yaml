@@ -407,8 +407,8 @@ importers:
         specifier: ^12.23.12
         version: 12.23.12(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       i18next:
-        specifier: ^25.4.1
-        version: 25.4.1(typescript@5.8.3)
+        specifier: ^25.4.2
+        version: 25.4.2(typescript@5.8.3)
       immer:
         specifier: ^10.1.1
         version: 10.1.1
@@ -426,7 +426,7 @@ importers:
         version: 15.4.7(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       next-i18next:
         specifier: ^15.4.2
-        version: 15.4.2(i18next@25.4.1(typescript@5.8.3))(next@15.4.7(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-i18next@15.7.2(i18next@25.4.1(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3))(react@19.1.1)
+        version: 15.4.2(i18next@25.4.2(typescript@5.8.3))(next@15.4.7(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-i18next@15.7.2(i18next@25.4.2(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3))(react@19.1.1)
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -450,7 +450,7 @@ importers:
         version: 7.62.0(react@19.1.1)
       react-i18next:
         specifier: ^15.7.2
-        version: 15.7.2(i18next@25.4.1(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3)
+        version: 15.7.2(i18next@25.4.2(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3)
       react-select:
         specifier: ^5.10.2
         version: 5.10.2(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -7161,8 +7161,8 @@ packages:
   i18next-fs-backend@2.6.0:
     resolution: {integrity: sha512-3ZlhNoF9yxnM8pa8bWp5120/Ob6t4lVl1l/tbLmkml/ei3ud8IWySCHt2lrY5xWRlSU5D9IV2sm5bEbGuTqwTw==}
 
-  i18next@25.4.1:
-    resolution: {integrity: sha512-sYJX4Ap0SSho1JZppKvc9BeacbpNCdNvKuXMYPUGjDH0XTTdVXmm7UU3l4bvF8nqh70lZNBeLboRYwItBf9jOw==}
+  i18next@25.4.2:
+    resolution: {integrity: sha512-gD4T25a6ovNXsfXY1TwHXXXLnD/K2t99jyYMCSimSCBnBRJVQr5j+VAaU83RJCPzrTGhVQ6dqIga66xO2rtd5g==}
     peerDependencies:
       typescript: ^5
     peerDependenciesMeta:
@@ -18281,7 +18281,7 @@ snapshots:
 
   i18next-fs-backend@2.6.0: {}
 
-  i18next@25.4.1(typescript@5.8.3):
+  i18next@25.4.2(typescript@5.8.3):
     dependencies:
       '@babel/runtime': 7.28.2
     optionalDependencies:
@@ -19832,17 +19832,17 @@ snapshots:
       '@nestjs/common': 11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       typeorm: 0.3.26(babel-plugin-macros@3.1.0)(mysql2@3.14.3)(reflect-metadata@0.2.2)(ts-node@10.9.2(@swc/core@1.13.5(@swc/helpers@0.5.17))(@types/node@22.17.0)(typescript@5.8.3))
 
-  next-i18next@15.4.2(i18next@25.4.1(typescript@5.8.3))(next@15.4.7(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-i18next@15.7.2(i18next@25.4.1(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3))(react@19.1.1):
+  next-i18next@15.4.2(i18next@25.4.2(typescript@5.8.3))(next@15.4.7(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-i18next@15.7.2(i18next@25.4.2(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3))(react@19.1.1):
     dependencies:
       '@babel/runtime': 7.27.1
       '@types/hoist-non-react-statics': 3.3.6
       core-js: 3.39.0
       hoist-non-react-statics: 3.3.2
-      i18next: 25.4.1(typescript@5.8.3)
+      i18next: 25.4.2(typescript@5.8.3)
       i18next-fs-backend: 2.6.0
       next: 15.4.7(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react: 19.1.1
-      react-i18next: 15.7.2(i18next@25.4.1(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3)
+      react-i18next: 15.7.2(i18next@25.4.2(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3)
 
   next-router-mock@1.0.2(next@15.4.7(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
     dependencies:
@@ -20607,11 +20607,11 @@ snapshots:
     dependencies:
       react: 19.1.1
 
-  react-i18next@15.7.2(i18next@25.4.1(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3):
+  react-i18next@15.7.2(i18next@25.4.2(typescript@5.8.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.8.3):
     dependencies:
       '@babel/runtime': 7.28.2
       html-parse-stringify: 3.0.1
-      i18next: 25.4.1(typescript@5.8.3)
+      i18next: 25.4.2(typescript@5.8.3)
       react: 19.1.1
     optionalDependencies:
       react-dom: 19.1.1(react@19.1.1)
