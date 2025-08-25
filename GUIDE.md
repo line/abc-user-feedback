@@ -23,7 +23,7 @@ To enable image uploads directly to the server, you must configure the image sto
 - `endpoint`: The endpoint URL for the storage service.
 - `region`: The region your storage service is located in.
 - `bucket`: The name of the bucket where images will be stored.
-- `imageDownloadSecurity`: Options for image download, such as direct URL and presigned URL, can be used to enhance security.
+- `enablePresignedUrlDownload`: Download security can be enhanced by using pre-signed URLs supported by AWS S3.
 
 Depending on your use case and the desired level of access, you may need to adjust the permissions of your S3 bucket. If your application requires that the images be publicly accessible, configure your S3 bucket's policy to allow public reads.
 

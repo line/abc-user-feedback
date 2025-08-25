@@ -14,9 +14,7 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsString } from 'class-validator';
-
-import { ImageDownloadSecurityEnum } from '@/common/enums/image-download-security.enum';
+import { IsBoolean, IsString } from 'class-validator';
 
 export class ImageConfigRequestDto {
   @ApiProperty()
@@ -43,10 +41,7 @@ export class ImageConfigRequestDto {
   @IsString({ each: true })
   domainWhiteList: string[];
 
-  @ApiProperty({
-    enum: ImageDownloadSecurityEnum,
-    enumName: 'ImageDownloadSecurityEnum',
-  })
-  @IsEnum(ImageDownloadSecurityEnum)
-  imageDownloadSecurity: ImageDownloadSecurityEnum;
+  @ApiProperty()
+  @IsBoolean()
+  enablePresignedUrlDownload: boolean;
 }
