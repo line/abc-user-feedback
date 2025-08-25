@@ -14,7 +14,8 @@
  * under the License.
  */
 import {
-  ListBucketsCommand,
+  GetObjectCommand,
+  ListObjectsCommand,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
@@ -26,6 +27,7 @@ import { Transactional } from 'typeorm-transactional';
 import { OpensearchRepository } from '@/common/repositories';
 import { ProjectService } from '@/domains/admin/project/project/project.service';
 import type {
+  CreateImageDownloadUrlDto,
   CreateImageUploadUrlDto,
   ImageUploadUrlTestDto,
 } from '../../feedback/dtos';
@@ -130,8 +132,9 @@ export class ChannelService {
     return await getSignedUrl(s3, command, { expiresIn: 60 * 60 });
   }
 
-  async isValidImageConfig(dto: ImageUploadUrlTestDto) {
-    const { accessKeyId, secretAccessKey, endpoint, region } = dto;
+  async createImageDownloadUrl(dto: CreateImageDownloadUrlDto) {
+    const { accessKeyId, secretAccessKey, endpoint, region, bucket, imageKey } =
+      dto;
 
     const s3 = new S3Client({
       credentials: { accessKeyId, secretAccessKey },
@@ -139,7 +142,24 @@ export class ChannelService {
       region,
     });
 
-    const command = new ListBucketsCommand({});
+    const command = new GetObjectCommand({
+      Bucket: bucket,
+      Key: imageKey,
+    });
+
+    return await getSignedUrl(s3, command, { expiresIn: 60 });
+  }
+
+  async isValidImageConfig(dto: ImageUploadUrlTestDto) {
+    const { accessKeyId, secretAccessKey, endpoint, region, bucket } = dto;
+
+    const s3 = new S3Client({
+      credentials: { accessKeyId, secretAccessKey },
+      endpoint,
+      region,
+    });
+
+    const command = new ListObjectsCommand({ Bucket: bucket });
 
     try {
       await s3.send(command);

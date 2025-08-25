@@ -19,4 +19,5 @@ export class ImageUploadUrlTestDto {
   secretAccessKey: string;
   endpoint: string;
   region: string;
+  bucket: string;
 }

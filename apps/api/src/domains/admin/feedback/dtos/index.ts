@@ -19,6 +19,7 @@ export {
   CreateFeedbackOSDto,
 } from './create-feedback.dto';
 export { CreateImageUploadUrlDto } from './create-image-upload-url.dto';
+export { CreateImageDownloadUrlDto } from './create-image-download-url.dto';
 export { FindFeedbacksByChannelIdDto } from './find-feedbacks-by-channel-id.dto';
 export {
   UpdateFeedbackDto,

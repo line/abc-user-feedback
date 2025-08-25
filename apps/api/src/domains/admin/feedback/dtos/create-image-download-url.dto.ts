@@ -13,35 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
 
-export class ImageConfigResponseDto {
-  @Expose()
-  @ApiProperty()
+export class CreateImageDownloadUrlDto {
   accessKeyId: string;
-
-  @Expose()
-  @ApiProperty()
   secretAccessKey: string;
-
-  @Expose()
-  @ApiProperty()
   endpoint: string;
-
-  @Expose()
-  @ApiProperty()
   region: string;
-
-  @Expose()
-  @ApiProperty()
   bucket: string;
-
-  @Expose()
-  @ApiProperty()
-  domainWhiteList: string[];
-
-  @Expose()
-  @ApiProperty()
-  enablePresignedUrlDownload: boolean | undefined;
+  imageKey: string;
 }
