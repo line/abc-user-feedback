@@ -98,7 +98,7 @@
     "@types/nodemailer": "^7.0.1",
     "@types/passport-jwt": "*",
     "@types/supertest": "^6.0.3",
-    "@typescript-eslint/parser": "^8.40.0",
+    "@typescript-eslint/parser": "^8.41.0",
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
