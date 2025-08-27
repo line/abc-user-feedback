@@ -40,7 +40,7 @@ export const channelSchema = z.object({
     .nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  imageConfig: channelImageConfigSchema.nullable(),
+  imageConfig: channelImageConfigSchema.nullable().optional(),
   feedbackSearchMaxDays: z.number(),
 });
 

@@ -1753,7 +1753,7 @@ export interface components {
       region: string;
       bucket: string;
       domainWhiteList: string[] | null;
-      enablePresignedUrlDownload: boolean;
+      enablePresignedUrlDownload?: boolean;
     };
     /** @enum {string} */
     FieldFormatEnum:

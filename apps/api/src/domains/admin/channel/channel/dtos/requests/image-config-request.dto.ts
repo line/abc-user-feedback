@@ -41,7 +41,7 @@ export class ImageConfigRequestDto {
   @IsString({ each: true })
   domainWhiteList: string[];
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsBoolean()
   enablePresignedUrlDownload: boolean;
 }
