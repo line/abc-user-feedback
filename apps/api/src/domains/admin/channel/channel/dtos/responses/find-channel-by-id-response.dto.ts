@@ -37,7 +37,7 @@ export class FindChannelByIdResponseDto {
   description: string;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ required: false })
   imageConfig: ImageConfigResponseDto;
 
   @Expose()

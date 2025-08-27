@@ -42,6 +42,6 @@ export class ImageConfigResponseDto {
   domainWhiteList: string[];
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ required: false, type: 'boolean' })
   enablePresignedUrlDownload: boolean | undefined;
 }

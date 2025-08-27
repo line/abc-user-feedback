@@ -14,8 +14,9 @@
  * under the License.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -34,7 +35,7 @@ import {
   Tag,
 } from '@ufb/react';
 
-import { cn } from '@/shared';
+import { cn, useOAIQuery } from '@/shared';
 
 interface IProps {
   urls: string[];
@@ -81,13 +82,7 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
           >
             {urls.map((url) => (
               <SwiperSlide key={url}>
-                <Image
-                  src={url}
-                  alt={url}
-                  fill
-                  onClick={() => window.open(url, '_blank')}
-                  className="cursor-pointer object-contain"
-                />
+                <PresignedURLImage url={url} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -102,13 +97,11 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
             className="thumbnail-swiper"
           >
             {urls.map((url) => (
-              <SwiperSlide key={url} className="rounded-8 overflow-hidden">
-                <Image
-                  src={url}
-                  alt={url}
-                  fill
-                  className="cursor-pointer object-cover"
-                />
+              <SwiperSlide
+                key={url}
+                className="rounded-8 bg-neutral-secondary overflow-hidden"
+              >
+                <PresignedURLImage url={url} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -118,6 +111,58 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+};
+interface IPresignedURLImageProps {
+  url: string;
+}
+const PresignedURLImage = ({ url }: IPresignedURLImageProps) => {
+  const router = useRouter();
+  const projectId = Number(router.query.projectId);
+  const channelId = Number(router.query.channelId);
+
+  const { data: channelData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
+    variables: { channelId, projectId },
+  });
+
+  const imageKey = useMemo(() => {
+    if (!channelData?.imageConfig?.enablePresignedUrlDownload) {
+      return url;
+    }
+
+    const parsedUrl = new URL(url);
+    const key = decodeURIComponent(parsedUrl.pathname.replace(/^\/+/, ''));
+    const host = parsedUrl.hostname;
+
+    const parts = key.split('/', 2);
+    if (
+      (host === 's3.amazonaws.com' || host.startsWith('s3.')) &&
+      parts.length >= 2
+    ) {
+      return parts.slice(1).join('/');
+    }
+
+    return key;
+  }, [channelData, url]);
+
+  const { data: presignedUrl } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels/{channelId}/image-download-url',
+    variables: { channelId, projectId, imageKey },
+    queryOptions: {
+      enabled: Boolean(
+        imageKey && channelData?.imageConfig?.enablePresignedUrlDownload,
+      ),
+    },
+  });
+
+  return (
+    <Image
+      src={presignedUrl ?? url}
+      alt={presignedUrl ?? url}
+      fill
+      className="cursor-pointer object-cover"
+    />
   );
 };
 
