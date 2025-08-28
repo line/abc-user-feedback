@@ -81,7 +81,7 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
             className="main-swiper"
           >
             {urls.map((url) => (
-              <SwiperSlide key={url}>
+              <SwiperSlide key={url} className="relative">
                 <PresignedURLImage url={url} />
               </SwiperSlide>
             ))}
@@ -99,7 +99,7 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
             {urls.map((url) => (
               <SwiperSlide
                 key={url}
-                className="rounded-8 bg-neutral-secondary overflow-hidden"
+                className="rounded-8 bg-neutral-secondary relative overflow-hidden"
               >
                 <PresignedURLImage url={url} />
               </SwiperSlide>
@@ -124,6 +124,12 @@ const PresignedURLImage = ({ url }: IPresignedURLImageProps) => {
   const { data: channelData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
+    queryOptions: {
+      enabled:
+        router.isReady &&
+        Number.isFinite(projectId) &&
+        Number.isFinite(channelId),
+    },
   });
 
   const imageKey = useMemo(() => {
