@@ -14,9 +14,7 @@
  * under the License.
  */
 
-import { useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -33,7 +31,7 @@ import {
   DialogTrigger,
 } from '@ufb/react';
 
-import { useOAIQuery } from '@/shared';
+import FeedbackImage from './feedback-image';
 
 interface IProps extends React.PropsWithChildren {
   urls: string[];
@@ -76,7 +74,7 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
           >
             {urls.map((url) => (
               <SwiperSlide key={url} className="relative">
-                <PresignedURLImage url={url} />
+                <FeedbackImage url={url} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -94,7 +92,7 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
                 key={url}
                 className="rounded-8 bg-neutral-secondary relative overflow-hidden"
               >
-                <PresignedURLImage url={url} />
+                <FeedbackImage url={url} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -104,79 +102,6 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
-interface IPresignedURLImageProps {
-  url: string;
-}
-const PresignedURLImage = ({ url }: IPresignedURLImageProps) => {
-  const router = useRouter();
-  const projectId = Number(router.query.projectId);
-  const channelId = Number(router.query.channelId);
-
-  const { data: channelData } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels/{channelId}',
-    variables: { channelId, projectId },
-    queryOptions: {
-      enabled:
-        router.isReady &&
-        Number.isFinite(projectId) &&
-        Number.isFinite(channelId),
-    },
-  });
-
-  const imageKey = useMemo(() => {
-    if (!channelData?.imageConfig?.enablePresignedUrlDownload) return url;
-
-    let parsed: URL | null = null;
-    try {
-      parsed = new URL(
-        url,
-        typeof window !== 'undefined' ?
-          window.location.href
-        : 'http://localhost',
-      );
-    } catch {
-      return url;
-    }
-    if (!/^https?:$/.test(parsed.protocol)) return url;
-
-    const rawPath = parsed.pathname.replace(/^\/+/, '');
-    let key = rawPath;
-    try {
-      key = decodeURIComponent(rawPath);
-    } catch {
-      /* keep raw */
-    }
-
-    const host = parsed.hostname;
-    const parts = key.split('/', 2);
-    if (
-      (host === 's3.amazonaws.com' || host.startsWith('s3.')) &&
-      parts.length >= 2
-    ) {
-      return parts.slice(1).join('/');
-    }
-    return key;
-  }, [channelData, url]);
-
-  const { data: presignedUrl } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels/{channelId}/image-download-url',
-    variables: { channelId, projectId, imageKey },
-    queryOptions: {
-      enabled: Boolean(
-        imageKey && channelData?.imageConfig?.enablePresignedUrlDownload,
-      ),
-    },
-  });
-
-  return (
-    <Image
-      src={presignedUrl ?? url}
-      alt={presignedUrl ?? url}
-      fill
-      className="cursor-pointer object-cover"
-    />
   );
 };
 

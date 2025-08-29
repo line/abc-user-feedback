@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import Linkify from 'linkify-react';
@@ -39,6 +38,7 @@ import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
 import { useOAIMutation, usePermissions } from '../lib';
 import { cn } from '../utils';
+import FeedbackImage from './feedback-image';
 import ImagePreviewButton from './image-preview-button';
 import {
   DatePicker,
@@ -201,7 +201,7 @@ const SheetDetailTable = (props: Props) => {
               className="bg-neutral-tertiary relative h-16 w-16 overflow-hidden rounded"
               key={index}
             >
-              <Image src={v} alt={v} fill />
+              <FeedbackImage url={v} />
               <div className="absolute inset-1/2 flex h-fit w-fit -translate-x-1/2 -translate-y-1/2 items-center justify-center">
                 <ImagePreviewButton
                   urls={value as string[]}
@@ -363,7 +363,7 @@ const SheetDetailTable = (props: Props) => {
               className="bg-neutral-tertiary relative h-16 w-16 overflow-hidden rounded"
               key={v}
             >
-              <Image src={v} alt={v} fill />
+              <FeedbackImage url={v} />
               <div className="absolute inset-1/2 flex h-fit w-fit -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1">
                 <ImagePreviewButton
                   urls={value as string[]}
