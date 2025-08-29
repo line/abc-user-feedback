@@ -198,7 +198,7 @@ const SheetDetailTable = (props: Props) => {
         <div className="flex flex-wrap gap-2">
           {urls.map((v, index) => (
             <div
-              className="relative h-16 w-16 overflow-hidden rounded"
+              className="bg-neutral-tertiary relative h-16 w-16 overflow-hidden rounded"
               key={index}
             >
               <Image src={v} alt={v} fill />
@@ -360,8 +360,8 @@ const SheetDetailTable = (props: Props) => {
         <div className="flex flex-wrap gap-2">
           {urls.map((v, index) => (
             <div
-              className="relative h-16 w-16 overflow-hidden rounded"
-              key={index}
+              className="bg-neutral-tertiary relative h-16 w-16 overflow-hidden rounded"
+              key={v}
             >
               <Image src={v} alt={v} fill />
               <div className="absolute inset-1/2 flex h-fit w-fit -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1">
