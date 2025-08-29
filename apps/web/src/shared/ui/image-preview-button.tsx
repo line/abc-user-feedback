@@ -126,14 +126,30 @@ const PresignedURLImage = ({ url }: IPresignedURLImageProps) => {
   });
 
   const imageKey = useMemo(() => {
-    if (!channelData?.imageConfig?.enablePresignedUrlDownload) {
+    if (!channelData?.imageConfig?.enablePresignedUrlDownload) return url;
+
+    let parsed: URL | null = null;
+    try {
+      parsed = new URL(
+        url,
+        typeof window !== 'undefined' ?
+          window.location.href
+        : 'http://localhost',
+      );
+    } catch {
       return url;
     }
+    if (!/^https?:$/.test(parsed.protocol)) return url;
 
-    const parsedUrl = new URL(url);
-    const key = decodeURIComponent(parsedUrl.pathname.replace(/^\/+/, ''));
-    const host = parsedUrl.hostname;
+    const rawPath = parsed.pathname.replace(/^\/+/, '');
+    let key = rawPath;
+    try {
+      key = decodeURIComponent(rawPath);
+    } catch {
+      /* keep raw */
+    }
 
+    const host = parsed.hostname;
     const parts = key.split('/', 2);
     if (
       (host === 's3.amazonaws.com' || host.startsWith('s3.')) &&
@@ -141,7 +157,6 @@ const PresignedURLImage = ({ url }: IPresignedURLImageProps) => {
     ) {
       return parts.slice(1).join('/');
     }
-
     return key;
   }, [channelData, url]);
 

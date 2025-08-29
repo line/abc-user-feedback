@@ -71,17 +71,22 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
             </Badge>
           )}
           {field.format === 'images' && (
-            <ImagePreviewButton urls={value as string[]}>
-              <Tag
-                variant="outline"
-                size="small"
-                className="cursor-pointer gap-1"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <Icon name="RiImageFill" size={12} />
-                Image
-              </Tag>
-            </ImagePreviewButton>
+            <>
+              {Array.isArray(value) && (value as string[]).length > 0 ?
+                <ImagePreviewButton urls={value}>
+                  <Tag
+                    aria-label="View images"
+                    variant="outline"
+                    size="small"
+                    className="cursor-pointer gap-1"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Icon name="RiImageFill" size={12} />
+                    Image
+                  </Tag>
+                </ImagePreviewButton>
+              : '-'}
+            </>
           )}
           {field.format === 'text' && (
             <Linkify
