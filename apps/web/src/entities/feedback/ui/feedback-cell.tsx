@@ -17,7 +17,7 @@ import { memo } from 'react';
 import dayjs from 'dayjs';
 import Linkify from 'linkify-react';
 
-import { Badge } from '@ufb/react';
+import { Badge, Icon, Tag } from '@ufb/react';
 
 import { DATE_TIME_FORMAT, ExpandableText, ImagePreviewButton } from '@/shared';
 import { AICell } from '@/entities/ai';
@@ -71,7 +71,22 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
             </Badge>
           )}
           {field.format === 'images' && (
-            <ImagePreviewButton urls={value as string[]} />
+            <>
+              {Array.isArray(value) && (value as string[]).length > 0 ?
+                <ImagePreviewButton urls={value}>
+                  <Tag
+                    aria-label="View images"
+                    variant="outline"
+                    size="small"
+                    className="cursor-pointer gap-1"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Icon name="RiImageFill" size={12} />
+                    Image
+                  </Tag>
+                </ImagePreviewButton>
+              : '-'}
+            </>
           )}
           {field.format === 'text' && (
             <Linkify

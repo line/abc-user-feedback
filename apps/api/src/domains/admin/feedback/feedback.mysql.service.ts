@@ -551,37 +551,46 @@ export class FeedbackMySQLService {
   async updateFeedback(dto: UpdateFeedbackMySQLDto) {
     const { feedbackId, data } = dto;
 
+    let query = `JSON_SET(IFNULL(feedbacks.data,'{}'), `;
+    const parameters: Record<string, any> = {};
+
+    if (Object.keys(data).length === 0) {
+      query = 'data';
+    } else {
+      Object.entries(data).forEach(([fieldKey, value], index) => {
+        query += `'$.${fieldKey}', `;
+        if (Array.isArray(value)) {
+          const arrayParams = value
+            .map((v, i) => {
+              const paramName = `value${index}_${i}`;
+              parameters[paramName] = v as string | number;
+              return `:${paramName}`;
+            })
+            .join(', ');
+          query += `JSON_ARRAY(${arrayParams})`;
+        } else {
+          const paramName = `value${index}`;
+          parameters[paramName] = value as string | number;
+          query += `:${paramName}`;
+        }
+
+        if (index + 1 !== Object.entries(data).length) {
+          query += ', ';
+        }
+      });
+
+      query += ')';
+    }
+
     await this.feedbackRepository
       .createQueryBuilder('feedbacks')
       .update('feedbacks')
       .set({
-        data: () => {
-          if (Object.keys(data).length === 0) {
-            return 'data';
-          }
-          let query = `JSON_SET(IFNULL(feedbacks.data,'{}'), `;
-          for (const [index, fieldKey] of Object.entries(Object.keys(data))) {
-            query += `'$.${fieldKey}',
-            ${
-              Array.isArray(data[fieldKey]) ?
-                data[fieldKey].length === 0 ?
-                  'JSON_ARRAY()'
-                : 'JSON_ARRAY("' + data[fieldKey].join('","') + '")'
-              : `:${fieldKey}`
-            }`;
-
-            if (parseInt(index) + 1 !== Object.entries(data).length) {
-              query += ',';
-            }
-          }
-          query += `)`;
-
-          return query;
-        },
+        data: () => query,
         updatedAt: () => `'${DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss')}'`,
       })
       .where('id = :feedbackId', { feedbackId })
-      .setParameters(data)
+      .setParameters(parameters)
       .execute();
   }
 

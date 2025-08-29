@@ -14,8 +14,9 @@
  * under the License.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -30,43 +31,36 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Icon,
-  Tag,
 } from '@ufb/react';
 
-import { cn } from '@/shared';
+import { useOAIQuery } from '@/shared';
 
-interface IProps {
+interface IProps extends React.PropsWithChildren {
   urls: string[];
+  initialIndex?: number;
 }
 
 const ImagePreviewButton: React.FC<IProps> = (props) => {
-  const { urls } = props;
+  const { urls, children, initialIndex } = props;
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
+
   useEffect(() => {
     if (!open) setThumbsSwiper(null);
   }, [open]);
 
+  useEffect(() => {
+    if (!thumbsSwiper || !open) return;
+    thumbsSwiper.slideTo(initialIndex ?? 0);
+  }, [thumbsSwiper, open, initialIndex]);
+
   if (urls.length === 0) return null;
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Tag
-          variant="outline"
-          size="small"
-          className={cn('cursor-pointer gap-1')}
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpen(!open);
-          }}
-        >
-          <Icon name="RiImageFill" size={12} />
-          Image
-        </Tag>
-      </DialogTrigger>
-      <DialogContent onClick={(e) => e.stopPropagation()} className="max-w-fit">
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="max-w-fit" onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
           <DialogTitle>{t('modal.image-preview.title')}</DialogTitle>
         </DialogHeader>
@@ -78,22 +72,16 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
             thumbs={{ swiper: thumbsSwiper }}
             modules={[FreeMode, Navigation, Thumbs]}
             className="main-swiper"
+            initialSlide={initialIndex ?? 0}
           >
             {urls.map((url) => (
-              <SwiperSlide key={url}>
-                <Image
-                  src={url}
-                  alt={url}
-                  fill
-                  onClick={() => window.open(url, '_blank')}
-                  className="cursor-pointer object-contain"
-                />
+              <SwiperSlide key={url} className="relative">
+                <PresignedURLImage url={url} />
               </SwiperSlide>
             ))}
           </Swiper>
           <Swiper
             onSwiper={setThumbsSwiper}
-            loop={true}
             spaceBetween={10}
             slidesPerView="auto"
             freeMode={true}
@@ -102,13 +90,11 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
             className="thumbnail-swiper"
           >
             {urls.map((url) => (
-              <SwiperSlide key={url} className="rounded-8 overflow-hidden">
-                <Image
-                  src={url}
-                  alt={url}
-                  fill
-                  className="cursor-pointer object-cover"
-                />
+              <SwiperSlide
+                key={url}
+                className="rounded-8 bg-neutral-secondary relative overflow-hidden"
+              >
+                <PresignedURLImage url={url} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -118,6 +104,79 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+};
+interface IPresignedURLImageProps {
+  url: string;
+}
+const PresignedURLImage = ({ url }: IPresignedURLImageProps) => {
+  const router = useRouter();
+  const projectId = Number(router.query.projectId);
+  const channelId = Number(router.query.channelId);
+
+  const { data: channelData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
+    variables: { channelId, projectId },
+    queryOptions: {
+      enabled:
+        router.isReady &&
+        Number.isFinite(projectId) &&
+        Number.isFinite(channelId),
+    },
+  });
+
+  const imageKey = useMemo(() => {
+    if (!channelData?.imageConfig?.enablePresignedUrlDownload) return url;
+
+    let parsed: URL | null = null;
+    try {
+      parsed = new URL(
+        url,
+        typeof window !== 'undefined' ?
+          window.location.href
+        : 'http://localhost',
+      );
+    } catch {
+      return url;
+    }
+    if (!/^https?:$/.test(parsed.protocol)) return url;
+
+    const rawPath = parsed.pathname.replace(/^\/+/, '');
+    let key = rawPath;
+    try {
+      key = decodeURIComponent(rawPath);
+    } catch {
+      /* keep raw */
+    }
+
+    const host = parsed.hostname;
+    const parts = key.split('/', 2);
+    if (
+      (host === 's3.amazonaws.com' || host.startsWith('s3.')) &&
+      parts.length >= 2
+    ) {
+      return parts.slice(1).join('/');
+    }
+    return key;
+  }, [channelData, url]);
+
+  const { data: presignedUrl } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels/{channelId}/image-download-url',
+    variables: { channelId, projectId, imageKey },
+    queryOptions: {
+      enabled: Boolean(
+        imageKey && channelData?.imageConfig?.enablePresignedUrlDownload,
+      ),
+    },
+  });
+
+  return (
+    <Image
+      src={presignedUrl ?? url}
+      alt={presignedUrl ?? url}
+      fill
+      className="cursor-pointer object-cover"
+    />
   );
 };
 

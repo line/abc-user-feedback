@@ -692,6 +692,22 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/admin/projects/{projectId}/channels/{channelId}/image-download-url': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations['ChannelController_getImageDownloadUrl'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/admin/fields/{fieldId}/options': {
     parameters: {
       query?: never;
@@ -1737,6 +1753,7 @@ export interface components {
       region: string;
       bucket: string;
       domainWhiteList: string[] | null;
+      enablePresignedUrlDownload?: boolean;
     };
     /** @enum {string} */
     FieldFormatEnum:
@@ -1787,6 +1804,7 @@ export interface components {
       region: string;
       bucket: string;
       domainWhiteList: string[];
+      enablePresignedUrlDownload?: boolean;
     };
     FindChannelsByProjectDto: {
       id: number;
@@ -1841,7 +1859,7 @@ export interface components {
       id: number;
       name: string;
       description: string;
-      imageConfig: components['schemas']['ImageConfigResponseDto'];
+      imageConfig?: components['schemas']['ImageConfigResponseDto'];
       feedbackSearchMaxDays: number;
       /** Format: date-time */
       createdAt: string;
@@ -3719,6 +3737,31 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['ImageUploadUrlTestResponseDto'];
+        };
+      };
+    };
+  };
+  ChannelController_getImageDownloadUrl: {
+    parameters: {
+      query: {
+        /** @description Image Key for the pre-signed url download */
+        imageKey: string;
+      };
+      header?: never;
+      path: {
+        projectId: number;
+        channelId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': string;
         };
       };
     };
