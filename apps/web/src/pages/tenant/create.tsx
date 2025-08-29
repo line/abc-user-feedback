@@ -48,10 +48,7 @@ const CreateTenantPage: NextPageWithLayout = () => {
   const [data, setData] = useState<{
     tenant: { siteName: string } | null;
     user: SignUpWithEmailType | null;
-  }>({
-    tenant: null,
-    user: null,
-  });
+  }>({ tenant: null, user: null });
 
   const { tenant } = useTenantStore();
 

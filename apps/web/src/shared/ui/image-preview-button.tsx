@@ -31,43 +31,36 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Icon,
-  Tag,
 } from '@ufb/react';
 
-import { cn, useOAIQuery } from '@/shared';
+import { useOAIQuery } from '@/shared';
 
-interface IProps {
+interface IProps extends React.PropsWithChildren {
   urls: string[];
+  initialIndex?: number;
 }
 
 const ImagePreviewButton: React.FC<IProps> = (props) => {
-  const { urls } = props;
+  const { urls, children, initialIndex } = props;
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
+
   useEffect(() => {
     if (!open) setThumbsSwiper(null);
   }, [open]);
 
+  useEffect(() => {
+    if (!thumbsSwiper || !open) return;
+    thumbsSwiper.slideTo(initialIndex ?? 0);
+  }, [thumbsSwiper, open, initialIndex]);
+
   if (urls.length === 0) return null;
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Tag
-          variant="outline"
-          size="small"
-          className={cn('cursor-pointer gap-1')}
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpen(!open);
-          }}
-        >
-          <Icon name="RiImageFill" size={12} />
-          Image
-        </Tag>
-      </DialogTrigger>
-      <DialogContent onClick={(e) => e.stopPropagation()} className="max-w-fit">
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="max-w-fit" onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
           <DialogTitle>{t('modal.image-preview.title')}</DialogTitle>
         </DialogHeader>
@@ -79,6 +72,7 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
             thumbs={{ swiper: thumbsSwiper }}
             modules={[FreeMode, Navigation, Thumbs]}
             className="main-swiper"
+            initialSlide={initialIndex ?? 0}
           >
             {urls.map((url) => (
               <SwiperSlide key={url} className="relative">
@@ -88,7 +82,6 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
           </Swiper>
           <Swiper
             onSwiper={setThumbsSwiper}
-            loop={true}
             spaceBetween={10}
             slidesPerView="auto"
             freeMode={true}
