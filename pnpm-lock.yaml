@@ -537,8 +537,8 @@ importers:
         specifier: ^30.1.1
         version: 30.1.1
       jest-fixed-jsdom:
-        specifier: ^0.0.9
-        version: 0.0.9(jest-environment-jsdom@30.1.1)
+        specifier: ^0.0.10
+        version: 0.0.10(jest-environment-jsdom@30.1.1)
       jiti:
         specifier: 1.21.7
         version: 1.21.7
@@ -7537,8 +7537,8 @@ packages:
     resolution: {integrity: sha512-IaMoaA6saxnJimqCppUDqKck+LKM0Jg+OxyMUIvs1yGd2neiC22o8zXo90k04+tO+49OmgMR4jTgM5e4B0S62Q==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
 
-  jest-fixed-jsdom@0.0.9:
-    resolution: {integrity: sha512-KPfqh2+sn5q2B+7LZktwDcwhCpOpUSue8a1I+BcixWLOQoEVyAjAGfH+IYZGoxZsziNojoHGRTC8xRbB1wDD4g==}
+  jest-fixed-jsdom@0.0.10:
+    resolution: {integrity: sha512-WaEVX+FripJh+Hn/7dysIgqP66h0KT1NNC22NGmNYANExtCoYNk1q2yjwwcdSboBMkkhn0NtmvKad/cmisnCLg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       jest-environment-jsdom: '>=28.0.0'
@@ -18721,7 +18721,7 @@ snapshots:
       jest-util: 30.0.5
       jest-validate: 30.1.0
 
-  jest-fixed-jsdom@0.0.9(jest-environment-jsdom@30.1.1):
+  jest-fixed-jsdom@0.0.10(jest-environment-jsdom@30.1.1):
     dependencies:
       jest-environment-jsdom: 30.1.1
 
