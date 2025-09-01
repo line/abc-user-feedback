@@ -21,9 +21,10 @@ import { useOAIQuery } from '../lib';
 
 interface Props {
   url: string;
+  onClick?: (url: string) => void;
 }
 
-const FeedbackImage = ({ url }: Props) => {
+const FeedbackImage = ({ url, onClick }: Props) => {
   const router = useRouter();
   const projectId = Number(router.query.projectId);
   const channelId = Number(router.query.channelId);
@@ -76,6 +77,7 @@ const FeedbackImage = ({ url }: Props) => {
       alt={presignedUrl ?? url}
       className="cursor-pointer object-cover"
       fill
+      onClick={() => onClick?.(presignedUrl ?? url)}
     />
   );
 };

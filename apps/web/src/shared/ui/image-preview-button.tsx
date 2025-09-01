@@ -74,7 +74,12 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
           >
             {urls.map((url) => (
               <SwiperSlide key={url} className="relative">
-                <FeedbackImage url={url} />
+                <FeedbackImage
+                  url={url}
+                  onClick={(url) =>
+                    window.open(url, '_blank', 'noopener,noreferrer')
+                  }
+                />
               </SwiperSlide>
             ))}
           </Swiper>
