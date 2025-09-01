@@ -3,7 +3,7 @@
 if [[ ${1} == "help" || "$#" -lt 2 ]]; then
     echo "Usage: sh ${0} APP VER"
     echo "APP        APP of docker image"
-    echo "              ex. api, web"
+    echo "              ex. api, web, docs"
     echo "VER           Version of docker image"
     echo "              ex. 1.0.0, 1.1.0, ..."
     exit;
