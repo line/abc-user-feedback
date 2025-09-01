@@ -16,8 +16,8 @@ description: '소스 코드에서 직접 ABC User Feedback을 빌드하고 실�
 - [pnpm](https://pnpm.io/installation) (패키지 관리자)
 - [Git](https://git-scm.com/downloads)
 - [MySQL 8.0](https://www.mysql.com/downloads/)
+- SMTP 서버
 - (선택 사항) [OpenSearch 2.16](https://opensearch.org/)
-- (선택 사항) SMTP 서버
 
 ## 소스 코드 다운로드
 
@@ -75,7 +75,7 @@ APP_PORT=4000
 APP_ADDRESS=0.0.0.0
 AUTO_MIGRATION=true
 
-# SMTP 설정 (선택 사항)
+# SMTP 설정
 SMTP_HOST=smtp.example.com
 SMTP_PORT=587
 SMTP_USERNAME=your-username
@@ -331,4 +331,4 @@ module.exports = {
 
 ## 다음 단계
 
-수동 설치를 성공적으로 완료했다면, 다음 단계로 [초기 설정](../03-initial-setup.md)을 진행하여 시스템을 구성하고 사용자를 추가하세요.
+수동 설치를 성공적으로 완료했다면, 다음 단계로 [초기 설정](../03-tutorial.md)을 진행하여 시스템을 구성하고 사용자를 추가하세요.
