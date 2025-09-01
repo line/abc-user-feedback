@@ -180,7 +180,7 @@ docker-compose up -d
 2. 초기 관리자 계정을 생성합니다.
 3. 로그인 후 프로젝트, 채널, 태그 등을 구성합니다.
 
-자세한 초기 설정 방법은 [초기 설정](../03-initial-setup.md) 문서를 참조하세요.
+자세한 초기 설정 방법은 [초기 설정](../03-tutorial.md) 문서를 참조하세요.
 
 ## 업그레이드
 
@@ -246,4 +246,4 @@ docker-compose up -d
 
 ## 다음 단계
 
-Docker Hub 이미지를 사용하여 ABC User Feedback을 성공적으로 설치했다면, 다음 단계로 [초기 설정](../03-initial-setup.md)을 진행하여 시스템을 구성하고 사용자를 추가하세요.
+Docker Hub 이미지를 사용하여 ABC User Feedback을 성공적으로 설치했다면, 다음 단계로 [튜토리얼](../03-tutorial.md)을 진행하여 시스템을 구성하고 사용자를 추가하세요.

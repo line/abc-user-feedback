@@ -246,5 +246,3 @@ curl -X POST http://localhost:4000/api/v1/projects/1/channels/1/feedbacks \
 - [이슈 트래커 사용법](../03-user-guide/03-issue-management/01-issue-tracker.md): 이슈 관리 및 추적 방법 학습
 - [API 개요](../04-integration-guide/01-api-overview.md): API를 통한 프로그래매틱 통합 방법 학습
 - [웹훅 설정 및 활용](../04-integration-guide/03-webhooks.md): 웹훅을 통한 외부 시스템 연동 방법 학습
-
-문제가 발생하거나 추가 지원이 필요한 경우 [지원 받는 방법](../06-community-support/03-getting-help.md)을 확인하세요.

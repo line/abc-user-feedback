@@ -189,4 +189,4 @@ mysql://username:password@hostname:port/database
 
 ## 다음 단계
 
-환경 변수를 올바르게 구성한 후에는 [초기 설정](../03-initial-setup.md) 문서를 참조하여 ABC User Feedback 시스템을 초기화하고 사용자를 추가하세요.
+환경 변수를 올바르게 구성한 후에는 [튜토리얼](../03-tutorial.md) 문서를 참조하여 ABC User Feedback 시스템을 초기화하고 사용자를 추가하세요.

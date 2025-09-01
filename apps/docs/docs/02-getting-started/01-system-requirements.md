@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-title: '시작하기'
+title: '시스템 요구사항'
 description: '시스템 요구사항 대한 설명입니다.'
 ---
 
@@ -144,5 +144,3 @@ docker-compose -f docker/docker-compose.infra-arm64.yml up -d
 - [Docker Hub 이미지 사용](./02-installation/01-docker-hub-images.md)
 - [CLI 도구 사용](./02-installation/02-cli-tool.md)
 - [수동 설치](./02-installation/03-manual-setup.md)
-
-문제가 발생하거나 추가 지원이 필요한 경우 [지원 받는 방법](../06-community-support/03-getting-help.md)을 확인하세요.

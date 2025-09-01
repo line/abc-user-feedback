@@ -189,4 +189,4 @@ ABC User Feedback은 위에서 설명한 주요 기능 외에도 다음과 같�
 
 ---
 
-이 문서는 ABC User Feedback의 주요 기능을 개괄적으로 설명합니다. 각 기능에 대한 더 자세한 사용법은 [사용자 가이드](/docs/category/사용자-가이드) 섹션을 참조하세요.
+이 문서는 ABC User Feedback의 주요 기능을 개괄적으로 설명합니다. 각 기능에 대한 더 자세한 사용법은 [사용자 가이드](../03-user-guide/01-dashboard-overview.md) 섹션을 참조하세요.
