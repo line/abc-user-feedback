@@ -15,7 +15,7 @@
  */
 import { DateTime } from 'luxon';
 
-export default function calculateDaysBetweenDates(
+export function calculateDaysBetweenDates(
   date1: string,
   date2: string,
 ): number {
@@ -23,4 +23,16 @@ export default function calculateDaysBetweenDates(
   const endDate = DateTime.fromISO(date2);
 
   return endDate.diff(startDate, 'days').days;
+}
+
+export function getCurrentYear(): number {
+  return DateTime.now().year;
+}
+
+export function getCurrentMonth(): number {
+  return DateTime.now().month;
+}
+
+export function getCurrentDay(): number {
+  return DateTime.now().day;
 }

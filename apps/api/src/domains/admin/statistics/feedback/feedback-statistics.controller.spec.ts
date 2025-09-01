@@ -63,7 +63,7 @@ describe('Feedback Statistics Controller', () => {
 
     expect(
       MockFeedbackStatisticsService.getCountByDateByChannel,
-    ).toBeCalledTimes(1);
+    ).toHaveBeenCalledTimes(1);
   });
 
   it('getCount', async () => {
@@ -72,7 +72,7 @@ describe('Feedback Statistics Controller', () => {
     const to = faker.date.future();
     const projectId = faker.number.int();
     await feedbackStatisticsController.getCount(from, to, projectId);
-    expect(MockFeedbackStatisticsService.getCount).toBeCalledTimes(1);
+    expect(MockFeedbackStatisticsService.getCount).toHaveBeenCalledTimes(1);
   });
 
   it('getIssuedRatio', async () => {
@@ -81,6 +81,8 @@ describe('Feedback Statistics Controller', () => {
     const to = faker.date.future();
     const projectId = faker.number.int();
     await feedbackStatisticsController.getIssuedRatio(from, to, projectId);
-    expect(MockFeedbackStatisticsService.getIssuedRatio).toBeCalledTimes(1);
+    expect(MockFeedbackStatisticsService.getIssuedRatio).toHaveBeenCalledTimes(
+      1,
+    );
   });
 });

@@ -21,6 +21,7 @@ export enum FieldFormatEnum {
   multiSelect = 'multiSelect',
   date = 'date',
   images = 'images',
+  aiField = 'aiField',
 }
 
 export function isSelectFieldFormat(type: FieldFormatEnum) {

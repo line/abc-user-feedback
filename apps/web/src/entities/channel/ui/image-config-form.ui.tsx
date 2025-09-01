@@ -19,7 +19,12 @@ import { useFormContext } from 'react-hook-form';
 
 import { Badge, Button, Divider, Icon, toast } from '@ufb/react';
 
-import { ComboboxInputbox, TextInput, useOAIMutation } from '@/shared';
+import {
+  ComboboxInputbox,
+  SelectInput,
+  TextInput,
+  useOAIMutation,
+} from '@/shared';
 
 import type { ChannelImageConfig } from '../channel.type';
 
@@ -174,6 +179,24 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
             placeholder={t('v2.placeholder.text')}
             error={formState.errors.bucket?.message}
             disabled={readOnly}
+          />
+          <SelectInput
+            options={[
+              { label: 'Enable', value: 'true' },
+              { label: 'Disable', value: 'false' },
+            ]}
+            value={
+              typeof watch('enablePresignedUrlDownload') !== 'undefined' ?
+                String(watch('enablePresignedUrlDownload'))
+              : ''
+            }
+            placeholder={t('v2.placeholder.select')}
+            onChange={(v) =>
+              setValue('enablePresignedUrlDownload', v === 'true', {
+                shouldDirty: true,
+              })
+            }
+            label="Presigned URL Download"
           />
         </div>
         <div className="flex items-center gap-2">

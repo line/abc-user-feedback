@@ -76,7 +76,7 @@ const CategoryCombobox = (props: Props) => {
 
   const refetch = async () => {
     await queryClient.invalidateQueries({
-      queryKey: ['/api/admin/projects/{projectId}/categories'],
+      queryKey: ['/api/admin/projects/{projectId}/categories/search'],
     });
     await queryClient.invalidateQueries({
       queryKey: ['/api/admin/projects/{projectId}/issues/search'],
@@ -149,7 +149,7 @@ const CategoryCombobox = (props: Props) => {
           {children}
         </button>
       </ComboboxTrigger>
-      <ComboboxContent commandProps={{ filter: commandFilter }}>
+      <ComboboxContent options={{ filter: commandFilter }}>
         <ComboboxInput
           onClick={(e) => e.stopPropagation()}
           onValueChange={(value) => setInputValue(value)}

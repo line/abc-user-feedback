@@ -27,7 +27,7 @@
 }
 
 .menu-item {
-  @apply rounded-8 relative flex w-full cursor-pointer select-none items-center gap-2 text-left text-[var(--menu-fg)] outline-none hover:bg-[var(--menu-bg-hover)] hover:text-[var(--menu-fg-hover)] hover:opacity-100 data-[disabled]:pointer-events-none data-[state=on]:bg-[var(--menu-bg-pressed)] data-[state=open]:bg-[var(--menu-bg-pressed)] data-[state=on]:text-[var(--menu-fg-pressed)] data-[state=open]:text-[var(--menu-fg-pressed)] data-[disabled]:opacity-50 [&>svg]:flex-shrink-0;
+  @apply rounded-8 relative flex w-full cursor-pointer select-none items-center gap-2 text-left text-[var(--menu-fg)] outline-none hover:bg-[var(--menu-bg-hover)] hover:text-[var(--menu-fg-hover)] hover:opacity-100 data-[disabled]:pointer-events-none data-[state=on]:bg-[var(--menu-bg-pressed)] data-[state=open]:!bg-[var(--menu-bg-pressed)] data-[state=on]:text-[var(--menu-fg-pressed)] data-[state=open]:text-[var(--menu-fg-pressed)] data-[disabled]:opacity-50 [&>svg]:flex-shrink-0;
 
   /* default */
   @apply menu-item-small;

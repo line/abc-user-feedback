@@ -79,7 +79,10 @@ export class ChannelMySQLService {
   async findById({ channelId }: FindByChannelIdDto) {
     const channel = await this.repository.findOne({
       where: { id: channelId },
-      relations: { fields: { options: true }, project: true },
+      relations: {
+        fields: { options: true, aiFieldTemplate: true },
+        project: true,
+      },
     });
     if (!channel) throw new ChannelNotFoundException();
 

@@ -58,7 +58,7 @@ describe('Issue Statistics Controller', () => {
       projectId,
     );
 
-    expect(MockIssueStatisticsService.getCountByDate).toBeCalledTimes(1);
+    expect(MockIssueStatisticsService.getCountByDate).toHaveBeenCalledTimes(1);
   });
 
   it('getCount', async () => {
@@ -67,6 +67,6 @@ describe('Issue Statistics Controller', () => {
     const to = faker.date.future();
     const projectId = faker.number.int();
     await issueStatisticsController.getCount(from, to, projectId);
-    expect(MockIssueStatisticsService.getCount).toBeCalledTimes(1);
+    expect(MockIssueStatisticsService.getCount).toHaveBeenCalledTimes(1);
   });
 });

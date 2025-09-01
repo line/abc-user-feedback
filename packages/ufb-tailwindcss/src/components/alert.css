@@ -34,10 +34,14 @@
 }
 
 .alert-icon {
-  @apply mb-auto box-content flex-shrink-0 p-1;
+  @apply relative mb-auto box-content w-5 flex-shrink-0 p-1;
 
   /* default */
   @apply alert-icon-default;
+}
+
+.alert-loader {
+  @apply flex scale-100;
 }
 
 .alert-content {

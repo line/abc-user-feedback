@@ -15,7 +15,6 @@
  */
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -30,43 +29,36 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  Icon,
-  Tag,
 } from '@ufb/react';
 
-import { cn } from '@/shared';
+import FeedbackImage from './feedback-image';
 
-interface IProps {
+interface IProps extends React.PropsWithChildren {
   urls: string[];
+  initialIndex?: number;
 }
 
 const ImagePreviewButton: React.FC<IProps> = (props) => {
-  const { urls } = props;
+  const { urls, children, initialIndex } = props;
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
+
   useEffect(() => {
     if (!open) setThumbsSwiper(null);
   }, [open]);
 
+  useEffect(() => {
+    if (!thumbsSwiper || !open) return;
+    thumbsSwiper.slideTo(initialIndex ?? 0);
+  }, [thumbsSwiper, open, initialIndex]);
+
   if (urls.length === 0) return null;
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Tag
-          variant="outline"
-          size="small"
-          className={cn('cursor-pointer gap-1')}
-          onClick={(e) => {
-            e.stopPropagation();
-            setOpen(!open);
-          }}
-        >
-          <Icon name="RiImageFill" size={12} />
-          Image
-        </Tag>
-      </DialogTrigger>
-      <DialogContent onClick={(e) => e.stopPropagation()} className="max-w-fit">
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="max-w-fit" onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
           <DialogTitle>{t('modal.image-preview.title')}</DialogTitle>
         </DialogHeader>
@@ -78,22 +70,21 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
             thumbs={{ swiper: thumbsSwiper }}
             modules={[FreeMode, Navigation, Thumbs]}
             className="main-swiper"
+            initialSlide={initialIndex ?? 0}
           >
             {urls.map((url) => (
-              <SwiperSlide key={url}>
-                <Image
-                  src={url}
-                  alt={url}
-                  fill
-                  onClick={() => window.open(url, '_blank')}
-                  className="cursor-pointer object-contain"
+              <SwiperSlide key={url} className="relative">
+                <FeedbackImage
+                  url={url}
+                  onClick={(url) =>
+                    window.open(url, '_blank', 'noopener,noreferrer')
+                  }
                 />
               </SwiperSlide>
             ))}
           </Swiper>
           <Swiper
             onSwiper={setThumbsSwiper}
-            loop={true}
             spaceBetween={10}
             slidesPerView="auto"
             freeMode={true}
@@ -102,13 +93,11 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
             className="thumbnail-swiper"
           >
             {urls.map((url) => (
-              <SwiperSlide key={url} className="rounded-8 overflow-hidden">
-                <Image
-                  src={url}
-                  alt={url}
-                  fill
-                  className="cursor-pointer object-cover"
-                />
+              <SwiperSlide
+                key={url}
+                className="rounded-8 bg-neutral-secondary relative overflow-hidden"
+              >
+                <FeedbackImage url={url} />
               </SwiperSlide>
             ))}
           </Swiper>

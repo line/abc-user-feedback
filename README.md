@@ -23,7 +23,8 @@ ABC User Feedback is a standalone web application designed to manage Voice of Cu
 | ![Image 1](./assets/01-feedback-tag.png)    | ![Image 2](./assets/02-Issue-Kanban.png)  |
 | ------------------------------------------- | ----------------------------------------- |
 | ![Image 3](./assets/03-issue-tracker.png)   | ![Image 4](./assets/04-single-signon.png) |
-| ![Image 3](./assets/05-role-management.png) | ![Image 4](./assets/06-dashboard.png)     |
+| ![Image 5](./assets/05-role-management.png) | ![Image 6](./assets/06-dashboard.png)     |
+| ![Image 7](./assets/07-ai-field.png)        | ![Image 8](./assets/08-ai-issue.png)      |
 
 - **Feedback Tag**: You can assign tags to each feedback to categorize them by topic.
 - **Kanban Mode**: Experience the advantage of organizing and visualizing issue groups efficiently with Kanban mode.
@@ -31,6 +32,8 @@ ABC User Feedback is a standalone web application designed to manage Voice of Cu
 - **Single Sign-on**: Authentication offers OAuth to accommodate enterprise-level single sign-on (SSO) requirements.
 - **Role Management**: Role Based Access Control (RBAC)
 - **Dashboard**: Dashboard help you visualize statistical data about your feedback and issues so you can learn about them at a glance.
+- **🤖 AI Field**: Write custom prompts to get AI-powered analysis of your feedback data. Examples include summarization, translation, keyword extraction, and sentiment analysis.
+- **🤖 AI Issue Recommandation**: Get intelligent issue recommendations based on feedback analysis using AI-powered insights.
 
 ## Getting Started
 

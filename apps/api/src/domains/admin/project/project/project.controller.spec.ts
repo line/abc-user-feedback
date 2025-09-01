@@ -65,7 +65,7 @@ describe('ProjectController', () => {
       dto.description = faker.string.sample();
 
       await projectController.create(dto);
-      expect(MockProjectService.create).toBeCalledTimes(1);
+      expect(MockProjectService.create).toHaveBeenCalledTimes(1);
     });
   });
   describe('findAll', () => {
@@ -77,7 +77,7 @@ describe('ProjectController', () => {
       const userDto = new UserDto();
 
       await projectController.findAll(dto, userDto);
-      expect(MockProjectService.findAll).toBeCalledTimes(1);
+      expect(MockProjectService.findAll).toHaveBeenCalledTimes(1);
     });
   });
   describe('countFeedbacks', () => {
@@ -86,7 +86,7 @@ describe('ProjectController', () => {
       const projectId = faker.number.int();
 
       await projectController.countFeedbacks(projectId);
-      expect(MockFeedbackService.countByProjectId).toBeCalledTimes(1);
+      expect(MockFeedbackService.countByProjectId).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -96,7 +96,7 @@ describe('ProjectController', () => {
       const projectId = faker.number.int();
 
       await projectController.countIssues(projectId);
-      expect(MockIssueService.countByProjectId).toBeCalledTimes(1);
+      expect(MockIssueService.countByProjectId).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -106,7 +106,7 @@ describe('ProjectController', () => {
       const projectId = faker.number.int();
 
       await projectController.delete(projectId);
-      expect(MockProjectService.deleteById).toBeCalledTimes(1);
+      expect(MockProjectService.deleteById).toHaveBeenCalledTimes(1);
     });
   });
 });

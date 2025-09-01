@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+'use client';
+
 import * as React from 'react';
 import type { DateRange, DayPickerDefaultProps } from 'react-day-picker';
 import { DayPicker } from 'react-day-picker';

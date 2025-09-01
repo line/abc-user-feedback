@@ -133,7 +133,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <SettingTemplate
-      title={t('project-setting-menu.webhook-integration')}
+      title={t('v2.project-setting-menu.webhook-integration')}
       action={
         <Button
           disabled={!perms.includes('project_webhook_create')}

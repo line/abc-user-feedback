@@ -36,6 +36,7 @@ export const FIELD_TYPES_TO_MAPPING_TYPES: Record<FieldFormatEnum, string> = {
   multiSelect: 'keyword',
   date: 'date',
   images: 'text',
+  aiField: 'text',
 };
 
 @Injectable()
@@ -47,31 +48,45 @@ export class FieldService {
   ) {}
 
   fieldsToMapping(fields: FieldEntity[]) {
-    return fields.reduce(
-      (mapping: Record<string, Property>, field) =>
-        Object.assign(mapping, {
-          [field.key]:
-            (
-              [FieldFormatEnum.text, FieldFormatEnum.images].includes(
-                field.format,
-              )
-            ) ?
-              ({
-                type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
-                analyzer: 'ngram_analyzer',
-                search_analyzer: 'ngram_analyzer',
-              } as TextProperty)
-            : field.format === FieldFormatEnum.date ?
-              ({
-                type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
-                format: `yyyy-MM-dd HH:mm:ss||yyyy-MM-dd HH:mm:ssZ||yyyy-MM-dd HH:mm:ssZZZZZ||yyyy-MM-dd||epoch_millis||strict_date_optional_time`,
-              } as DateProperty)
-            : ({
-                type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
-              } as Property),
-        }),
-      {},
-    );
+    return fields.reduce((mapping: Record<string, Property>, field) => {
+      let property: Property;
+
+      if (
+        field.format === FieldFormatEnum.text ||
+        field.format === FieldFormatEnum.images
+      ) {
+        property = {
+          type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
+          analyzer: 'ngram_analyzer',
+          search_analyzer: 'ngram_analyzer',
+        } as TextProperty;
+      } else if (field.format === FieldFormatEnum.aiField) {
+        property = {
+          type: 'object',
+          properties: {
+            status: { type: 'text' },
+            message: {
+              type: 'text',
+              analyzer: 'ngram_analyzer',
+              search_analyzer: 'ngram_analyzer',
+            },
+          },
+        } as Property;
+      } else if (field.format === FieldFormatEnum.date) {
+        property = {
+          type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
+          format: `yyyy-MM-dd HH:mm:ss||yyyy-MM-dd HH:mm:ssZ||yyyy-MM-dd HH:mm:ssZZZZZ||yyyy-MM-dd||epoch_millis||strict_date_optional_time`,
+        } as DateProperty;
+      } else {
+        property = {
+          type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
+        } as Property;
+      }
+
+      return Object.assign(mapping, {
+        [field.key]: property,
+      });
+    }, {});
   }
 
   @Transactional()

@@ -148,7 +148,7 @@ const InputMembersStep: React.FC<IProps> = () => {
             }}
           >
             <Icon name="RiExchange2Fill" />
-            {t('project-setting-menu.role-mgmt')}
+            {t('v2.project-setting-menu.role-mgmt')}
           </Button>
           <Button onClick={openCreateMemberFormDialog}>
             {t('v2.button.name.register', { name: 'Member' })}

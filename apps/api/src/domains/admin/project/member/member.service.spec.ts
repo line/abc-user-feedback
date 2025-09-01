@@ -66,10 +66,10 @@ describe('MemberService test suite', () => {
 
       await memberService.create(dto);
 
-      expect(roleRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.save).toBeCalledTimes(1);
-      expect(memberRepo.save).toBeCalledWith({
+      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(memberRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).toHaveBeenCalledWith({
         role: { id: roleId },
         user: { id: userId },
       });
@@ -81,13 +81,13 @@ describe('MemberService test suite', () => {
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue({} as MemberEntity);
       jest.spyOn(memberRepo, 'save');
 
-      await expect(memberService.create(dto)).rejects.toThrowError(
+      await expect(memberService.create(dto)).rejects.toThrow(
         MemberAlreadyExistsException,
       );
 
-      expect(roleRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.save).not.toBeCalled();
+      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(memberRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).not.toHaveBeenCalled();
     });
   });
 
@@ -112,10 +112,10 @@ describe('MemberService test suite', () => {
 
       await memberService.createMany(dtos);
 
-      expect(roleRepo.findOne).toBeCalledTimes(memberCount);
-      expect(memberRepo.findOne).toBeCalledTimes(memberCount);
-      expect(memberRepo.save).toBeCalledTimes(1);
-      expect(memberRepo.save).toBeCalledWith(
+      expect(roleRepo.findOne).toHaveBeenCalledTimes(memberCount);
+      expect(memberRepo.findOne).toHaveBeenCalledTimes(memberCount);
+      expect(memberRepo.save).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).toHaveBeenCalledWith(
         members.map(({ roleId, userId }) =>
           MemberEntity.from({ roleId, userId }),
         ),
@@ -128,13 +128,13 @@ describe('MemberService test suite', () => {
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue({} as MemberEntity);
       jest.spyOn(memberRepo, 'save');
 
-      await expect(memberService.createMany(dtos)).rejects.toThrowError(
+      await expect(memberService.createMany(dtos)).rejects.toThrow(
         MemberAlreadyExistsException,
       );
 
-      expect(roleRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.save).not.toBeCalled();
+      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(memberRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).not.toHaveBeenCalled();
     });
   });
 
@@ -163,10 +163,10 @@ describe('MemberService test suite', () => {
 
       await memberService.update(dto);
 
-      expect(roleRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.save).toBeCalledTimes(1);
-      expect(memberRepo.save).toBeCalledWith({
+      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(memberRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).toHaveBeenCalledWith({
         id: memberId,
         role: { id: newRoleId, project: { id: projectId } },
       });
@@ -178,13 +178,13 @@ describe('MemberService test suite', () => {
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save');
 
-      await expect(memberService.update(dto)).rejects.toThrowError(
+      await expect(memberService.update(dto)).rejects.toThrow(
         MemberNotFoundException,
       );
 
-      expect(roleRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.save).not.toBeCalled();
+      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(memberRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).not.toHaveBeenCalled();
     });
     it('updating a member fails with not matching inputs', async () => {
       jest
@@ -195,13 +195,13 @@ describe('MemberService test suite', () => {
       } as MemberEntity);
       jest.spyOn(memberRepo, 'save');
 
-      await expect(memberService.update(dto)).rejects.toThrowError(
+      await expect(memberService.update(dto)).rejects.toThrow(
         MemberUpdateRoleNotMatchedProjectException,
       );
 
-      expect(roleRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.save).not.toBeCalled();
+      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(memberRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).not.toHaveBeenCalled();
     });
   });
 });

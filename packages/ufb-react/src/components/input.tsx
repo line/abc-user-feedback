@@ -13,19 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+'use client';
+
 import type { ButtonHTMLAttributes, HTMLInputTypeAttribute } from 'react';
 import React, { useRef } from 'react';
-import { Slot, Slottable } from '@radix-ui/react-slot';
 import { cva } from 'class-variance-authority';
 
-import {
-  CAPTION_DEFAULT_ICON,
-  ICON_SIZE,
-  INPUT_CAPTION_ICON_SIZE,
-} from '../constants';
-import type { CaptionType, Radius, Size } from '../lib/types';
+import { ICON_SIZE } from '../constants';
+import type { Radius, Size } from '../lib/types';
 import { cn, composeRefs } from '../lib/utils';
-import type { IconNameType, IconProps } from './icon';
+import type { IconProps } from './icon';
 import { Icon } from './icon';
 import useTheme from './use-theme';
 
@@ -65,34 +62,9 @@ const inputVariants = cva('input', {
       medium: 'input-radius-medium',
       small: 'input-radius-small',
     },
-    error: {
-      true: 'input-error',
-      false: '',
-    },
     defaultVariants: {
       size: undefined,
       radius: undefined,
-      error: false,
-    },
-  },
-});
-
-const inputCaptionVariants = cva('input-caption', {
-  variants: {
-    variant: {
-      default: 'input-caption-default',
-      success: 'input-caption-success',
-      info: 'input-caption-info',
-      error: 'input-caption-error',
-    },
-    size: {
-      large: 'input-caption-large',
-      medium: 'input-caption-medium',
-      small: 'input-caption-small',
-    },
-    defaultVariants: {
-      size: undefined,
-      variant: 'default',
     },
   },
 });
@@ -121,7 +93,6 @@ interface TextInputProps
   size?: Size;
   type?: TextInputType;
   radius?: Radius;
-  error?: boolean;
 }
 
 const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
@@ -130,7 +101,6 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
       size,
       type = 'text',
       radius,
-      error = false,
       disabled = false,
       onFocus,
       onBlur,
@@ -168,7 +138,6 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           inputVariants({
             size: size ?? boxSize,
             radius: radius ?? themeRadius,
-            error,
             className,
           }),
         )}
@@ -178,58 +147,6 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
 );
 
 TextInput.displayName = 'TextInput';
-
-const InputLabel = React.forwardRef<
-  HTMLElement,
-  React.ComponentPropsWithoutRef<'strong'>
->((props, ref) => {
-  const { className, ...rest } = props;
-  return (
-    <strong ref={ref} className={cn('input-label', className)} {...rest} />
-  );
-});
-InputLabel.displayName = 'InputLabel';
-
-interface InputCaptionProps extends React.ComponentPropsWithoutRef<'span'> {
-  icon?: IconNameType;
-  variant?: CaptionType;
-  size?: Size;
-  asChild?: boolean;
-}
-
-const InputCaption = React.forwardRef<HTMLElement, InputCaptionProps>(
-  (props, ref) => {
-    const {
-      icon = undefined,
-      variant = 'default',
-      size,
-      className,
-      children,
-      asChild,
-      ...rest
-    } = props;
-    const { themeSize } = useTheme();
-    const Comp = asChild ? Slot : 'span';
-
-    return (
-      <Comp
-        ref={ref}
-        className={cn(
-          inputCaptionVariants({ size: size ?? themeSize, variant, className }),
-        )}
-        {...rest}
-      >
-        <Icon
-          name={icon ?? CAPTION_DEFAULT_ICON[variant]}
-          size={INPUT_CAPTION_ICON_SIZE[size ?? themeSize]}
-          className={cn('input-caption-icon')}
-        />
-        <Slottable>{children}</Slottable>
-      </Comp>
-    );
-  },
-);
-InputCaption.displayName = 'InputCaption';
 
 const inputIconVariants = cva('input-icon', {
   variants: {
@@ -333,8 +250,6 @@ export {
   InputField,
   InputBox,
   TextInput,
-  InputLabel,
-  InputCaption,
   InputClearButton,
   InputEyeButton,
   InputIcon,

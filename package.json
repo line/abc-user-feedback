@@ -1,10 +1,10 @@
 {
   "name": "abc-user-feedback",
   "private": true,
-  "packageManager": "pnpm@10.11.1",
+  "packageManager": "pnpm@10.15.0",
   "engines": {
-    "node": ">=22.11.0",
-    "pnpm": "^10.11.1"
+    "node": ">=22.19.0",
+    "pnpm": "^10.15.0"
   },
   "scripts": {
     "build": "turbo run build",
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@ufb/prettier-config": "workspace:*",
     "prettier": "catalog:",
-    "turbo": "^2.3.4",
+    "turbo": "^2.5.6",
     "typescript": "catalog:"
   },
   "prettier": "@ufb/prettier-config",

@@ -41,6 +41,7 @@ import { FieldModule } from './domains/admin/channel/field/field.module';
 import { OptionModule } from './domains/admin/channel/option/option.module';
 import { FeedbackModule } from './domains/admin/feedback/feedback.module';
 import { HistoryModule } from './domains/admin/history/history.module';
+import { AIModule } from './domains/admin/project/ai/ai.module';
 import { ApiKeyModule } from './domains/admin/project/api-key/api-key.module';
 import { CategoryModule } from './domains/admin/project/category/category.module';
 import { IssueTrackerModule } from './domains/admin/project/issue-tracker/issue-tracker.module';
@@ -83,6 +84,7 @@ export const domainModules = [
   FeedbackIssueStatisticsModule,
   APIModule,
   SchedulerLockModule,
+  AIModule,
 ] as (typeof AuthModule)[];
 
 @Module({

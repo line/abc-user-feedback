@@ -16,7 +16,7 @@
 import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { RadioCard, RadioCardGroup } from '@ufb/react';
+import { Icon, RadioCard, RadioCardGroup } from '@ufb/react';
 
 import { TextInput } from '@/shared';
 
@@ -40,8 +40,16 @@ const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
           setValue('oauthConfig.loginButtonType', v, { shouldDirty: true })
         }
       >
-        <RadioCard value="GOOGLE" icon="RiGoogleFill" title="Google Login" />
-        <RadioCard value="CUSTOM" icon="RiToolsFill" title="Custom Login" />
+        <RadioCard
+          value="GOOGLE"
+          icon={<Icon name="RiGoogleFill" />}
+          title="Google Login"
+        />
+        <RadioCard
+          value="CUSTOM"
+          icon={<Icon name="RiToolsFill" />}
+          title="Custom Login"
+        />
       </RadioCardGroup>
       <div className="flex flex-col gap-4">
         <TextInput

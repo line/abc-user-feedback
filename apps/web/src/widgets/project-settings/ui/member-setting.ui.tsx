@@ -282,7 +282,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
 
   return (
     <SettingTemplate
-      title={t('project-setting-menu.member-mgmt')}
+      title={t('v2.project-setting-menu.member-mgmt')}
       action={
         <>
           <Button
@@ -296,7 +296,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
             }
           >
             <Icon name="RiExchange2Fill" />
-            {t('project-setting-menu.role-mgmt')}
+            {t('v2.project-setting-menu.role-mgmt')}
           </Button>
           <Button
             disabled={!perms.includes('project_member_create')}

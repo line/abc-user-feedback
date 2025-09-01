@@ -18,3 +18,5 @@ export { default as FieldSettingSheet } from './field-setting-sheet.ui';
 export { default as FeedbackRequestCodePopover } from './feedback-request-code-popover.ui';
 export { default as PreviewFieldTable } from './preview-field-table.ui';
 export { default as FieldFormatLabel } from './field-format-label.ui';
+export { default as AiFieldOptionPopover } from './ai-field-option-popover.ui';
+export { default as SelectOptionListPopover } from './select-option-list-popover.ui';

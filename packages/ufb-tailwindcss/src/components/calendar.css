@@ -82,7 +82,7 @@
   @apply rounded-8 text-base-normal relative flex h-full w-full items-center justify-center overflow-hidden p-0 transition-colors aria-selected:opacity-100 [&:not(.calendar-day-selected)]:hover:bg-[var(--calendar-bg-hover)];
 }
 
-.calendar-day-selected {
+.calendar-day-selected:not(.calendar-day-outside) {
   @apply bg-[var(--calendar-bg-pressed)] text-[--calendar-fg-pressed];
 }
 
@@ -91,7 +91,7 @@
 }
 
 .calendar-day-outside {
-  @apply opacity-50 aria-selected:bg-[var(--calendar-bg-pressed)] aria-selected:text-[var(--calendar-fg-pressed)] aria-selected:opacity-100;
+  @apply pointer-events-none !opacity-50;
 }
 
 .calendar-day-disabled {

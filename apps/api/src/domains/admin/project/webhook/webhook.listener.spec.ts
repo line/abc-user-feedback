@@ -48,12 +48,12 @@ describe('webhook listener', () => {
         feedbackId: faker.number.int(),
       });
 
-      expect(httpService.post).toBeCalledTimes(
+      expect(httpService.post).toHaveBeenCalledTimes(
         webhookFixture.events.filter(
           (event) => event.type === EventTypeEnum.FEEDBACK_CREATION,
         ).length,
       );
-      expect(httpService.post).toBeCalledWith(
+      expect(httpService.post).toHaveBeenCalledWith(
         webhookFixture.url,
         expect.objectContaining({ event: EventTypeEnum.FEEDBACK_CREATION }),
         {
@@ -77,12 +77,12 @@ describe('webhook listener', () => {
         issueId: faker.number.int(),
       });
 
-      expect(httpService.post).toBeCalledTimes(
+      expect(httpService.post).toHaveBeenCalledTimes(
         webhookFixture.events.filter(
           (event) => event.type === EventTypeEnum.ISSUE_ADDITION,
         ).length,
       );
-      expect(httpService.post).toBeCalledWith(
+      expect(httpService.post).toHaveBeenCalledWith(
         webhookFixture.url,
         expect.objectContaining({ event: EventTypeEnum.ISSUE_ADDITION }),
         {
@@ -105,12 +105,12 @@ describe('webhook listener', () => {
         issueId: faker.number.int(),
       });
 
-      expect(httpService.post).toBeCalledTimes(
+      expect(httpService.post).toHaveBeenCalledTimes(
         webhookFixture.events.filter(
           (event) => event.type === EventTypeEnum.ISSUE_CREATION,
         ).length,
       );
-      expect(httpService.post).toBeCalledWith(
+      expect(httpService.post).toHaveBeenCalledWith(
         webhookFixture.url,
         expect.objectContaining({ event: EventTypeEnum.ISSUE_CREATION }),
         {
@@ -134,12 +134,12 @@ describe('webhook listener', () => {
         previousStatus: getRandomEnumValue(IssueStatusEnum),
       });
 
-      expect(httpService.post).toBeCalledTimes(
+      expect(httpService.post).toHaveBeenCalledTimes(
         webhookFixture.events.filter(
           (event) => event.type === EventTypeEnum.ISSUE_STATUS_CHANGE,
         ).length,
       );
-      expect(httpService.post).toBeCalledWith(
+      expect(httpService.post).toHaveBeenCalledWith(
         webhookFixture.url,
         expect.objectContaining({ event: EventTypeEnum.ISSUE_STATUS_CHANGE }),
         {

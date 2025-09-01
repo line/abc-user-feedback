@@ -79,8 +79,8 @@ describe('Opensearch Repository Test suite', () => {
 
       await osRepo.createIndex({ index });
 
-      expect(osClient.indices.create).toBeCalledTimes(1);
-      expect(osClient.indices.create).toBeCalledWith({
+      expect(osClient.indices.create).toHaveBeenCalledTimes(1);
+      expect(osClient.indices.create).toHaveBeenCalledWith({
         index: indexName,
         body: {
           settings: {
@@ -105,8 +105,8 @@ describe('Opensearch Repository Test suite', () => {
           },
         },
       });
-      expect(osClient.indices.putAlias).toBeCalledTimes(1);
-      expect(osClient.indices.putAlias).toBeCalledWith({
+      expect(osClient.indices.putAlias).toHaveBeenCalledTimes(1);
+      expect(osClient.indices.putAlias).toHaveBeenCalledWith({
         index: indexName,
         name: index,
       });
@@ -125,9 +125,9 @@ describe('Opensearch Repository Test suite', () => {
 
       await osRepo.putMappings(dto);
 
-      expect(osClient.indices.exists).toBeCalledTimes(1);
-      expect(osClient.indices.putMapping).toBeCalledTimes(1);
-      expect(osClient.indices.putMapping).toBeCalledWith({
+      expect(osClient.indices.exists).toHaveBeenCalledTimes(1);
+      expect(osClient.indices.putMapping).toHaveBeenCalledTimes(1);
+      expect(osClient.indices.putMapping).toHaveBeenCalledWith({
         index: dto.index,
         body: { properties: dto.mappings },
       });
@@ -141,12 +141,12 @@ describe('Opensearch Repository Test suite', () => {
         .mockResolvedValue({ statusCode: 404 } as never);
       jest.spyOn(osClient.indices, 'putMapping');
 
-      await expect(osRepo.putMappings(dto)).rejects.toThrowError(
+      await expect(osRepo.putMappings(dto)).rejects.toThrow(
         new NotFoundException('index is not found'),
       );
 
-      expect(osClient.indices.exists).toBeCalledTimes(1);
-      expect(osClient.indices.putMapping).not.toBeCalled();
+      expect(osClient.indices.exists).toHaveBeenCalledTimes(1);
+      expect(osClient.indices.putMapping).not.toHaveBeenCalled();
     });
   });
 
@@ -179,9 +179,9 @@ describe('Opensearch Repository Test suite', () => {
       const response = await osRepo.createData(dto);
 
       expect(response.id).toEqual(dto.id);
-      expect(osClient.indices.getMapping).toBeCalledTimes(1);
-      expect(osClient.index).toBeCalledTimes(1);
-      expect(osClient.index).toBeCalledWith({
+      expect(osClient.indices.getMapping).toHaveBeenCalledTimes(1);
+      expect(osClient.index).toHaveBeenCalledTimes(1);
+      expect(osClient.index).toHaveBeenCalledWith({
         id: dto.id,
         index: 'channel_' + index,
         body: dto.data,
@@ -213,13 +213,13 @@ describe('Opensearch Repository Test suite', () => {
         },
       } as never);
 
-      await expect(osRepo.createData(dto)).rejects.toThrowError(
+      await expect(osRepo.createData(dto)).rejects.toThrow(
         new NotFoundException('index is not found'),
       );
 
-      expect(osClient.indices.exists).toBeCalledTimes(1);
-      expect(osClient.indices.getMapping).not.toBeCalled();
-      expect(osClient.index).not.toBeCalled();
+      expect(osClient.indices.exists).toHaveBeenCalledTimes(1);
+      expect(osClient.indices.getMapping).not.toHaveBeenCalled();
+      expect(osClient.index).not.toHaveBeenCalled();
     });
     it('creating data fails with invalid data', async () => {
       const index = faker.number.int().toString();
@@ -250,13 +250,13 @@ describe('Opensearch Repository Test suite', () => {
         },
       } as never);
 
-      await expect(osRepo.createData(dto)).rejects.toThrowError(
+      await expect(osRepo.createData(dto)).rejects.toThrow(
         new InternalServerErrorException('error!!!'),
       );
 
-      expect(osClient.indices.exists).toBeCalledTimes(1);
-      expect(osClient.indices.getMapping).toBeCalledTimes(1);
-      expect(osClient.index).not.toBeCalled();
+      expect(osClient.indices.exists).toHaveBeenCalledTimes(1);
+      expect(osClient.indices.getMapping).toHaveBeenCalledTimes(1);
+      expect(osClient.index).not.toHaveBeenCalled();
     });
   });
 

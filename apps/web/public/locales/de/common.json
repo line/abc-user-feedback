@@ -31,22 +31,13 @@
       },
       "same-key": "Geben Sie den gleichen Wert wie den Schlüssel ein",
       "feedback-request-code": "Feedback-Anforderungscode",
-      "option-info": "Optionsinformationen",
       "field-mgmt": {
         "preview": "Vorschau"
       },
       "dialog": {
-        "create-role": {
-          "title": "Rolle erstellen",
-          "description": "Bitte geben Sie einen neuen Rollennamen ein."
-        },
         "delete-option": {
           "title": "Option löschen",
           "description": "Dies wird keine Auswirkungen auf Optionen in vorherigem Feedback haben."
-        },
-        "delete-role": {
-          "title": "Rolle löschen",
-          "description": "Sind Sie sicher, dass Sie diese Rolle löschen möchten?\nMitglieder, die dieser Rolle zugewiesen sind, werden ebenfalls entfernt."
         },
         "add-field": {
           "title": "Feld hinzufügen"
@@ -216,15 +207,6 @@
     "sign-up-mgmt": "Anmeldungs- und Registrierungsverwaltung",
     "user-mgmt": "Benutzer-Verwaltung"
   },
-  "project-setting-menu": {
-    "project-info": "Projekt-Informationen",
-    "member-mgmt": "Mitglieder-Verwaltung",
-    "role-mgmt": "Rollen-Verwaltung",
-    "api-key-mgmt": "API-Schlüsselverwaltung",
-    "issue-tracker-mgmt": "Problem-Verfolgungs-Verwaltung",
-    "webhook-integration": "Webhook-Integration",
-    "delete-project": "Projekt löschen"
-  },
   "channel-setting-menu": {
     "channel-info": "Kanal-Informationen",
     "field-mgmt": "Feld-Verwaltung",
@@ -249,7 +231,11 @@
     "field": "Sie können Feedback-Daten, die im Channel gesammelt werden sollen, in Field-Einheiten definieren. Bitte fügen Sie Fields unter Berücksichtigung des Datentyps und der Eigenschaften hinzu.",
     "image-config": "Beim Sammeln von Feedback im Image-Format können Sie hier die Image Storage-Integration einrichten und die Whitelist für Image URL-Domains konfigurieren. Weitere Details finden Sie in der Image <docs>Docs</docs>.",
     "field-preview": "Bietet eine Vorschau darauf, wie Ihr Feedback basierend auf den registrierten Field-Informationen aussehen wird. Die Vorschau verwendet Beispieldaten zur Veranschaulichung.",
-    "webhook": "Dies ist der Bildschirm, auf dem Sie Webhook-Integration entsprechend den in User Feedback auftretenden Event-Triggern einrichten können. Weitere Details finden Sie in der Webhook <docs>Docs</docs>."
+    "webhook": "Dies ist der Bildschirm, auf dem Sie Webhook-Integration entsprechend den in User Feedback auftretenden Event-Triggern einrichten können. Weitere Details finden Sie in der Webhook <docs>Docs</docs>.",
+    "ai-setting": "Dies ist der Bildschirm zur Einrichtung der Integration von Generative AI. Um AI-Funktionen nutzen zu können, müssen erforderliche Informationen eingegeben werden.",
+    "ai-usage": "Dies ist der Bildschirm zur Überprüfung und Verwaltung der Token-Nutzung im Zusammenhang mit der Nutzung von AI-Funktionen.",
+    "ai-field-template": "Dies ist der Bildschirm zur Definition des Verhaltens von AI-Feldern. Sie können Anweisungen über Vorlagen eingeben und die erweiterten Einstellungen anpassen.",
+    "ai-issue-recommendation": "Dies ist der Bildschirm zur Einrichtung der AI-Issue-Empfehlungsfunktion. Nach der detaillierten Konfiguration pro Channel können Sie die AI-Issue-Empfehlungsfunktion nutzen."
   },
   "hint": {
     "required": "Erforderlich",
@@ -297,7 +283,9 @@
       "next": "Weiter",
       "previous": "Zurück",
       "addFilter": "Filter hinzufügen",
-      "edit": "Bearbeiten"
+      "edit": "Bearbeiten",
+      "process-ai-test": "AI Test ausführen",
+      "setting": "Einstellungen"
     },
     "project-setting-menu": {
       "project-info": "Project-Informationen",
@@ -306,7 +294,7 @@
       "api-key-mgmt": "API Key-Verwaltung",
       "issue-tracker-mgmt": "Issue Tracker-Verwaltung",
       "webhook-integration": "Webhook-Integration",
-      "delete-project": "Project löschen"
+      "generative-ai-setting": "Generative AI-Integration"
     },
     "channel-setting-menu": {
       "channel-info": "Channel-Informationen",
@@ -340,6 +328,7 @@
     },
     "text": {
       "no-data": {
+        "default": "Es liegen noch keine Daten vor.",
         "api-key": "Es wurde noch kein API Key generiert.",
         "member": "Es wurden noch keine Member registriert.",
         "channel": "Es wurde noch kein Channel erstellt.",
@@ -367,7 +356,10 @@
       "request-email-auth": "Authentifizierung wurde angefordert.",
       "all-image-url-allow": "Alle Image-URLs sind erlaubt.",
       "select-project": "Bitte wählen Sie ein Projekt aus.",
-      "no-category": "Keine Kategorie"
+      "no-category": "Keine Kategorie",
+      "token-threshold-percentage": "{{percentage}}% der Obergrenze erreicht",
+      "ai-issue-ready": "Ich werde passende Probleme für das Feedback empfehlen.",
+      "ai-issue-pending": "AI analysiert die Probleme..."
     },
     "create-tenant": {
       "tenant": {
@@ -386,11 +378,23 @@
     "placeholder": {
       "select": "Bitte auswählen.",
       "text": "Bitte eingeben.",
-      "text-or-generate": "Bitte eingeben oder generieren."
+      "text-or-generate": "Bitte eingeben oder generieren.",
+      "ai-endpoint-url": "Bitte geben Sie die Endpoint-URL ein, falls eine separate Konfiguration erforderlich ist.",
+      "system-prompt": "Bitte geben Sie zusätzliche Informationen ein, die das generative KI-Modell berücksichtigen soll.",
+      "ai-field-template-prompt": "Bitte geben Sie Anweisungen ein, wie das generative KI-Modell die Eingabe verarbeiten soll.",
+      "ai-field-reccommendation-prompt": "Bitte geben Sie zusätzliche Anweisungen ein, die an das generative KI-Modell gesendet werden sollen."
     },
     "toast": {
       "success": "Erfolgreich verarbeitet.",
-      "copy": "In die Zwischenablage kopiert."
+      "copy": "In die Zwischenablage kopiert.",
+      "ai-usage-limit-approaching": {
+        "title": "AI-Nutzungslimit erreicht",
+        "description": "Token-Nutzung hat {{percentage}}% des Limits erreicht."
+      },
+      "ai-function-terminated": {
+        "title": "AI-Funktion beendet",
+        "description": "Die AI-Ausführung wurde aufgrund der Überschreitung des Token-Nutzungslimits gestoppt."
+      }
     },
     "webhook-card": {
       "feedback-creation": {
@@ -417,7 +421,20 @@
     },
     "description": {
       "create-project": "Project wurde erfolgreich erstellt.\nAls Nächstes müssen Sie einen Channel erstellen, um Feedback zu sammeln.\nFahren Sie mit 'Channel erstellen' zum nächsten Schritt fort.",
-      "create-channel": "Channel wurde erfolgreich erstellt.\nSie können jetzt Benutzerfeedback sammeln und verwalten.\nKlicken Sie auf 'Starten', um die vollständige Funktionalität zu nutzen."
+      "create-channel": "Channel wurde erfolgreich erstellt.\nSie können jetzt Benutzerfeedback sammeln und verwalten.\nKlicken Sie auf 'Starten', um die vollständige Funktionalität zu nutzen.",
+      "remaining-token-amount": "Monatliche verbleibende Tokenmenge überprüfen, bitte zuerst ein Limit festlegen.",
+      "token-threshold": "Monatliches Token-Nutzungsobergrenze festlegen. Wenn die Obergrenze überschritten wird, wird die KI-Funktionalität gestoppt.",
+      "pre-limit-notification": "Wenn die Token-Nutzung 80% der festgelegten Obergrenze erreicht, wird eine Benachrichtigung gesendet.",
+      "ai-field-template-form": "Grundlegende Informationen für die Vorlage festlegen.",
+      "ai-field-template-advanced-configuration": "Sie können das verbundene Modell und die Temperatur der Vorlage ändern.",
+      "ai-field-template-playground": "Sie können die AI-Ergebnisse im Voraus überprüfen, indem Sie die Vorlage und Testdaten verwenden.",
+      "ai-issue-recommendation-form": "Grundlegende Informationen für die AI-Issue-Empfehlung festlegen.",
+      "ai-issue-recommendation-enable": "Hier können Sie die Nutzung der AI-Issue-Empfehlungsfunktion aktivieren oder deaktivieren.",
+      "ai-issue-recommendation-advanced-configuration": "Sie können das verbundene Modell, die Temperatur und die Datenreferenzmenge der AI-Issue-Empfehlung ändern.",
+      "ai-issue-recommendation-data-reference-amount": "Hier können Sie die Menge der Issue-Daten anpassen, die das generative KI-Modell für die AI-Issue-Empfehlung referenzieren soll.",
+      "ai-issue-recommendation-playground": "Sie können die AI-Issue-Empfehlungseinstellungen und Testdaten verwenden, um die AI-Ergebnisse im Voraus zu überprüfen.",
+      "ai-field-template-auto-processing": "Automatisches Ausführen von AI-Feldern",
+      "ai-issue-recommendation-setting-required": "Die AI-Issue-Empfehlungsfunktion erfordert eine Konfiguration."
     },
     "login-setting": {
       "oauth-description": "Bietet eine Möglichkeit, sich mit OAuth2.0 anzumelden.",

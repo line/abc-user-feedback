@@ -88,18 +88,18 @@ describe('auth service ', () => {
       const timeoutTime = await authService.sendEmailCode(dto);
 
       expect(new Date(timeoutTime) > new Date()).toEqual(true);
-      expect(MockEmailVerificationMailingService.send).toBeCalledTimes(1);
+      expect(MockEmailVerificationMailingService.send).toHaveBeenCalledTimes(1);
     });
     it('sending a code by email succeeds with a duplicate email', async () => {
       const duplicateEmail = emailFixture;
       dto.email = duplicateEmail;
       jest.spyOn(MockEmailVerificationMailingService, 'send');
 
-      await expect(authService.sendEmailCode(dto)).rejects.toThrowError(
+      await expect(authService.sendEmailCode(dto)).rejects.toThrow(
         UserAlreadyExistsException,
       );
 
-      expect(MockEmailVerificationMailingService.send).not.toBeCalled();
+      expect(MockEmailVerificationMailingService.send).not.toHaveBeenCalled();
     });
   });
 
@@ -126,7 +126,7 @@ describe('auth service ', () => {
       dto.email = faker.internet.email();
       dto.password = passwordFixture;
 
-      await expect(authService.validateEmailUser(dto)).rejects.toThrowError(
+      await expect(authService.validateEmailUser(dto)).rejects.toThrow(
         UserNotFoundException,
       );
     });
@@ -136,7 +136,7 @@ describe('auth service ', () => {
       dto.email = faker.internet.email();
       dto.password = invalidPassword;
 
-      await expect(authService.validateEmailUser(dto)).rejects.toThrowError(
+      await expect(authService.validateEmailUser(dto)).rejects.toThrow(
         PasswordNotMatchException,
       );
     });
@@ -162,11 +162,11 @@ describe('auth service ', () => {
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
       jest.spyOn(userRepo, 'save');
 
-      await expect(authService.signUpEmailUser(dto)).rejects.toThrowError(
+      await expect(authService.signUpEmailUser(dto)).rejects.toThrow(
         NotVerifiedEmailException,
       );
 
-      expect(userRepo.save).not.toBeCalled();
+      expect(userRepo.save).not.toHaveBeenCalled();
     });
     it('signing up by an email fails with a not verification requested email', async () => {
       const dto = new SignUpEmailUserDto();
@@ -176,11 +176,11 @@ describe('auth service ', () => {
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
       jest.spyOn(userRepo, 'save');
 
-      await expect(authService.signUpEmailUser(dto)).rejects.toThrowError(
+      await expect(authService.signUpEmailUser(dto)).rejects.toThrow(
         new BadRequestException('must request email verification'),
       );
 
-      expect(userRepo.save).not.toBeCalled();
+      expect(userRepo.save).not.toHaveBeenCalled();
     });
   });
 
@@ -218,7 +218,7 @@ describe('auth service ', () => {
         UserBlockedException,
       );
 
-      expect(MockJwtService.sign).not.toBeCalled();
+      expect(MockJwtService.sign).not.toHaveBeenCalled();
     });
   });
 
@@ -266,14 +266,14 @@ describe('auth service ', () => {
     it('getting an oauth login url fails with no oauth using tenant', async () => {
       tenantRepo.setUseOAuth(false, null);
 
-      await expect(authService.getOAuthLoginURL()).rejects.toThrowError(
+      await expect(authService.getOAuthLoginURL()).rejects.toThrow(
         new BadRequestException('OAuth login is disabled.'),
       );
     });
     it('getting an oauth login url fails with no oauthconfig tenant', async () => {
       tenantRepo.setUseOAuth(true, null);
 
-      await expect(authService.getOAuthLoginURL()).rejects.toThrowError(
+      await expect(authService.getOAuthLoginURL()).rejects.toThrow(
         new BadRequestException('OAuth Config is required.'),
       );
     });

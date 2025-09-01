@@ -91,7 +91,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
         className="flex flex-col gap-4"
         onSubmit={handleSubmit((value) => {
           const { role, user, createdAt, id } = value;
-          if (!user) return;
+          if (!user || !role) return;
           onSubmit({ role, user, createdAt, id });
         })}
       >

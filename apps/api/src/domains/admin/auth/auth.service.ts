@@ -169,11 +169,12 @@ export class AuthService {
   async signUpOAuthUser(dto: SignUpOauthUserDto) {
     const { email, projectName, roleName } = dto;
 
+    const user = await this.createUserService.createOAuthUser({ email });
+    if (!projectName || !roleName) return;
     const role = await this.roleService.findByProjectNameAndRoleName(
       projectName,
       roleName,
     );
-    const user = await this.createUserService.createOAuthUser({ email });
 
     await this.memberService.create({ roleId: role.id, userId: user.id });
   }

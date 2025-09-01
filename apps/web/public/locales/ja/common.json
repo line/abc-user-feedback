@@ -31,22 +31,13 @@
       },
       "same-key": "Key と同様に入力",
       "feedback-request-code": "フィードバック要求コード",
-      "option-info": "オプション情報",
       "field-mgmt": {
         "preview": "プレビュー"
       },
       "dialog": {
-        "create-role": {
-          "title": "Role 生成",
-          "description": "新規Role Nameを入力してください。"
-        },
         "delete-option": {
           "title": "オプションの削除",
           "description": "以前のフィードバックのオプションには適用されません。"
-        },
-        "delete-role": {
-          "title": "Role 削除",
-          "description": "Roleを削除しますか？\n該当Roleを持つ会員も一緒にいなくなります。"
         },
         "add-field": {
           "title": "Field 追加"
@@ -216,15 +207,6 @@
     "sign-up-mgmt": "Login管理",
     "user-mgmt": "User管理"
   },
-  "project-setting-menu": {
-    "project-info": "Project情報",
-    "member-mgmt": "Member管理",
-    "role-mgmt": "Role管理",
-    "api-key-mgmt": "API Key管理",
-    "issue-tracker-mgmt": "Issue Tracker管理",
-    "webhook-integration": "Webhook連動",
-    "delete-project": "Project削除"
-  },
   "channel-setting-menu": {
     "channel-info": "Channel情報",
     "field-mgmt": "Field管理",
@@ -249,7 +231,11 @@
     "field": "Channelで収集するフィードバックデータをField単位で定義できます。データタイプと属性を考慮してFieldを追加してください。",
     "image-config": "Image形式のフィードバックを収集する場合、Image Storageとの連携を設定し、Image URLドメインのホワイトリストを設定できる画面です。詳しくはImage <docs>Docs</docs>をご参照ください。",
     "field-preview": "登録したField情報に基づいてフィードバックがどのように表示されるかをプレビュー表示します。プレビューではサンプルデータを使用して表示しています。",
-    "webhook": "User Feedbackで発生するイベントトリガーに応じてWebhook連携を設定できる画面です。詳しくはWebhook <docs>Docs</docs>をご参照ください。"
+    "webhook": "User Feedbackで発生するイベントトリガーに応じてWebhook連携を設定できる画面です。詳しくはWebhook <docs>Docs</docs>をご参照ください。",
+    "ai-setting": "生成型AIを連携する設定画面です。AI機能を使用するためには必須情報が入力されている必要があります。",
+    "ai-usage": "AI機能使用に伴うトークン使用量を確認・管理する画面です。",
+    "ai-field-template": "AIフィールドの動作を定義する画面です。テンプレートを通じて指示を入力し、詳細設定を調整できます。",
+    "ai-issue-recommendation": "AIイシュー推薦機能を設定する画面です。Channelごとの詳細設定後にAIイシュー推薦機能を使用できます。"
   },
   "hint": {
     "required": "必須入力対象です。",
@@ -297,7 +283,9 @@
       "next": "次へ",
       "previous": "前へ",
       "addFilter": "フィルタ追加",
-      "edit": "編集"
+      "edit": "編集",
+      "process-ai-test": "AIテスト実行",
+      "setting": "設定する"
     },
     "project-setting-menu": {
       "project-info": "Project情報",
@@ -306,7 +294,7 @@
       "api-key-mgmt": "API Key管理",
       "issue-tracker-mgmt": "Issue Tracker管理",
       "webhook-integration": "Webhook連携",
-      "delete-project": "Project削除"
+      "generative-ai-setting": "Generative AI設定"
     },
     "channel-setting-menu": {
       "channel-info": "Channel情報",
@@ -340,6 +328,7 @@
     },
     "text": {
       "no-data": {
+        "default": "まだデータはありません。",
         "api-key": "生成されたAPI Keyがありません。",
         "member": "登録されたMemberがいません。",
         "channel": "作成されたChannelがありません。",
@@ -367,7 +356,10 @@
       "request-email-auth": "認証が要求されました。",
       "all-image-url-allow": "すべてのImage URLを許可します。",
       "select-project": "Projectを選択してください。",
-      "no-category": "カテゴリがありません。"
+      "no-category": "カテゴリがありません。",
+      "token-threshold-percentage": "上限値の{{percentage}}%に達しました",
+      "ai-issue-ready": "フィードバックに合ったイシューを推薦します",
+      "ai-issue-pending": "AIがイシューを分析中です..."
     },
     "create-tenant": {
       "tenant": {
@@ -386,11 +378,23 @@
     "placeholder": {
       "select": "選択してください",
       "text": "入力してください",
-      "text-or-generate": "入力または生成してください"
+      "text-or-generate": "入力または生成してください",
+      "ai-endpoint-url": "別のEndpoint URL設定が必要な場合にのみ入力してください",
+      "system-prompt": "生成型AIが追加で参照すべき内容がある場合は入力してください",
+      "ai-field-template-prompt": "生成型AIがどのように処理すべきかの指示を入力してください",
+      "ai-field-reccommendation-prompt": "生成型AIに追加で要求する指示がある場合は入力してください"
     },
     "toast": {
       "success": "正常に処理されました",
-      "copy": "クリップボードにコピーしました"
+      "copy": "クリップボードにコピーしました",
+      "ai-usage-limit-approaching": {
+        "title": "AI使用量の上限に近づいています",
+        "description": "トークン使用量が上限の{{percentage}}%に達しました。"
+      },
+      "ai-function-terminated": {
+        "title": "AI機能が中断されました",
+        "description": "AI実行がトークン使用量制限を超えたため停止されました。"
+      }
     },
     "webhook-card": {
       "feedback-creation": {
@@ -417,7 +421,20 @@
     },
     "description": {
       "create-project": "Projectの作成が完了しました。\n次は、フィードバックを収集するためにChannelを作成する必要があります。\n「Channel作成」から次のステップへ進んでください。",
-      "create-channel": "Channelの作成が完了しました。\nこれでユーザーフィードバックの収集・管理の準備が整いました。\n「はじめる」から本格的にご利用ください。"
+      "create-channel": "Channelの作成が完了しました。\nこれでユーザーフィードバックの収集・管理の準備が整いました。\n「はじめる」から本格的にご利用ください。",
+      "remaining-token-amount": "月間残りトークン量を確認するには、まず上限値を設定してください。",
+      "token-threshold": "月間トークン使用量に対する上限値を設定します。上限を超えるとAI機能が停止します。",
+      "pre-limit-notification": "設定した上限値の80%に達すると通知が送信されます。",
+      "ai-field-template-form": "テンプレートの基本情報を設定します。",
+      "ai-field-template-advanced-configuration": "テンプレートの連携ModelとTemperatureを変更できます。",
+      "ai-field-template-playground": "テンプレートとテストデータを活用してAI結果を事前に確認できます。",
+      "ai-issue-recommendation-form": "AIイシュー推薦のための基本情報を設定します。",
+      "ai-issue-recommendation-enable": "AIイシュー推薦機能の使用有無を設定します。",
+      "ai-issue-recommendation-advanced-configuration": "AIイシュー推薦の連携Model、Temperature、Data Reference Amountを変更できます。",
+      "ai-issue-recommendation-data-reference-amount": "AIイシュー推薦のために生成型AIが参照すべきイシューデータの量を調整できます。",
+      "ai-issue-recommendation-playground": "AIイシュー推薦設定とテストデータを活用してAI結果を事前に確認できます。",
+      "ai-field-template-auto-processing": "AIフィールドを自動で実行します。",
+      "ai-issue-recommendation-setting-required": "AIイシュー推薦機能を使用するには設定が必要です。設定を行ってください。"
     },
     "login-setting": {
       "oauth-description": "OAuth2.0を活用してログインできる方法を提供します。",

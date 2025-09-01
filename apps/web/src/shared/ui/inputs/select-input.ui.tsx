@@ -15,29 +15,33 @@
  */
 import type { IconNameType, Size } from '@ufb/react';
 import {
+  Button,
+  Caption,
+  Icon,
+  Label,
   Select,
-  SelectCaption,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@ufb/react';
 
 interface Props {
   placeholder?: string;
-  options: { label: string; value: string; icon?: IconNameType }[];
+  options: {
+    label: string;
+    value: string;
+    icon?: IconNameType;
+    disabled?: boolean;
+  }[];
   label?: string;
   value?: string;
-  values?: string[];
   onChange?: (value?: string) => void;
-  onValuesChange?: (value?: string[]) => void;
   disabled?: boolean;
   required?: boolean;
-  type?: 'single' | 'multiple';
   error?: string;
   size?: Size;
+  clearable?: boolean;
 }
 
 const SelectInput: React.FC<Props> = (props) => {
@@ -46,44 +50,49 @@ const SelectInput: React.FC<Props> = (props) => {
     options,
     label,
     value,
-    values,
     onChange,
-    onValuesChange,
     disabled,
     required,
-    type = 'single',
     error,
     size,
+    clearable = false,
   } = props;
 
   return (
     <Select
       value={value}
-      values={values}
       onValueChange={onChange}
-      onValuesChange={onValuesChange}
       disabled={disabled}
-      type={type}
       size={size}
     >
       {label && (
-        <SelectLabel>
+        <Label>
           {label} {required && <span className="text-tint-red">*</span>}
-        </SelectLabel>
+        </Label>
       )}
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
+        {clearable && !!value && (
+          <Button variant="ghost" onClick={(e) => e.stopPropagation()}>
+            <Icon
+              name="RiCloseCircleFill"
+              className="z-20"
+              onClick={() => {
+                onChange?.(undefined);
+              }}
+            />
+          </Button>
+        )}
       </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {options.map(({ label, value, icon }) => (
-            <SelectItem key={value} value={value} icon={icon}>
-              {label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
+      <SelectContent className="max-h-[200px]">
+        {options.map(({ label, value, icon, disabled }) => (
+          <SelectItem key={value} value={value} disabled={disabled}>
+            {icon && <Icon name={icon} size={16} className="mr-2" />}
+            {label}
+          </SelectItem>
+        ))}
       </SelectContent>
-      {error && <SelectCaption variant="error">{error}</SelectCaption>}
+      {error && <Caption variant="error">{error}</Caption>}
     </Select>
   );
 };

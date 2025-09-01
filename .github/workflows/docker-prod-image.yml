@@ -1,11 +1,9 @@
-name: Docker Prod Image CI
+name: Docker Dev Image CI
 
 on:
   push:
     tags:
-      - '*'
-      - '!**-beta'
-      - '!**-dev'
+      - '**-dev'
 
 jobs:
   build:
@@ -25,9 +23,10 @@ jobs:
         with:
           images: line/abc-user-feedback-api
           tags: |
+            type=ref,event=branch
+            type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=raw,value=latest
 
       - name: Docker meta for Web
         id: web-meta
@@ -35,9 +34,10 @@ jobs:
         with:
           images: line/abc-user-feedback-web
           tags: |
+            type=ref,event=branch
+            type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=raw,value=latest
 
       - name: Login to DockerHub
         if: github.event_name != 'pull_request'

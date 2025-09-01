@@ -17,19 +17,23 @@ import { memo } from 'react';
 import dayjs from 'dayjs';
 import Linkify from 'linkify-react';
 
-import { Badge } from '@ufb/react';
+import { Badge, Icon, Tag } from '@ufb/react';
 
 import { DATE_TIME_FORMAT, ExpandableText, ImagePreviewButton } from '@/shared';
+import { AICell } from '@/entities/ai';
 import type { FieldInfo } from '@/entities/field';
+
+import { useAIFIeldFeedbackCellLoading } from '..';
 
 interface IProps {
   isExpanded: boolean;
   field: FieldInfo;
   value: unknown;
+  feedbackId: number;
 }
 
 const FeedbackCell: React.FC<IProps> = memo((props) => {
-  const { isExpanded, field, value } = props;
+  const { isExpanded, field, value, feedbackId } = props;
 
   return (
     <ExpandableText isExpanded={isExpanded}>
@@ -67,7 +71,22 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
             </Badge>
           )}
           {field.format === 'images' && (
-            <ImagePreviewButton urls={value as string[]} />
+            <>
+              {Array.isArray(value) && (value as string[]).length > 0 ?
+                <ImagePreviewButton urls={value}>
+                  <Tag
+                    aria-label="View images"
+                    variant="outline"
+                    size="small"
+                    className="cursor-pointer gap-1"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Icon name="RiImageFill" size={12} />
+                    Image
+                  </Tag>
+                </ImagePreviewButton>
+              : '-'}
+            </>
           )}
           {field.format === 'text' && (
             <Linkify
@@ -85,9 +104,40 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
           )}
           {field.format === 'keyword' && value}
           {field.format === 'number' && value}
+          {field.format === 'aiField' && (
+            <FeedbackAIFieldCell
+              value={
+                value as
+                  | { status: 'loading' | 'success' | 'error'; message: string }
+                  | undefined
+              }
+              feedbackId={feedbackId}
+              field={field}
+            />
+          )}
         </>
       }
     </ExpandableText>
+  );
+});
+
+const FeedbackAIFieldCell: React.FC<{
+  value?: { status: 'loading' | 'success' | 'error'; message: string };
+  feedbackId: number;
+  field: FieldInfo;
+}> = memo((props) => {
+  const { field, value, feedbackId } = props;
+  const loadingFeedbackIds = useAIFIeldFeedbackCellLoading(
+    (state) => state.loadingFeedbackIds,
+  );
+
+  return (
+    <AICell
+      value={value}
+      isLoading={
+        loadingFeedbackIds.has(feedbackId) && field.status === 'ACTIVE'
+      }
+    />
   );
 });
 

@@ -17,7 +17,6 @@
   --accordion-fg: var(--fg-neutral-primary);
   --accordion-border: var(--border-neutral-tertiary);
   --accordion-bg: var(--bg-primary);
-  --accordion-bg-filled: var(--bg-tertiary);
 
   @apply h-fit overflow-hidden bg-[var(--accordion-bg)] text-[var(--accordion-fg)];
 }
@@ -36,10 +35,6 @@
 
 .accordion-trigger {
   @apply text-base-strong flex w-full items-center justify-between p-4 text-left transition-all [&>svg]:shrink-0 [&>svg]:transition-transform [&>svg]:duration-75 [&[data-state=open]>svg]:rotate-180;
-}
-
-.accordion-trigger-bg {
-  @apply bg-[var(--accordion-bg-filled)];
 }
 
 .accordion-trigger-align-left {

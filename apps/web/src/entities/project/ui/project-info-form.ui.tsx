@@ -16,7 +16,9 @@
 import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { TextInput } from '@/shared';
+import { FormField } from '@ufb/react';
+
+import { FormInput } from '@/shared/ui/form-inputs';
 
 import type { ProjectInfo } from '../project.type';
 import TimezoneSelectBox from './timezone-select-box';
@@ -30,35 +32,55 @@ const ProjectInfoForm: React.FC<IProps> = (props) => {
   const { type = 'create', readOnly = false } = props;
   const { t } = useTranslation();
 
-  const { register, setValue, watch, formState } =
-    useFormContext<ProjectInfo>();
+  const { control } = useFormContext<ProjectInfo>();
 
   return (
     <div className="flex flex-col gap-4">
       {type === 'update' && (
-        <TextInput label="ID" {...register('id')} disabled />
+        <FormField
+          name="id"
+          control={control}
+          render={({ field }) => (
+            <FormInput
+              label="ID"
+              type="number"
+              placeholder={t('v2.placeholder.text')}
+              disabled
+              {...field}
+            />
+          )}
+        />
       )}
-      <TextInput
-        label="Name"
-        {...register('name')}
-        placeholder={t('v2.placeholder.text')}
-        required
-        disabled={readOnly}
-        error={formState.errors.name?.message}
+      <FormField
+        name="name"
+        control={control}
+        render={({ field }) => (
+          <FormInput
+            label="Name"
+            placeholder={t('v2.placeholder.text')}
+            required
+            {...field}
+          />
+        )}
       />
-      <TextInput
-        label="Description"
-        {...register('description')}
-        placeholder={t('v2.placeholder.text')}
-        disabled={readOnly}
-        error={formState.errors.description?.message}
+      <FormField
+        name="description"
+        control={control}
+        render={({ field }) => (
+          <FormInput
+            label="Description"
+            placeholder={t('v2.placeholder.text')}
+            disabled={readOnly}
+            {...field}
+          />
+        )}
       />
-      <TimezoneSelectBox
-        value={watch('timezone')}
-        onChange={(value) =>
-          value && setValue('timezone', value, { shouldDirty: true })
-        }
-        disabled={readOnly || type === 'update'}
+      <FormField
+        name="timezone"
+        control={control}
+        render={({ field }) => (
+          <TimezoneSelectBox disabled={readOnly} {...field} />
+        )}
       />
     </div>
   );

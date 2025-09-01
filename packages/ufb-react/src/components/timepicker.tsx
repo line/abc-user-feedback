@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+'use client';
+
 import * as React from 'react';
-import { useImperativeHandle } from 'react';
 
 import { cn } from '../lib/utils';
 import { Icon } from './icon';
@@ -35,6 +36,7 @@ interface PeriodSelectorProps {
   onDateChange?: (date: Date | undefined) => void;
   onRightFocus?: () => void;
   onLeftFocus?: () => void;
+  className?: string;
 }
 
 const TimePeriodSelect = React.forwardRef<
@@ -42,7 +44,15 @@ const TimePeriodSelect = React.forwardRef<
   PeriodSelectorProps
 >(
   (
-    { period, setPeriod, date, onDateChange, onLeftFocus, onRightFocus },
+    {
+      period,
+      setPeriod,
+      date,
+      onDateChange,
+      onLeftFocus,
+      onRightFocus,
+      className,
+    },
     ref,
   ) => {
     const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
@@ -77,8 +87,8 @@ const TimePeriodSelect = React.forwardRef<
         onValueChange={(value: Period) => handleValueChange(value)}
       >
         <SelectTrigger
+          className={className}
           ref={ref}
-          className="min-w-[4.375rem]"
           onKeyDown={handleKeyDown}
         >
           <SelectValue />
@@ -239,7 +249,7 @@ const TimePicker = React.forwardRef<TimePickerRef, TimePickerProps>(
       date && date.getHours() >= 12 ? 'PM' : 'AM',
     );
 
-    useImperativeHandle(
+    React.useImperativeHandle(
       ref,
       () => ({
         minuteRef: minuteRef.current,
@@ -433,7 +443,7 @@ function set12Hours(date: Date, value: string, period: Period) {
 }
 
 type TimePickerType = 'minutes' | 'seconds' | 'hours' | '12hours';
-type Period = 'AM' | 'PM';
+export type Period = 'AM' | 'PM';
 
 function setDateByType(
   date: Date,
@@ -519,5 +529,5 @@ function display12HourValue(hours: number) {
 
 // ---------- utils end ----------
 
-export { TimePicker, TimePickerInput, TimePeriodSelect };
-export type { TimePickerProps, TimePickerInputProps, PeriodSelectorProps };
+export { TimePickerInput, TimePeriodSelect };
+export type { TimePickerInputProps, PeriodSelectorProps };
