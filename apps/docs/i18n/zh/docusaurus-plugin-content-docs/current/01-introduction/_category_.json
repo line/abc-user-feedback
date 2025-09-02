@@ -1,0 +1,8 @@
+{
+  "label": "소개",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "소개 대한 문서입니다."
+  }
+}

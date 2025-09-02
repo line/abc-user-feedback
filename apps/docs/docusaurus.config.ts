@@ -26,8 +26,8 @@ const config: Config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'ko',
-    locales: ['ko'],
+    defaultLocale: 'en',
+    locales: ['en', 'zh', 'de', 'ja', 'ko'],
   },
 
   presets: [
@@ -61,6 +61,10 @@ const config: Config = {
         {
           href: 'https://github.com/line/abc-user-feedback',
           label: 'GitHub',
+          position: 'right',
+        },
+        {
+          type: 'localeDropdown',
           position: 'right',
         },
       ],

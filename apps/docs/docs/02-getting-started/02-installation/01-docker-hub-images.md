@@ -1,60 +1,53 @@
 ---
 sidebar_position: 1
-title: 'Docker Hub 이미지'
-description: 'Docker Hub 이미지를 사용하여 ABC User Feedback을 설치하고 실행하는 방법을 안내합니다.'
+title: 'Docker Hub Images'
+description: 'Guide on how to install and run ABC User Feedback using Docker Hub images.'
 ---
 
-# 필수 요구사항
+# Docker Hub Images
 
-- **버전**: 최신 안정 버전
-- **설명**: 컨테이너화된 배포와 인프라 구성 요소 실행을 위해 필요합니다.
-- **다운로드**: [Docker 공식 웹사이트](https://docs.docker.com/desktop/)
-- **참고**: Docker Compose도 함께 설치되어야 합니다.
+ABC User Feedback provides official images on Docker Hub for easy deployment. This document guides you through installing and running ABC User Feedback using Docker Hub images.
 
-# Docker Hub 이미지
+## Available Docker Images
 
-ABC User Feedback은 손쉬운 배포를 위해 Docker Hub에 공식 이미지를 제공합니다. 이 문서에서는 Docker Hub 이미지를 사용하여 ABC User Feedback을 설치하고 실행하는 방법을 안내합니다.
+ABC User Feedback provides Docker images for two main components:
 
-## 제공되는 Docker 이미지
+1. **Web Admin Frontend**: Next.js-based web interface [[Image](https://hub.docker.com/r/line/abc-user-feedback-web)]
+2. **API Backend**: NestJS-based API server [[Image](https://hub.docker.com/r/line/abc-user-feedback-api)]
 
-ABC User Feedback은 두 가지 주요 컴포넌트에 대한 Docker 이미지를 제공합니다:
+Each image is published to Docker Hub for every release, providing both the latest stable version and specific version tags.
 
-1. **웹 관리자 프론트엔드**: Next.js 기반의 웹 인터페이스 [[이미지](https://hub.docker.com/r/line/abc-user-feedback-web)]
-2. **API 백엔드**: NestJS 기반의 API 서버 [[이미지](https://hub.docker.com/r/line/abc-user-feedback-api)]
+## Image Download
 
-각 이미지는 모든 릴리스에서 Docker Hub에 게시되며, 최신 안정 버전과 특정 버전 태그를 모두 제공합니다.
+You can download ABC User Feedback images from Docker Hub using the following commands:
 
-## 이미지 다운로드
-
-다음 명령을 사용하여 Docker Hub에서 ABC User Feedback 이미지를 다운로드할 수 있습니다:
-
-### 웹 관리자 프론트엔드
+### Web Admin Frontend
 
 ```bash
 docker pull line/abc-user-feedback-web
 ```
 
-특정 버전을 다운로드하려면 태그를 지정하세요:
+To download a specific version, specify the tag:
 
 ```bash
 docker pull line/abc-user-feedback-web:1.0.0
 ```
 
-### API 백엔드
+### API Backend
 
 ```bash
 docker pull line/abc-user-feedback-api
 ```
 
-특정 버전을 다운로드하려면 태그를 지정하세요:
+To download a specific version, specify the tag:
 
 ```bash
 docker pull line/abc-user-feedback-api:1.0.0
 ```
 
-## Docker Compose를 사용한 설치
+## Installation using Docker Compose
 
-docker-compose.yml 파일 생성
+Create a docker-compose.yml file:
 
 ```yaml
 services:
@@ -88,7 +81,7 @@ services:
 
   mysql:
     container_name: ufb-db
-    image: mysql:8.0.43
+    image: mysql:8.0
     command:
       [
         '--default-authentication-plugin=mysql_native_password',
@@ -122,23 +115,24 @@ volumes:
   smtp4dev:
 ```
 
-이 통합 파일을 사용하여 모든 서비스를 한 번에 시작할 수 있습니다:
+You can start all services at once using this integrated file:
 
 ```bash
 docker compose up -d
 ```
 
-## 초기 설정
+For detailed information about environment variables, refer to the [Environment Variable Configuration](./04-configuration.md) documentation.
 
-컨테이너가 실행된 후 다음 단계를 수행하여 초기 설정을 완료하세요:
+## Initial Setup
 
-1. 웹 브라우저에서 `http://localhost:3000`(또는 구성한 URL)에 접속합니다.
-2. 초기 관리자 계정을 생성합니다.
-3. 계정 생성시 smtp4dev로 설정이 되어 있으므로 `http://localhost:5080` 에서 메일을 받을 수 있습니다.
-4. 로그인 후 프로젝트, 채널, 태그 등을 구성합니다.
+After the containers are running, perform the following steps to complete the initial setup:
 
-자세한 초기 설정 방법은 [초기 설정](../03-tutorial.md) 문서를 참조하세요.
+1. Access `http://localhost:3000` (or the URL you configured) in your web browser.
+2. Create an initial administrator account. (If using smtp4dev, you can receive emails at `http://localhost:5080`.)
+3. After logging in, configure projects, channels, tags, etc.
 
-## 다음 단계
+For detailed initial setup instructions, refer to the [Initial Setup](../03-tutorial.md) documentation.
 
-Docker Hub 이미지를 사용하여 ABC User Feedback을 성공적으로 설치했다면, 다음 단계로 [튜토리얼](../03-tutorial.md)을 진행하여 시스템을 구성하고 사용자를 추가하세요.
+## Next Steps
+
+If you have successfully installed ABC User Feedback using Docker Hub images, proceed to the [Tutorial](../03-tutorial.md) to configure the system and add users.

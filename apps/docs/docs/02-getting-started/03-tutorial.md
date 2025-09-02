@@ -1,248 +1,240 @@
 ---
 sidebar_position: 3
-title: '튜토리얼'
-description: '튜토리얼 대한 설명입니다.'
+title: 'Tutorial'
+description: 'A description of the tutorial.'
 ---
 
-# 튜토리얼
+# Tutorial
 
-ABC User Feedback을 설치한 후에는 시스템을 사용하기 위한 초기 설정이 필요합니다. 이 문서에서는 관리자 계정 생성부터 기본 구성 요소 설정까지 초기 설정 과정을 안내합니다.
+After installing ABC User Feedback, initial setup is required to use the system. This document guides you through the initial setup process from creating an administrator account to configuring basic components.
 
-## 1. 시스템 접근
+## 1. System Access
 
-설치가 완료되면 웹 브라우저에서 ABC User Feedback 웹 인터페이스에 접속합니다:
+Once the installation is complete, access the ABC User Feedback web interface through your web browser:
 
 ```
 http://localhost:3000
 ```
 
-> **참고**: 기본 포트를 변경했거나 다른 호스트에 설치한 경우 해당 URL을 사용하세요.
+> **Note**: If you changed the default port or installed on a different host, use the appropriate URL.
 
-## 2. 테넌트 설명 및 관리자 계정 생성
+## 2. Tenant Description and Administrator Account Creation
 
-ABC User Feedback에 처음 접속하면 테넌트 생성 및 관리자 계정 설정 화면이 표시됩니다. 테넌트는 ABC User Feedback 내에서 조직 또는 회사를 나타내는 최상위 단위로, 모든 프로젝트와 사용자를 포함합니다.
+When you first access ABC User Feedback, a tenant creation and administrator account setup screen will be displayed. A tenant is the top-level unit within ABC User Feedback that represents an organization or company, containing all projects and users.
 
-### 테넌트 이름 입력
+### Enter Tenant Name
 
-![테넌트 생성](../../static/assets/initial-setup/create-tenant-1.png)
+![Create Tenant](/assets/initial-setup/create-tenant-1.png)
 
-- "Create Tenant" 화면에서 조직/회사 이름을 입력합니다.
-- 이 이름은 ABC User Feedback을 관리할 회사나 조직의 식별자로 사용됩니다.
-- 입력 후 "Next" 버튼을 클릭합니다.
+- Enter your organization/company name in the "Create Tenant" screen.
+- This name will be used as an identifier for the company or organization that will manage ABC User Feedback.
+- Click the "Next" button after entering the information.
 
-### 관리자 계정 정보 입력
+### Enter Administrator Account Information
 
-![관리자 계정 생성](../../static/assets/initial-setup/create-tenant-2.png)
+![Create Administrator Account](/assets/initial-setup/create-tenant-2.png)
 
-- 이메일 주소: 관리자 계정으로 사용할 이메일 주소를 입력합니다.
-- 비밀번호: 안전한 비밀번호를 설정합니다.
-- 비밀번호 확인: 동일한 비밀번호를 재입력합니다.
-- "Request Code" 버튼을 클릭하여 인증 코드를 요청합니다.
+- Email Address: Enter the email address to be used for the administrator account.
+- Password: Set a secure password.
+- Confirm Password: Re-enter the same password.
+- Click the "Request Code" button to request a verification code.
 
-### 이메일 인증
+### Email Verification
 
-![이메일 인증](../../static/assets/initial-setup/email-verification.png)
+![Email Verification](/assets/initial-setup/email-verification.png)
 
-- SMTP 서버가 구성되어 있는 경우, 입력한 이메일 주소로 인증 코드가 포함된 메일이 발송됩니다.
-- 이메일에서 인증 코드를 확인하고 인증 코드 입력 필드에 입력합니다.
-- "Verify Code" 버튼을 클릭하여 코드를 검증합니다.
+- If an SMTP server is configured, an email containing a verification code will be sent to the entered email address.
+- Check the verification code from the email and enter it in the verification code input field.
+- Click the "Verify Code" button to validate the code.
 
-### 인증 완료 및 계정 생성
+### Complete Verification and Create Account
 
-![인증 코드 입력](../../static/assets/initial-setup/create-tenant-3.png)
+![Enter Verification Code](/assets/initial-setup/create-tenant-3.png)
 
-- 인증 코드가 확인되면 비밀번호 입력 필드가 활성화됩니다.
-- 비밀번호와 비밀번호 확인을 입력한 후 "Next" 버튼을 클릭합니다.
+- Once the verification code is confirmed, the password input field will be activated.
+- Enter the password and password confirmation, then click the "Next" button.
 
-### 테넌트 생성 완료
+### Complete Tenant Creation
 
-![테넌트 생성 완료](../../static/assets/initial-setup/create-tenant-4.png)
+![Tenant Creation Complete](/assets/initial-setup/create-tenant-4.png)
 
-- 테넌트 생성이 완료되면 확인 화면이 표시됩니다.
-- 테넌트 이름과 관리자 이메일 주소를 확인하고 "Confirm" 버튼을 클릭합니다.
-- 테넌트 생성이 완료되면 로그인 화면으로 리디렉션됩니다.
+- When tenant creation is complete, a confirmation screen will be displayed.
+- Verify the tenant name and administrator email address, then click the "Confirm" button.
+- Once tenant creation is complete, you will be redirected to the login screen.
 
-> **참고**: 테넌트는 ABC User Feedback 내에서 완전히 격리된 환경을 제공합니다. 각 테넌트는 자체 사용자, 프로젝트, 설정을 가지며 다른 테넌트와 데이터를 공유하지 않습니다.
+> **Note**: A tenant provides a completely isolated environment within ABC User Feedback. Each tenant has its own users, projects, and settings, and does not share data with other tenants.
 
-## 3. 로그인
+## 3. Login
 
-관리자 계정이 생성되면 로그인 화면이 표시됩니다. 생성한 계정 정보로 로그인합니다.
+Once the administrator account is created, a login screen will be displayed. Log in with the account information you created.
 
-![로그인 화면](../../static/assets/initial-setup/login.png)
+![Login Screen](/assets/initial-setup/login.png)
 
-## 4. 프로젝트 생성
+## 4. Project Creation
 
-로그인 후 첫 번째 단계는 프로젝트를 생성하는 것입니다. ABC User Feedback에서 프로젝트는 피드백을 수집하고 관리하는 기본 단위입니다. 프로젝트 생성은 3단계 과정으로 이루어집니다.
+After logging in, the first step is to create a project. In ABC User Feedback, a project is the basic unit for collecting and managing feedback. Project creation is a 3-step process.
 
-### 시작하기
+### Getting Started
 
-처음 로그인하면 환영 화면이 표시됩니다. ABC User Feedback에서는 테넌트 > 프로젝트 > 채널 구조로 피드백을 관리합니다. "Next" 버튼을 클릭하여 프로젝트 생성을 시작합니다.
+When you first log in, a welcome screen will be displayed. ABC User Feedback manages feedback in a Tenant > Project > Channel structure. Click the "Next" button to start creating a project.
 
-![환영 화면](../../static/assets/initial-setup/welcome-screen.png)
+![Welcome Screen](/assets/initial-setup/welcome-screen.png)
 
-### 1단계: 프로젝트 정보 입력
+### Step 1: Enter Project Information
 
-![프로젝트 정보 입력](../../static/assets/initial-setup/create-project-1.png)
+![Enter Project Information](/assets/initial-setup/create-project-1.png)
 
-첫 번째 단계에서는 프로젝트의 기본 정보를 입력합니다:
+In the first step, enter the basic information for the project:
 
-1. **프로젝트 이름**: 피드백을 수집할 제품이나 서비스의 이름을 입력합니다 (필수).
-2. **설명**: 프로젝트에 대한 간략한 설명을 입력합니다 (선택 사항).
-3. **시간대**: 프로젝트의 기본 시간대를 선택합니다. 이 시간대는 대시보드 통계 생성 및 날짜/시간 표시에 사용됩니다 (필수).
-4. 모든 정보를 입력한 후 "Next" 버튼을 클릭하여 다음 단계로 진행합니다.
+1. **Project Name**: Enter the name of the product or service for which you will collect feedback (required).
+2. **Description**: Enter a brief description of the project (optional).
+3. **Timezone**: Select the default timezone for the project. This timezone will be used for generating dashboard statistics and displaying dates/times (required).
+4. After entering all information, click the "Next" button to proceed to the next step.
 
-### 2단계: 멤버 관리
+### Step 2: Member Management
 
-![멤버 관리](../../static/assets/initial-setup/create-project-2.png)
+![Member Management](/assets/initial-setup/create-project-2.png)
 
-두 번째 단계에서는 프로젝트에 참여할 멤버를 관리합니다:
+In the second step, manage the members who will participate in the project:
 
-1. 초기에는 멤버가 등록되어 있지 않습니다.
-2. "Register Member" 버튼을 클릭하여 새 멤버를 추가할 수 있습니다.
-3. 멤버 등록 팝업에서 이메일과 역할을 선택합니다:
-   ![멤버 등록](../../static/assets/initial-setup/register-member.png)
-   - **이메일**: 시스템에 등록된 사용자 중에서 선택합니다.
-   - **역할**: 해당 멤버에게 부여할 역할을 선택합니다.
-4. "Save" 버튼을 클릭하여 멤버를 추가합니다.
-5. 필요한 멤버를 모두 추가한 후 "Next" 버튼을 클릭합니다.
+1. Initially, no members are registered.
+2. Click the "Register Member" button to add a new member.
+3. In the member registration popup, select an email and role:
+   ![Register Member](/assets/initial-setup/register-member.png)
+   - **Email**: Select from users registered in the system.
+   - **Role**: Select the role to be granted to the member.
+4. Click the "Save" button to add the member.
+5. After adding all necessary members, click the "Next" button.
 
-### 역할 관리 (선택 사항)
+### Role Management (Optional)
 
-프로젝트 멤버 관리 화면에서 "Role Management" 버튼을 클릭하면 역할 관리 화면으로 이동합니다:
+By clicking the "Role Management" button in the project member management screen, you can navigate to the role management screen:
 
-![역할 관리](../../static/assets/initial-setup/role-management.png)
+![Role Management](/assets/initial-setup/role-management.png)
 
-여기서는 기본 제공되는 역할(Admin, Editor, Viewer)의 권한을 확인하고 필요에 따라 새 역할을 생성할 수 있습니다:
+Here, you can check the permissions of the default provided roles (Admin, Editor, Viewer) and create new roles as needed:
 
-1. 각 역할별로 피드백, 이슈, 프로젝트, 멤버 관련 권한을 설정할 수 있습니다.
-2. "Create Role" 버튼을 클릭하여 새 역할을 생성할 수 있습니다.
-3. 설정을 완료한 후 멤버 관리 화면으로 돌아갑니다.
+1. You can set permissions related to feedback, issues, projects, and members for each role.
+2. Click the "Create Role" button to create a new role.
+3. After completing the settings, return to the member management screen.
 
-### 3단계: API 키 관리
+### Step 3: API Key Management
 
-![API 키 관리](../../static/assets/initial-setup/create-project-3.png)
+![API Key Management](/assets/initial-setup/create-project-3.png)
 
-세 번째 단계에서는 API 키를 생성하고 관리합니다:
+In the third step, generate and manage API keys:
 
-1. API 키는 프로그래매틱 방식으로 피드백을 수집하거나 관리할 때 사용됩니다.
-2. "Create API Key" 버튼을 클릭하여 새 API 키를 생성할 수 있습니다.
-3. 생성된 API 키는 목록에 표시됩니다:
-   ![API 키 생성됨](../../static/assets/initial-setup/api-key-created.png)
-4. API 키를 안전한 곳에 보관하세요. 이 키는 다시 표시되지 않습니다.
-5. "Complete" 버튼을 클릭하여 프로젝트 생성을 완료합니다.
+1. API keys are used when collecting or managing feedback programmatically.
+2. Click the "Create API Key" button to generate a new API key.
+3. The generated API key will be displayed in the list:
+   ![API Key Created](/assets/initial-setup/api-key-created.png)
+4. Store the API key in a safe place. This key will not be displayed again.
+5. Click the "Complete" button to complete project creation.
 
-### 프로젝트 생성 완료
+### Project Creation Complete
 
-![프로젝트 생성 완료](../../static/assets/initial-setup/project-creation-complete.png)
+![Project Creation Complete](/assets/initial-setup/project-creation-complete.png)
 
-프로젝트 생성이 완료되면 요약 화면이 표시됩니다:
+When project creation is complete, a summary screen will be displayed:
 
-1. 프로젝트 정보, 역할 관리, 멤버 관리, API 키 관리 섹션을 확장하여 설정 내용을 확인할 수 있습니다.
-2. "Create Channel" 버튼을 클릭하여 피드백을 수집할 채널을 생성하는 단계로 진행합니다.
-3. 또는 "Later" 버튼을 클릭하여 나중에 채널을 생성할 수 있습니다.
+1. You can expand the Project Information, Role Management, Member Management, and API Key Management sections to review the configuration.
+2. Click the "Create Channel" button to proceed to creating a channel for collecting feedback.
+3. Alternatively, click the "Later" button to create a channel later.
 
-> **참고**: ABC User Feedback에서 피드백을 수집하려면 최소한 하나의 채널이 필요합니다. 프로젝트 생성 후 바로 채널을 생성하는 것이 좋습니다.
+> **Note**: In ABC User Feedback, at least one channel is required to collect feedback. It is recommended to create a channel immediately after creating a project.
 
-## 4. 채널 설정
+## 4. Channel Setup
 
-프로젝트를 생성한 후에는 피드백을 수집할 채널을 설정해야 합니다. 채널은 피드백이 들어오는 출처를 나타냅니다. 채널 생성은 2단계 과정으로 이루어집니다.
+After creating a project, you need to set up channels for collecting feedback. A channel represents the source from which feedback comes. Channel creation is a 2-step process.
 
-### 1단계: 채널 정보 입력
+### Step 1: Enter Channel Information
 
-![채널 정보 입력](../../static/assets/initial-setup/create-channel-1.png)
+![Enter Channel Information](/assets/initial-setup/create-channel-1.png)
 
-첫 번째 단계에서는 채널의 기본 정보를 입력합니다:
+In the first step, enter the basic information for the channel:
 
-- **채널 이름**: 채널의 식별 이름을 입력합니다 (예: "인앱 피드백", "이메일 문의", "고객 지원") (필수)
-- **설명**: 채널에 대한 간략한 설명을 입력합니다 (선택 사항)
-- 채널은 피드백 수집 경로나 수집 방법을 구분하는 단위입니다. 채널의 특성을 고려하여 정보를 입력하세요.
-- 정보 입력 후 "Next" 버튼을 클릭하여 다음 단계로 진행합니다.
+- **Channel Name**: Enter an identifying name for the channel (e.g., "In-app Feedback", "Email Inquiry", "Customer Support") (required)
+- **Description**: Enter a brief description of the channel (optional)
+- A channel is a unit that distinguishes feedback collection paths or collection methods. Consider the characteristics of the channel when entering information.
+- After entering the information, click the "Next" button to proceed to the next step.
 
-### 2단계: 필드 관리
+### Step 2: Field Management
 
-![필드 관리](../../static/assets/initial-setup/create-channel-2.png)
+![Field Management](/assets/initial-setup/create-channel-2.png)
 
-두 번째 단계에서는 채널에서 수집할 피드백 데이터의 필드를 정의합니다:
+In the second step, define the fields for feedback data to be collected in the channel:
 
-1. 기본적으로 id, createdAt, updatedAt, issues와 같은 시스템 필드가 제공됩니다.
-2. "Add Field" 버튼을 클릭하여 새 필드를 추가할 수 있습니다:
-   ![필드 추가](../../static/assets/initial-setup/add-field.png)
-   - **Key**: 필드의 고유 식별자
-   - **Display Name**: 사용자 인터페이스에 표시될 이름
-   - **Format**: 텍스트, 숫자, 날짜 등 필드의 데이터 형식
-   - **Property**: 읽기 전용 또는 편집 가능 여부
-   - **Status**: 필드의 활성화 상태
-   - **Description**: 필드에 대한 설명 (선택 사항)
-3. "Preview" 버튼을 클릭하여 설정한 필드로 구성된 피드백 데이터의 미리보기를 확인할 수 있습니다:
-   ![필드 미리보기](../../static/assets/initial-setup/field-preview.png)
-4. 필요한 필드를 모두 추가한 후 "Complete" 버튼을 클릭하여 채널 생성을 완료합니다.
+1. By default, system fields such as id, createdAt, updatedAt, and issues are provided.
+2. Click the "Add Field" button to add new fields:
+   ![Add Field](/assets/initial-setup/add-field.png)
+   - **Key**: Unique identifier for the field
+   - **Display Name**: Name to be displayed in the user interface
+   - **Format**: Data format of the field such as text, number, date, etc.
+   - **Property**: Whether it's read-only or editable
+   - **Status**: Activation status of the field
+   - **Description**: Description of the field (optional)
+3. Click the "Preview" button to view a preview of feedback data composed of the configured fields:
+   ![Field Preview](/assets/initial-setup/field-preview.png)
+4. After adding all necessary fields, click the "Complete" button to complete channel creation.
 
-### 채널 생성 완료
+### Channel Creation Complete
 
-![채널 생성 완료](../../static/assets/initial-setup/channel-creation-complete.png)
+![Channel Creation Complete](/assets/initial-setup/channel-creation-complete.png)
 
-채널 생성이 완료되면 요약 화면이 표시됩니다:
+When channel creation is complete, a summary screen will be displayed:
 
-1. 채널 정보와 필드 관리 섹션을 확장하여 설정 내용을 확인할 수 있습니다.
-2. "Start" 버튼을 클릭하여 피드백 수집을 시작합니다.
+1. You can expand the Channel Information and Field Management sections to review the configuration.
+2. Click the "Start" button to begin collecting feedback.
 
-> **참고**: 채널 설정이 완료되면 API를 통해 피드백을 수집하거나 웹 폼을 통해 사용자로부터 직접 피드백을 받을 수 있습니다.
+> **Note**: Once channel setup is complete, you can collect feedback through the API.
 
-## 5. 첫 번째 피드백 수집하기
+## 5. Collecting Your First Feedback
 
-### API를 통한 피드백 수집
+### Collecting Feedback via API
 
-API를 통해 첫 번째 피드백을 수집해 보겠습니다. 터미널에서 다음 명령을 실행합니다:
+Let's collect your first feedback through the API. Run the following command in your terminal:
 
 ```bash
 curl -X POST http://localhost:4000/api/v1/projects/1/channels/1/feedbacks \
   -H "Content-Type: application/json" \
   -H "X-API-KEY: YOUR_API_KEY" \
   -d '{
-    "content": "이 제품은 정말 좋아요! 하지만 로딩 속도가 조금 느립니다.",
+    "content": "I really like this product! But the loading speed is a bit slow.",
     "userEmail": "user@example.com"
   }'
 ```
 
-`YOUR_API_KEY`를 앞서 생성한 API 키로 대체하세요.
+Replace `YOUR_API_KEY` with the API key you created earlier.
 
-### 웹 인터페이스에서 피드백 확인
+### Viewing Feedback in the Web Interface
 
-1. 웹 인터페이스의 왼쪽 메뉴에서 "Feedback" 탭을 클릭합니다.
-2. 방금 추가한 피드백이 목록에 표시됩니다.
-3. 피드백을 클릭하여 상세 내용을 확인합니다.
+1. Click the "Feedback" tab in the top menu of the web interface.
+2. The feedback you just added will appear in the list.
+3. Click on the feedback to view detailed information.
 
-<!-- ![피드백 목록](../../static/assets/quick-start/feedback-list.png) -->
+<!-- ![Feedback List](/assets/quick-start/feedback-list.png) -->
 
-## 6. 이슈 추가하기
+## 6. Adding Issues
 
-1. 피드백 상세 화면에서 "Add Tag" 버튼을 클릭합니다.
-2. "New Tag" 버튼을 클릭하여 새 이슈를 생성합니다:
-   - 카테고리: "Feedback Type" (없으면 새로 생성)
-   - 이슈 이름: "Praise"
-   - 색상: 원하는 색상 선택
-3. "Create" 버튼을 클릭하여 이슈를 생성합니다.
-4. 생성한 이슈를 선택하고 "Add" 버튼을 클릭하여 피드백에 이슈를 추가합니다.
+1. In the feedback detail screen, click the "+" button in the issue column.
+2. A dropdown will open where you can enter the name of the issue.
+3. Click on that issue to create it and add the issue to the corresponding feedback.
 
-<!-- ![이슈 추가](../../static/assets/quick-start/add-tag.png) -->
+<!-- ![Add Issue](/assets/quick-start/add-tag.png) -->
 
-## 7. 이슈 생성하기
+## 7. Viewing Issues
 
-1. 피드백 상세 화면에서 "Convert to Issue" 버튼을 클릭합니다.
-2. 이슈 정보를 입력합니다:
-   - 이슈 이름: "Performance Improvement"
-   - 설명: "Need to improve loading speed"
-   - 상태: "INIT" (초기 상태)
-3. "Create" 버튼을 클릭하여 이슈를 생성합니다.
-4. 왼쪽 메뉴에서 "Issues" 탭을 클릭하여 생성된 이슈를 확인합니다.
+1. Click the "Issue" tab in the top menu of the web interface.
+2. Issues will be displayed by status.
+3. Click the List button to view issues in list format.
 
-<!-- ![이슈 생성](../../static/assets/quick-start/create-issue.png) -->
+<!-- ![Create Issue](/assets/quick-start/create-issue.png) -->
 
-## 다음 단계
+## Next Steps
 
-초기 설정을 완료한 후에는 다음 단계로 진행할 수 있습니다:
+After completing the initial setup, you can proceed to the following steps:
 
-- [피드백 관리](../03-user-guide/02-feedback-management/01-viewing-filtering.md): 피드백 조회, 필터링, 태그 지정 방법 학습
-- [이슈 트래커 사용법](../03-user-guide/03-issue-management/01-issue-tracker.md): 이슈 관리 및 추적 방법 학습
-- [API 개요](../04-integration-guide/01-api-overview.md): API를 통한 프로그래매틱 통합 방법 학습
-- [웹훅 설정 및 활용](../04-integration-guide/03-webhooks.md): 웹훅을 통한 외부 시스템 연동 방법 학습
+- [Feedback Management](../03-user-guide/02-feedback-management/01-viewing-filtering.md): Learn how to view, filter, and tag feedback
+- [Using Issue Tracker](../03-user-guide/03-issue-management/01-issue-tracker.md): Learn how to manage and track issues
+- [API Overview](../04-integration-guide/01-api-overview.md): Learn how to integrate programmatically through the API
+- [Setting Up and Using Webhooks](../04-integration-guide/03-webhooks.md): Learn how to integrate with external systems through webhooks
