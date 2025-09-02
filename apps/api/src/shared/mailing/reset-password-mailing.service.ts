@@ -22,14 +22,12 @@ import type { SendMailDto } from './send-mail.dto';
 
 @Injectable()
 export class ResetPasswordMailingService {
-  private readonly baseUrl: string;
+  private readonly baseUrl?: string;
   constructor(
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService<ConfigServiceType>,
   ) {
-    this.baseUrl =
-      (this.configService.get('smtp', { infer: true }) ?? { baseUrl: '' })
-        .baseUrl ?? '';
+    this.baseUrl = this.configService.get('app.adminWebUrl', { infer: true });
   }
   async send({ code, email }: SendMailDto) {
     await this.mailerService.sendMail({

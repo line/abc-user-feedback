@@ -75,11 +75,13 @@ services:
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
-      - BASE_URL=0.0.0.0
       - SMTP_HOST=smtp4dev
       - SMTP_PORT=25
       - SMTP_SENDER=user@feedback.com
-      - SMTP_BASE_URL=http://localhost:3000
+      - OPENSEARCH_USE=true
+      # - OPENSEARCH_NODE=opensearch-node
+      # - OPENSEARCH_NODE=http://opensearch-node:9200
+
     ports:
       - 4000:4000
     depends_on:
@@ -117,9 +119,35 @@ services:
       - smtp4dev:/smtp4dev
     restart: unless-stopped
 
+  # opensearch-node:
+  #   container_name: ufb-opensearch
+  #   image: opensearchproject/opensearch:2.16.0
+  #   restart: always
+  #   environment:
+  #     - cluster.name=opensearch-cluster
+  #     - node.name=opensearch-node
+  #     - discovery.type=single-node
+  #     - bootstrap.memory_lock=true
+  #     - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
+  #     - plugins.security.disabled=true
+  #     - OPENSEARCH_INITIAL_ADMIN_PASSWORD=UserFeedback123!@#
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #     nofile:
+  #       soft: 65536
+  #       hard: 65536
+  #   volumes:
+  #     - opensearch:/usr/share/opensearch/data
+  #   ports:
+  #     - 9200:9200
+  #     - 9600:9600
+
 volumes:
   mysql:
   smtp4dev:
+  # opensearch:
 ```
 
 이 통합 파일을 사용하여 모든 서비스를 한 번에 시작할 수 있습니다:
@@ -127,6 +155,8 @@ volumes:
 ```bash
 docker compose up -d
 ```
+
+만약 opensearch를 사용하려면 모든 수석을 제거하면 사용할 수 있습니다.
 
 ## 초기 설정
 

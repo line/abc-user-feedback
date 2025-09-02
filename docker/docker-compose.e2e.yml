@@ -29,11 +29,9 @@ services:
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@host.docker.internal:13307/e2e
-      - BASE_URL=http://host.docker.internal:3000
       - SMTP_HOST=localhost
       - SMTP_PORT=25
       - SMTP_SENDER=abc@feedback.user
-      - SMTP_BASE_URL=http://localhost:3000
       - APP_PORT=4000
       - AUTO_MIGRATION=true
       - MASTER_API_KEY=MASTER_API_KEY

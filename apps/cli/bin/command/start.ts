@@ -15,7 +15,6 @@
  */
 import { execSync } from 'child_process';
 import * as fs from 'fs';
-import os from 'os';
 import { load } from 'js-toml';
 
 import getDestinationPath from '../utils/get-destination-path';
@@ -26,11 +25,9 @@ const WEB_ENV_VARS = ['NEXT_PUBLIC_API_BASE_URL'];
 const API_ENV_VARS = [
   'JWT_SECRET',
   'MYSQL_PRIMARY_URL',
-  'BASE_URL',
   'SMTP_HOST',
   'SMTP_PORT',
   'SMTP_SENDER',
-  'SMTP_BASE_URL',
   'AUTO_MIGRATION',
   'MASTER_API_KEY',
   'NODE_OPTIONS',

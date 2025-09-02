@@ -23,11 +23,9 @@ services:
     environment:
       - JWT_SECRET=secret
       - MYSQL_PRIMARY_URL=mysql://root:userfeedback@host.docker.internal:13306/userfeedback
-      - BASE_URL=http://localhost:3000
       - SMTP_HOST=smtp4dev
       - SMTP_PORT=25
       - SMTP_SENDER=noreply@linecorp.com
-      - SMTP_BASE_URL=http://localhost:3000
       - AUTO_MIGRATION=true
       - MASTER_API_KEY=MASTER_API_KEY
       - NODE_OPTIONS=--max_old_space_size=3072

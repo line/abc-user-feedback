@@ -68,8 +68,6 @@ type UserProfileResponse = Record<string, string>;
 
 @Injectable()
 export class AuthService {
-  private REDIRECT_URI = `${process.env.BASE_URL}/auth/oauth-callback`;
-
   constructor(
     private readonly createUserService: CreateUserService,
     private readonly userService: UserService,
@@ -235,7 +233,7 @@ export class AuthService {
     }
 
     const params = new URLSearchParams({
-      redirect_uri: this.REDIRECT_URI,
+      redirect_uri: this.getRedirectURI(),
       client_id: oauthConfig.clientId,
       response_type: 'code',
       state: crypto.randomBytes(10).toString('hex'),
@@ -264,7 +262,7 @@ export class AuthService {
           {
             grant_type: 'authorization_code',
             code,
-            redirect_uri: this.REDIRECT_URI,
+            redirect_uri: this.getRedirectURI(),
           },
           {
             headers: {
@@ -339,5 +337,10 @@ export class AuthService {
       const user = await this.createUserService.createOAuthUser({ email });
       return await this.signIn(user);
     }
+  }
+  private getRedirectURI() {
+    const app = this.configService.get('app', { infer: true });
+
+    return `${app?.adminWebUrl}/auth/oauth-callback`;
   }
 }

@@ -22,7 +22,6 @@ export const smtpConfigSchema = Joi.object({
   SMTP_USERNAME: Joi.string().optional(),
   SMTP_PASSWORD: Joi.string().optional(),
   SMTP_SENDER: Joi.string().required(),
-  SMTP_BASE_URL: Joi.string().required(),
   SMTP_TLS: Joi.boolean().optional().default(false),
   SMTP_CIPHER_SPEC: Joi.string().when('SMTP_TLS', {
     is: true,
@@ -42,7 +41,6 @@ export const smtpConfig = registerAs('smtp', () => ({
   username: process.env.SMTP_USERNAME,
   password: process.env.SMTP_PASSWORD,
   sender: process.env.SMTP_SENDER,
-  baseUrl: process.env.SMTP_BASE_URL,
   tls: process.env.SMTP_TLS === 'true',
   cipherSpec: process.env.SMTP_CIPHER_SPEC,
   opportunisticTLS: process.env.SMTP_OPPORTUNISTIC_TLS === 'true',

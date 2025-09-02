@@ -62,7 +62,6 @@ pnpm install
 # 필수 환경 변수
 JWT_SECRET=your-jwt-secret-key
 MYSQL_PRIMARY_URL=mysql://username:password@localhost:3306/database
-BASE_URL=http://localhost:4000
 ACCESS_TOKEN_EXPIRED_TIME=10m
 REFRESH_TOKEN_EXPIRED_TIME=1h
 
@@ -77,7 +76,6 @@ SMTP_PORT=587
 SMTP_USERNAME=your-username
 SMTP_PASSWORD=your-password
 SMTP_SENDER=noreply@example.com
-SMTP_BASE_URL=http://localhost:3000
 
 # OpenSearch 설정 (선택 사항)
 OPENSEARCH_USE=false

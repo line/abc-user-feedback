@@ -90,7 +90,6 @@ npx auf-cli clean
 [api]
 JWT_SECRET = "jwtsecretjwtsecretjwtsecret"
 MYSQL_PRIMARY_URL = "mysql://userfeedback:userfeedback@mysql:3306/userfeedback"
-BASE_URL = "http://api:4000"
 ACCESS_TOKEN_EXPIRED_TIME = "10m"
 REFRESH_TOKEN_EXPIRED_TIME = "1h"
 APP_PORT = 4000
@@ -100,7 +99,6 @@ NODE_OPTIONS = "--max_old_space_size=3072"
 SMTP_HOST = "smtp4dev"
 SMTP_PORT = 25
 SMTP_SENDER = "user@feedback.com"
-SMTP_BASE_URL = "http://localhost:3000"
 
 # OpenSearch 설정 (선택 사항)
 # OPENSEARCH_USE = true

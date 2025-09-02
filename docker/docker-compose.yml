@@ -19,10 +19,10 @@ services:
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
-      - BASE_URL=0.0.0.0
       - SMTP_HOST=smtp4dev
       - SMTP_PORT=25
       - SMTP_SENDER=user@feedback.com
-      - SMTP_BASE_URL=http://localhost:3000
       - OPENSEARCH_USE=true
-      - OPENSEARCH_NODE=opensearch-node
+      - OPENSEARCH_NODE=http://opensearch-node:9200
+      - OPENSEARCH_USERNAME=""
+      - OPENSEARCH_PASSWORD=""
