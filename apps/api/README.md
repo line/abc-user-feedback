@@ -72,13 +72,15 @@ The following is a list of environment variables used by the application, along 
 
 ### Required Environment Variables
 
-| Environment                  | Description                                  | Default Value                                            |
-| ---------------------------- | -------------------------------------------- | -------------------------------------------------------- |
-| `JWT_SECRET`                 | Secret key for signing JSON Web Tokens (JWT) | _required_                                               |
-| `MYSQL_PRIMARY_URL`          | Primary MySQL connection URL                 | `mysql://userfeedback:userfeedback@localhost:13306/test` |
-| `BASE_URL`                   | Base URL of the application                  | `http://localhost:3000`                                  |
-| `ACCESS_TOKEN_EXPIRED_TIME`  | Duration until the access token expires      | `10m`                                                    |
-| `REFRESH_TOKEN_EXPIRED_TIME` | Duration until the refresh token expires     | `1h`                                                     |
+| Environment         | Description                                         | Default Value                                            |
+| ------------------- | --------------------------------------------------- | -------------------------------------------------------- |
+| `JWT_SECRET`        | Secret key for signing JSON Web Tokens (JWT)        | _required_                                               |
+| `MYSQL_PRIMARY_URL` | Primary MySQL connection URL                        | `mysql://userfeedback:userfeedback@localhost:13306/test` |
+| `BASE_URL`          | Base URL of the application                         | `http://localhost:3000`                                  |
+| `SMTP_HOST`         | SMTP server host                                    | _required_                                               |
+| `SMTP_PORT`         | SMTP server port                                    | _required_                                               |
+| `SMTP_SENDER`       | Email address used as sender in emails              | _required_                                               |
+| `SMTP_BASE_URL`     | Base URL for emails to link back to the application | _required_                                               |
 
 ### Optional Environment Variables
 
@@ -87,12 +89,8 @@ The following is a list of environment variables used by the application, along 
 | `APP_PORT`                           | The port that the server runs on                               | `4000`                                        |
 | `APP_ADDRESS`                        | The address that the server binds to                           | `0.0.0.0`                                     |
 | `MYSQL_SECONDARY_URLS`               | Secondary MySQL connection URLs (must be in JSON array format) | _optional_                                    |
-| `SMTP_HOST`                          | SMTP server host                                               | _required_                                    |
-| `SMTP_PORT`                          | SMTP server port                                               | _required_                                    |
 | `SMTP_USERNAME`                      | SMTP server authentication username                            | _optional_                                    |
 | `SMTP_PASSWORD`                      | SMTP server authentication password                            | _optional_                                    |
-| `SMTP_SENDER`                        | Email address used as sender in emails                         | _required_                                    |
-| `SMTP_BASE_URL`                      | Base URL for emails to link back to the application            | _required_                                    |
 | `SMTP_TLS`                           | Flag to enable SMTP server with secure option                  | `false`                                       |
 | `SMTP_CIPHER_SPEC`                   | SMTP Cipher Algorithm Specification                            | `TLSv1.2`                                     |
 | `SMTP_OPPORTUNISTIC_TLS`             | Use Opportunistic TLS using STARTTLS                           | `true`                                        |
@@ -104,6 +102,8 @@ The following is a list of environment variables used by the application, along 
 | `MASTER_API_KEY`                     | Master API key for privileged operations                       | _none_                                        |
 | `ENABLE_AUTO_FEEDBACK_DELETION`      | Enable auto old feedback deletion cron on application start    | `false`                                       |
 | `AUTO_FEEDBACK_DELETION_PERIOD_DAYS` | Auto old feedback deletion period (in days)                    | _required if `ENABLE_AUTO_FEEDBACK_DELETION`_ |
+| `ACCESS_TOKEN_EXPIRED_TIME`          | Duration until the access token expires                        | `10m`                                         |
+| `REFRESH_TOKEN_EXPIRED_TIME`         | Duration until the refresh token expires                       | `1h`                                          |
 
 Please ensure that you set the required environment variables before starting the application. Optional variables can be set as needed based on your specific configuration and requirements.
 

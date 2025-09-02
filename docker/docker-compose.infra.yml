@@ -1,9 +1,7 @@
 services:
   mysql:
-    hostname: mysql
-    image: mysql:8.0.39
-    platform: linux/amd64
-    restart: always
+    container_name: ufb-db
+    image: mysql:8.0.43
     command:
       [
         '--default-authentication-plugin=mysql_native_password',
@@ -19,20 +17,22 @@ services:
       - 13306:3306
     volumes:
       - mysql:/var/lib/mysql
+    restart: unless-stopped
 
-  # optional for email verification on creating user
   smtp4dev:
+    container_name: ufb-smtp
     image: rnwood/smtp4dev:v3
-    restart: always
     ports:
       - 5080:80
       - 25:25
       - 143:143
     volumes:
       - smtp4dev:/smtp4dev
+    restart: unless-stopped
 
   # optional for better performance on searching feedbacks
   opensearch-node:
+    container_name: ufb-opensearch
     image: opensearchproject/opensearch:2.16.0
     restart: always
     environment:
@@ -58,6 +58,7 @@ services:
 
   # optional for opensearch
   opensearch-dashboards:
+    container_name: ufb-opensearch-dashboards
     image: opensearchproject/opensearch-dashboards:2.16.0
     restart: always
     ports:

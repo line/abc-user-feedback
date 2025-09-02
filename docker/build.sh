@@ -26,7 +26,7 @@ echo "TAG:${TAG}"
 echo ""
 echo "docker image build start - ${TAG}"
 
-docker build --platform linux/amd64 -t ${TAG} -f ${DOCKER_FILE} ${APP_DIR}
+docker build -t ${TAG} -f ${DOCKER_FILE} ${APP_DIR}
 
 if [[ $? -ne 0 ]]; then
     echo "docker image build failed - ${TAG}"

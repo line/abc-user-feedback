@@ -1,6 +1,6 @@
 services:
   web:
-    hostname: web
+    container_name: ufb-web
     image: line/abc-user-feedback-web:latest
     restart: always
     ports:
@@ -11,7 +11,7 @@ services:
       - api
 
   api:
-    hostname: api
+    container_name: ufb-api
     image: line/abc-user-feedback-api:latest
     restart: always
     ports:
@@ -19,14 +19,10 @@ services:
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
-      - BASE_URL=http://api:3000
-      - ACCESS_TOKEN_EXPIRED_TIME=10m
-      - REFRESH_TOKEN_EXPIRED_TIME=1h
-      - APP_PORT=4000
-      - APP_ADDRESS=api
-      - AUTO_MIGRATION=true
-      - NODE_OPTIONS="--max_old_space_size=3072"
+      - BASE_URL=0.0.0.0
       - SMTP_HOST=smtp4dev
       - SMTP_PORT=25
       - SMTP_SENDER=user@feedback.com
       - SMTP_BASE_URL=http://localhost:3000
+      - OPENSEARCH_USE=true
+      - OPENSEARCH_NODE=opensearch-node

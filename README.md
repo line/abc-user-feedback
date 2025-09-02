@@ -54,9 +54,7 @@ Before you begin, ensure you have the following installed:
 - SMTP - for mail verification during making accounts
 - [OpenSearch v2.16](https://opensearch.org/) - for performance on searching feedback
 
-You can use the [docker-compose.infra-amd64.yml](/docker/docker-compose.infra-amd64.yml) file for requirements.
-
-For ARM architecture, use the [docker-compose.infra-arm64.yml](/docker/docker-compose.infra-arm64.yml) file.
+You can use the [docker-compose.infra.yml](/docker/docker-compose.infra.yml) file for requirements.
 
 ### Docker Hub Images
 

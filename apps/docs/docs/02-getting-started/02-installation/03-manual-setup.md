@@ -37,11 +37,7 @@ ABC User Feedback은 MySQL 데이터베이스와 선택적으로 OpenSearch 및 
 가장 간단한 방법은 Docker Compose를 사용하여 필요한 인프라를 설정하는 것입니다:
 
 ```bash
-# AMD64 아키텍처(대부분의 x86 기반 시스템)
-docker-compose -f docker/docker-compose.infra-amd64.yml up -d
-
-# ARM64 아키텍처(Apple Silicon, 일부 서버)
-docker-compose -f docker/docker-compose.infra-arm64.yml up -d
+docker-compose -f docker/docker-compose.infra.yml up -d
 ```
 
 ### 기존 인프라 사용

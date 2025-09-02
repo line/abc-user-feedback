@@ -41,29 +41,8 @@ interface TomlConfig {
   api: Record<string, string>;
 }
 
-const getArchitectureType = () => {
-  const arch = os.arch();
-
-  switch (arch) {
-    case 'arm':
-    case 'arm64':
-      return 'arm';
-    case 'ia32':
-    case 'x32':
-    case 'x64':
-      return 'amd';
-    default:
-      return 'arm';
-  }
-};
-
 const startDockerComposeInfra = () => {
-  const architecture = getArchitectureType();
-
-  const composeFile =
-    architecture === 'amd' ?
-      'docker-compose.infra-amd64.yml'
-    : 'docker-compose.infra-arm64.yml';
+  const composeFile = 'docker-compose.infra.yml';
 
   const composeFilePath = getSourcePath(composeFile);
 

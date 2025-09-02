@@ -1,8 +1,7 @@
 services:
   mysql:
     hostname: mysql
-    image: mysql:8.0.39
-    platform: linux/amd64
+    image: mysql:8.0.43
     restart: always
     command:
       [
@@ -20,7 +19,6 @@ services:
     volumes:
       - mysql:/var/lib/mysql
 
-  # optional for email verification on creating user
   smtp4dev:
     image: rnwood/smtp4dev:v3
     restart: always
@@ -31,7 +29,6 @@ services:
     volumes:
       - smtp4dev:/smtp4dev
 
-  # optional for better performance on searching feedbacks
   opensearch-node:
     image: opensearchproject/opensearch:2.16.0
     restart: always
