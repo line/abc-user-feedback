@@ -807,14 +807,14 @@ importers:
   tooling/prettier:
     dependencies:
       '@ianvs/prettier-plugin-sort-imports':
-        specifier: ^4.6.3
-        version: 4.6.3(prettier@3.5.3)
+        specifier: ^4.7.0
+        version: 4.7.0(prettier@3.5.3)
       prettier:
         specifier: 'catalog:'
         version: 3.5.3
       prettier-plugin-tailwindcss:
         specifier: ^0.6.14
-        version: 0.6.14(@ianvs/prettier-plugin-sort-imports@4.6.3(prettier@3.5.3))(prettier@3.5.3)
+        version: 0.6.14(@ianvs/prettier-plugin-sort-imports@4.7.0(prettier@3.5.3))(prettier@3.5.3)
     devDependencies:
       '@types/node':
         specifier: 22.18.0
@@ -2351,8 +2351,8 @@ packages:
     resolution: {integrity: sha512-xeO57FpIu4p1Ri3Jq/EXq4ClRm86dVF2z/+kvFnyqVYRavTZmaFaUBbWCOuuTh0o/g7DSsk6kc2vrS4Vl5oPOQ==}
     engines: {node: '>=18.18'}
 
-  '@ianvs/prettier-plugin-sort-imports@4.6.3':
-    resolution: {integrity: sha512-lgETjWKuWgdu7CIKMrnaP9STvYDga42+A2ff8hMIployvkLYqT3xUt6Dqw0NpKp3qcqxBOCpwqbaYJEXXrhPQA==}
+  '@ianvs/prettier-plugin-sort-imports@4.7.0':
+    resolution: {integrity: sha512-soa2bPUJAFruLL4z/CnMfSEKGznm5ebz29fIa9PxYtu8HHyLKNE1NXAs6dylfw1jn/ilEIfO2oLLN6uAafb7DA==}
     peerDependencies:
       '@prettier/plugin-oxc': ^0.0.4
       '@vue/compiler-sfc': 2.7.x || 3.x
@@ -12896,7 +12896,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.2': {}
 
-  '@ianvs/prettier-plugin-sort-imports@4.6.3(prettier@3.5.3)':
+  '@ianvs/prettier-plugin-sort-imports@4.7.0(prettier@3.5.3)':
     dependencies:
       '@babel/generator': 7.28.3
       '@babel/parser': 7.28.3
@@ -20522,11 +20522,11 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-tailwindcss@0.6.14(@ianvs/prettier-plugin-sort-imports@4.6.3(prettier@3.5.3))(prettier@3.5.3):
+  prettier-plugin-tailwindcss@0.6.14(@ianvs/prettier-plugin-sort-imports@4.7.0(prettier@3.5.3))(prettier@3.5.3):
     dependencies:
       prettier: 3.5.3
     optionalDependencies:
-      '@ianvs/prettier-plugin-sort-imports': 4.6.3(prettier@3.5.3)
+      '@ianvs/prettier-plugin-sort-imports': 4.7.0(prettier@3.5.3)
 
   prettier@3.5.3: {}
 
