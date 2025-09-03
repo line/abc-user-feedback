@@ -1,167 +1,190 @@
 ---
 sidebar_position: 2
-title: 'CLI 도구 사용'
-description: 'CLI 도구를 사용하여 ABC User Feedback을 설치, 실행 및 관리하는 방법을 안내합니다.'
+title: '使用CLI工具'
+description: '使用CLI工具安装、运行和管理ABC User Feedback的指南。'
 ---
 
-# CLI 도구 사용
+# 使用CLI工具
 
-ABC User Feedback CLI(`auf-cli`)는 ABC User Feedback의 설치, 실행 및 관리를 간소화하기 위한 명령줄 인터페이스 도구입니다. 이 문서에서는 CLI 도구를 사용하여 ABC User Feedback을 빠르고 쉽게 설정하는 방법을 안내합니다.
+ABC User Feedback CLI（`auf-cli`）是一个命令行界面工具，旨在简化ABC User Feedback的安装、执行和管理。本文档将指导您使用CLI工具快速、轻松地设置ABC User Feedback。
 
-## CLI 도구 소개
+## CLI工具介绍
 
-`auf-cli`는 다음과 같은 주요 기능을 제공합니다:
+`auf-cli`提供以下主要功能：
 
-- 필요한 인프라(MySQL, SMTP, OpenSearch) 자동 설정
-- 환경 변수 구성 간소화
-- API 및 웹 서버 시작/중지 자동화
-- 볼륨 데이터 정리
+- 自动设置所需基础设施（MySQL、SMTP、OpenSearch）
+- 简化环境变量配置
+- 自动化API和Web服务器的启动/停止
+- 卷数据清理
 
-이 도구의 가장 큰 장점은 Node.js와 Docker만 설치되어 있으면 별도의 종속성 설치나 저장소 복제 없이 `npx`를 통해 바로 실행할 수 있다는 점입니다.
+该工具的最大优势是，只要安装了Node.js和Docker，就可以通过`npx`直接执行，无需安装额外的依赖项或克隆存储库。
 
-## 사전 요구사항
+## 前提条件
 
-CLI 도구를 사용하기 전에 다음 요구사항을 충족해야 합니다:
+在使用CLI工具之前，您必须满足以下要求：
 
-- [Node.js v22 이상](https://nodejs.org/en/download/)
+- [Node.js v22或更高版本](https://nodejs.org/en/download/)
 - [Docker](https://docs.docker.com/desktop/)
 
-## 기본 명령어
+## 基本命令
 
-### 초기화
+### 初始化
 
-다음 명령을 실행하여 ABC User Feedback에 필요한 인프라를 설정합니다:
+运行以下命令来设置ABC User Feedback所需的基础设施：
 
 ```bash
 npx auf-cli init
 ```
 
-이 명령은 다음 작업을 수행합니다:
+此命令执行以下任务：
 
-1. 시스템 아키텍처(ARM/AMD)를 감지하고 적절한 Docker 이미지를 선택합니다.
-2. MySQL, SMTP, OpenSearch 등 필요한 인프라 컨테이너를 설정합니다.
-3. 환경 변수 구성을 위한 `config.toml` 파일을 생성합니다.
+1. 创建用于环境变量配置的`config.toml`文件。
+2. 如果`config.toml`文件已存在，使用`--force`选项覆盖它。
 
-초기화가 완료되면 `config.toml` 파일이 생성됩니다. 이 파일을 편집하여 환경 변수를 필요에 맞게 조정할 수 있습니다.
+初始化完成后，将创建一个`config.toml`文件。您可以编辑此文件以根据需要调整环境变量。
 
-### 서버 시작
+### 启动服务器
 
-다음 명령을 실행하여 API 및 웹 서버를 시작합니다:
+运行以下命令来启动API和Web服务器：
 
 ```bash
 npx auf-cli start
 ```
 
-이 명령은 다음 작업을 수행합니다:
+此命令执行以下任务：
 
-1. `config.toml` 파일에서 환경 변수를 읽어옵니다.
-2. Docker Compose 파일을 생성합니다.
-3. API 및 웹 서버 컨테이너를 시작합니다.
+1. 从`config.toml`文件读取环境变量。
+2. 生成Docker Compose文件并启动服务。
+3. 启动API和Web服务器容器以及所需的基础设施（MySQL、SMTP、OpenSearch如果启用）。
 
-서버가 성공적으로 시작되면 웹 브라우저에서 `http://localhost:3000`(또는 구성된 URL)으로 접속하여 ABC User Feedback 웹 인터페이스에 액세스할 수 있습니다.
+服务器成功启动后，您可以在Web浏览器中导航到`http://localhost:3000`（或配置的URL）来访问ABC User Feedback Web界面。CLI将显示可用的URL，包括：
 
-### 서버 중지
+- Web界面URL
+- API URL
+- MySQL连接字符串
+- OpenSearch URL（如果启用）
+- SMTP Web界面（如果使用smtp4dev）
 
-다음 명령을 실행하여 API 및 웹 서버를 중지합니다:
+### 停止服务器
+
+运行以下命令来停止API和Web服务器：
 
 ```bash
 npx auf-cli stop
 ```
 
-이 명령은 실행 중인 API 및 웹 서버 컨테이너를 중지합니다. 인프라 컨테이너(MySQL, SMTP, OpenSearch)는 계속 실행됩니다.
+此命令会停止正在运行的API和Web服务器容器以及基础设施容器。存储在卷中的所有数据都将被保留。
 
-### 볼륨 정리
+### 卷清理
 
-다음 명령을 실행하여 초기화 중에 생성된 Docker 볼륨을 정리합니다:
+运行以下命令来清理启动期间创建的Docker卷：
 
 ```bash
 npx auf-cli clean
 ```
 
-이 명령은 MySQL, SMTP, OpenSearch 등의 Docker 볼륨을 삭제합니다. **주의**: 이 작업은 모든 데이터를 삭제하므로 백업이 필요한 경우 미리 데이터를 백업하세요.
+此命令会停止所有容器并删除MySQL、SMTP、OpenSearch等的Docker卷。**警告**：此操作将删除所有数据，因此如果需要备份，请确保预先备份您的数据。
 
-## 구성 파일 (config.toml)
+您也可以使用`--images`选项来清理未使用的Docker镜像：
 
-`init` 명령을 실행하면 현재 디렉토리에 `config.toml` 파일이 생성됩니다. 이 파일은 ABC User Feedback의 환경 변수를 구성하는 데 사용됩니다.
-
-다음은 `config.toml` 파일의 예시입니다:
-
-```toml
-[api]
-JWT_SECRET = "jwtsecretjwtsecretjwtsecret"
-MYSQL_PRIMARY_URL = "mysql://userfeedback:userfeedback@mysql:3306/userfeedback"
-ACCESS_TOKEN_EXPIRED_TIME = "10m"
-REFRESH_TOKEN_EXPIRED_TIME = "1h"
-APP_PORT = 4000
-APP_ADDRESS = "0.0.0.0"
-AUTO_MIGRATION = true
-NODE_OPTIONS = "--max_old_space_size=3072"
-SMTP_HOST = "smtp4dev"
-SMTP_PORT = 25
-SMTP_SENDER = "user@feedback.com"
-SMTP_BASE_URL = "http://localhost:3000"
-
-# OpenSearch 설정 (선택 사항)
-# OPENSEARCH_USE = true
-# OPENSEARCH_NODE = "http://opensearch-node:9200"
-# OPENSEARCH_USERNAME = "admin"
-# OPENSEARCH_PASSWORD = "UserFeedback123!@#"
-
-[web]
-NEXT_PUBLIC_API_BASE_URL = "http://localhost:4000"
+```bash
+npx auf-cli clean --images
 ```
 
-필요에 따라 이 파일을 편집하여 환경 변수를 조정할 수 있습니다. 환경 변수에 대한 자세한 설명은 [환경 변수 구성](./04-configuration.md) 문서를 참조하세요.
+## 配置文件（config.toml）
 
-## 고급 사용법
+运行`init`命令时，会在当前目录中创建一个`config.toml`文件。此文件用于配置ABC User Feedback的环境变量。
 
-### 포트 변경
-
-기본적으로 웹 서버는 포트 3000, API 서버는 포트 4000을 사용합니다. 이를 변경하려면 `config.toml` 파일에서 다음 설정을 수정하세요:
+以下是`config.toml`文件的示例：
 
 ```toml
-[api]
-APP_PORT = 8080  # API 서버 포트 변경
-
 [web]
-PORT = 8000  # 웹 서버 포트 변경
-NEXT_PUBLIC_API_BASE_URL = "http://localhost:8080"  # API URL도 변경해야 함
+port = 3000
+# api_base_url = "http://localhost:4000"
+
+[api]
+port = 4000
+jwt_secret = "jwtsecretjwtsecretjwtsecretjwtsecretjwtsecretjwtsecret"
+
+# master_api_key = "MASTER_KEY"
+# access_token_expired_time = "10m"
+# refresh_token_expired_time = "1h"
+
+# [api.auto_feedback_deletion]
+# enabled = true
+# period_days = 365
+
+# [api.smtp]
+# host = "smtp4dev" # SMTP_HOST
+# port = 25 # SMTP_PORT
+# sender = "user@feedback.com"
+# username=
+# password=
+# tls=
+# ciper_spec=
+# opportunitic_tls=
+
+# [api.opensearch]
+# enabled = true
+
+[mysql]
+port = 13306
 ```
 
-### 사용자 정의 Docker Compose 파일
+您可以根据需要编辑此文件以调整环境变量。有关环境变量的详细信息，请参阅[环境变量配置](./04-configuration.md)文档。
 
-CLI 도구는 내부적으로 Docker Compose 파일을 생성하여 사용합니다. 생성된 Docker Compose 파일을 확인하려면 `start` 명령 실행 후 현재 디렉토리에서 `docker-compose.yml` 파일을 확인하세요.
+## 高级用法
 
-이 파일을 직접 수정하여 추가적인 구성을 적용할 수 있지만, `auf-cli start` 명령을 다시 실행하면 변경 사항이 덮어쓰여질 수 있으므로 주의하세요.
+### 更改端口
 
-## 문제 해결
+默认情况下，Web服务器使用端口3000，API服务器使用端口4000。要更改这些端口，请在`config.toml`文件中修改以下设置：
 
-### 일반적인 문제
+```toml
+[web]
+port = 8000  # 更改Web服务器端口
+api_base_url = "http://localhost:8080"  # API URL也必须更改
 
-1. **Docker 관련 오류**:
+[api]
+port = 8080  # 更改API服务器端口
 
-   - Docker가 실행 중인지 확인하세요.
-   - Docker 명령을 실행할 권한이 있는지 확인하세요.
+[mysql]
+port = 13307  # 如果需要，更改MySQL端口
+```
 
-2. **포트 충돌**:
+### 自定义Docker Compose文件
 
-   - 포트 3000, 4000, 13306, 9200 등이 다른 애플리케이션에서 사용 중인지 확인하세요.
-   - `config.toml` 파일에서 포트 설정을 변경하세요.
+CLI工具内部生成并使用Docker Compose文件。要查看生成的Docker Compose文件，请在运行`start`命令后检查当前目录中的`docker-compose.yml`文件。
 
-3. **메모리 부족**:
-   - Docker에 할당된 메모리를 늘리세요.
-   - OpenSearch는 최소 2GB의 메모리를 필요로 합니다.
+您可以直接修改此文件以应用其他配置，但请注意，当您再次运行`auf-cli start`命令时，更改可能会被覆盖。
 
-## 제한 사항
+## 故障排除
 
-CLI 도구는 개발 및 테스트 환경에서 사용하기에 적합합니다. 프로덕션 환경에서는 다음 사항을 고려하세요:
+### 常见问题
 
-1. 보안 강화를 위해 환경 변수를 직접 설정하고 관리하세요.
-2. 고가용성 및 확장성을 위해 Kubernetes 또는 Docker Swarm과 같은 오케스트레이션 도구를 사용하세요.
-3. 데이터 지속성 및 백업 전략을 구현하세요.
+1. **Docker相关错误**：
 
-## 다음 단계
+   - 确保Docker正在运行。
+   - 验证您是否有执行Docker命令的权限。
 
-CLI 도구를 사용하여 ABC User Feedback을 성공적으로 설치했다면, 다음 단계로 [튜토리얼](../03-tutorial.md)을 진행하여 시스템을 구성하고 사용자를 추가하세요.
+2. **端口冲突**：
 
-자세한 API 및 웹 서버 구성 옵션은 [환경 변수 구성](./04-configuration.md) 문서를 참조하세요.
+   - 检查端口3000、4000、13306、9200、5080等是否正在被其他应用程序使用。
+   - 在`config.toml`文件中更改端口设置。
+
+3. **内存不足**：
+   - 增加分配给Docker的内存。
+   - OpenSearch至少需要2GB的内存。
+
+## 限制
+
+CLI工具适用于开发和测试环境。对于生产环境，请考虑以下事项：
+
+1. 直接设置和管理环境变量以增强安全性。
+2. 使用Kubernetes或Docker Swarm等编排工具实现高可用性和可扩展性。
+3. 实施数据持久性和备份策略。
+
+## 下一步
+
+如果您已使用CLI工具成功安装了ABC User Feedback，请继续进行[教程](../03-tutorial.md)以配置系统并添加用户。
+
+有关详细的API和Web服务器配置选项，请参阅[环境变量配置](./04-configuration.md)文档。
