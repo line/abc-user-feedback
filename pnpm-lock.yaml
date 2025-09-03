@@ -45,8 +45,8 @@ importers:
         specifier: ^3.879.0
         version: 3.879.0
       '@fastify/multipart':
-        specifier: ^9.0.3
-        version: 9.0.3
+        specifier: ^9.1.0
+        version: 9.1.0
       '@fastify/static':
         specifier: ^8.2.0
         version: 8.2.0
@@ -2279,8 +2279,8 @@ packages:
   '@fastify/middie@9.0.3':
     resolution: {integrity: sha512-7OYovKXp9UKYeVMcjcFLMcSpoMkmcZmfnG+eAvtdiatN35W7c+r9y1dRfpA+pfFVNuHGGqI3W+vDTmjvcfLcMA==}
 
-  '@fastify/multipart@9.0.3':
-    resolution: {integrity: sha512-pJogxQCrT12/6I5Fh6jr3narwcymA0pv4B0jbC7c6Bl9wnrxomEUnV0d26w6gUls7gSXmhG8JGRMmHFIPsxt1g==}
+  '@fastify/multipart@9.1.0':
+    resolution: {integrity: sha512-6wLsOTuUVQnZWeeL/jc7I9AqLb0O0nKo0zrcpepWT2YsbE/6oFOIotc9/aI29Lta1l59qiGm8/ILmjVSlbTyEA==}
 
   '@fastify/proxy-addr@5.0.0':
     resolution: {integrity: sha512-37qVVA1qZ5sgH7KpHkkC4z9SK6StIsIcOmpjvMPXNb3vx2GQxhZocogVYbr2PbbeLCQxYIPDok307xEvRZOzGA==}
@@ -12815,7 +12815,7 @@ snapshots:
       path-to-regexp: 8.2.0
       reusify: 1.1.0
 
-  '@fastify/multipart@9.0.3':
+  '@fastify/multipart@9.1.0':
     dependencies:
       '@fastify/busboy': 3.1.1
       '@fastify/deepmerge': 2.0.2
