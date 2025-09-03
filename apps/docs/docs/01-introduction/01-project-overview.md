@@ -1,53 +1,53 @@
 ---
 sidebar_position: 1
-title: '프로젝트 개요'
-description: '프로젝트 개요 대한 설명입니다.'
+title: 'Project Overview'
+description: 'This is a description of the project overview.'
 ---
 
-# 프로젝트 개요
+# Project Overview
 
-## ABC User Feedback이란?
+## What is ABC User Feedback?
 
-ABC User Feedback은 고객의 소리(Voice of Customer, VoC)를 효율적으로 수집, 분류 및 관리하기 위해 설계된 독립형 웹 애플리케이션입니다. 이 오픈소스 솔루션은 사용자 피드백을 체계적으로 관리하여 제품과 서비스 개선에 필요한 인사이트를 도출하는 데 중점을 두고 있습니다.
+ABC User Feedback is a standalone web application designed to efficiently collect, categorize, and manage Voice of Customer (VoC) feedback. This open-source solution focuses on systematically managing user feedback to derive insights necessary for product and service improvements.
 
-현재 이 애플리케이션은 월간 활성 사용자(MAU) 1,000만 명 규모의 서비스에서 활용되고 있어, 대규모 피드백 처리에 대한 검증된 안정성을 갖추고 있습니다.
+Currently, this application is being utilized by services with 10 million monthly active users (MAU), demonstrating proven stability for large-scale feedback processing.
 
-## 핵심 가치 제안
+## Core Value Proposition
 
-ABC User Feedback은 다음과 같은 핵심 가치를 제공합니다:
+ABC User Feedback provides the following core values:
 
-1. **중앙화된 피드백 관리**: 다양한 채널에서 수집된 사용자 피드백을 한 곳에서 관리
-2. **구조화된 분석**: 이슈 시스템을 통한 피드백 분류 및 추세 파악
-3. **이슈 추적**: 피드백에서 발견된 문제점을 이슈로 전환하여 추적 관리
-4. **데이터 기반 의사결정**: 대시보드를 통한 피드백 데이터 시각화 및 인사이트 도출
+1. **Centralized Feedback Management**: Manage user feedback collected from various channels in one place
+2. **Structured Analysis**: Categorize feedback and identify trends through the issue system
+3. **Issue Tracking**: Convert problems discovered in feedback into issues for tracking and management
+4. **Data-Driven Decision Making**: Visualize feedback data through dashboards and derive insights
 
-## 기술 스택
+## Technology Stack
 
-ABC User Feedback은 현대적인 웹 기술을 기반으로 구축되었습니다:
+ABC User Feedback is built on modern web technologies:
 
-- **프론트엔드**: [Next.js](https://nextjs.org/) - React 기반의 프론트엔드 프레임워크
-- **백엔드**: [NestJS](https://nestjs.com/) - TypeScript 기반의 확장 가능한 백엔드 프레임워크
-- **데이터베이스**: [MySQL v8](https://www.mysql.com/) - 안정적인 관계형 데이터베이스
-- **검색 엔진**: [OpenSearch v2.16](https://opensearch.org/) (선택 사항) - 대량의 피드백 데이터에 대한 고성능 검색 기능
+- **Frontend**: [Next.js](https://nextjs.org/) - React-based frontend framework
+- **Backend**: [NestJS](https://nestjs.com/) - TypeScript-based scalable backend framework
+- **Database**: [MySQL v8](https://www.mysql.com/) - Reliable relational database
+- **Search Engine**: [OpenSearch v2.16](https://opensearch.org/) (optional) - High-performance search functionality for large volumes of feedback data
 
-## 아키텍처 개요
+## Architecture Overview
 
-ABC User Feedback은 다음과 같은 주요 컴포넌트로 구성됩니다:
+ABC User Feedback consists of the following major components:
 
-1. **웹 관리자 인터페이스**: 피드백 관리, 이슈 추적, 대시보드 등 사용자 인터페이스를 제공하는 Next.js 기반 웹 애플리케이션
-2. **API 서버**: 데이터 처리, 비즈니스 로직, 인증 등을 담당하는 NestJS 기반 백엔드 서버
-3. **데이터베이스**: 피드백, 이슈, 사용자 정보 등을 저장하는 MySQL 데이터베이스
-4. **검색 엔진**: 대량의 피드백 데이터에 대한 고성능 검색을 제공하는 OpenSearch (선택 사항)
-5. **SMTP 서버**: 계정 생성 시 이메일 인증, 비밀번호 재설정 등 사용자 인증 프로세스에 필요한 이메일 발송을 담당하는 컴포넌트
+1. **Web Admin Interface**: Next.js-based web application providing user interfaces for feedback management, issue tracking, dashboard, etc.
+2. **API Server**: NestJS-based backend server responsible for data processing, business logic, authentication, etc.
+3. **Database**: MySQL database storing feedback, issues, user information, etc.
+4. **Search Engine**: OpenSearch (optional) providing high-performance search for large volumes of feedback data
+5. **SMTP Server**: Component responsible for sending emails required for user authentication processes such as email verification during account creation and password reset
 
-이 컴포넌트들은 Docker를 통해 컨테이너화되어 있어 쉽게 배포하고 확장할 수 있습니다.
+These components are containerized through Docker for easy deployment and scaling.
 
-아래 다이어그램은 ABC User Feedback의 주요 컴포넌트와 그 관계를 보여줍니다:
+The diagram below shows the major components of ABC User Feedback and their relationships:
 
 ```
 ┌─────────────────┐      ┌─────────────────┐
 │                 │      │                 │
-│  웹 인터페이스      │◄────►│    API 서버     │
+│  Web Interface  │◄────►│   API Server    │
 │   (Next.js)     │      │    (NestJS)     │
 │                 │      │                 │
 └─────────────────┘      └────────┬────────┘
@@ -57,39 +57,38 @@ ABC User Feedback은 다음과 같은 주요 컴포넌트로 구성됩니다:
          │                      │                      │
 ┌────────▼─────────┐  ┌─────────▼────────┐  ┌─────────▼────────┐
 │                  │  │                  │  │                  │
-│  MySQL 데이터베이스 │  │  OpenSearch 엔진   │  │    SMTP 서버     │
-│                  │  │    (선택사항)       │  │                  │
+│  MySQL Database  │  │ OpenSearch Engine │  │   SMTP Server    │
+│                  │  │    (Optional)     │  │                  │
 └──────────────────┘  └──────────────────┘  └──────────────────┘
 ```
 
-## 주요 사용 사례
+## Key Use Cases
 
-ABC User Feedback은 다음과 같은 상황에서 특히 유용합니다:
+ABC User Feedback is particularly useful in the following situations:
 
-1. **제품 개선 프로세스**: 사용자 피드백을 수집하고 분석하여 제품 개선 방향 설정
-2. **고객 지원**: 사용자 문의와 이슈를 효율적으로 추적하고 관리
-3. **사용자 경험 최적화**: 사용자 의견을 기반으로 UX/UI 개선
-4. **품질 관리**: 버그 리포트와 기능 요청을 체계적으로 관리
-5. **데이터 기반 의사결정**: 사용자 피드백 통계를 활용한 전략적 의사결정 지원
+1. **Product Improvement Process**: Collect and analyze user feedback to set product improvement directions
+2. **Customer Support**: Efficiently track and manage user inquiries and issues
+3. **User Experience Optimization**: Improve UX/UI based on user opinions
+4. **Quality Management**: Systematically manage bug reports and feature requests
+5. **Data-Driven Decision Making**: Support strategic decision-making using user feedback statistics
 
-## 차별화 요소
+## Differentiating Features
 
-ABC User Feedback은 다음과 같은 특징으로 다른 피드백 관리 도구와 차별화됩니다:
+ABC User Feedback differentiates itself from other feedback management tools with the following characteristics:
 
-1. **완전한 오픈소스**: 상용 솔루션과 달리 완전히 무료로 사용 가능하며 커스터마이징 가능
-2. **엔터프라이즈급 기능**: SSO 인증, RBAC 등 기업 환경에 필요한 기능 제공
-3. **확장성**: 대규모 사용자 기반(1,000만 MAU)에서 검증된 성능
-4. **통합 용이성**: RESTful API와 웹훅을 통해 기존 시스템과 쉽게 통합
-5. **컨테이너화**: Docker 지원으로 간편한 배포 및 확장
+1. **Fully Open Source**: Completely free to use and customizable, unlike commercial solutions
+2. **Enterprise-Grade Features**: Provides features necessary for enterprise environments such as SSO authentication and RBAC
+3. **Scalability**: Proven performance at large user bases (10 million MAU)
+4. **Easy Integration**: Easy integration with existing systems through RESTful APIs and webhooks
+5. **Containerization**: Simple deployment and scaling with Docker support
 
-## 다음 단계
+## Next Steps
 
-ABC User Feedback을 시작하려면 다음 문서를 참조하세요:
+To get started with ABC User Feedback, please refer to the following documents:
 
-- [주요 기능](./02-key-features.md) - 상세한 기능 설명
-- [설치 가이드](../02-getting-started/02-installation/01-docker-hub-images.md) - 설치 방법
-- [시스템 요구사항](../02-getting-started/01-system-requirements.md) - 필요한 환경 요구사항
+- [Key Features](./02-key-features.md) - Detailed feature descriptions
+- [Installation Guide](../02-getting-started/02-installation/01-docker-hub-images.md) - Installation methods
 
 ---
 
-이 문서는 ABC User Feedback의 기본 개요를 제공합니다. 더 자세한 정보는 해당 섹션의 문서를 참조하세요.
+This document provides a basic overview of ABC User Feedback. For more detailed information, please refer to the documents in the respective sections.

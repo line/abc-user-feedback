@@ -1,83 +1,92 @@
 ---
 sidebar_position: 4
-title: '환경 변수 구성'
-description: '환경 변수 구성 대한 설명입니다.'
+title: 'Environment Variable Configuration'
+description: 'Description of environment variable configuration.'
 ---
 
-# 환경 변수 구성
+# Environment Variable Configuration
 
-이 문서에서는 ABC User Feedback의 API 서버와 웹 서버에서 사용하는 환경 변수에 대한 자세한 설명을 제공합니다. 환경 변수를 올바르게 구성하는 것은 시스템의 안정적인 운영과 보안을 위해 중요합니다.
+This document provides detailed explanations of the environment variables used in ABC User Feedback's API server and web server. Proper configuration of environment variables is important for stable system operation and security.
 
-## API 서버 환경 변수
+## API Server Environment Variables
 
-### 기본 환경 변수
+### Required Environment Variables
 
-| 환경 변수        | 설명                                        | 기본값    | 예시                          |
-| ---------------- | ------------------------------------------- | --------- | ----------------------------- |
-| `JWT_SECRET`     | JSON Web Token(JWT) 서명에 사용되는 비밀 키 | _필수_    | `jwtsecretjwtsecretjwtsecret` |
-| `APP_PORT`       | 서버가 실행되는 포트                        | `4000`    | `4000`                        |
-| `APP_ADDRESS`    | 서버가 바인딩하는 주소                      | `0.0.0.0` | `0.0.0.0`                     |
-| `AUTO_MIGRATION` | 애플리케이션 시작 시 자동 마이그레이션 수행 | `true`    | `true`                        |
-| `MASTER_API_KEY` | 특권 작업을 위한 마스터 API 키              | _없음_    | `your-api-key`                |
-| `NODE_OPTIONS`   | Node.js 실행 옵션                           | _없음_    | `--max_old_space_size=3072`   |
+| Environment Variable | Description                                      | Default    | Example                       |
+| -------------------- | ------------------------------------------------ | ---------- | ----------------------------- |
+| `JWT_SECRET`         | Secret key used for JSON Web Token (JWT) signing | _Required_ | `jwtsecretjwtsecretjwtsecret` |
 
-### 데이터 페이스 설정
+### Optional Environment Variables
 
-| 환경 변수              | 설명                                | 기본값 | 예시                                                        |
-| ---------------------- | ----------------------------------- | ------ | ----------------------------------------------------------- |
-| `MYSQL_PRIMARY_URL`    | 주 MySQL 데이터베이스 연결 URL      | _필수_ | `mysql://userfeedback:userfeedback@mysql:3306/userfeedback` |
-| `MYSQL_SECONDARY_URLS` | 보조 MySQL 연결 URL(JSON 배열 형식) | _선택_ | `["mysql://user:pass@host2:3306/db"]`                       |
+| Environment Variable         | Description                                         | Default                 | Example                               |
+| ---------------------------- | --------------------------------------------------- | ----------------------- | ------------------------------------- |
+| `APP_PORT`                   | Port on which the server runs                       | `4000`                  | `4000`                                |
+| `APP_ADDRESS`                | Address to which the server binds                   | `0.0.0.0`               | `0.0.0.0`                             |
+| `MYSQL_SECONDARY_URLS`       | Secondary MySQL connection URLs (JSON array format) | _Optional_              | `["mysql://user:pass@host2:3306/db"]` |
+| `AUTO_MIGRATION`             | Perform automatic migration on application startup  | `true`                  | `true`                                |
+| `MASTER_API_KEY`             | Master API key for privileged operations            | _None_                  | `your-api-key`                        |
+| `NODE_OPTIONS`               | Node.js execution options                           | _None_                  | `--max_old_space_size=3072`           |
+| `ACCESS_TOKEN_EXPIRED_TIME`  | Access token expiration time                        | `10m`                   | `10m` (10 minutes)                    |
+| `REFRESH_TOKEN_EXPIRED_TIME` | Refresh token expiration time                       | `1h`                    | `1h` (1 hour)                         |
+| `ADMIN_WEB_URL`              | Base URL of the admin web url                       | `http://localhost:3000` | `http://localhost:3000`               |
 
-### SMTP 설정 (이메일 인증용)
+### Database Configuration
 
-| 환경 변수                | 설명                                 | 기본값    | 예시                  |
-| ------------------------ | ------------------------------------ | --------- | --------------------- |
-| `SMTP_HOST`              | SMTP 서버 호스트                     | _필수_    | `smtp.example.com`    |
-| `SMTP_PORT`              | SMTP 서버 포트                       | _필수_    | `587`                 |
-| `SMTP_USERNAME`          | SMTP 서버 인증 사용자 이름           | _필수_    | `user@example.com`    |
-| `SMTP_PASSWORD`          | SMTP 서버 인증 비밀번호              | _필수_    | `password`            |
-| `SMTP_SENDER`            | 이메일 발신자로 사용되는 이메일 주소 | _필수_    | `noreply@example.com` |
-| `SMTP_TLS`               | SMTP 서버에 보안 옵션 사용 설정      | `false`   | `true`                |
-| `SMTP_CIPHER_SPEC`       | SMTP 암호화 알고리즘 사양            | `TLSv1.2` | `TLSv1.2`             |
-| `SMTP_OPPORTUNISTIC_TLS` | STARTTLS를 사용한 기회적 TLS 사용    | `true`    | `true`                |
+| Environment Variable   | Description                                         | Default    | Example                                                     |
+| ---------------------- | --------------------------------------------------- | ---------- | ----------------------------------------------------------- |
+| `MYSQL_PRIMARY_URL`    | Primary MySQL database connection URL               | _Required_ | `mysql://userfeedback:userfeedback@mysql:3306/userfeedback` |
+| `MYSQL_SECONDARY_URLS` | Secondary MySQL connection URLs (JSON array format) | _Optional_ | `["mysql://user:pass@host2:3306/db"]`                       |
 
-## OpenSearch 설정 (검색 성능 향상용)
+### SMTP Configuration (for Email Authentication)
 
-| 환경 변수             | 설명                          | 기본값                        | 예시                          |
-| --------------------- | ----------------------------- | ----------------------------- | ----------------------------- |
-| `OPENSEARCH_USE`      | OpenSearch 통합 활성화 플래그 | `false`                       | `true`                        |
-| `OPENSEARCH_NODE`     | OpenSearch 노드 URL           | _OPENSEARCH_USE=true 시 필수_ | `http://opensearch-node:9200` |
-| `OPENSEARCH_USERNAME` | OpenSearch 사용자 이름        | ""                            | `admin`                       |
-| `OPENSEARCH_PASSWORD` | OpenSearch 비밀번호           | ""                            | `admin`                       |
+| Environment Variable     | Description                             | Default    | Example               |
+| ------------------------ | --------------------------------------- | ---------- | --------------------- |
+| `SMTP_HOST`              | SMTP server host                        | _Optional_ | `smtp.example.com`    |
+| `SMTP_PORT`              | SMTP server port                        | _Optional_ | `587`                 |
+| `SMTP_USERNAME`          | SMTP server authentication username     | _Optional_ | `user@example.com`    |
+| `SMTP_PASSWORD`          | SMTP server authentication password     | _Optional_ | `password`            |
+| `SMTP_SENDER`            | Email address used as the sender        | _Optional_ | `noreply@example.com` |
+| `SMTP_TLS`               | Enable security options for SMTP server | `false`    | `true`                |
+| `SMTP_CIPHER_SPEC`       | SMTP encryption algorithm specification | `TLSv1.2`  | `TLSv1.2`             |
+| `SMTP_OPPORTUNISTIC_TLS` | Use opportunistic TLS with STARTTLS     | `true`     | `true`                |
 
-## 자동 피드백 삭제 설정
+## OpenSearch Configuration (for Search Performance Enhancement)
 
-| 환경 변수                            | 설명                                                     | 기본값                                       | 예시   |
-| ------------------------------------ | -------------------------------------------------------- | -------------------------------------------- | ------ |
-| `ENABLE_AUTO_FEEDBACK_DELETION`      | 애플리케이션 시작 시 자동 오래된 피드백 삭제 크론 활성화 | `false`                                      | `true` |
-| `AUTO_FEEDBACK_DELETION_PERIOD_DAYS` | 자동 오래된 피드백 삭제 기간(일)                         | _ENABLE_AUTO_FEEDBACK_DELETION=true 시 필수_ | `365`  |
+| Environment Variable  | Description                        | Default                             | Example                       |
+| --------------------- | ---------------------------------- | ----------------------------------- | ----------------------------- |
+| `OPENSEARCH_USE`      | OpenSearch integration enable flag | `false`                             | `true`                        |
+| `OPENSEARCH_NODE`     | OpenSearch node URL                | _Required when OPENSEARCH_USE=true_ | `http://opensearch-node:9200` |
+| `OPENSEARCH_USERNAME` | OpenSearch username                | _Required when OPENSEARCH_USE=true_ | `admin`                       |
+| `OPENSEARCH_PASSWORD` | OpenSearch password                | _Required when OPENSEARCH_USE=true_ | `admin`                       |
 
-## 웹 서버 환경 변수
+## Automatic Feedback Deletion Configuration
 
-### 필수 환경 변수
+| Environment Variable                 | Description                                                        | Default                                            | Example |
+| ------------------------------------ | ------------------------------------------------------------------ | -------------------------------------------------- | ------- |
+| `ENABLE_AUTO_FEEDBACK_DELETION`      | Enable automatic old feedback deletion cron on application startup | `false`                                            | `true`  |
+| `AUTO_FEEDBACK_DELETION_PERIOD_DAYS` | Automatic old feedback deletion period (days)                      | _Required when ENABLE_AUTO_FEEDBACK_DELETION=true_ | `365`   |
 
-| 환경 변수                  | 설명                                  | 기본값 | 예시                    |
-| -------------------------- | ------------------------------------- | ------ | ----------------------- |
-| `NEXT_PUBLIC_API_BASE_URL` | 클라이언트 측에서 사용할 API 기본 URL | _필수_ | `http://localhost:4000` |
+## Web Server Environment Variables
 
-### 선택적 환경 변수
+### Required Environment Variables
 
-| 환경 변수 | 설명                    | 기본값 | 예시   |
-| --------- | ----------------------- | ------ | ------ |
-| `PORT`    | 웹 서버가 실행되는 포트 | `3000` | `3000` |
+| Environment Variable       | Description                                | Default    | Example                 |
+| -------------------------- | ------------------------------------------ | ---------- | ----------------------- |
+| `NEXT_PUBLIC_API_BASE_URL` | API base URL to be used on the client side | _Required_ | `http://localhost:4000` |
 
-## 환경 변수 설정 방법
+### Optional Environment Variables
 
-환경 변수를 설정하는 방법은 배포 방식에 따라 다릅니다:
+| Environment Variable | Description                       | Default | Example |
+| -------------------- | --------------------------------- | ------- | ------- |
+| `PORT`               | Port on which the web server runs | `3000`  | `3000`  |
 
-### Docker Compose 사용 시
+## How to Set Environment Variables
 
-Docker Compose 파일에서 `environment` 섹션을 통해 환경 변수를 설정할 수 있습니다:
+The method for setting environment variables varies depending on the deployment method:
+
+### When Using Docker Compose
+
+You can set environment variables through the `environment` section in the Docker Compose file:
 
 ```yaml
 services:
@@ -86,103 +95,103 @@ services:
     environment:
       - JWT_SECRET=your-jwt-secret
       - MYSQL_PRIMARY_URL=mysql://user:password@mysql:3306/db
-      # 기타 환경 변수
+      # Other environment variables
 ```
 
-### 수동 설치 시
+### When Installing Manually
 
-`.env` 파일을 사용하여 환경 변수를 설정할 수 있습니다:
+You can set environment variables using `.env` files:
 
 ```
-# API 서버 .env 파일 (apps/api/.env)
+# API server .env file (apps/api/.env)
 JWT_SECRET=your-jwt-secret
 MYSQL_PRIMARY_URL=mysql://user:password@localhost:3306/db
-# 기타 환경 변수
+# Other environment variables
 
-# 웹 서버 .env 파일 (apps/web/.env)
+# Web server .env file (apps/web/.env)
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 ```
 
-### CLI 도구 사용 시
+### When Using CLI Tool
 
-`config.toml` 파일을 통해 환경 변수를 설정할 수 있습니다:
+You can set environment variables through the `config.toml` file:
 
 ```toml
 [api]
 JWT_SECRET = "your-jwt-secret"
 MYSQL_PRIMARY_URL = "mysql://user:password@mysql:3306/db"
-# 기타 API 환경 변수
+# Other API environment variables
 
 [web]
 NEXT_PUBLIC_API_BASE_URL = "http://localhost:4000"
-# 기타 웹 환경 변수
+# Other web environment variables
 ```
 
-## 환경 변수 사용 팁
+## Environment Variable Usage Tips
 
-### 보안 관련 팁
+### Security Tips
 
-1. **강력한 JWT 시크릿 사용**: `JWT_SECRET`에는 무작위로 생성된 긴 문자열을 사용하세요.
-2. **프로덕션 환경에서 환경 변수 보호**: 프로덕션 환경에서는 환경 변수를 안전하게 관리하세요.
-3. **HTTPS 사용**: 프로덕션 환경에서는 항상 HTTPS를 통해 서비스를 제공하세요.
+1. **Use Strong JWT Secret**: Use a randomly generated long string for `JWT_SECRET`.
+2. **Protect Environment Variables in Production**: Manage environment variables securely in production environments.
+3. **Use HTTPS**: Always serve your service over HTTPS in production environments.
 
-### 성능 관련 팁
+### Performance Tips
 
-1. **OpenSearch 활성화**: 대량의 피드백 데이터를 처리하는 경우 검색 성능을 향상시키기 위해 OpenSearch를 활성화하세요.
-2. **메모리 할당 최적화**: `NODE_OPTIONS`를 사용하여 Node.js에 적절한 메모리를 할당하세요.
+1. **Enable OpenSearch**: Enable OpenSearch to improve search performance when handling large amounts of feedback data.
+2. **Optimize Memory Allocation**: Use `NODE_OPTIONS` to allocate appropriate memory to Node.js.
 
-### 배포 관련 팁
+### Deployment Tips
 
-1. **환경별 구성**: 개발, 테스트, 프로덕션 환경에 맞게 다른 환경 변수 값을 사용하세요.
-2. **자동 마이그레이션 주의**: 프로덕션 환경에서는 `AUTO_MIGRATION=true` 설정을 주의해서 사용하세요. 데이터베이스 백업 후 마이그레이션을 수행하는 것이 좋습니다.
+1. **Environment-specific Configuration**: Use different environment variable values for development, testing, and production environments.
+2. **Use Auto Migration Carefully**: Be careful when using `AUTO_MIGRATION=true` setting in production environments. It's recommended to perform migration after backing up the database.
 
-## MySQL 연결 URL 형식
+## MySQL Connection URL Format
 
-`MYSQL_PRIMARY_URL` 환경 변수는 다음 형식을 따라야 합니다:
+The `MYSQL_PRIMARY_URL` environment variable must follow this format:
 
 ```
 mysql://username:password@hostname:port/database
 ```
 
-예시:
+Examples:
 
-- 로컬 개발: `mysql://root:password@localhost:3306/userfeedback`
+- Local development: `mysql://root:password@localhost:3306/userfeedback`
 - Docker Compose: `mysql://userfeedback:userfeedback@mysql:3306/userfeedback`
 
-## 토큰 만료 시간 형식
+## Token Expiration Time Format
 
-`ACCESS_TOKEN_EXPIRED_TIME` 및 `REFRESH_TOKEN_EXPIRED_TIME` 환경 변수는 다음 형식을 사용합니다:
+The `ACCESS_TOKEN_EXPIRED_TIME` and `REFRESH_TOKEN_EXPIRED_TIME` environment variables use the following format:
 
-- `Xs`: X초 (예: `30s`)
-- `Xm`: X분 (예: `10m`)
-- `Xh`: X시간 (예: `1h`)
-- `Xd`: X일 (예: `7d`)
+- `Xs`: X seconds (e.g., `30s`)
+- `Xm`: X minutes (e.g., `10m`)
+- `Xh`: X hours (e.g., `1h`)
+- `Xd`: X days (e.g., `7d`)
 
-## 문제 해결
+## Troubleshooting
 
-### 일반적인 환경 변수 문제
+### Common Environment Variable Issues
 
-1. **환경 변수가 인식되지 않음**:
+1. **Environment variables not recognized**:
 
-   - 환경 변수 이름이 정확한지 확인하세요.
-   - 환경 변수가 올바른 위치에 설정되었는지 확인하세요.
-   - Docker Compose를 사용하는 경우 컨테이너를 다시 시작하세요.
+   - Check if the environment variable names are correct.
+   - Verify that environment variables are set in the correct location.
+   - If using Docker Compose, restart the containers.
 
-2. **데이터베이스 연결 오류**:
+2. **Database connection errors**:
 
-   - `MYSQL_PRIMARY_URL` 형식이 올바른지 확인하세요.
-   - MySQL 서버가 실행 중이고 접근 가능한지 확인하세요.
-   - 사용자 이름과 비밀번호가 올바른지 확인하세요.
+   - Check if the `MYSQL_PRIMARY_URL` format is correct.
+   - Verify that the MySQL server is running and accessible.
+   - Check if the username and password are correct.
 
-3. **SMTP 오류**:
+3. **SMTP errors**:
 
-   - SMTP 서버 설정이 올바른지 확인하세요.
-   - 필요한 경우 `SMTP_TLS` 및 `SMTP_CIPHER_SPEC` 설정을 조정하세요.
+   - Check if the SMTP server settings are correct.
+   - Adjust `SMTP_TLS` and `SMTP_CIPHER_SPEC` settings if necessary.
 
-4. **OpenSearch 연결 오류**:
-   - OpenSearch 서버가 실행 중인지 확인하세요.
-   - `OPENSEARCH_NODE`, `OPENSEARCH_USERNAME`, `OPENSEARCH_PASSWORD` 설정이 올바른지 확인하세요.
+4. **OpenSearch connection errors**:
+   - Check if the OpenSearch server is running.
+   - Verify that `OPENSEARCH_NODE`, `OPENSEARCH_USERNAME`, and `OPENSEARCH_PASSWORD` settings are correct.
 
-## 다음 단계
+## Next Steps
 
-환경 변수를 올바르게 구성한 후에는 [튜토리얼](../03-tutorial.md) 문서를 참조하여 ABC User Feedback 시스템을 초기화하고 사용자를 추가하세요.
+After properly configuring environment variables, refer to the [Tutorial](../03-tutorial.md) document to initialize the ABC User Feedback system and add users.
