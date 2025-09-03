@@ -54,8 +54,6 @@ services:
   web:
     container_name: ufb-web
     image: line/abc-user-feedback-web:latest
-    environment:
-      - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
     ports:
       - 3000:3000
     depends_on:
@@ -71,8 +69,7 @@ services:
       - SMTP_HOST=smtp4dev
       - SMTP_PORT=25
       - SMTP_SENDER=user@feedback.com
-      - OPENSEARCH_USE=true
-      # - OPENSEARCH_NODE=opensearch-node
+      # - OPENSEARCH_USE=true
       # - OPENSEARCH_NODE=http://opensearch-node:9200
 
     ports:

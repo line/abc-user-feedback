@@ -2,8 +2,9 @@
   "extends": "@ufb/tsconfig/nestjs.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "resolveJsonModule": true
   },
-  "include": ["bin"],
+  "include": ["."],
   "exclude": ["node_modules", "dist"]
 }

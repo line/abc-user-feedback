@@ -10,25 +10,18 @@ This document provides detailed explanations of the environment variables used i
 
 ## API Server Environment Variables
 
-### Required Environment Variables
+### App Environment Variables
 
-| Environment Variable | Description                                      | Default    | Example                       |
-| -------------------- | ------------------------------------------------ | ---------- | ----------------------------- |
-| `JWT_SECRET`         | Secret key used for JSON Web Token (JWT) signing | _Required_ | `jwtsecretjwtsecretjwtsecret` |
-
-### Optional Environment Variables
-
-| Environment Variable         | Description                                         | Default                 | Example                               |
-| ---------------------------- | --------------------------------------------------- | ----------------------- | ------------------------------------- |
-| `APP_PORT`                   | Port on which the server runs                       | `4000`                  | `4000`                                |
-| `APP_ADDRESS`                | Address to which the server binds                   | `0.0.0.0`               | `0.0.0.0`                             |
-| `MYSQL_SECONDARY_URLS`       | Secondary MySQL connection URLs (JSON array format) | _Optional_              | `["mysql://user:pass@host2:3306/db"]` |
-| `AUTO_MIGRATION`             | Perform automatic migration on application startup  | `true`                  | `true`                                |
-| `MASTER_API_KEY`             | Master API key for privileged operations            | _None_                  | `your-api-key`                        |
-| `NODE_OPTIONS`               | Node.js execution options                           | _None_                  | `--max_old_space_size=3072`           |
-| `ACCESS_TOKEN_EXPIRED_TIME`  | Access token expiration time                        | `10m`                   | `10m` (10 minutes)                    |
-| `REFRESH_TOKEN_EXPIRED_TIME` | Refresh token expiration time                       | `1h`                    | `1h` (1 hour)                         |
-| `ADMIN_WEB_URL`              | Base URL of the admin web url                       | `http://localhost:3000` | `http://localhost:3000`               |
+| Environment Variable         | Description                                        | Default                 | Example                       |
+| ---------------------------- | -------------------------------------------------- | ----------------------- | ----------------------------- |
+| `JWT_SECRET`                 | Secret key used for JSON Web Token (JWT) signing   | _Required_              | `jwtsecretjwtsecretjwtsecret` |
+| `APP_PORT`                   | Port on which the server runs                      | `4000`                  | `4000`                        |
+| `APP_ADDRESS`                | Address to which the server binds                  | `0.0.0.0`               | `0.0.0.0`                     |
+| `AUTO_MIGRATION`             | Perform automatic migration on application startup | `true`                  | `true`                        |
+| `MASTER_API_KEY`             | Master API key for privileged operations           | _None_                  | `your-api-key`                |
+| `ACCESS_TOKEN_EXPIRED_TIME`  | Access token expiration time                       | `10m`                   | `10m` (10 minutes)            |
+| `REFRESH_TOKEN_EXPIRED_TIME` | Refresh token expiration time                      | `1h`                    | `1h` (1 hour)                 |
+| `ADMIN_WEB_URL`              | Base URL of the admin web url                      | `http://localhost:3000` | `http://localhost:3000`       |
 
 ### Database Configuration
 
@@ -41,11 +34,11 @@ This document provides detailed explanations of the environment variables used i
 
 | Environment Variable     | Description                             | Default    | Example               |
 | ------------------------ | --------------------------------------- | ---------- | --------------------- |
-| `SMTP_HOST`              | SMTP server host                        | _Optional_ | `smtp.example.com`    |
-| `SMTP_PORT`              | SMTP server port                        | _Optional_ | `587`                 |
+| `SMTP_HOST`              | SMTP server host                        | _Required_ | `smtp.example.com`    |
+| `SMTP_PORT`              | SMTP server port                        | _Required_ | `587`                 |
+| `SMTP_SENDER`            | Email address used as the sender        | _Required_ | `noreply@example.com` |
 | `SMTP_USERNAME`          | SMTP server authentication username     | _Optional_ | `user@example.com`    |
 | `SMTP_PASSWORD`          | SMTP server authentication password     | _Optional_ | `password`            |
-| `SMTP_SENDER`            | Email address used as the sender        | _Optional_ | `noreply@example.com` |
 | `SMTP_TLS`               | Enable security options for SMTP server | `false`    | `true`                |
 | `SMTP_CIPHER_SPEC`       | SMTP encryption algorithm specification | `TLSv1.2`  | `TLSv1.2`             |
 | `SMTP_OPPORTUNISTIC_TLS` | Use opportunistic TLS with STARTTLS     | `true`     | `true`                |
@@ -61,24 +54,18 @@ This document provides detailed explanations of the environment variables used i
 
 ## Automatic Feedback Deletion Configuration
 
-| Environment Variable                 | Description                                                        | Default                                            | Example |
-| ------------------------------------ | ------------------------------------------------------------------ | -------------------------------------------------- | ------- |
-| `ENABLE_AUTO_FEEDBACK_DELETION`      | Enable automatic old feedback deletion cron on application startup | `false`                                            | `true`  |
-| `AUTO_FEEDBACK_DELETION_PERIOD_DAYS` | Automatic old feedback deletion period (days)                      | _Required when ENABLE_AUTO_FEEDBACK_DELETION=true_ | `365`   |
+| Environment Variable                 | Description                                                        | Default                                             | Example |
+| ------------------------------------ | ------------------------------------------------------------------ | --------------------------------------------------- | ------- |
+| `AUTO_FEEDBACK_DELETION_ENABLED`     | Enable automatic old feedback deletion cron on application startup | `false`                                             | `true`  |
+| `AUTO_FEEDBACK_DELETION_PERIOD_DAYS` | Automatic old feedback deletion period (days)                      | _Required when AUTO_FEEDBACK_DELETION_ENABLED=true_ | `365`   |
 
-## Web Server Environment Variables
+## Web Environment Variables
 
-### Required Environment Variables
+### App Environment Variables
 
-| Environment Variable       | Description                                | Default    | Example                 |
-| -------------------------- | ------------------------------------------ | ---------- | ----------------------- |
-| `NEXT_PUBLIC_API_BASE_URL` | API base URL to be used on the client side | _Required_ | `http://localhost:4000` |
-
-### Optional Environment Variables
-
-| Environment Variable | Description                       | Default | Example |
-| -------------------- | --------------------------------- | ------- | ------- |
-| `PORT`               | Port on which the web server runs | `3000`  | `3000`  |
+| Environment Variable       | Description                                | Default                 | Example                 |
+| -------------------------- | ------------------------------------------ | ----------------------- | ----------------------- |
+| `NEXT_PUBLIC_API_BASE_URL` | API base URL to be used on the client side | `http://localhost:4000` | `http://localhost:4000` |
 
 ## How to Set Environment Variables
 

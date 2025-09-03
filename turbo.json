@@ -67,7 +67,7 @@
     "MASTER_API_KEY",
     "SKIP_ENV_VALIDATION",
     "PORT",
-    "ENABLE_AUTO_FEEDBACK_DELETION",
+    "AUTO_FEEDBACK_DELETION_ENABLED",
     "AUTO_FEEDBACK_DELETION_PERIOD_DAYS"
   ],
   "globalPassThroughEnv": ["NODE_ENV", "CI", "npm_lifecycle_event"]

@@ -38,9 +38,8 @@ npx auf-cli init
 
 This command performs the following tasks:
 
-1. Detects the system architecture (ARM/AMD) and selects the appropriate Docker images.
-2. Sets up necessary infrastructure containers such as MySQL, SMTP, and OpenSearch.
-3. Creates a `config.toml` file for environment variable configuration.
+1. Creates a `config.toml` file for environment variable configuration.
+2. If a `config.toml` file already exists, use the `--force` option to overwrite it.
 
 Once initialization is complete, a `config.toml` file will be created. You can edit this file to adjust environment variables as needed.
 
@@ -55,10 +54,16 @@ npx auf-cli start
 This command performs the following tasks:
 
 1. Reads environment variables from the `config.toml` file.
-2. Generates a Docker Compose file.
-3. Starts the API and web server containers.
+2. Generates a Docker Compose file and starts the services.
+3. Starts the API and web server containers along with required infrastructure (MySQL, SMTP, OpenSearch if enabled).
 
-Once the server starts successfully, you can access the ABC User Feedback web interface by navigating to `http://localhost:3000` (or the configured URL) in your web browser.
+Once the server starts successfully, you can access the ABC User Feedback web interface by navigating to `http://localhost:3000` (or the configured URL) in your web browser. The CLI will display the available URLs including:
+
+- Web interface URL
+- API URL
+- MySQL connection string
+- OpenSearch URL (if enabled)
+- SMTP web interface (if using smtp4dev)
 
 ### Stopping the Server
 
@@ -68,17 +73,23 @@ Run the following command to stop the API and web servers:
 npx auf-cli stop
 ```
 
-This command stops the running API and web server containers. Infrastructure containers (MySQL, SMTP, OpenSearch) will continue to run.
+This command stops the running API and web server containers along with infrastructure containers. All data stored in volumes will be preserved.
 
 ### Volume Cleanup
 
-Run the following command to clean up Docker volumes created during initialization:
+Run the following command to clean up Docker volumes created during startup:
 
 ```bash
 npx auf-cli clean
 ```
 
-This command deletes Docker volumes for MySQL, SMTP, OpenSearch, etc. **Warning**: This operation will delete all data, so make sure to back up your data beforehand if backup is needed.
+This command stops all containers and deletes Docker volumes for MySQL, SMTP, OpenSearch, etc. **Warning**: This operation will delete all data, so make sure to back up your data beforehand if backup is needed.
+
+You can also use the `--images` option to clean up unused Docker images:
+
+```bash
+npx auf-cli clean --images
+```
 
 ## Configuration File (config.toml)
 
@@ -87,27 +98,37 @@ When you run the `init` command, a `config.toml` file is created in the current 
 Here's an example of the `config.toml` file:
 
 ```toml
-[api]
-JWT_SECRET = "jwtsecretjwtsecretjwtsecret"
-MYSQL_PRIMARY_URL = "mysql://userfeedback:userfeedback@mysql:3306/userfeedback"
-ACCESS_TOKEN_EXPIRED_TIME = "10m"
-REFRESH_TOKEN_EXPIRED_TIME = "1h"
-APP_PORT = 4000
-APP_ADDRESS = "0.0.0.0"
-AUTO_MIGRATION = true
-NODE_OPTIONS = "--max_old_space_size=3072"
-SMTP_HOST = "smtp4dev"
-SMTP_PORT = 25
-SMTP_SENDER = "user@feedback.com"
-
-# OpenSearch configuration (optional)
-# OPENSEARCH_USE = true
-# OPENSEARCH_NODE = "http://opensearch-node:9200"
-# OPENSEARCH_USERNAME = "admin"
-# OPENSEARCH_PASSWORD = "UserFeedback123!@#"
-
 [web]
-NEXT_PUBLIC_API_BASE_URL = "http://localhost:4000"
+port = 3000
+# api_base_url = "http://localhost:4000"
+
+[api]
+port = 4000
+jwt_secret = "jwtsecretjwtsecretjwtsecretjwtsecretjwtsecretjwtsecret"
+
+# master_api_key = "MASTER_KEY"
+# access_token_expired_time = "10m"
+# refresh_token_expired_time = "1h"
+
+# [api.auto_feedback_deletion]
+# enabled = true
+# period_days = 365
+
+# [api.smtp]
+# host = "smtp4dev" # SMTP_HOST
+# port = 25 # SMTP_PORT
+# sender = "user@feedback.com"
+# username=
+# password=
+# tls=
+# ciper_spec=
+# opportunitic_tls=
+
+# [api.opensearch]
+# enabled = true
+
+[mysql]
+port = 13306
 ```
 
 You can edit this file as needed to adjust environment variables. For detailed information about environment variables, refer to the [Environment Variable Configuration](./04-configuration.md) documentation.
@@ -119,12 +140,15 @@ You can edit this file as needed to adjust environment variables. For detailed i
 By default, the web server uses port 3000 and the API server uses port 4000. To change these, modify the following settings in the `config.toml` file:
 
 ```toml
-[api]
-APP_PORT = 8080  # Change API server port
-
 [web]
-PORT = 8000  # Change web server port
-NEXT_PUBLIC_API_BASE_URL = "http://localhost:8080"  # API URL must also be changed
+port = 8000  # Change web server port
+api_base_url = "http://localhost:8080"  # API URL must also be changed
+
+[api]
+port = 8080  # Change API server port
+
+[mysql]
+port = 13307  # Change MySQL port if needed
 ```
 
 ### Custom Docker Compose File
@@ -144,7 +168,7 @@ You can directly modify this file to apply additional configurations, but be awa
 
 2. **Port conflicts**:
 
-   - Check if ports 3000, 4000, 13306, 9200, etc., are being used by other applications.
+   - Check if ports 3000, 4000, 13306, 9200, 5080, etc., are being used by other applications.
    - Change port settings in the `config.toml` file.
 
 3. **Out of memory**:

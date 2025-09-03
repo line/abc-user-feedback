@@ -2,27 +2,87 @@ services:
   web:
     container_name: ufb-web
     image: line/abc-user-feedback-web:latest
-    restart: always
     ports:
       - 3000:3000
-    environment:
-      - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
     depends_on:
       - api
+    restart: unless-stopped
 
   api:
     container_name: ufb-api
     image: line/abc-user-feedback-api:latest
-    restart: always
-    ports:
-      - 4000:4000
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
       - SMTP_HOST=smtp4dev
       - SMTP_PORT=25
       - SMTP_SENDER=user@feedback.com
-      - OPENSEARCH_USE=true
-      - OPENSEARCH_NODE=http://opensearch-node:9200
-      - OPENSEARCH_USERNAME=""
-      - OPENSEARCH_PASSWORD=""
+      # - OPENSEARCH_USE=true
+      # - OPENSEARCH_NODE=http://opensearch-node:9200
+
+    ports:
+      - 4000:4000
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  mysql:
+    container_name: ufb-db
+    image: mysql:8.0
+    command:
+      [
+        '--default-authentication-plugin=mysql_native_password',
+        '--collation-server=utf8mb4_bin',
+      ]
+    environment:
+      MYSQL_ROOT_PASSWORD: userfeedback
+      MYSQL_DATABASE: userfeedback
+      MYSQL_USER: userfeedback
+      MYSQL_PASSWORD: userfeedback
+      TZ: UTC
+    ports:
+      - 13306:3306
+    volumes:
+      - mysql:/var/lib/mysql
+    restart: unless-stopped
+
+  smtp4dev:
+    container_name: ufb-smtp
+    image: rnwood/smtp4dev:v3
+    ports:
+      - 5080:80
+      - 25:25
+      - 143:143
+    volumes:
+      - smtp4dev:/smtp4dev
+    restart: unless-stopped
+
+  # opensearch-node:
+  #   container_name: ufb-opensearch
+  #   image: opensearchproject/opensearch:2.16.0
+  #   restart: unless-stopped
+  #   environment:
+  #     - cluster.name=opensearch-cluster
+  #     - node.name=opensearch-node
+  #     - discovery.type=single-node
+  #     - bootstrap.memory_lock=true
+  #     - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
+  #     - plugins.security.disabled=true
+  #     - OPENSEARCH_INITIAL_ADMIN_PASSWORD=UserFeedback123!@#
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #     nofile:
+  #       soft: 65536
+  #       hard: 65536
+  #   volumes:
+  #     - opensearch:/usr/share/opensearch/data
+  #   ports:
+  #     - 9200:9200
+  #     - 9600:9600
+
+volumes:
+  mysql:
+  smtp4dev:
+  # opensearch:
