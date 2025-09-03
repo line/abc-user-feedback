@@ -14,6 +14,7 @@
  * under the License.
  */
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -30,6 +31,7 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -145,6 +147,7 @@ export class ChannelController {
       secretAccessKey,
       endpoint,
       region,
+      bucket,
     }: ImageUploadUrlTestRequestDto,
   ) {
     return {
@@ -153,7 +156,46 @@ export class ChannelController {
         secretAccessKey,
         endpoint,
         region,
+        bucket,
       }),
     };
+  }
+
+  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({ name: 'channelId', type: Number })
+  @ApiQuery({
+    name: 'imageKey',
+    type: String,
+    required: true,
+    description: 'Image Key for the pre-signed url download',
+    example: 'test-image-key.jpg',
+  })
+  @ApiOkResponse({ type: String })
+  @UseGuards(JwtAuthGuard)
+  @Get('/:channelId/image-download-url')
+  async getImageDownloadUrl(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
+    @Query('imageKey') imageKey: string,
+  ) {
+    if (!imageKey) {
+      throw new BadRequestException('imageKey is required in query parameter');
+    }
+    const channel = await this.channelService.findById({ channelId });
+    if (channel.project.id !== projectId) {
+      throw new BadRequestException('Invalid channel id');
+    }
+    if (!channel.imageConfig) {
+      throw new BadRequestException('No image config in this channel');
+    }
+
+    return await this.channelService.createImageDownloadUrl({
+      accessKeyId: channel.imageConfig.accessKeyId,
+      secretAccessKey: channel.imageConfig.secretAccessKey,
+      endpoint: channel.imageConfig.endpoint,
+      region: channel.imageConfig.region,
+      bucket: channel.imageConfig.bucket,
+      imageKey,
+    });
   }
 }

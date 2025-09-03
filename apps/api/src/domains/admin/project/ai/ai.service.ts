@@ -536,6 +536,8 @@ export class AIService {
     fields: FieldEntity[],
     isAutoProcess = false,
   ): Promise<boolean> {
+    feedback = structuredClone(feedback);
+
     const integration = await this.aiIntegrationsRepo.findOne({
       where: {
         project: {

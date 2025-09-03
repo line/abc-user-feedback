@@ -127,13 +127,14 @@ th {
 
 .thumbnail-swiper {
   width: 464px;
-  height: 40px;
+  height: 70px;
 }
 
 .thumbnail-swiper .swiper-slide {
   width: 70px;
   height: 100%;
   opacity: 0.4;
+  @apply bg-neutral-tertiary;
 }
 
 .thumbnail-swiper .swiper-slide-thumb-active {

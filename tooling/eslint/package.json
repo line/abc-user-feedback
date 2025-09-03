@@ -16,15 +16,15 @@
   },
   "dependencies": {
     "@eslint/compat": "^1.3.2",
-    "@next/eslint-plugin-next": "^15.4.6",
+    "@next/eslint-plugin-next": "^15.4.7",
     "@ufb/eslint-plugin-header": "workspace:*",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-compiler": "beta",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-turbo": "^2.5.5",
-    "typescript-eslint": "^8.39.1"
+    "eslint-plugin-turbo": "^2.5.6",
+    "typescript-eslint": "^8.42.0"
   },
   "devDependencies": {
     "@ufb/prettier-config": "workspace:*",

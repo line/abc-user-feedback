@@ -13,35 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString } from 'class-validator';
 
-export class ImageConfigRequestDto {
-  @ApiProperty()
-  @IsString()
+export class CreateImageDownloadUrlDto {
   accessKeyId: string;
-
-  @ApiProperty()
-  @IsString()
   secretAccessKey: string;
-
-  @ApiProperty()
-  @IsString()
   endpoint: string;
-
-  @ApiProperty()
-  @IsString()
   region: string;
-
-  @ApiProperty()
-  @IsString()
   bucket: string;
-
-  @ApiProperty({ nullable: true, type: [String] })
-  @IsString({ each: true })
-  domainWhiteList: string[];
-
-  @ApiProperty({ required: false })
-  @IsBoolean()
-  enablePresignedUrlDownload: boolean;
+  imageKey: string;
 }

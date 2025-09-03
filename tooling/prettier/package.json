@@ -12,12 +12,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.6.2",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
     "prettier": "catalog:",
     "prettier-plugin-tailwindcss": "^0.6.14"
   },
   "devDependencies": {
-    "@types/node": "22.17.0",
+    "@types/node": "22.18.0",
     "@ufb/tsconfig": "workspace:*",
     "typescript": "catalog:"
   },

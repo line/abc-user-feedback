@@ -38,6 +38,7 @@ import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
 import { useOAIMutation, usePermissions } from '../lib';
 import { cn } from '../utils';
+import FeedbackImage from './feedback-image';
 import ImagePreviewButton from './image-preview-button';
 import {
   DatePicker,
@@ -188,10 +189,38 @@ const SheetDetailTable = (props: Props) => {
         }
       </div>
     ),
-    images: (value) =>
-      value && (value as string[]).length > 0 ?
-        <ImagePreviewButton urls={value as string[]} />
-      : '-',
+    images: (value) => {
+      const urls = value as string[] | undefined;
+      if (!urls || urls.length === 0) {
+        return '-';
+      }
+      return (
+        <div className="flex flex-wrap gap-2">
+          {urls.map((v, index) => (
+            <div
+              className="bg-neutral-tertiary relative h-16 w-16 overflow-hidden rounded"
+              key={index}
+            >
+              <FeedbackImage url={v} />
+              <div className="absolute inset-1/2 flex h-fit w-fit -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+                <ImagePreviewButton
+                  urls={value as string[]}
+                  initialIndex={index}
+                >
+                  <div className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-[#FFFFFF80]">
+                    <Icon
+                      name="RiEyeFill"
+                      size={10}
+                      className="cursor-pointer text-white"
+                    />
+                  </div>
+                </ImagePreviewButton>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    },
     ticket: (value, row) => {
       const { issueTracker } = row as TicketRow;
       return issueTracker?.ticketDomain && issueTracker.ticketKey && value ?
@@ -300,7 +329,6 @@ const SheetDetailTable = (props: Props) => {
         disabled={row.disabled}
       />
     ),
-
     ticket: (value, row) => {
       const { issueTracker } = row as TicketRow;
       return (
@@ -323,7 +351,51 @@ const SheetDetailTable = (props: Props) => {
         </div>
       );
     },
-    images: () => <></>,
+    images: (value, row) => {
+      const urls = value as string[] | undefined;
+      if (!urls || urls.length === 0) {
+        return '-';
+      }
+      return (
+        <div className="flex flex-wrap gap-2">
+          {urls.map((v, index) => (
+            <div
+              className="bg-neutral-tertiary relative h-16 w-16 overflow-hidden rounded"
+              key={v}
+            >
+              <FeedbackImage url={v} />
+              <div className="absolute inset-1/2 flex h-fit w-fit -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-1">
+                <ImagePreviewButton
+                  urls={value as string[]}
+                  initialIndex={index}
+                >
+                  <div className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-[#FFFFFF80]">
+                    <Icon
+                      name="RiEyeFill"
+                      size={10}
+                      className="cursor-pointer text-white"
+                    />
+                  </div>
+                </ImagePreviewButton>
+                <div className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-[#FFFFFF80]">
+                  <Icon
+                    name="RiDeleteBinLine"
+                    size={10}
+                    className="cursor-pointer text-white"
+                    onClick={() => {
+                      onChange?.(
+                        row.key,
+                        urls.filter((_, i) => i !== index),
+                      );
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    },
     issue: () => <></>,
     cateogry: () => <></>,
     aiField: () => <></>,
