@@ -4,16 +4,18 @@ import type { AppConfig } from './config';
 
 export function generateComposeContent(cfg: AppConfig) {
   const doc = {
+    name: 'abc-user-feedback',
     services: {
       web: {
-        container_name: 'ufb-web',
         image: 'line/abc-user-feedback-web:latest',
         ports: [`${cfg.web.port}:3000`],
         depends_on: { api: { condition: 'service_healthy' } },
         restart: 'unless-stopped',
+        environment: [
+          `NEXT_PUBLIC_API_BASE_URL=http://localhost:${cfg.api.port}`,
+        ],
       },
       api: {
-        container_name: 'ufb-api',
         image: 'line/abc-user-feedback-api:latest',
         environment: [
           `JWT_SECRET=${cfg.api.jwt_secret}`,
@@ -21,10 +23,6 @@ export function generateComposeContent(cfg: AppConfig) {
           `SMTP_HOST=${cfg.api.smtp.host}`,
           `SMTP_PORT=${cfg.api.smtp.port}`,
           `SMTP_SENDER=${cfg.api.smtp.sender}`,
-          `BASE_URL=http://localhost:3000`,
-          `SMTP_BASE_URL=http://localhost:3000`,
-          `OPENSEARCH_USERNAME=""`,
-          `OPENSEARCH_PASSWORD=""`,
         ],
         ports: [`${cfg.api.port}:4000`],
         depends_on: { mysql: { condition: 'service_healthy' } },
@@ -40,14 +38,12 @@ export function generateComposeContent(cfg: AppConfig) {
         },
       },
       smtp4dev: {
-        container_name: 'ufb-smtp',
         image: 'rnwood/smtp4dev:v3',
         ports: ['5080:80', '25:25', '143:143'],
         volumes: ['smtp4dev:/smtp4dev'],
         restart: 'unless-stopped',
       },
       mysql: {
-        container_name: 'ufb-db',
         image: 'mysql:8.0',
         command: [
           '--default-authentication-plugin=mysql_native_password',
@@ -111,7 +107,6 @@ export function generateComposeContent(cfg: AppConfig) {
 
   if (cfg.api.opensearch) {
     doc.services['opensearch-node'] = {
-      container_name: 'ufb-opensearch',
       image: 'opensearchproject/opensearch:2.16.0',
       restart: 'unless-stopped',
       environment: [

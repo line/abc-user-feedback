@@ -112,21 +112,6 @@ MYSQL_PRIMARY_URL=mysql://user:password@localhost:3306/db
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 ```
 
-### CLI 도구 사용 시
-
-`config.toml` 파일을 통해 환경 변수를 설정할 수 있습니다:
-
-```toml
-[api]
-JWT_SECRET = "your-jwt-secret"
-MYSQL_PRIMARY_URL = "mysql://user:password@mysql:3306/db"
-# 기타 API 환경 변수
-
-[web]
-NEXT_PUBLIC_API_BASE_URL = "http://localhost:4000"
-# 기타 웹 환경 변수
-```
-
 ## 환경 변수 사용 팁
 
 ### 보안 관련 팁

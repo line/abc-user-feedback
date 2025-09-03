@@ -50,10 +50,12 @@ docker pull line/abc-user-feedback-api:1.0.0
 Create a docker-compose.yml file:
 
 ```yaml
+name: 'abc-user-feedback',
 services:
   web:
-    container_name: ufb-web
     image: line/abc-user-feedback-web:latest
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
     ports:
       - 3000:3000
     depends_on:
@@ -61,7 +63,6 @@ services:
     restart: unless-stopped
 
   api:
-    container_name: ufb-api
     image: line/abc-user-feedback-api:latest
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
@@ -79,7 +80,6 @@ services:
     restart: unless-stopped
 
   mysql:
-    container_name: ufb-db
     image: mysql:8.0
     command:
       [
@@ -99,7 +99,6 @@ services:
     restart: unless-stopped
 
   smtp4dev:
-    container_name: ufb-smtp
     image: rnwood/smtp4dev:v3
     ports:
       - 5080:80
@@ -110,7 +109,6 @@ services:
     restart: unless-stopped
 
   # opensearch-node:
-  #   container_name: ufb-opensearch
   #   image: opensearchproject/opensearch:2.16.0
   #   restart: always
   #   environment:

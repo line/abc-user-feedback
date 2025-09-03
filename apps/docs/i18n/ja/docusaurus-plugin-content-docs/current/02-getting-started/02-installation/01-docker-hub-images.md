@@ -50,9 +50,9 @@ docker pull line/abc-user-feedback-api:1.0.0
 docker-compose.yml 파일 생성
 
 ```yaml
+name: 'abc-user-feedback',
 services:
   web:
-    container_name: ufb-web
     image: line/abc-user-feedback-web:latest
     environment:
       - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
@@ -63,7 +63,6 @@ services:
     restart: unless-stopped
 
   api:
-    container_name: ufb-api
     image: line/abc-user-feedback-api:latest
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
@@ -79,7 +78,6 @@ services:
     restart: unless-stopped
 
   mysql:
-    container_name: ufb-db
     image: mysql:8.0
     command:
       [
@@ -99,7 +97,6 @@ services:
     restart: unless-stopped
 
   smtp4dev:
-    container_name: ufb-smtp
     image: rnwood/smtp4dev:v3
     ports:
       - 5080:80

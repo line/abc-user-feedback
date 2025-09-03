@@ -7,11 +7,11 @@ import { exists, readFile } from './fsutil';
 const ConfigSchema = z.object({
   web: z.object({
     port: z.number().default(3000),
-    api_base_url: z.string().default('http://localhost:4000'), // NEXT_PUBLIC_API_BASE_URL
+    api_base_url: z.string().default('http://localhost:4000'),
   }),
   api: z.object({
     port: z.number().default(4000),
-    jwt_secret: z.string().min(32).default('jwtsecretjwtsecretjwtsecret'), // JWT_SECRET
+    jwt_secret: z.string().min(32).default('jwtsecretjwtsecretjwtsecret'),
     master_api_key: z.string().optional(),
     access_token_expired_time: z.string().optional(),
     refresh_token_expired_time: z.string().optional(),

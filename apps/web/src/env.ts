@@ -23,7 +23,7 @@ export const env = createEnv({
       .default('development'),
   },
   client: {
-    NEXT_PUBLIC_API_BASE_URL: z.string().default('http://localhost:4000'),
+    NEXT_PUBLIC_API_BASE_URL: z.string(),
   },
   runtimeEnv: {
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,

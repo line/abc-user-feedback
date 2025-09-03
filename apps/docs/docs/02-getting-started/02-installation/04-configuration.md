@@ -61,7 +61,7 @@ This document provides detailed explanations of the environment variables used i
 
 ## Web Environment Variables
 
-### App Environment Variables
+### Required Environment Variables
 
 | Environment Variable       | Description                                | Default                 | Example                 |
 | -------------------------- | ------------------------------------------ | ----------------------- | ----------------------- |
@@ -97,21 +97,6 @@ MYSQL_PRIMARY_URL=mysql://user:password@localhost:3306/db
 
 # Web server .env file (apps/web/.env)
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
-```
-
-### When Using CLI Tool
-
-You can set environment variables through the `config.toml` file:
-
-```toml
-[api]
-JWT_SECRET = "your-jwt-secret"
-MYSQL_PRIMARY_URL = "mysql://user:password@mysql:3306/db"
-# Other API environment variables
-
-[web]
-NEXT_PUBLIC_API_BASE_URL = "http://localhost:4000"
-# Other web environment variables
 ```
 
 ## Environment Variable Usage Tips

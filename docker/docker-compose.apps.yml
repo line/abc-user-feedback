@@ -1,19 +1,18 @@
+name: abc-user-feedback
+
 services:
   web:
-    container_name: ufb-web
     image: line/abc-user-feedback-web:latest
-    restart: always
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
     ports:
       - 3000:3000
     depends_on:
       - api
+    restart: unless-stopped
 
   api:
-    container_name: ufb-api
     image: line/abc-user-feedback-api:latest
-    restart: always
-    ports:
-      - 4000:4000
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
@@ -22,3 +21,6 @@ services:
       - SMTP_SENDER=user@feedback.com
       - OPENSEARCH_USE=true
       - OPENSEARCH_NODE=http://opensearch-node:9200
+    ports:
+      - 4000:4000
+    restart: unless-stopped
