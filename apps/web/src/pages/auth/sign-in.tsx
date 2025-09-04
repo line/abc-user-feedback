@@ -13,57 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
 import type { GetStaticProps } from 'next';
-import Link from 'next/link';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
-import { Button, toast } from '@ufb/react';
-
-import { AnonymousTemplate, TextInput } from '@/shared';
-import type { IFetchError, NextPageWithLayout } from '@/shared/types';
+import { AnonymousTemplate } from '@/shared';
+import type { NextPageWithLayout } from '@/shared/types';
 import { useTenantStore } from '@/entities/tenant';
-import { useUserStore } from '@/entities/user';
-import { SignInWithOAuthButton } from '@/features/auth/sign-in-with-oauth';
+import { SignInWithEmailForm, SignInWithOAuthButton } from '@/features/auth';
 import { AnonymousLayout } from '@/widgets/anonymous-layout';
 
 import serverSideTranslations from '@/server-side-translations';
 
-const signInWithEmailSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
-
-type FormType = z.infer<typeof signInWithEmailSchema>;
-
 const SignInPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
   const { tenant } = useTenantStore();
-  const { signInWithEmail } = useUserStore();
-  const [loginLoading, setLoginLoading] = useState(false);
-
-  const { handleSubmit, register, formState, setError } = useForm<FormType>({
-    resolver: zodResolver(signInWithEmailSchema),
-    defaultValues: { email: '', password: '' },
-  });
-
-  const onSubmit = async (data: FormType) => {
-    try {
-      setLoginLoading(true);
-      await signInWithEmail(data);
-      toast.success(t('v2.toast.success'));
-    } catch (error) {
-      const { message } = error as IFetchError;
-      setError('email', { message: 'invalid email' });
-      setError('password', { message: 'invalid password' });
-      toast.error(message);
-    } finally {
-      setLoginLoading(false);
-    }
-  };
 
   return (
     <AnonymousTemplate
@@ -84,45 +47,7 @@ const SignInPage: NextPageWithLayout = () => {
           <div className="border-neutral-tertiary flex-1 border-b-[1px]" />
         </div>
       )}
-      {tenant?.useEmail && (
-        <form id="sign-in" onSubmit={handleSubmit(onSubmit)}>
-          <TextInput
-            label="Email"
-            placeholder={t('v2.placeholder.text')}
-            type="email"
-            {...register('email')}
-            error={formState.errors.email?.message}
-          />
-          <TextInput
-            label="Password"
-            placeholder={t('v2.placeholder.text')}
-            type="password"
-            {...register('password')}
-            error={formState.errors.password?.message}
-          />
-        </form>
-      )}
-      {tenant?.useEmail && (
-        <div className="flex flex-col gap-4">
-          <Button
-            size="medium"
-            type="submit"
-            loading={loginLoading}
-            form="sign-in"
-            disabled={!formState.isDirty}
-          >
-            {t('button.sign-in')}
-          </Button>
-          <div className="flex flex-col gap-3">
-            <Link href="/auth/reset-password" className="text-center underline">
-              {t('link.reset-password.title')}
-            </Link>
-            <Link href="/auth/sign-up" className="text-center underline">
-              {t('button.sign-up')}
-            </Link>
-          </div>
-        </div>
-      )}
+      {tenant?.useEmail && <SignInWithEmailForm />}
     </AnonymousTemplate>
   );
 };
