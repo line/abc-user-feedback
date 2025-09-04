@@ -15,3 +15,7 @@
  */
 export { default as SignInWithEmailForm } from './sign-in-with-email-form.ui';
 export { default as SignInWithOAuthButton } from './sign-in-with-oauth-button.ui';
+export { default as SignUpWithEmailForm } from './sign-up-with-email-form.ui';
+export { default as ResetPasswordForm } from './reset-password-form.ui';
+export { default as ForgotPasswordForm } from './forgot-password-form.ui';
+export { default as InviteSignUpForm } from './invite-sign-up-form.ui';

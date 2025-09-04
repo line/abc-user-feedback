@@ -36,11 +36,8 @@ import {
 import { useAllProjects } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import SideMenuLayout from '@/shared/ui/side-menu-layout.ui';
-import {
-  ChangePasswordSetting,
-  UserProfileSetting,
-  useUserStore,
-} from '@/entities/user';
+import { ChangePasswordSetting, UserProfileSetting } from '@/entities/user';
+import { useAuth } from '@/features/auth';
 import { Layout } from '@/widgets/layout';
 
 import serverSideTranslations from '@/server-side-translations';
@@ -49,7 +46,7 @@ const ProfilePage: NextPageWithLayout = () => {
   const { t } = useTranslation();
 
   const overlay = useOverlay();
-  const { user } = useUserStore();
+  const { user } = useAuth();
   const router = useRouter();
 
   const [currentMenu] = useQueryState<string>(

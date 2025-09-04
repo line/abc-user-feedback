@@ -17,10 +17,7 @@ import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import type { O } from 'ts-toolbelt';
 
 interface IData {
-  jwt: {
-    accessToken: string;
-    refreshToken: string;
-  };
+  jwt: { accessToken: string; refreshToken: string };
 }
 
 export type CookieStorageKeyType = keyof IData;

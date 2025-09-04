@@ -29,17 +29,14 @@ import {
   useWarnIfUnsavedChanges,
 } from '@/shared';
 import type { UserProfile } from '@/entities/user';
-import {
-  UserProfileForm,
-  userProfileSchema,
-  useUserStore,
-} from '@/entities/user';
+import { UserProfileForm, userProfileSchema } from '@/entities/user';
+import { useAuth } from '@/features/auth';
 
 const UserProfileSetting = () => {
   const { t } = useTranslation();
   const overlay = useOverlay();
 
-  const { user, signOut } = useUserStore();
+  const { user, signOut } = useAuth();
 
   const methods = useForm<UserProfile>({
     resolver: zodResolver(userProfileSchema),

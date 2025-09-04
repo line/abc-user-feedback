@@ -20,20 +20,22 @@ import { AxiosError } from 'axios';
 import { toast } from '@ufb/react';
 
 import type { IFetchError } from '@/shared';
-import { useUserStore } from '@/entities/user';
+
+import { useAuth } from '../contexts';
 
 export const useOAuthCallback = () => {
   const router = useRouter();
 
-  const { signInWithOAuth } = useUserStore();
+  const { signInWithOAuth } = useAuth();
   const [status, setStatus] = useState<'loading' | 'error'>('loading');
 
   const code = router.query.code as string | undefined;
 
-  useEffect(() => {
+  const signIn = async () => {
     if (!code) return;
-
-    signInWithOAuth({ code }).catch((error) => {
+    try {
+      await signInWithOAuth({ code });
+    } catch (error) {
       if (error instanceof AxiosError && error.response) {
         const message = error.response.data as IFetchError;
         toast.error(
@@ -47,7 +49,11 @@ export const useOAuthCallback = () => {
         );
       }
       setStatus('error');
-    });
+    }
+  };
+
+  useEffect(() => {
+    void signIn();
   }, [code]);
 
   return { status };

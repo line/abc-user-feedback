@@ -36,10 +36,10 @@ import {
   useOAIMutation,
   useSort,
 } from '@/shared';
+import { useAuth } from '@/features/auth';
 
 import { useUserSearch } from '../lib';
 import { getUserColumns } from '../user-columns';
-import { useUserStore } from '../user.model';
 import type { UpdateUser, UserMember } from '../user.type';
 import UpdateUserDialog from './update-user-dialog.ui';
 
@@ -50,7 +50,7 @@ interface IProps {
 const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   const { t } = useTranslation();
   const overlay = useOverlay();
-  const { user } = useUserStore();
+  const { user } = useAuth();
 
   const [rows, setRows] = useState<UserMember[]>([]);
 

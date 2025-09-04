@@ -18,7 +18,7 @@ import { useTranslation } from 'next-i18next';
 
 import { AnonymousTemplate } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
-import { RequestResetPasswordWithEmail } from '@/features/auth/reset-password-with-email';
+import { ForgotPasswordForm } from '@/features/auth';
 import { AnonymousLayout } from '@/widgets/anonymous-layout';
 
 import serverSideTranslations from '@/server-side-translations';
@@ -31,7 +31,7 @@ const ResetPasswordPage: NextPageWithLayout = () => {
       title={t('v2.auth.reset-password.title')}
       image="/assets/images/send-reset-password-email.svg"
     >
-      <RequestResetPasswordWithEmail />
+      <ForgotPasswordForm />
     </AnonymousTemplate>
   );
 };

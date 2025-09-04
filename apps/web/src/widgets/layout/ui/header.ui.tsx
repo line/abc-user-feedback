@@ -19,7 +19,7 @@ import Link from 'next/link';
 import { Button, Divider, Icon } from '@ufb/react';
 
 import { LanguageSelectBox, ThemeSelectBox } from '@/shared';
-import { useUserStore } from '@/entities/user';
+import { useAuth } from '@/features/auth';
 
 import MenuList from './menu-list.ui';
 import ProjectSelectBox from './project-select-box.ui';
@@ -30,7 +30,7 @@ interface IProps {
 }
 
 const Header: React.FC<IProps> = ({ projectId }) => {
-  const { user } = useUserStore();
+  const { user } = useAuth();
   return (
     <header className="navbar items-center gap-2">
       <ProjectSelectBox projectId={projectId} />

@@ -20,8 +20,8 @@ import dayjs from 'dayjs';
 import { Badge } from '@ufb/react';
 
 import { Avatar, DATE_TIME_FORMAT, TableCheckbox } from '@/shared';
+import { useAuth } from '@/features/auth';
 
-import { useUserStore } from './user.model';
 import type { UserMember } from './user.type';
 
 const columnHelper = createColumnHelper<UserMember>();
@@ -53,7 +53,7 @@ export const getUserColumns = () => [
   columnHelper.accessor('email', {
     header: 'Email',
     cell: ({ getValue }) => {
-      const { user } = useUserStore();
+      const { user } = useAuth();
 
       return (
         <div className="flex items-center gap-1">

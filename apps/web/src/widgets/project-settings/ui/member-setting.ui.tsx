@@ -48,7 +48,7 @@ import type { Member, MemberInfo } from '@/entities/member';
 import { MemberFormDialog } from '@/entities/member';
 import { useMembmerSearch } from '@/entities/member/lib';
 import { memberColumns } from '@/entities/member/member-columns';
-import { useUserStore } from '@/entities/user';
+import { useAuth } from '@/features/auth';
 
 interface IProps {
   projectId: number;
@@ -62,7 +62,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
   const queryClient = useQueryClient();
   const overlay = useOverlay();
   const router = useRouter();
-  const { user } = useUserStore();
+  const { user } = useAuth();
 
   const [tableFilters, setTableFilters] = useState<TableFilter[]>([]);
   const [operator, setOperator] = useState<TableFilterOperator>('AND');

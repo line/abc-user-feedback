@@ -33,7 +33,7 @@ import {
 } from '@ufb/react';
 
 import { cn, CreatingDialog, Path, useAllProjects } from '@/shared';
-import { useUserStore } from '@/entities/user';
+import { useAuth } from '@/features/auth';
 import { useCreateProjectStore } from '@/features/create-project/create-project-model';
 
 interface IProps {
@@ -46,7 +46,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   const { editingStepIndex, reset, jumpStepByIndex } = useCreateProjectStore();
 
   const overlay = useOverlay();
-  const { user } = useUserStore();
+  const { user } = useAuth();
 
   const { data } = useAllProjects();
 

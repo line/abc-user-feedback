@@ -18,12 +18,12 @@ import { useRouter } from 'next/router';
 
 import { PermissionList } from '@/entities/role';
 import type { PermissionType } from '@/entities/role';
-import { useUserStore } from '@/entities/user';
+import { useAuth } from '@/features/auth';
 
 import useOAIQuery from './useOAIQuery';
 
 const usePermissions = (inputProjectId?: number | null) => {
-  const { user } = useUserStore();
+  const { user } = useAuth();
   const [permissions, setPermissions] = useState<readonly PermissionType[]>([]);
 
   const router = useRouter();

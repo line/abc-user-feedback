@@ -25,7 +25,8 @@ import { Button, toast } from '@ufb/react';
 
 import type { IFetchError } from '@/shared';
 import { TextInput } from '@/shared';
-import { useUserStore } from '@/entities/user';
+
+import { useAuth } from '../contexts';
 
 const FormSchema = z.object({
   email: z.string().email(),
@@ -36,8 +37,8 @@ type FormType = z.infer<typeof FormSchema>;
 const SignInWithEmailForm = () => {
   const { t } = useTranslation();
 
-  const { signInWithEmail } = useUserStore();
-  const [loginLoading, setLoginLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { signInWithEmail } = useAuth();
 
   const { handleSubmit, register, formState, setError } = useForm<FormType>({
     resolver: zodResolver(FormSchema),
@@ -46,7 +47,7 @@ const SignInWithEmailForm = () => {
 
   const onSubmit = async (data: FormType) => {
     try {
-      setLoginLoading(true);
+      setLoading(true);
       await signInWithEmail(data);
       toast.success(t('v2.toast.success'));
     } catch (error) {
@@ -55,7 +56,7 @@ const SignInWithEmailForm = () => {
       setError('password', { message: 'invalid password' });
       toast.error(message);
     } finally {
-      setLoginLoading(false);
+      setLoading(false);
     }
   };
 
@@ -81,7 +82,7 @@ const SignInWithEmailForm = () => {
         <Button
           size="medium"
           type="submit"
-          loading={loginLoading}
+          loading={loading}
           disabled={!formState.isDirty}
         >
           {t('button.sign-in')}

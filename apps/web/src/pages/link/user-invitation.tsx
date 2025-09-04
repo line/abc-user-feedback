@@ -18,7 +18,7 @@ import { useTranslation } from 'next-i18next';
 
 import { AnonymousTemplate } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
-import { InvitedUserSignupForm } from '@/entities/user';
+import { InviteSignUpForm } from '@/features/auth';
 import { AnonymousLayout } from '@/widgets/anonymous-layout';
 
 import serverSideTranslations from '@/server-side-translations';
@@ -36,7 +36,7 @@ const UserInvitationPage: NextPageWithLayout<IProps> = ({ code, email }) => {
       title={t('link.user-invitation.title')}
       image="/assets/images/reset-password.svg"
     >
-      <InvitedUserSignupForm code={code} email={email} />
+      <InviteSignUpForm code={code} email={email} />
     </AnonymousTemplate>
   );
 };

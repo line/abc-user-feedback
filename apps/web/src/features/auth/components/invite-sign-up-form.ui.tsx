@@ -17,79 +17,102 @@ import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
-import type { z } from 'zod';
+import { z } from 'zod';
 
 import { Button, toast } from '@ufb/react';
 
 import { Path, TextInput, useOAIMutation } from '@/shared';
 
-import { resetPasswordWithEmailSchema } from '../reset-password-with-email.schema';
+export const schema = z
+  .object({
+    password: z.string().min(8),
+    confirmPassword: z.string().min(8),
+    code: z.string(),
+    email: z.string().email(),
+  })
+  .refine(({ password, confirmPassword }) => password === confirmPassword, {
+    message: 'must equal Password',
+    path: ['confirmPassword'],
+  })
+  .refine(({ password }) => /[A-Za-z]/.test(password), {
+    message: 'must contain at least one letter.',
+    path: ['password'],
+  })
+  .refine(
+    ({ password }) => /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/.test(password),
+    {
+      message: 'Password must contain at least one special character.',
+      path: ['password'],
+    },
+  )
+  .refine(({ password }) => !/(.)\1/.test(password), {
+    message: 'must not contain consecutive identical characters',
+    path: ['password'],
+  });
+type FormType = z.infer<typeof schema>;
 
-type FormType = z.infer<typeof resetPasswordWithEmailSchema>;
-
-interface IProps {
+interface Props {
   code: string;
   email: string;
 }
 
-const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
+const InviteSignUpForm = ({ code, email }: Props) => {
   const { t } = useTranslation();
   const router = useRouter();
 
   const { handleSubmit, register, formState } = useForm<FormType>({
-    resolver: zodResolver(resetPasswordWithEmailSchema),
+    resolver: zodResolver(schema),
     defaultValues: { code, email },
   });
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/admin/users/password/reset',
+    path: '/api/admin/auth/signUp/invitation',
     queryOptions: {
       async onSuccess() {
-        toast.success(t('v2.toast.success'));
+        toast.success('Success');
         await router.push(Path.SIGN_IN);
       },
     },
   });
 
-  const onSubmit = ({ password }: FormType) =>
+  const onSubmit = ({ password, code, email }: FormType) =>
     mutate({ code, email, password });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-10 flex flex-col gap-4">
+      <div className="mb-12 flex flex-col gap-4">
         <TextInput
-          type="email"
           label="Email"
           placeholder={t('v2.placeholder.text')}
-          {...register('email')}
+          type="email"
+          value={email}
           disabled
         />
         <TextInput
           type="password"
           label="Password"
           placeholder={t('v2.placeholder.text')}
-          error={formState.errors.password?.message}
           {...register('password')}
+          error={formState.errors.password?.message}
+          required
         />
         <TextInput
           type="password"
           label="Confirm Password"
           placeholder={t('v2.placeholder.text')}
-          error={formState.errors.confirmPassword?.message}
           {...register('confirmPassword')}
+          error={formState.errors.confirmPassword?.message}
+          required
         />
       </div>
-      <Button
-        type="submit"
-        loading={isPending}
-        disabled={!formState.isDirty}
-        size="medium"
-      >
-        {t('v2.button.confirm')}
-      </Button>
+      <div className="flex flex-col gap-2">
+        <Button type="submit" loading={isPending} disabled={!formState.isDirty}>
+          {t('button.setting')}
+        </Button>
+      </div>
     </form>
   );
 };
 
-export default ResetPasswordWithEmailForm;
+export default InviteSignUpForm;

@@ -22,13 +22,13 @@ import { Icon } from '@ufb/react';
 import { Path, useAllProjects } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { TenantGuard } from '@/entities/tenant';
-import { useUserStore } from '@/entities/user';
+import { useAuth } from '@/features/auth';
 
 import serverSideTranslations from '@/server-side-translations';
 
 const MainIndexPage: NextPageWithLayout = () => {
   const router = useRouter();
-  const { user } = useUserStore();
+  const { user } = useAuth();
   const { data } = useAllProjects();
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const MainIndexPage: NextPageWithLayout = () => {
       return;
     }
     void router.push({ pathname: '/main/profile' });
-  }, [data]);
+  }, [data, user, router]);
 
   return (
     <TenantGuard>

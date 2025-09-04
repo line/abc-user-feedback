@@ -13,8 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { z } from 'zod';
 
-import type { signUpWithEmailSchema } from './sign-up-with-email.schema';
+import type { Jwt } from '@/shared';
+import cookieStorage from '@/shared/lib/cookie-storage';
 
-export type SignUpWithEmailType = z.infer<typeof signUpWithEmailSchema>;
+export const jwtStorage = {
+  get: () => cookieStorage.getItem('jwt'),
+  set: (jwt: Jwt) => cookieStorage.setItem('jwt', jwt),
+  remove: () => cookieStorage.removeItem('jwt'),
+};

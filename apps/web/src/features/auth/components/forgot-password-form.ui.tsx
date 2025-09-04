@@ -17,78 +17,67 @@ import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
-import type { z } from 'zod';
+import { z } from 'zod';
 
 import { Button, toast } from '@ufb/react';
 
 import { Path, TextInput, useOAIMutation } from '@/shared';
 
-import { invitedUserSignupSchema } from '../user.schema';
+const schema = z.object({ email: z.email() });
 
-type FormType = z.infer<typeof invitedUserSignupSchema>;
+type FormType = z.infer<typeof schema>;
 
-interface IProps {
-  code: string;
-  email: string;
-}
-
-const InvitedUserSignupForm: React.FC<IProps> = ({ code, email }) => {
+const ForgotPasswordForm = () => {
   const { t } = useTranslation();
+
   const router = useRouter();
 
-  const { handleSubmit, register, formState } = useForm<FormType>({
-    resolver: zodResolver(invitedUserSignupSchema),
-    defaultValues: { code, email },
+  const { register, handleSubmit, formState } = useForm<FormType>({
+    resolver: zodResolver(schema),
   });
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/admin/auth/signUp/invitation',
+    path: '/api/admin/users/password/reset/code',
     queryOptions: {
       async onSuccess() {
-        toast.success('Success');
         await router.push(Path.SIGN_IN);
+        toast.success(t('v2.toast.success'));
       },
     },
   });
 
-  const onSubmit = ({ password, code, email }: FormType) =>
-    mutate({ code, email, password });
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit((data) => mutate(data))}>
       <div className="mb-12 flex flex-col gap-4">
         <TextInput
+          type="email"
           label="Email"
           placeholder={t('v2.placeholder.text')}
-          type="email"
-          value={email}
-          disabled
-        />
-        <TextInput
-          type="password"
-          label="Password"
-          placeholder={t('v2.placeholder.text')}
-          {...register('password')}
-          error={formState.errors.password?.message}
-          required
-        />
-        <TextInput
-          type="password"
-          label="Confirm Password"
-          placeholder={t('v2.placeholder.text')}
-          {...register('confirmPassword')}
-          error={formState.errors.confirmPassword?.message}
-          required
+          error={formState.errors.email?.message}
+          {...register('email')}
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Button type="submit" loading={isPending} disabled={!formState.isDirty}>
-          {t('button.setting')}
+        <Button
+          size="medium"
+          type="submit"
+          loading={isPending}
+          disabled={!formState.isValid}
+        >
+          {t('v2.auth.reset-password.button.send-email')}
+        </Button>
+        <Button
+          size="medium"
+          variant="outline"
+          type="button"
+          onClick={router.back}
+        >
+          {t('button.back')}
         </Button>
       </div>
     </form>
   );
 };
 
-export default InvitedUserSignupForm;
+export default ForgotPasswordForm;

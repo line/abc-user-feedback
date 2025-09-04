@@ -19,7 +19,7 @@ import { useRouter } from 'next/router';
 import { Button } from '@ufb/react';
 
 import { Path } from '@/shared';
-import { useOAuthCallback } from '@/features/auth/sign-in-with-oauth';
+import { useOAuthCallback } from '@/features/auth';
 
 interface IProps {}
 

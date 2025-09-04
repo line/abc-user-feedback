@@ -19,7 +19,8 @@ import { useTranslation } from 'next-i18next';
 import { Badge } from '@ufb/react';
 
 import { DescriptionTooltip } from '@/shared';
-import { useUserSearch, useUserStore } from '@/entities/user';
+import { useUserSearch } from '@/entities/user';
+import { useAuth } from '@/features/auth';
 
 interface Props {
   email: string;
@@ -31,7 +32,7 @@ const MemberNameCell = (props: Props) => {
   const { data, isLoading } = useUserSearch({
     queries: [{ key: 'email', value: email, condition: 'IS' }],
   });
-  const { user } = useUserStore();
+  const { user } = useAuth();
 
   return data || isLoading ?
       <div className="flex items-center gap-1">

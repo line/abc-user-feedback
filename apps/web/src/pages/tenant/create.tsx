@@ -24,8 +24,7 @@ import { Button, toast } from '@ufb/react';
 import { AnonymousTemplate, Path, TextInput, useOAIMutation } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { useTenantStore } from '@/entities/tenant';
-import type { SignUpWithEmailType } from '@/features/auth/sign-up-with-email';
-import { SignUpWithEmailForm } from '@/features/auth/sign-up-with-email';
+import { SignUpWithEmailForm } from '@/features/auth';
 import { CreateTenantForm } from '@/features/create-tenant';
 import { AnonymousLayout } from '@/widgets/anonymous-layout';
 
@@ -47,7 +46,7 @@ const CreateTenantPage: NextPageWithLayout = () => {
 
   const [data, setData] = useState<{
     tenant: { siteName: string } | null;
-    user: SignUpWithEmailType | null;
+    user: { email: string; password: string } | null;
   }>({ tenant: null, user: null });
 
   const { tenant } = useTenantStore();

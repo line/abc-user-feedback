@@ -21,7 +21,7 @@ import { toast } from '@ufb/react';
 
 import { AnonymousTemplate, Path, useOAIMutation } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
-import { SignUpWithEmailForm } from '@/features/auth/sign-up-with-email';
+import { SignUpWithEmailForm } from '@/features/auth';
 import { AnonymousLayout } from '@/widgets/anonymous-layout';
 
 import serverSideTranslations from '@/server-side-translations';

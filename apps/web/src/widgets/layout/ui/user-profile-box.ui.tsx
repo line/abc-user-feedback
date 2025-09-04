@@ -25,7 +25,7 @@ import {
   Icon,
 } from '@ufb/react';
 
-import { useUserStore } from '@/entities/user';
+import { useAuth } from '@/features/auth';
 
 interface Props {}
 
@@ -33,7 +33,7 @@ const UserProfileBox: React.FC<Props> = () => {
   const { t } = useTranslation();
 
   const router = useRouter();
-  const { signOut } = useUserStore();
+  const { signOut } = useAuth();
 
   const handleClickProfile = async () => {
     await router.push('/main/profile');
