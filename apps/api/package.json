@@ -79,7 +79,7 @@
     "typeorm": "^0.3.26",
     "typeorm-naming-strategies": "^4.1.0",
     "typeorm-transactional": "^0.5.0",
-    "uuid": "^11.1.0"
+    "uuid": "^12.0.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.9.0",
