@@ -59,7 +59,7 @@
     "fast-csv": "^5.0.5",
     "fastify": "^5.4.0",
     "joi": "^18.0.1",
-    "luxon": "^3.7.1",
+    "luxon": "^3.7.2",
     "magic-bytes.js": "^1.12.1",
     "mysql2": "^3.14.4",
     "nestjs-cls": "^6.0.1",
