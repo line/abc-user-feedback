@@ -198,8 +198,8 @@ importers:
         specifier: ^0.5.0
         version: 0.5.0(reflect-metadata@0.2.2)(typeorm@0.3.26(babel-plugin-macros@3.1.0)(mysql2@3.14.5)(reflect-metadata@0.2.2)(ts-node@10.9.2(@swc/core@1.13.5(@swc/helpers@0.5.17))(@types/node@22.18.1)(typescript@5.8.3)))
       uuid:
-        specifier: ^11.1.0
-        version: 11.1.0
+        specifier: ^12.0.0
+        version: 12.0.0
     devDependencies:
       '@faker-js/faker':
         specifier: ^9.9.0
@@ -10457,6 +10457,10 @@ packages:
 
   uuid@11.1.0:
     resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
+    hasBin: true
+
+  uuid@12.0.0:
+    resolution: {integrity: sha512-USe1zesMYh4fjCA8ZH5+X5WIVD0J4V1Jksm1bFTVBX2F/cwSXt0RO5w/3UXbdLKmZX65MiWV+hwhSS8p6oBTGA==}
     hasBin: true
 
   uuid@8.3.2:
@@ -22371,6 +22375,8 @@ snapshots:
   utils-merge@1.0.1: {}
 
   uuid@11.1.0: {}
+
+  uuid@12.0.0: {}
 
   uuid@8.3.2: {}
 
