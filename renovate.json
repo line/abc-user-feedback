@@ -9,6 +9,10 @@
     {
       "matchManagers": ["docker-compose"],
       "enabled": false
+    },
+    {
+      "matchPackageNames": ["nuqs"],
+      "allowedVersions": "2.4.x"
     }
   ],
   "updateInternalDeps": true,
