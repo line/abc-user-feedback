@@ -36,6 +36,8 @@ ABC User Feedback의 생성형 AI 기능은 다음과 같은 두 가지 주요 �
 
 ### AI 제공업체 설정
 
+![AI 통합 설정](../../static/assets/integration-guide/generative-ai-01.png)
+
 Admin Web에서 다음 단계를 따라 AI 통합을 설정합니다:
 
 1. **Settings** 메뉴에서 **AI Integration** 선택
@@ -59,6 +61,8 @@ Admin Web에서 다음 단계를 따라 AI 통합을 설정합니다:
 
 #### 기본 템플릿
 
+![AI Field Templates](../../static/assets/integration-guide/generative-ai-02.png)
+
 AI 통합을 처음 설정하면 다음과 같은 기본 템플릿이 자동으로 생성됩니다:
 
 - **Summary**: 피드백 요약
@@ -69,6 +73,8 @@ AI 통합을 처음 설정하면 다음과 같은 기본 템플릿이 자동으�
 이 외에도 사용자가 원하는 추가적인 템플릿들을 생성하여 사용할 수 있습니다.
 
 ### 2. 채널에서 AI Field 설정
+
+![AI Field 설정](../../static/assets/integration-guide/generative-ai-03.png)
 
 1. **Settings** > **Channel** > **Field Management** 메뉴로 이동
 2. **새 필드 추가** 또는 기존 필드 수정
@@ -89,6 +95,8 @@ AI Field 템플릿을 테스트할 수 있는 Playground 기능을 제공합니�
 ### 1. AI Issue 템플릿 관리
 
 #### AI Issue 템플릿 조회
+
+![AI Issue 템플릿 관리](../../static/assets/integration-guide/generative-ai-04.png)
 
 Admin Web에서 현재 설정된 AI Issue 템플릿들을 확인할 수 있습니다. 각 템플릿의 설정 상태와 활성화 여부를 한눈에 볼 수 있습니다.
 
@@ -131,9 +139,13 @@ Admin Web에서 현재 설정된 AI Issue 템플릿들을 확인할 수 있습�
 
 ### 3. AI Issue Playground
 
+![AI Issue Playground](../../static/assets/integration-guide/generative-ai-05.png)
+
 AI Issue 템플릿을 테스트할 수 있는 Playground 기능을 제공합니다. 실제 피드백 데이터를 사용하지 않고도 다양한 입력값으로 이슈 추천 기능을 테스트해볼 수 있습니다. 이를 통해 프롬프트나 설정을 최적화할 수 있습니다.
 
 ## AI 사용량 모니터링
+
+![AI Usage](../../static/assets/integration-guide/generative-ai-06.png)
 
 ### 사용량 조회
 

@@ -22,6 +22,8 @@ Admin Web에 접속하여 다음 단계를 따라 프로젝트 ID를 확인할 �
 2. **Project Information** 메뉴 선택
 3. 화면 상단에 표시된 **Project ID** 값을 확인
 
+![프로젝트 ID 확인](../../static/assets/integration-guide/api-integration-01.png)
+
 > 💡 **참고**: Project ID는 숫자 형태로 표시되며, API 호출 시 `{projectId}` 파라미터로 사용됩니다.
 
 ### 채널 ID 확인
@@ -31,6 +33,8 @@ Admin Web에 접속하여 다음 단계를 따라 프로젝트 ID를 확인할 �
 1. **Settings** 메뉴에서 **Channel** 선택
 2. **Channel Information** 메뉴 클릭
 3. 화면에서 **Channel ID** 값을 확인
+
+![채널 ID 확인](../../static/assets/integration-guide/api-integration-02.png)
 
 > 💡 **참고**: Channel ID도 숫자 형태로 표시되며, API 호출 시 `{channelId}` 파라미터로 사용됩니다.
 
@@ -49,6 +53,8 @@ curl --request GET {API_ENDPOINT}/api/projects/{PROJECT_ID} \
 
 Admin Web에 접속하여 Settings > API Key Management 메뉴 에서 API Key를 발급하여 사용할 수 있습니다.
 
+![API Key 관리](../../static/assets/integration-guide/api-integration-03.png)
+
 모든 API 요청은 헤더에 `x-api-key`를 포함해야 합니다.
 
 ```bash
@@ -58,6 +64,8 @@ Admin Web에 접속하여 Settings > API Key Management 메뉴 에서 API Key를
 ## Field 확인하기
 
 Admin Web에 접속하여 Settings > Channel > Field Management 메뉴에서 현재 Channel에 등록된 필드들을 확인할 수 있으며, 이 정보들을 바탕으로 피드백 생성/수정시 필드에 대한 정보를 parameter로 설정할 수 있습니다.
+
+![Field 관리](../../static/assets/integration-guide/api-integration-04.png)
 
 ### 필드 정보 조회
 

@@ -31,6 +31,8 @@ ABC User Feedback은 사용자 피드백에 첨부된 이미지를 관리하기 
 
 이미지 업로드를 활성화하려면 다음 항목을 설정해야 합니다:
 
+![S3 설정 화면](../../static/assets/integration-guide/image-storage-01.png)
+
 **필수 설정 항목:**
 
 - `accessKeyId`: S3에서 발급받은 access key를 입력합니다.

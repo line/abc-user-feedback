@@ -20,6 +20,8 @@ ABC User Feedback은 다양한 이벤트 발생 시 외부 시스템으로 실�
 2. 웹훅 URL과 구독할 이벤트를 설정합니다.
 3. 저장 후, 이벤트 발생 시 설정된 URL로 POST 요청이 전송됩니다.
 
+![웹훅 설정 화면](../../static/assets/integration-guide/webhook-01.png)
+
 > 웹훅 리스너 서버는 JSON POST 요청을 수신할 수 있어야 합니다.
 
 ### 지원하는 이벤트 및 실제 페이로드 구조
