@@ -12,7 +12,7 @@
     },
     {
       "matchPackageNames": ["nuqs"],
-      "allowedVersions": "2.4.x"
+      "allowedVersions": "<=2.4.3"
     }
   ],
   "updateInternalDeps": true,
