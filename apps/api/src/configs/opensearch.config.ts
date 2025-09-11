@@ -23,8 +23,8 @@ export const opensearchConfigSchema = Joi.object({
     then: Joi.required(),
     otherwise: Joi.optional(),
   }),
-  OPENSEARCH_USERNAME: Joi.string().optional().default(''),
-  OPENSEARCH_PASSWORD: Joi.string().optional().default(''),
+  OPENSEARCH_USERNAME: Joi.string().allow('').optional().default(''),
+  OPENSEARCH_PASSWORD: Joi.string().allow('').optional().default(''),
 });
 
 export const opensearchConfig = registerAs('opensearch', () => ({
