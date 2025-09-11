@@ -19,8 +19,8 @@ import Joi from 'joi';
 export const smtpConfigSchema = Joi.object({
   SMTP_HOST: Joi.string().required(),
   SMTP_PORT: Joi.number().required(),
-  SMTP_USERNAME: Joi.string().optional(),
-  SMTP_PASSWORD: Joi.string().optional(),
+  SMTP_USERNAME: Joi.string().optional().allow(''),
+  SMTP_PASSWORD: Joi.string().optional().allow(''),
   SMTP_SENDER: Joi.string().required(),
   SMTP_TLS: Joi.boolean().optional().default(false),
   SMTP_CIPHER_SPEC: Joi.string().when('SMTP_TLS', {
