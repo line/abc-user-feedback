@@ -234,7 +234,7 @@ Replace `YOUR_API_KEY` with the API key you created earlier.
 
 After completing the initial setup, you can proceed to the following steps:
 
-- [Feedback Management](../03-user-guide/02-feedback-management/01-viewing-filtering.md): Learn how to view, filter, and tag feedback
-- [Using Issue Tracker](../03-user-guide/03-issue-management/01-issue-tracker.md): Learn how to manage and track issues
+- [Feedback Management](../03-user-guide/02-feedback-management.md): Learn how to view, filter, and tag feedback
+- [Using Issue Tracker](../03-user-guide/03-issue-management.md): Learn how to manage and track issues
 - [API Overview](../04-integration-guide/01-api-overview.md): Learn how to integrate programmatically through the API
 - [Setting Up and Using Webhooks](../04-integration-guide/03-webhooks.md): Learn how to integrate with external systems through webhooks

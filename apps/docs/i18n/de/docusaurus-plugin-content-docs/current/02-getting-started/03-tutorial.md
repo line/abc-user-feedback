@@ -234,7 +234,7 @@ curl -X POST http://localhost:4000/api/v1/projects/1/channels/1/feedbacks \
 
 초기 설정을 완료한 후에는 다음 단계로 진행할 수 있습니다:
 
-- [피드백 관리](../03-user-guide/02-feedback-management/01-viewing-filtering.md): 피드백 조회, 필터링, 태그 지정 방법 학습
-- [이슈 트래커 사용법](../03-user-guide/03-issue-management/01-issue-tracker.md): 이슈 관리 및 추적 방법 학습
+- [피드백 관리](../03-user-guide/02-feedback-management.md): 피드백 조회, 필터링, 태그 지정 방법 학습
+- [이슈 트래커 사용법](../03-user-guide/03-issue-management.md): 이슈 관리 및 추적 방법 학습
 - [API 개요](../04-integration-guide/01-api-overview.md): API를 통한 프로그래매틱 통합 방법 학습
 - [웹훅 설정 및 활용](../04-integration-guide/03-webhooks.md): 웹훅을 통한 외부 시스템 연동 방법 학습
