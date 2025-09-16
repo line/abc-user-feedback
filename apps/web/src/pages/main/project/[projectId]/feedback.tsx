@@ -65,7 +65,10 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     return channels?.items.find((channel) => channel.id === currentChannelId);
   }, [channels, currentChannelId]);
 
-  const fields = (channelData?.fields ?? []).sort((a, b) => a.order - b.order);
+  const fields = useMemo(
+    () => [...(channelData?.fields ?? [])].sort((a, b) => a.order - b.order),
+    [channelData],
+  );
 
   const filterFields = useMemo(() => {
     return (channelData?.fields ?? [])
