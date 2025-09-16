@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -24,7 +25,14 @@ import { ChannelServiceProviders } from '../../../../test-utils/providers/channe
 import { FieldEntity } from '../field/field.entity';
 import { ChannelEntity } from './channel.entity';
 import { ChannelService } from './channel.service';
-import { CreateChannelDto, FindByChannelIdDto, UpdateChannelDto } from './dtos';
+import {
+  CreateChannelDto,
+  FindAllChannelsByProjectIdDto,
+  FindByChannelIdDto,
+  FindOneByNameAndProjectIdDto,
+  UpdateChannelDto,
+  UpdateChannelFieldsDto,
+} from './dtos';
 import {
   ChannelAlreadyExistsException,
   ChannelInvalidNameException,
@@ -65,6 +73,7 @@ describe('ChannelService', () => {
 
       expect(channel.id).toBeDefined();
     });
+
     it('creating a channel fails with a duplicate name', async () => {
       const fieldCount = faker.number.int({ min: 1, max: 10 });
       const dto = new CreateChannelDto();
@@ -78,7 +87,120 @@ describe('ChannelService', () => {
         ChannelAlreadyExistsException,
       );
     });
+
+    it('creating a channel succeeds with empty fields array', async () => {
+      const dto = new CreateChannelDto();
+      dto.name = faker.string.sample();
+      dto.description = faker.string.sample();
+      dto.projectId = channelFixture.project.id;
+      dto.feedbackSearchMaxDays = faker.number.int();
+      dto.fields = [];
+      jest.spyOn(channelRepo, 'findOneBy').mockResolvedValue(null);
+
+      const channel = await channelService.create(dto);
+
+      expect(channel.id).toBeDefined();
+    });
+
+    it('creating a channel fails with invalid project id', async () => {
+      const dto = new CreateChannelDto();
+      dto.name = faker.string.sample();
+      dto.description = faker.string.sample();
+      dto.projectId = faker.number.int();
+      dto.feedbackSearchMaxDays = faker.number.int();
+      dto.fields = [];
+
+      // Mock projectService.findById to throw error
+      jest
+        .spyOn(channelService.projectService, 'findById')
+        .mockRejectedValue(new Error('Project not found'));
+
+      await expect(channelService.create(dto)).rejects.toThrow();
+    });
   });
+
+  describe('findAllByProjectId', () => {
+    it('finding all channels by project id succeeds with valid project id', async () => {
+      const dto = new FindAllChannelsByProjectIdDto();
+      dto.projectId = channelFixture.project.id;
+      dto.options = { limit: 10, page: 1 };
+      dto.searchText = faker.string.sample();
+
+      const mockChannels = {
+        items: [channelFixture],
+        meta: {
+          itemCount: 1,
+          totalItems: 1,
+          itemsPerPage: 10,
+          totalPages: 1,
+          currentPage: 1,
+        },
+      };
+
+      jest
+        .spyOn(channelService.channelMySQLService, 'findAllByProjectId')
+        .mockResolvedValue(mockChannels);
+
+      const result = await channelService.findAllByProjectId(dto);
+
+      expect(result).toEqual(mockChannels);
+      expect(
+        channelService.channelMySQLService.findAllByProjectId,
+      ).toHaveBeenCalledWith(dto);
+    });
+
+    it('finding all channels by project id returns empty result', async () => {
+      const dto = new FindAllChannelsByProjectIdDto();
+      dto.projectId = faker.number.int();
+      dto.options = { limit: 10, page: 1 };
+
+      const mockChannels = {
+        items: [],
+        meta: {
+          itemCount: 0,
+          totalItems: 0,
+          itemsPerPage: 10,
+          totalPages: 0,
+          currentPage: 1,
+        },
+      };
+
+      jest
+        .spyOn(channelService.channelMySQLService, 'findAllByProjectId')
+        .mockResolvedValue(mockChannels);
+
+      const result = await channelService.findAllByProjectId(dto);
+
+      expect(result.items).toHaveLength(0);
+      expect(result.meta.totalItems).toBe(0);
+    });
+
+    it('finding all channels by project id succeeds without search text', async () => {
+      const dto = new FindAllChannelsByProjectIdDto();
+      dto.projectId = channelFixture.project.id;
+      dto.options = { limit: 10, page: 1 };
+
+      const mockChannels = {
+        items: [channelFixture],
+        meta: {
+          itemCount: 1,
+          totalItems: 1,
+          itemsPerPage: 10,
+          totalPages: 1,
+          currentPage: 1,
+        },
+      };
+
+      jest
+        .spyOn(channelService.channelMySQLService, 'findAllByProjectId')
+        .mockResolvedValue(mockChannels);
+
+      const result = await channelService.findAllByProjectId(dto);
+
+      expect(result).toEqual(mockChannels);
+    });
+  });
+
   describe('findById', () => {
     it('finding by an id succeeds with an existent id', async () => {
       const dto = new FindByChannelIdDto();
@@ -95,6 +217,42 @@ describe('ChannelService', () => {
 
       await expect(channelService.findById(dto)).rejects.toThrow(
         ChannelNotFoundException,
+      );
+    });
+  });
+
+  describe('checkName', () => {
+    it('checking name returns true when channel exists', async () => {
+      const dto = new FindOneByNameAndProjectIdDto();
+      dto.name = channelFixture.name;
+      dto.projectId = channelFixture.project.id;
+
+      jest
+        .spyOn(channelService.channelMySQLService, 'findOneBy')
+        .mockResolvedValue(channelFixture);
+
+      const result = await channelService.checkName(dto);
+
+      expect(result).toBe(true);
+      expect(channelService.channelMySQLService.findOneBy).toHaveBeenCalledWith(
+        dto,
+      );
+    });
+
+    it('checking name returns false when channel does not exist', async () => {
+      const dto = new FindOneByNameAndProjectIdDto();
+      dto.name = faker.string.sample();
+      dto.projectId = faker.number.int();
+
+      jest
+        .spyOn(channelService.channelMySQLService, 'findOneBy')
+        .mockResolvedValue(null);
+
+      const result = await channelService.checkName(dto);
+
+      expect(result).toBe(false);
+      expect(channelService.channelMySQLService.findOneBy).toHaveBeenCalledWith(
+        dto,
       );
     });
   });
@@ -127,15 +285,127 @@ describe('ChannelService', () => {
     });
   });
 
+  describe('updateFields', () => {
+    it('updating fields succeeds with valid inputs', async () => {
+      const channelId = channelFixture.id;
+      const dto = new UpdateChannelFieldsDto();
+      dto.fields = Array.from({ length: 3 }).map(createFieldDto);
+
+      jest
+        .spyOn(channelService.fieldService, 'replaceMany')
+        .mockResolvedValue(undefined);
+
+      await channelService.updateFields(channelId, dto);
+
+      expect(channelService.fieldService.replaceMany).toHaveBeenCalledWith({
+        channelId,
+        fields: dto.fields,
+      });
+    });
+
+    it('updating fields succeeds with empty fields array', async () => {
+      const channelId = channelFixture.id;
+      const dto = new UpdateChannelFieldsDto();
+      dto.fields = [];
+
+      jest
+        .spyOn(channelService.fieldService, 'replaceMany')
+        .mockResolvedValue(undefined);
+
+      await channelService.updateFields(channelId, dto);
+
+      expect(channelService.fieldService.replaceMany).toHaveBeenCalledWith({
+        channelId,
+        fields: [],
+      });
+    });
+
+    it('updating fields fails when field service throws error', async () => {
+      const channelId = channelFixture.id;
+      const dto = new UpdateChannelFieldsDto();
+      dto.fields = Array.from({ length: 3 }).map(createFieldDto);
+
+      jest
+        .spyOn(channelService.fieldService, 'replaceMany')
+        .mockRejectedValue(new Error('Field service error'));
+
+      await expect(
+        channelService.updateFields(channelId, dto),
+      ).rejects.toThrow();
+    });
+  });
+
   describe('deleteById', () => {
     it('deleting by an id succeeds with a valid id', async () => {
       const channelId = faker.number.int();
       const channel = new ChannelEntity();
       channel.id = channelId;
 
+      jest
+        .spyOn(channelService.channelMySQLService, 'delete')
+        .mockResolvedValue(channel);
+
       const deletedChannel = await channelService.deleteById(channelId);
 
       expect(deletedChannel.id).toEqual(channel.id);
+      expect(channelService.channelMySQLService.delete).toHaveBeenCalledWith(
+        channelId,
+      );
+    });
+
+    it('deleting by an id succeeds with OpenSearch enabled', async () => {
+      const channelId = faker.number.int();
+      const channel = new ChannelEntity();
+      channel.id = channelId;
+
+      // Mock config to enable OpenSearch
+      jest.spyOn(channelService.configService, 'get').mockReturnValue(true);
+      jest
+        .spyOn(channelService.osRepository, 'deleteIndex')
+        .mockResolvedValue(undefined);
+      jest
+        .spyOn(channelService.channelMySQLService, 'delete')
+        .mockResolvedValue(channel);
+
+      const deletedChannel = await channelService.deleteById(channelId);
+
+      expect(deletedChannel.id).toEqual(channel.id);
+      expect(channelService.osRepository.deleteIndex).toHaveBeenCalledWith(
+        channelId.toString(),
+      );
+      expect(channelService.channelMySQLService.delete).toHaveBeenCalledWith(
+        channelId,
+      );
+    });
+
+    it('deleting by an id succeeds with OpenSearch disabled', async () => {
+      const channelId = faker.number.int();
+      const channel = new ChannelEntity();
+      channel.id = channelId;
+
+      // Mock config to disable OpenSearch
+      jest.spyOn(channelService.configService, 'get').mockReturnValue(false);
+      jest
+        .spyOn(channelService.channelMySQLService, 'delete')
+        .mockResolvedValue(channel);
+
+      const deletedChannel = await channelService.deleteById(channelId);
+
+      expect(deletedChannel.id).toEqual(channel.id);
+      expect(channelService.osRepository.deleteIndex).not.toHaveBeenCalled();
+      expect(channelService.channelMySQLService.delete).toHaveBeenCalledWith(
+        channelId,
+      );
+    });
+
+    it('deleting by an id fails when MySQL service throws error', async () => {
+      const channelId = faker.number.int();
+
+      jest
+        .spyOn(channelService.channelMySQLService, 'delete')
+        .mockRejectedValue(new Error('MySQL service error'));
+
+      await expect(channelService.deleteById(channelId)).rejects.toThrow();
     });
   });
 });
