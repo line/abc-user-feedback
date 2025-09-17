@@ -165,7 +165,7 @@ describe('AuthController', () => {
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+       
       authService.signUpEmailUser.mockResolvedValue(undefined as any);
 
       const result = await authController.signUpEmailUser(dto);
@@ -209,7 +209,7 @@ describe('AuthController', () => {
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+       
       authService.signUpInvitationUser.mockResolvedValue(undefined as any);
 
       const result = await authController.signUpInvitationUser(dto);
@@ -259,7 +259,7 @@ describe('AuthController', () => {
         refreshToken: faker.string.alphanumeric(32),
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+       
       authService.signIn.mockReturnValue(mockTokens as any);
 
       const result = authController.signInEmail(user);
@@ -281,7 +281,7 @@ describe('AuthController', () => {
         refreshToken: faker.string.alphanumeric(32),
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+       
       authService.refreshToken.mockReturnValue(mockTokens as any);
 
       const result = authController.refreshToken(user);

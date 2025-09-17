@@ -372,7 +372,7 @@ describe('Option Test suite', () => {
 
     it('creating an option with null fieldId succeeds', async () => {
       const dto = new CreateOptionDto();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+       
       dto.fieldId = null as any;
       dto.key = faker.string.sample();
       dto.name = faker.string.sample();
@@ -427,7 +427,7 @@ describe('Option Test suite', () => {
       const fieldId = faker.number.int();
       const dto = new ReplaceManyOptionsDto();
       dto.fieldId = fieldId;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+       
       dto.options = null as any;
       jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
       jest.spyOn(optionRepo, 'query');
@@ -442,7 +442,7 @@ describe('Option Test suite', () => {
       const fieldId = faker.number.int();
       const dto = new ReplaceManyOptionsDto();
       dto.fieldId = fieldId;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+       
       dto.options = undefined as any;
       jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
       jest.spyOn(optionRepo, 'query');

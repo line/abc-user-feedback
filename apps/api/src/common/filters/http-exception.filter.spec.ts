@@ -166,7 +166,7 @@ describe('HttpExceptionFilter', () => {
     });
 
     it('should handle null exception response', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+       
       const exception = new HttpException(null as any, HttpStatus.NO_CONTENT);
 
       filter.catch(exception, mockArgumentsHost);
@@ -180,7 +180,7 @@ describe('HttpExceptionFilter', () => {
 
     it('should handle undefined exception response', () => {
       const exception = new HttpException(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+         
         undefined as any,
         HttpStatus.NO_CONTENT,
       );
@@ -276,7 +276,7 @@ describe('HttpExceptionFilter', () => {
     });
 
     it('should handle boolean exception response', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+       
       const exception = new HttpException(true as any, HttpStatus.OK);
 
       filter.catch(exception, mockArgumentsHost);
@@ -289,7 +289,7 @@ describe('HttpExceptionFilter', () => {
     });
 
     it('should handle number exception response', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+       
       const exception = new HttpException(42 as any, HttpStatus.OK);
 
       filter.catch(exception, mockArgumentsHost);
