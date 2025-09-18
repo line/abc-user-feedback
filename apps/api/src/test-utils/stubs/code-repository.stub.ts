@@ -46,4 +46,15 @@ export class CodeRepositoryStub extends CommonRepositoryStub<CodeEntity> {
       entity.tryCount = tryCount;
     });
   }
+
+  getTryCount(): number {
+    return this.entities?.[0]?.tryCount ?? 0;
+  }
+
+  setData(data: unknown) {
+    this.entities?.forEach((entity) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      (entity as any).data = data;
+    });
+  }
 }
