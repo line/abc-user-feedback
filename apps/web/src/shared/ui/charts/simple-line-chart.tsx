@@ -185,7 +185,7 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
                 </div>
               )}
               <p>
-                {typeof value === 'number' ? value.toLocaleString() : value}
+                {typeof value === 'number' ? value.toLocaleString() : String(value)}
               </p>
             </div>
           );

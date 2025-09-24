@@ -755,7 +755,7 @@ importers:
     dependencies:
       '@eslint/compat':
         specifier: ^1.4.0
-        version: 1.4.0(eslint@9.36.0(jiti@2.4.2))
+        version: 1.4.0(eslint@9.36.0(jiti@1.21.7))
       '@next/eslint-plugin-next':
         specifier: ^15.5.4
         version: 15.5.4

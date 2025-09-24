@@ -117,7 +117,7 @@ const SimplePieChart: React.FC<IProps> = (props) => {
               if (typeof value === 'number') {
                 return value.toLocaleString();
               }
-              return value;
+              return String(value);
             }}
             cursor={{ fill: 'var(--bg-neutral-tertiary)' }}
             content={({ payload }) => {
@@ -148,7 +148,7 @@ const SimplePieChart: React.FC<IProps> = (props) => {
                         <p>
                           {typeof value === 'number' ?
                             value.toLocaleString()
-                          : value}
+                          : String(value)}
                         </p>
                       </div>
                     );
@@ -178,7 +178,7 @@ const CustomLegend: ContentType = ({ payload }) => {
           </tr>
         </thead>
         <tbody>
-          {payload.map((entry, index) => (
+          {payload?.map((entry, index) => (
             <tr key={`item-${index}`}>
               <td className="!text-large-normal text-neutral-primary table-cell py-2">
                 <div className="flex items-center gap-2">

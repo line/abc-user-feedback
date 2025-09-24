@@ -422,7 +422,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
               if (typeof value === 'number') {
                 return value.toLocaleString();
               }
-              return value;
+              return String(value);
             }}
             cursor={{ fill: 'var(--bg-neutral-tertiary)' }}
             content={({ payload }) => {
@@ -453,7 +453,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
                         <p>
                           {typeof value === 'number' ?
                             value.toLocaleString()
-                          : value}
+                          : String(value)}
                         </p>
                       </div>
                     );

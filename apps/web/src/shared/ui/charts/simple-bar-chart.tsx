@@ -86,7 +86,7 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
               if (typeof value === 'number') {
                 return value.toLocaleString();
               }
-              return value;
+              return String(value);
             }}
             cursor={{ fill: 'var(--bg-neutral-tertiary)' }}
             content={({ payload }) => (
