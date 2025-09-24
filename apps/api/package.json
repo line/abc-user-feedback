@@ -53,7 +53,7 @@
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
-    "cron": "^4.3.0",
+    "cron": "^4.3.3",
     "dotenv": "^17.2.2",
     "exceljs": "^4.4.0",
     "fast-csv": "^5.0.5",
