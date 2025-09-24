@@ -62,7 +62,6 @@ const IssueKanbanColumnItem = (props: Props) => {
       }
       transition={{
         duration: !isDragging ? 0.25 : 0,
-        easings: { type: 'spring' },
         scale: { duration: 0.25 },
         zIndex: { delay: isDragging ? 0 : 0.25 },
       }}

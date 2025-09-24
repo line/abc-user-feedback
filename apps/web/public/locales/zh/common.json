@@ -31,22 +31,13 @@
       },
       "same-key": "输入与键值相同的内容",
       "feedback-request-code": "反馈请求码",
-      "option-info": "选项信息",
       "field-mgmt": {
         "preview": "预览"
       },
       "dialog": {
-        "create-role": {
-          "title": "创建角色",
-          "description": "请输入一个新的角色名称。"
-        },
         "delete-option": {
           "title": "删除选项",
           "description": "这不会影响之前反馈中的选项。"
-        },
-        "delete-role": {
-          "title": "删除角色",
-          "description": "您确定要删除这个角色吗？\n分配给这个角色的成员也将被移除。"
         },
         "add-field": {
           "title": "添加字段"
@@ -216,15 +207,6 @@
     "sign-up-mgmt": "注册与登录管理",
     "user-mgmt": "用户管理"
   },
-  "project-setting-menu": {
-    "project-info": "项目信息",
-    "member-mgmt": "成员管理",
-    "role-mgmt": "角色管理",
-    "api-key-mgmt": "API密钥管理",
-    "issue-tracker-mgmt": "问题跟踪管理",
-    "webhook-integration": "Webhook集成",
-    "delete-project": "删除项目"
-  },
   "channel-setting-menu": {
     "channel-info": "频道信息",
     "field-mgmt": "字段管理",
@@ -249,7 +231,11 @@
     "field": "您可以按Field单位定义在Channel中收集的反馈数据。请考虑数据类型和属性来添加Field。",
     "image-config": "收集Image格式的反馈时，可以设置Image Storage连接并设置Image URL域名的白名单。详细内容请参考Image <docs>Docs</docs>。",
     "field-preview": "根据注册的Field信息预览反馈将呈现的样子。预览使用示例数据来显示。",
-    "webhook": "这是根据User Feedback中发生的事件触发器设置Webhook连接的界面。详细内容请参考Webhook <docs>Docs</docs>。"
+    "webhook": "这是根据User Feedback中发生的事件触发器设置Webhook连接的界面。详细内容请参考Webhook <docs>Docs</docs>。",
+    "ai-setting": "这是设置生成型AI集成的界面。要使用AI功能，必须输入必要信息。",
+    "ai-usage": "这是检查和管理与AI功能使用相关的令牌使用量的界面。",
+    "ai-field-template": "这是定义AI字段行为的界面。您可以通过模板输入指令并调整高级设置。",
+    "ai-issue-recommendation": "这是设置AI问题推荐功能的界面。Channel的详细设置后，您可以使用AI问题推荐功能。"
   },
   "hint": {
     "required": "必填",
@@ -297,7 +283,9 @@
       "next": "下一步",
       "previous": "上一步",
       "addFilter": "添加过滤器",
-      "edit": "编辑"
+      "edit": "编辑",
+      "process-ai-test": "AI测试执行",
+      "setting": "设置"
     },
     "project-setting-menu": {
       "project-info": "Project信息",
@@ -306,7 +294,7 @@
       "api-key-mgmt": "API Key管理",
       "issue-tracker-mgmt": "Issue Tracker管理",
       "webhook-integration": "Webhook集成",
-      "delete-project": "删除Project"
+      "generative-ai-setting": "Generative AI 集成"
     },
     "channel-setting-menu": {
       "channel-info": "Channel信息",
@@ -340,6 +328,7 @@
     },
     "text": {
       "no-data": {
+        "default": "还没有数据。",
         "api-key": "尚未生成API Key。",
         "member": "尚未注册Member。",
         "channel": "尚未创建Channel。",
@@ -367,7 +356,10 @@
       "request-email-auth": "认证请求已发送到您的邮箱。",
       "all-image-url-allow": "允许所有图片URL。",
       "select-project": "选择Project",
-      "no-category": "无类别"
+      "no-category": "无类别",
+      "token-threshold-percentage": "达到上限的{{percentage}}%",
+      "ai-issue-ready": "我将为反馈推荐相关问题。",
+      "ai-issue-pending": "AI正在分析问题..."
     },
     "create-tenant": {
       "tenant": {
@@ -386,11 +378,23 @@
     "placeholder": {
       "select": "请选择。",
       "text": "请输入。",
-      "text-or-generate": "请输入或生成。"
+      "text-or-generate": "请输入或生成。",
+      "ai-endpoint-url": "如果需要单独设置Endpoint URL，请输入。",
+      "system-prompt": "如果生成型AI需要参考的其他内容，请输入。",
+      "ai-field-template-prompt": "请输入生成型AI如何处理的指示。",
+      "ai-field-reccommendation-prompt": "如果有其他指示要请求生成型AI，请输入。"
     },
     "toast": {
       "success": "处理成功。",
-      "copy": "已复制到剪贴板。"
+      "copy": "已复制到剪贴板。",
+      "ai-usage-limit-approaching": {
+        "title": "AI使用量接近上限",
+        "description": "令牌使用量已达到上限的{{percentage}}%。"
+      },
+      "ai-function-terminated": {
+        "title": "AI功能已终止",
+        "description": "由于超过令牌使用限制，AI执行已停止。"
+      }
     },
     "webhook-card": {
       "feedback-creation": {
@@ -417,7 +421,20 @@
     },
     "description": {
       "create-project": "Project创建成功。\n接下来，需要创建Channel来收集反馈。\n请通过'创建Channel'继续下一步。",
-      "create-channel": "Channel创建成功。\n现在您可以开始收集和管理用户反馈了。\n请通过'开始使用'来全面体验。"
+      "create-channel": "Channel创建成功。\n现在您可以开始收集和管理用户反馈了。\n请通过'开始使用'来全面体验。",
+      "remaining-token-amount": "要查看月度剩余令牌量，请先设置上限值。",
+      "token-threshold": "设置每月令牌使用的上限。如果超过上限，AI功能将被停止。",
+      "pre-limit-notification": "如果令牌使用量达到设置上限的80%，将发送通知。",
+      "ai-field-template-form": "设置模板的基本信息。",
+      "ai-field-template-advanced-configuration": "可以更改模板的集成模型和温度。",
+      "ai-field-template-playground": "可以使用模板和测试数据预览AI结果。",
+      "ai-issue-recommendation-form": "设置AI问题推荐的基本信息。",
+      "ai-issue-recommendation-enable": "设置是否使用AI问题推荐功能。",
+      "ai-issue-recommendation-advanced-configuration": "可以更改AI问题推荐的集成模型、温度和数据参考量。",
+      "ai-issue-recommendation-data-reference-amount": "可以调整生成型AI参考的Issue数据量。",
+      "ai-issue-recommendation-playground": "可以使用AI问题推荐设置和测试数据预览AI结果。",
+      "ai-field-template-auto-processing": "可以自动执行AI字段。",
+      "ai-issue-recommendation-setting-required": "AI问题推荐功能需要设置。"
     },
     "login-setting": {
       "oauth-description": "提供使用OAuth2.0登录的方式。",

@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "dev": "tsc",
+    "dev": "tsup src/index.ts --format cjs,esm --dts",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
@@ -21,7 +21,7 @@
     "@ufb/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "react": "^19.1.0",
+    "react": "^19.1.1",
     "tsup": "^8.5.0",
     "typescript": "catalog:"
   }

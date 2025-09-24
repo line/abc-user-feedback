@@ -14,7 +14,6 @@
  * under the License.
  */
 import { useMemo } from 'react';
-import Image from 'next/image';
 import {
   closestCenter,
   DndContext,
@@ -46,6 +45,7 @@ import {
 
 import { cn } from '@/shared/utils';
 
+import { NodataImage, NoDataWithSearchImage } from '@/assets';
 import SortingTableHead from '../sorting-table-head.ui';
 import DraggableRow from './draggable-row.ui';
 import TableLoadingRow from './table-loading-row';
@@ -172,25 +172,15 @@ const BasicTable = <T,>(props: IProps<T>) => {
                   <div className="my-10 flex flex-col items-center justify-center gap-4 [&>button]:min-w-[120px]">
                     {isFiltered ?
                       <>
-                        <Image
-                          width={200}
-                          height={200}
-                          src="/assets/images/no-data-with-search.svg"
-                          alt="empty image"
-                        />
+                        <NoDataWithSearchImage />
                         <p className="text-small text-neutral-tertiary whitespace-pre-wrap text-center">
                           {t('v2.text.no-data.filter')}
                         </p>
                       </>
                     : <>
-                        <Image
-                          width={200}
-                          height={200}
-                          src="/assets/images/no-data.svg"
-                          alt="empty image"
-                        />
-                        <p className="text-small text-neutral-tertiary">
-                          {t('v2.text.no-data.empty')}
+                        <NodataImage />
+                        <p className="text-small text-neutral-tertiary whitespace-pre-wrap text-center">
+                          {t('v2.text.no-data.default')}
                         </p>
                         {createButton}
                       </>

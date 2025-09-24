@@ -38,10 +38,10 @@ export const CREATE_PROJECT_STEPPER_TEXT: Record<
   CreateProjectStepKey,
   React.ReactNode
 > = {
-  'project-info': <Trans i18nKey="project-setting-menu.project-info" />,
-  roles: <Trans i18nKey="project-setting-menu.role-mgmt" />,
-  members: <Trans i18nKey="project-setting-menu.member-mgmt" />,
-  'api-keys': <Trans i18nKey="project-setting-menu.api-key-mgmt" />,
+  'project-info': <Trans i18nKey="v2.project-setting-menu.project-info" />,
+  roles: <Trans i18nKey="v2.project-setting-menu.role-mgmt" />,
+  members: <Trans i18nKey="v2.project-setting-menu.member-mgmt" />,
+  'api-keys': <Trans i18nKey="v2.project-setting-menu.api-key-mgmt" />,
 };
 
 export const CREATE_PROJECT_HELP_TEXT: Record<

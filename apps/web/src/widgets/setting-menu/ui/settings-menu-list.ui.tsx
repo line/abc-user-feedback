@@ -18,7 +18,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 
-import type { IconNameType } from '@ufb/react';
 import {
   Accordion,
   AccordionContent,
@@ -63,50 +62,47 @@ const SettingsMenuList: React.FC<Props> = (props) => {
   const projectMenuItems: Omit<ProjectMenuItemProps, 'projectId'>[] = [
     {
       label: t('v2.project-setting-menu.project-info'),
-      icon: 'RiInformation2Line',
       value: 'project',
     },
     {
       label: t('v2.project-setting-menu.member-mgmt'),
-      icon: 'RiUser2Line',
       disabled: !perms.includes('project_member_read'),
       value: 'member',
     },
     {
       label: t('v2.project-setting-menu.api-key-mgmt'),
-      icon: 'RiShieldKeyholeLine',
       disabled: !perms.includes('project_apikey_read'),
       value: 'api-key',
     },
     {
       label: t('v2.project-setting-menu.issue-tracker-mgmt'),
-      icon: 'RiSeoLine',
       disabled: !perms.includes('project_tracker_read'),
       value: 'issue-tracker',
     },
     {
       label: t('v2.project-setting-menu.webhook-integration'),
-      icon: 'RiWebhookLine',
       disabled: !perms.includes('project_webhook_read'),
       value: 'webhook',
+    },
+    {
+      label: t('v2.project-setting-menu.generative-ai-setting'),
+      disabled: !perms.includes('project_webhook_read'),
+      value: 'generative-ai',
     },
   ];
 
   const channelMenuItems: Omit<ProjectMenuItemProps, 'projectId'>[] = [
     {
       label: t('v2.channel-setting-menu.channel-info'),
-      icon: 'RiInformationLine',
       value: 'channel-info',
     },
     {
       label: t('v2.channel-setting-menu.field-mgmt'),
-      icon: 'RiListCheck',
       value: 'field-mgmt',
       disabled: !perms.includes('channel_field_read'),
     },
     {
       label: t('v2.channel-setting-menu.image-mgmt'),
-      icon: 'RiImageFill',
       value: 'image-mgmt',
       disabled: !perms.includes('channel_image_read'),
     },
@@ -126,10 +122,14 @@ const SettingsMenuList: React.FC<Props> = (props) => {
         type="single"
         iconAlign="left"
         collapsible
-        divider={false}
+        border={false}
         defaultValue="channel-list"
       >
-        <AccordionItem value="channel-list" className="bg-primary">
+        <AccordionItem
+          value="channel-list"
+          className="bg-primary"
+          divider={false}
+        >
           <AccordionTrigger className="p-2">Channel List</AccordionTrigger>
           <AccordionContent className="p-0">
             {data?.meta.totalItems === 0 ?
@@ -212,13 +212,12 @@ const SettingsMenuList: React.FC<Props> = (props) => {
 interface ProjectMenuItemProps {
   disabled?: boolean;
   label: string;
-  icon: IconNameType;
   value: string;
   projectId: number;
 }
 
 const ProjectMenuItem = (props: ProjectMenuItemProps) => {
-  const { disabled = false, label, icon, value, projectId } = props;
+  const { disabled = false, label, value, projectId } = props;
   return (
     <Link
       className={cn({ 'pointer-events-none': disabled })}
@@ -228,7 +227,6 @@ const ProjectMenuItem = (props: ProjectMenuItemProps) => {
       }}
     >
       <MenuItem value={value} disabled={disabled}>
-        <Icon name={icon} />
         {label}
       </MenuItem>
     </Link>
@@ -237,14 +235,13 @@ const ProjectMenuItem = (props: ProjectMenuItemProps) => {
 interface ChannelMenuItemProps {
   disabled?: boolean;
   label: string;
-  icon: IconNameType;
   value: string;
   projectId: number;
   channelId: number;
 }
 
 const ChannelMenuItem = (props: ChannelMenuItemProps) => {
-  const { disabled = false, label, icon, value, projectId, channelId } = props;
+  const { disabled = false, label, value, projectId, channelId } = props;
   return (
     <Link
       className={cn({
@@ -256,7 +253,6 @@ const ChannelMenuItem = (props: ChannelMenuItemProps) => {
       }}
     >
       <MenuDropdownItem value={`${value}_${channelId}`} disabled={disabled}>
-        <Icon name={icon} />
         {label}
       </MenuDropdownItem>
     </Link>

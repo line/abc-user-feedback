@@ -51,13 +51,17 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   const { data } = useAllProjects();
 
   const onChangeProject = async (currentProjectId?: string) => {
-    await router.push({
-      pathname:
-        router.pathname.startsWith('/main/project') ?
-          router.pathname
-        : '/main/project/[projectId]/dashboard',
-      query: { projectId: currentProjectId },
-    });
+    if (router.pathname.includes('projectId')) {
+      await router.push({
+        pathname: router.pathname,
+        query: { projectId: currentProjectId },
+      });
+    } else {
+      await router.push({
+        pathname: Path.DASHBOARD,
+        query: { projectId: currentProjectId },
+      });
+    }
   };
 
   const openCreateProjectDialog = async () => {
@@ -85,46 +89,45 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <Tooltip open={!projectId}>
-      <TooltipTrigger>
-        <Select
-          type="single"
-          value={projectId ? String(projectId) : ''}
-          onValueChange={(value) => onChangeProject(value)}
-        >
+      <Select
+        value={projectId ? String(projectId) : ''}
+        onValueChange={(value) => onChangeProject(value)}
+      >
+        <TooltipTrigger asChild>
           <SelectTrigger className="min-w-60">
             <SelectValue placeholder="Select project" />
           </SelectTrigger>
-          <SelectContent maxHeight="300px">
-            <SelectGroup>
-              {data?.items.map(({ id, name }) => (
-                <SelectItem key={id} value={String(id)}>
-                  {name}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-            <SelectSeparator />
-            <button
-              className={cn('select-item text-tint-blue select-item-left p-2', {
-                'cursor-auto opacity-50': user?.type !== 'SUPER',
-              })}
-              onClick={openCreateProjectDialog}
-              disabled={user?.type !== 'SUPER'}
-            >
-              <span className="select-item-check select-item-check-left">
-                <Icon name="RiAddCircleFill" size={16} />
-              </span>
-              <div className="flex w-[215px] items-center justify-between gap-2">
-                <span>{t('v2.text.create-project')}</span>
-                {editingStepIndex !== null && (
-                  <span className="text-tint-red">
-                    {t('v2.text.in-progress')}
-                  </span>
-                )}
-              </div>
-            </button>
-          </SelectContent>
-        </Select>
-      </TooltipTrigger>
+        </TooltipTrigger>
+        <SelectContent maxHeight="300px">
+          <SelectGroup>
+            {data?.items.map(({ id, name }) => (
+              <SelectItem key={id} value={String(id)}>
+                {name}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+          <SelectSeparator />
+          <button
+            className={cn('select-item text-tint-blue select-item-left p-2', {
+              'cursor-auto opacity-50': user?.type !== 'SUPER',
+            })}
+            onClick={openCreateProjectDialog}
+            disabled={user?.type !== 'SUPER'}
+          >
+            <span className="select-item-check select-item-check-left">
+              <Icon name="RiAddCircleFill" size={16} />
+            </span>
+            <div className="flex w-[215px] items-center justify-between gap-2">
+              <span>{t('v2.text.create-project')}</span>
+              {editingStepIndex !== null && (
+                <span className="text-tint-red">
+                  {t('v2.text.in-progress')}
+                </span>
+              )}
+            </div>
+          </button>
+        </SelectContent>
+      </Select>
       <TooltipContent>{t('v2.text.select-project')}</TooltipContent>
     </Tooltip>
   );

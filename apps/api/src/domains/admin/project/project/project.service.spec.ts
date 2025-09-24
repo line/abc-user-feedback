@@ -212,7 +212,7 @@ describe('ProjectService Test suite', () => {
     });
 
     it('creating a project fails with an existent project name', async () => {
-      await expect(projectService.create(dto)).rejects.toThrowError(
+      await expect(projectService.create(dto)).rejects.toThrow(
         ProjectAlreadyExistsException,
       );
     });
@@ -258,7 +258,7 @@ describe('ProjectService Test suite', () => {
     it('finding a project by an id fails with an invalid id', async () => {
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue(null);
 
-      await expect(projectService.findById(dto)).rejects.toThrowError(
+      await expect(projectService.findById(dto)).rejects.toThrow(
         ProjectNotFoundException,
       );
     });
@@ -278,18 +278,18 @@ describe('ProjectService Test suite', () => {
 
       await projectService.update(dto);
 
-      expect(projectRepo.save).toBeCalledTimes(1);
+      expect(projectRepo.save).toHaveBeenCalledTimes(1);
     });
     it('updating a project fails with a duplicate name', async () => {
       const name = 'DUPLICATE_NAME';
       dto.name = name;
       jest.spyOn(projectRepo, 'save');
 
-      await expect(projectService.update(dto)).rejects.toThrowError(
+      await expect(projectService.update(dto)).rejects.toThrow(
         new ProjectInvalidNameException('Duplicated name'),
       );
 
-      expect(projectRepo.save).not.toBeCalled();
+      expect(projectRepo.save).not.toHaveBeenCalled();
     });
   });
   describe('deleteById', () => {
@@ -299,7 +299,7 @@ describe('ProjectService Test suite', () => {
 
       await projectService.deleteById(projectId);
 
-      expect(projectRepo.remove).toBeCalledTimes(1);
+      expect(projectRepo.remove).toHaveBeenCalledTimes(1);
     });
   });
 });

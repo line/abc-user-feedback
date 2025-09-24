@@ -13,10 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import plugin from "tailwindcss/plugin";
+import plugin from 'tailwindcss/plugin';
 
 export default plugin(({ addBase, addComponents }) => {
-  addBase(require("./dist/base"));
-  addComponents(require("./dist/components"));
-  addComponents(require("./dist/utilities"));
+  addBase(require('./dist/base'));
+  addComponents(require('./dist/components'));
+  addComponents(require('./dist/utilities'));
 });

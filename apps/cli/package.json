@@ -16,8 +16,8 @@
   "dependencies": {
     "@types/prompts": "^2.4.9",
     "child_process": "^1.0.2",
-    "commander": "^14.0.0",
-    "js-toml": "^1.0.1"
+    "commander": "^14.0.1",
+    "js-toml": "^1.0.2"
   },
   "devDependencies": {
     "@ufb/eslint-config": "workspace:*",

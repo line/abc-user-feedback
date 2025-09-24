@@ -144,6 +144,12 @@ export class FeedbackOSService {
                     [field.key]: query,
                   },
                 });
+              } else if (field.format === FieldFormatEnum.aiField) {
+                prev.push({
+                  match_phrase: {
+                    [`${field.key}.message`]: query,
+                  },
+                });
               } else if (
                 [
                   FieldFormatEnum.text,
@@ -199,6 +205,7 @@ export class FeedbackOSService {
                 osQuery.bool.must.push(
                   this.getMultiFieldQuery(query[fieldKey] ?? '', fields, [
                     FieldFormatEnum.text,
+                    FieldFormatEnum.aiField,
                     FieldFormatEnum.keyword,
                     FieldFormatEnum.number,
                     FieldFormatEnum.select,
@@ -240,6 +247,12 @@ export class FeedbackOSService {
                 osQuery.bool.must.push({
                   range: {
                     [key]: query[fieldKey] as TimeRange,
+                  },
+                });
+              } else if (format === FieldFormatEnum.aiField) {
+                osQuery.bool.must.push({
+                  match_phrase: {
+                    [`${key}.message`]: query[fieldKey] as string,
                   },
                 });
               } else if (
@@ -440,6 +453,12 @@ export class FeedbackOSService {
         osQuery.bool.must.push({
           range: {
             [key]: fieldValue as TimeRange,
+          },
+        });
+      } else if (format === FieldFormatEnum.aiField) {
+        osQuery.bool.must.push({
+          match_phrase: {
+            [`${key}.message`]: fieldValue,
           },
         });
       } else if (

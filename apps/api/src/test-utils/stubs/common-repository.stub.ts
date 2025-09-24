@@ -54,6 +54,7 @@ export class CommonRepositoryStub<T> {
 
   save(entity: T) {
     const entityToSave = removeUndefinedValues(entity as object);
+    this.entities?.push(entityToSave as T);
     if (Array.isArray(entityToSave)) {
       return (entityToSave as T[]).map((e) => ({
         ...this.entities?.[0],

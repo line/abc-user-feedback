@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+'use client';
+
 import * as React from 'react';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { Slottable } from '@radix-ui/react-slot';
@@ -26,48 +28,36 @@ import { Icon } from './icon';
 const DefaultValue = {
   iconSize: 'small',
   iconAlign: 'right',
-  divider: true,
   border: false,
-  bgColor: false,
 } as const;
 
 const AccordionContext = React.createContext<{
   iconSize: Size;
   iconAlign: 'left' | 'right';
-  divider: boolean;
-  bgColor: boolean;
 }>({
   iconSize: DefaultValue.iconSize,
   iconAlign: DefaultValue.iconAlign,
-  divider: DefaultValue.divider,
-  bgColor: DefaultValue.bgColor,
 });
 
 const Accordion = React.forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Root>,
+  React.ComponentRef<typeof AccordionPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> & {
     iconSize?: Size;
     iconAlign?: 'left' | 'right';
-    divider?: boolean;
     border?: boolean;
-    bgColor?: boolean;
   }
 >(
   (
     {
       iconAlign = DefaultValue.iconAlign,
       iconSize = DefaultValue.iconSize,
-      divider = DefaultValue.divider,
       border = DefaultValue.border,
-      bgColor = DefaultValue.bgColor,
       className,
       ...props
     },
     ref,
   ) => (
-    <AccordionContext.Provider
-      value={{ iconAlign, iconSize, divider, bgColor }}
-    >
+    <AccordionContext.Provider value={{ iconAlign, iconSize }}>
       <AccordionPrimitive.Root
         ref={ref}
         className={cn('accordion', border && 'accordion-border', className)}
@@ -79,10 +69,11 @@ const Accordion = React.forwardRef<
 Accordion.displayName = 'Accordion';
 
 const AccordionItem = React.forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
->(({ className, ...props }, ref) => {
-  const { divider } = React.useContext(AccordionContext);
+  React.ComponentRef<typeof AccordionPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item> & {
+    divider?: boolean;
+  }
+>(({ divider = true, className, ...props }, ref) => {
   return (
     <AccordionPrimitive.Item
       ref={ref}
@@ -98,17 +89,16 @@ const AccordionItem = React.forwardRef<
 AccordionItem.displayName = 'AccordionItem';
 
 const AccordionTrigger = React.forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Trigger>,
+  React.ComponentRef<typeof AccordionPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => {
-  const { iconSize, iconAlign, bgColor } = React.useContext(AccordionContext);
+  const { iconSize, iconAlign } = React.useContext(AccordionContext);
   return (
     <AccordionPrimitive.Header>
       <AccordionPrimitive.Trigger
         ref={ref}
         className={cn(
           'accordion-trigger',
-          bgColor && 'accordion-trigger-bg',
           iconAlign === 'left' && 'accordion-trigger-align-left',
           className,
         )}
@@ -163,7 +153,7 @@ const accordionContentVariants = cva('accordion-content', {
 });
 
 const AccordionContent = React.forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Content>,
+  React.ComponentRef<typeof AccordionPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
 >(({ className, children, ...props }, ref) => {
   const { iconAlign, iconSize } = React.useContext(AccordionContext);

@@ -14,8 +14,6 @@
  * under the License.
  */
 
-import { useTranslation } from 'next-i18next';
-
 import {
   Dropdown,
   DropdownContent,
@@ -31,14 +29,12 @@ interface IProps {
   options: FieldOptionInfo[];
 }
 
-const OptionListPopover: React.FC<IProps> = ({ options }) => {
-  const { t } = useTranslation();
-
+const SelectOptionListPopover: React.FC<IProps> = ({ options }) => {
   return (
     <Dropdown>
       <DropdownTrigger asChild data-state="close">
         <Tag onClick={(e) => e.stopPropagation()}>
-          {t('main.setting.option-info')}
+          Select Options
           <Icon name="RiInformation2Line" />
         </Tag>
       </DropdownTrigger>
@@ -51,4 +47,4 @@ const OptionListPopover: React.FC<IProps> = ({ options }) => {
   );
 };
 
-export default OptionListPopover;
+export default SelectOptionListPopover;

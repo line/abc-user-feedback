@@ -26,7 +26,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   TextInput,
-  TimePicker,
+  TimePickerInput,
 } from '@ufb/react';
 
 import { cn } from '@/shared/utils';
@@ -90,10 +90,10 @@ const DatePicker = (props: Props) => {
               <div className="border-neutral-transparent border-t-8">
                 <Divider variant="subtle" />
                 <div className="px-2 pt-2">
-                  <TimePicker
+                  <TimePickerInput
                     date={dayjs(value).toDate()}
-                    onChange={(date) => onChange(dayjs(date).toISOString())}
-                    granularity="minute"
+                    onDateChange={(date) => onChange(dayjs(date).toISOString())}
+                    picker="minutes"
                   />
                 </div>
               </div>

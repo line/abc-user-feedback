@@ -19,7 +19,7 @@ import Legend from './legend';
 
 interface IProps extends React.PropsWithChildren {
   title: string;
-  description: string;
+  description?: string;
   dataKeys?: { name: string; color: string }[];
   showLegend?: boolean;
   filterContent?: React.ReactNode;
@@ -33,7 +33,9 @@ const ChartCard: React.FC<IProps> = (props) => {
       <div className="border-neutral-tertiary flex items-center justify-between border-b px-6 py-5">
         <div className="flex items-center">
           <span className="text-title-h4">{title}</span>
-          <DescriptionTooltip description={description} side="bottom" />
+          {description && (
+            <DescriptionTooltip description={description} side="bottom" />
+          )}
         </div>
         <div className="flex gap-3">
           {showLegend && <Legend dataKeys={dataKeys ?? []} />}

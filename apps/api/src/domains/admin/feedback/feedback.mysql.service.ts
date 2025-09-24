@@ -117,6 +117,7 @@ export class FeedbackMySQLService {
             [
               FieldFormatEnum.keyword,
               FieldFormatEnum.text,
+              FieldFormatEnum.aiField,
               FieldFormatEnum.number,
               FieldFormatEnum.select,
               FieldFormatEnum.multiSelect,
@@ -135,7 +136,18 @@ export class FeedbackMySQLService {
                 const field = searchableFields[i];
                 const jsonExtractExpression = `JSON_EXTRACT(feedbacks.data, '$."${field.key}"')`;
 
-                if (
+                if (field.format === FieldFormatEnum.aiField) {
+                  const jsonExtractExpression = `JSON_EXTRACT(JSON_UNQUOTE(JSON_EXTRACT(feedbacks.data, '$.${field.key}')), '$.message')`;
+                  if (i === 0) {
+                    qb.where(`${jsonExtractExpression} like :likeValue`, {
+                      likeValue: `%${value as string | number}%`,
+                    });
+                  } else {
+                    qb.orWhere(`${jsonExtractExpression} like :likeValue`, {
+                      likeValue: `%${value as string | number}%`,
+                    });
+                  }
+                } else if (
                   field.format === FieldFormatEnum.keyword ||
                   field.format === FieldFormatEnum.select ||
                   field.format === FieldFormatEnum.date ||
@@ -224,6 +236,11 @@ export class FeedbackMySQLService {
                 '$')`,
             );
           }
+        } else if (format === FieldFormatEnum.aiField) {
+          const jsonExtractExpression = `JSON_EXTRACT(JSON_UNQUOTE(JSON_EXTRACT(feedbacks.data, '$.${fieldKey}')), '$.message')`;
+          queryBuilder.andWhere(`${jsonExtractExpression} like :value`, {
+            value: `%${value as string}%`,
+          });
         } else if (
           [FieldFormatEnum.text, FieldFormatEnum.images].includes(format)
         ) {
@@ -448,6 +465,11 @@ export class FeedbackMySQLService {
                   qb[method]('1 = 0');
                 }
               }
+            } else if (format === FieldFormatEnum.aiField) {
+              const jsonExtractExpression = `JSON_EXTRACT(JSON_UNQUOTE(JSON_EXTRACT(feedbacks.data, '$.${fieldKey}')), '$.message')`;
+              qb[method](`${jsonExtractExpression} like :${paramName}`, {
+                [paramName]: `%${value as string}%`,
+              });
             } else if (format === FieldFormatEnum.text) {
               qb[method](
                 `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') like :${paramName}`,
@@ -529,37 +551,46 @@ export class FeedbackMySQLService {
   async updateFeedback(dto: UpdateFeedbackMySQLDto) {
     const { feedbackId, data } = dto;
 
+    let query = `JSON_SET(IFNULL(feedbacks.data,'{}'), `;
+    const parameters: Record<string, any> = {};
+
+    if (Object.keys(data).length === 0) {
+      query = 'data';
+    } else {
+      Object.entries(data).forEach(([fieldKey, value], index) => {
+        query += `'$.${fieldKey}', `;
+        if (Array.isArray(value)) {
+          const arrayParams = value
+            .map((v, i) => {
+              const paramName = `value${index}_${i}`;
+              parameters[paramName] = v as string | number;
+              return `:${paramName}`;
+            })
+            .join(', ');
+          query += `JSON_ARRAY(${arrayParams})`;
+        } else {
+          const paramName = `value${index}`;
+          parameters[paramName] = value as string | number;
+          query += `:${paramName}`;
+        }
+
+        if (index + 1 !== Object.entries(data).length) {
+          query += ', ';
+        }
+      });
+
+      query += ')';
+    }
+
     await this.feedbackRepository
       .createQueryBuilder('feedbacks')
       .update('feedbacks')
       .set({
-        data: () => {
-          if (Object.keys(data).length === 0) {
-            return 'data';
-          }
-          let query = `JSON_SET(IFNULL(feedbacks.data,'{}'), `;
-          for (const [index, fieldKey] of Object.entries(Object.keys(data))) {
-            query += `'$.${fieldKey}',
-            ${
-              Array.isArray(data[fieldKey]) ?
-                data[fieldKey].length === 0 ?
-                  'JSON_ARRAY()'
-                : 'JSON_ARRAY("' + data[fieldKey].join('","') + '")'
-              : `:${fieldKey}`
-            }`;
-
-            if (parseInt(index) + 1 !== Object.entries(data).length) {
-              query += ',';
-            }
-          }
-          query += `)`;
-
-          return query;
-        },
+        data: () => query,
         updatedAt: () => `'${DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss')}'`,
       })
       .where('id = :feedbackId', { feedbackId })
-      .setParameters(data)
+      .setParameters(parameters)
       .execute();
   }
 

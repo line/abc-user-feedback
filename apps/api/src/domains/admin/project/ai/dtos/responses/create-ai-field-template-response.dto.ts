@@ -13,13 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-.toaster {
-}
 
-.toast {
-  @apply !absolute !left-0;
-}
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose, plainToInstance } from 'class-transformer';
+import { IsNumber } from 'class-validator';
 
-.toast-close {
-  @apply order-1;
+export class CreateAIFieldTemplateResponseDto {
+  @ApiProperty()
+  @IsNumber()
+  @Expose()
+  id: number;
+
+  public static transform(params: any): CreateAIFieldTemplateResponseDto {
+    return plainToInstance(CreateAIFieldTemplateResponseDto, params, {
+      excludeExtraneousValues: true,
+    });
+  }
 }

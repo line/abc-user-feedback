@@ -53,8 +53,13 @@ import {
 import type { Channel } from '@/entities/channel';
 import type { Field } from '@/entities/field';
 
+import { AISparklingIcon } from '@/assets';
 import { getColumns } from '../feedback-table-columns';
-import { useFeedbackQueryConverter, useFeedbackSearch } from '../lib';
+import {
+  useAIFIeldFeedbackCellLoading,
+  useFeedbackQueryConverter,
+  useFeedbackSearch,
+} from '../lib';
 import FeedbackDetailSheet from './feedback-detail-sheet.ui';
 import FeedbackTableChannelSelection from './feedback-table-channel-selection.ui';
 import FeedbackTableDownload from './feedback-table-download.ui';
@@ -84,6 +89,9 @@ const FeedbackTable = (props: Props) => {
   const perms = usePermissions();
   const overlay = useOverlay();
 
+  const setLoadingFeedbackIds = useAIFIeldFeedbackCellLoading(
+    (state) => state.setLoadingFeedbackIds,
+  );
   const [openFeedbackId, setOpenFeedbackId] = useState<number | null>(null);
 
   const [rows, setRows] = useState<Record<string, unknown>[]>([]);
@@ -242,6 +250,26 @@ const FeedbackTable = (props: Props) => {
     },
   });
 
+  const { mutateAsync: processAI, isPending: isPendingAIProcess } =
+    useOAIMutation({
+      method: 'post',
+      path: '/api/admin/projects/{projectId}/ai/process',
+      pathParams: { projectId },
+      queryOptions: {
+        onSuccess() {
+          toast.success(t('v2.toast.success'));
+        },
+        async onSettled() {
+          table.resetRowSelection();
+          await refetch();
+          setLoadingFeedbackIds([]);
+        },
+        onError(error) {
+          toast.error(error.message);
+        },
+      },
+    });
+
   return (
     <div className="flex h-full flex-col gap-4">
       <div className="flex flex-shrink justify-between gap-2">
@@ -253,18 +281,41 @@ const FeedbackTable = (props: Props) => {
         />
         <div className="flex flex-shrink-0 gap-2 [&>button]:min-w-20 [&>button]:flex-shrink-0">
           {selectedRowIds.length > 0 && (
-            <Button
-              variant="outline"
-              className="!text-tint-red"
-              onClick={openDeleteFeedbacksDialog}
-              disabled={!perms.includes('feedback_delete')}
-            >
-              <Icon name="RiDeleteBin6Line" />
-              {t('v2.button.name.delete', { name: 'Feedback' })}
-              <Badge variant="subtle" className="!text-tint-red">
-                {selectedRowIds.length}
-              </Badge>
-            </Button>
+            <>
+              <Button
+                variant="outline"
+                className="!text-tint-red"
+                onClick={openDeleteFeedbacksDialog}
+                disabled={!perms.includes('feedback_delete')}
+              >
+                <Icon name="RiDeleteBin6Line" />
+                {t('v2.button.name.delete', { name: 'Feedback' })}
+                <Badge variant="subtle" className="!text-tint-red">
+                  {selectedRowIds.length}
+                </Badge>
+              </Button>
+              {fields.filter(
+                (v) => v.format === 'aiField' && v.status === 'ACTIVE',
+              ).length > 0 && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setLoadingFeedbackIds(selectedRowIds);
+                    toast.promise(processAI({ feedbackIds: selectedRowIds }), {
+                      loading: 'Loading',
+                      success: () => 'Success',
+                    });
+                  }}
+                  disabled={
+                    isPendingAIProcess || !perms.includes('feedback_update')
+                  }
+                >
+                  <AISparklingIcon />
+                  Run AI
+                  <Badge variant="subtle">{selectedRowIds.length}</Badge>
+                </Button>
+              )}
+            </>
           )}
           <Tooltip>
             <TooltipTrigger>
@@ -323,6 +374,7 @@ const FeedbackTable = (props: Props) => {
           feedback={currentFeedback}
           fields={fields}
           channelId={currentChannel.id}
+          refetchFeedback={refetch}
         />
       )}
     </div>

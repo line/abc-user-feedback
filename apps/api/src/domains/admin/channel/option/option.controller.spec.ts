@@ -50,13 +50,13 @@ describe('SelectOptionController', () => {
       .mockReturnValue(options);
     const fieldId = faker.number.int();
     await optionController.getOptions(fieldId);
-    expect(MockSelectOptionService.findByFieldId).toBeCalledTimes(1);
+    expect(MockSelectOptionService.findByFieldId).toHaveBeenCalledTimes(1);
   });
   it('creaetOption', async () => {
     const fieldId = faker.number.int();
     const dto = new CreateOptionRequestDto();
     dto.name = faker.string.sample();
     await optionController.createOption(fieldId, dto);
-    expect(MockSelectOptionService.create).toBeCalledTimes(1);
+    expect(MockSelectOptionService.create).toHaveBeenCalledTimes(1);
   });
 });

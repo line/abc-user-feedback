@@ -16,3 +16,4 @@
 export { default as useFeedbackSearch } from './use-feedback-search';
 export { default as usePreviewFeedback } from './use-preview-feedback';
 export { default as useFeedbackQueryConverter } from './use-feedback-query-converter';
+export { default as useAIFIeldFeedbackCellLoading } from './use-ai-field-feedback-cell-loading';

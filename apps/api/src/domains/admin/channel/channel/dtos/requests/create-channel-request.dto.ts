@@ -82,6 +82,19 @@ export class CreateChannelRequestFieldDto {
   @IsNumber()
   order?: number | null;
 
+  @ApiProperty({ nullable: true, type: Number, required: false })
+  @IsOptional()
+  @IsNumber()
+  aiFieldTemplateId?: number | null;
+
+  @ApiProperty({ nullable: true, type: [String], required: false })
+  @IsOptional()
+  aiFieldTargetKeys?: string[] | null;
+
+  @ApiProperty({ nullable: true, type: Boolean, required: false })
+  @IsOptional()
+  aiFieldAutoProcessing?: boolean | null;
+
   @ApiProperty({
     type: [CreateChannelRequestFieldSelectOptionDto],
     required: false,

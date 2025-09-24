@@ -33,14 +33,10 @@ const DialogTrigger = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Trigger>,
   DialogPrimitive.DialogTriggerProps &
     React.ComponentPropsWithoutRef<typeof Button>
->(({ variant = 'outline', className, children, ...props }, ref) => {
+>(({ variant = 'outline', children, ...props }, ref) => {
   if (props.asChild) {
     return (
-      <DialogPrimitive.Trigger
-        className={cn('dialog-trigger', className)}
-        ref={ref}
-        {...props}
-      >
+      <DialogPrimitive.Trigger ref={ref} {...props}>
         {children}
       </DialogPrimitive.Trigger>
     );
@@ -48,12 +44,7 @@ const DialogTrigger = React.forwardRef<
 
   return (
     <DialogPrimitive.Trigger asChild>
-      <Button
-        variant={variant}
-        className={cn('dialog-trigger', className)}
-        ref={ref}
-        {...props}
-      >
+      <Button variant={variant} ref={ref} {...props}>
         {children}
       </Button>
     </DialogPrimitive.Trigger>
@@ -110,27 +101,26 @@ const DialogContent = React.forwardRef<
   const { themeRadius } = useTheme();
   return (
     <DialogPortal>
-      <DialogOverlay onClick={(e) => e.stopPropagation()}>
-        <DialogPrimitive.Content
-          ref={ref}
-          className={cn(
-            dialogContentVariants({ radius: radius ?? themeRadius, className }),
-          )}
-          {...props}
-        >
-          {children}
-          <DialogPrimitive.Close asChild>
-            <Button
-              size="medium"
-              variant="ghost"
-              className="dialog-close"
-              aria-label="Close"
-            >
-              <Icon name="RiCloseLine" />
-            </Button>
-          </DialogPrimitive.Close>
-        </DialogPrimitive.Content>
-      </DialogOverlay>
+      <DialogOverlay onClick={(e) => e.stopPropagation()} />
+      <DialogPrimitive.Content
+        ref={ref}
+        className={cn(
+          dialogContentVariants({ radius: radius ?? themeRadius, className }),
+        )}
+        {...props}
+      >
+        {children}
+        <DialogPrimitive.Close asChild>
+          <Button
+            size="medium"
+            variant="ghost"
+            className="dialog-close"
+            aria-label="Close"
+          >
+            <Icon name="RiCloseLine" />
+          </Button>
+        </DialogPrimitive.Close>
+      </DialogPrimitive.Content>
     </DialogPortal>
   );
 });

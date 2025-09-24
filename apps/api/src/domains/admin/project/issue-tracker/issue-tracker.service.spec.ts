@@ -53,11 +53,11 @@ describe('issue-tracker service', () => {
 
       await issueTrackerService.update(dto);
 
-      expect(issueTrackerRepo.findOne).toBeCalledTimes(1);
-      expect(issueTrackerRepo.findOne).toBeCalledWith({
+      expect(issueTrackerRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(issueTrackerRepo.findOne).toHaveBeenCalledWith({
         where: { project: { id: dto.projectId } },
       });
-      expect(issueTrackerRepo.save).toBeCalledTimes(1);
+      expect(issueTrackerRepo.save).toHaveBeenCalledTimes(1);
     });
   });
 });

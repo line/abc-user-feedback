@@ -29,6 +29,7 @@ import {
   FieldPropertyEnum,
   FieldStatusEnum,
 } from '../../../../common/enums';
+import { AIFieldTemplatesEntity } from '../../project/ai/ai-field-templates.entity';
 import { ChannelEntity } from '../channel/channel.entity';
 import { OptionEntity } from '../option/option.entity';
 
@@ -58,6 +59,23 @@ export class FieldEntity extends CommonEntity {
   @Column('int', { default: 0 })
   order: number | null;
 
+  @ManyToOne(
+    () => AIFieldTemplatesEntity,
+    (aiFieldTemplate) => aiFieldTemplate.fields,
+    {
+      onDelete: 'CASCADE',
+      orphanedRowAction: 'delete',
+      nullable: true,
+    },
+  )
+  aiFieldTemplate: Relation<AIFieldTemplatesEntity> | null;
+
+  @Column('json', { nullable: true })
+  aiFieldTargetKeys: string[] | null;
+
+  @Column('boolean', { nullable: true })
+  aiFieldAutoProcessing: boolean | null;
+
   @ManyToOne(() => ChannelEntity, (channel) => channel.fields, {
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',
@@ -79,6 +97,9 @@ export class FieldEntity extends CommonEntity {
     property,
     status,
     order,
+    aiFieldTemplateId,
+    aiFieldTargetKeys,
+    aiFieldAutoProcessing,
   }: {
     channelId: number;
     name: string;
@@ -88,6 +109,9 @@ export class FieldEntity extends CommonEntity {
     property: FieldPropertyEnum;
     status: FieldStatusEnum;
     order?: number | null;
+    aiFieldTemplateId?: number | null;
+    aiFieldTargetKeys?: string[] | null;
+    aiFieldAutoProcessing?: boolean | null;
   }) {
     const field = new FieldEntity();
     field.channel = new ChannelEntity();
@@ -99,6 +123,12 @@ export class FieldEntity extends CommonEntity {
     field.property = property;
     field.status = status;
     field.order = order ?? 0;
+    if (aiFieldTemplateId) {
+      field.aiFieldTemplate = new AIFieldTemplatesEntity();
+      field.aiFieldTemplate.id = aiFieldTemplateId;
+    }
+    field.aiFieldTargetKeys = aiFieldTargetKeys ?? null;
+    field.aiFieldAutoProcessing = aiFieldAutoProcessing ?? null;
 
     return field;
   }

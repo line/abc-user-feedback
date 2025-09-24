@@ -27,6 +27,7 @@ import {
 import { CommonEntity } from '@/common/entities';
 import { FeedbackStatisticsEntity } from '@/domains/admin/statistics/feedback/feedback-statistics.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
+import { AIIssueTemplatesEntity } from '../../project/ai/ai-issue-templates.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
 import { EventEntity } from '../../project/webhook/event.entity';
 import { FieldEntity } from '../field/field.entity';
@@ -70,6 +71,15 @@ export class ChannelEntity extends CommonEntity {
     cascade: true,
   })
   feedbacks: Relation<FeedbackEntity>[];
+
+  @OneToMany(
+    () => AIIssueTemplatesEntity,
+    (aiIssueTemplates) => aiIssueTemplates.channel,
+    {
+      cascade: true,
+    },
+  )
+  aiIssueTemplates: Relation<AIIssueTemplatesEntity>[];
 
   @OneToMany(
     () => FeedbackStatisticsEntity,

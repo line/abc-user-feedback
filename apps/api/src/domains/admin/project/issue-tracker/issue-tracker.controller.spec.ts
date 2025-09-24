@@ -51,7 +51,7 @@ describe('IssueTrackerController', () => {
       await issueTrackerController.create(projectId, {
         data: {} as IssueTrackerDataDto,
       });
-      expect(MockIssueTrackerService.create).toBeCalledTimes(1);
+      expect(MockIssueTrackerService.create).toHaveBeenCalledTimes(1);
     });
   });
   describe('findOne', () => {
@@ -60,7 +60,7 @@ describe('IssueTrackerController', () => {
       const projectId = faker.number.int();
 
       await issueTrackerController.findOne(projectId);
-      expect(MockIssueTrackerService.findByProjectId).toBeCalledTimes(1);
+      expect(MockIssueTrackerService.findByProjectId).toHaveBeenCalledTimes(1);
     });
   });
   describe('updateOne', () => {
@@ -71,7 +71,7 @@ describe('IssueTrackerController', () => {
       await issueTrackerController.updateOne(projectId, {
         data: {} as IssueTrackerDataDto,
       });
-      expect(MockIssueTrackerService.update).toBeCalledTimes(1);
+      expect(MockIssueTrackerService.update).toHaveBeenCalledTimes(1);
     });
   });
 });

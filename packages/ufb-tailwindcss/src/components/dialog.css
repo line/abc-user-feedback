@@ -15,19 +15,13 @@
  */
 .dialog {
   --dialog-bg: var(--bg-neutral-primary);
-  --dialog-bg-open: var(--bg-neutral-tertiary);
   --dialog-border: var(--border-neutral-tertiary);
 
   @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-[var(--alpha-black800)];
 }
 
-.dialog-trigger {
-  @apply data-[state=open]:bg-[var(--dialog-bg-open)];
-}
-
 .dialog-content {
   --dialog-bg: var(--bg-neutral-primary);
-  --dialog-bg-open: var(--bg-neutral-tertiary);
   --dialog-border: var(--border-neutral-tertiary);
 
   @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed left-[50%] top-[50%] z-50 grid w-full max-w-sm translate-x-[-50%] translate-y-[-50%] gap-y-5 space-y-2 border border-[var(--dialog-border)] bg-[var(--dialog-bg)] p-5 duration-200;

@@ -27,20 +27,6 @@
       font-size: 0.75rem;
       line-height: 1.125rem;
     }
-
-    &-underline {
-      font-weight: 400;
-      font-size: 0.75rem;
-      line-height: 1.125rem;
-      text-decoration: underline;
-    }
-
-    &-delete {
-      font-weight: 400;
-      font-size: 0.75rem;
-      line-height: 1.125rem;
-      text-decoration: line-through;
-    }
   }
 
   &-base {
@@ -54,20 +40,6 @@
       font-weight: 600;
       font-size: 0.875rem;
       line-height: 1.375rem;
-    }
-
-    &-underline {
-      font-weight: 400;
-      font-size: 0.875rem;
-      line-height: 1.375rem;
-      text-decoration: underline;
-    }
-
-    &-delete {
-      font-weight: 400;
-      font-size: 0.875rem;
-      line-height: 1.375rem;
-      text-decoration: line-through;
     }
   }
 
@@ -83,20 +55,6 @@
       font-size: 1rem;
       line-height: 1.5rem;
     }
-
-    &-underline {
-      font-weight: 400;
-      font-size: 1rem;
-      line-height: 1.5rem;
-      text-decoration: underline;
-    }
-
-    &-delete {
-      font-weight: 400;
-      font-size: 1rem;
-      line-height: 1.5rem;
-      text-decoration: line-through;
-    }
   }
 
   &-xlarge {
@@ -110,20 +68,6 @@
       font-weight: 600;
       font-size: 1.25rem;
       line-height: 2rem;
-    }
-
-    &-underline {
-      font-weight: 400;
-      font-size: 1.25rem;
-      line-height: 2rem;
-      text-decoration: underline;
-    }
-
-    &-delete {
-      font-weight: 400;
-      font-size: 1.25rem;
-      line-height: 2rem;
-      text-decoration: line-through;
     }
   }
 

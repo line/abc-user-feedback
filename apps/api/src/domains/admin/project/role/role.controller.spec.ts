@@ -74,7 +74,7 @@ describe('Role Controller', () => {
 
     const res = await controller.getAllRolesByProjectId(projectId);
 
-    expect(MockRoleService.findByProjectId).toBeCalledTimes(1);
+    expect(MockRoleService.findByProjectId).toHaveBeenCalledTimes(1);
     expect(res).toEqual({
       total,
       roles: roles.map(({ id, name, permissions }) => ({
@@ -91,8 +91,8 @@ describe('Role Controller', () => {
 
     await controller.createRole(projectId, dto);
 
-    expect(MockRoleService.create).toBeCalledTimes(1);
-    expect(MockRoleService.create).toBeCalledWith({ ...dto, projectId });
+    expect(MockRoleService.create).toHaveBeenCalledTimes(1);
+    expect(MockRoleService.create).toHaveBeenCalledWith({ ...dto, projectId });
   });
 
   it('updateRole', async () => {
@@ -102,8 +102,8 @@ describe('Role Controller', () => {
 
     await controller.updateRole(projectId, id, dto);
 
-    expect(MockRoleService.update).toBeCalledTimes(1);
-    expect(MockRoleService.update).toBeCalledWith(id, projectId, dto);
+    expect(MockRoleService.update).toHaveBeenCalledTimes(1);
+    expect(MockRoleService.update).toHaveBeenCalledWith(id, projectId, dto);
   });
 
   it('deleteRole', async () => {
@@ -111,7 +111,7 @@ describe('Role Controller', () => {
 
     await controller.deleteRole(id);
 
-    expect(MockRoleService.deleteById).toBeCalledTimes(1);
-    expect(MockRoleService.deleteById).toBeCalledWith(id);
+    expect(MockRoleService.deleteById).toHaveBeenCalledTimes(1);
+    expect(MockRoleService.deleteById).toHaveBeenCalledWith(id);
   });
 });

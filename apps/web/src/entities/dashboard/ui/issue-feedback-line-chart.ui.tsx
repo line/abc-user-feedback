@@ -145,7 +145,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
             <Icon name="RiFilter3Line" />
             Filter
           </ComboboxTrigger>
-          <ComboboxContent commandProps={{ filter: commandFilter }}>
+          <ComboboxContent options={{ filter: commandFilter }}>
             <ComboboxInput
               onValueChange={(value) => setSearchName(value)}
               value={searchName}

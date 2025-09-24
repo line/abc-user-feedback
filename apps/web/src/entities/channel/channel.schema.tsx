@@ -23,6 +23,7 @@ export const channelImageConfigSchema = z.object({
   region: z.string().trim(),
   bucket: z.string().trim(),
   domainWhiteList: z.array(z.string().trim()).nullable(),
+  enablePresignedUrlDownload: z.boolean().optional(),
 });
 
 export const channelSchema = z.object({
@@ -39,7 +40,7 @@ export const channelSchema = z.object({
     .nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  imageConfig: channelImageConfigSchema.nullable(),
+  imageConfig: channelImageConfigSchema.nullable().optional(),
   feedbackSearchMaxDays: z.number(),
 });
 

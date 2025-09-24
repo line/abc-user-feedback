@@ -109,7 +109,7 @@ function DashboardTable<T>(props: IProps<T>) {
                       alt="empty image"
                     />
                     <p className="text-small text-neutral-tertiary">
-                      {t('v2.text.no-data.empty')}
+                      {t('v2.text.no-data.default')}
                     </p>
                   </div>
                 </td>

@@ -17,7 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 
-import { InputField, InputLabel, Textarea } from '@ufb/react';
+import { InputField, Label, Textarea } from '@ufb/react';
 
 import { FormDialog, ISSUES, SelectInput, TextInput } from '@/shared';
 import type { FormOverlayProps } from '@/shared';
@@ -86,14 +86,14 @@ const IssueFormDialog = (props: Props) => {
           error={formState.errors.status?.message}
         />
         <InputField>
-          <InputLabel>Description</InputLabel>
+          <Label>Description</Label>
           <Textarea
             {...register('description')}
             placeholder={t('v2.placeholder.text')}
           />
         </InputField>
         <InputField>
-          <InputLabel>Ticket</InputLabel>
+          <Label>Ticket</Label>
           <div className="flex items-center gap-2">
             <div className="w-28">
               <TextInput disabled value={issueTracker?.ticketKey ?? ''} />

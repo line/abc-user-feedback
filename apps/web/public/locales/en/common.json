@@ -31,22 +31,13 @@
       },
       "same-key": "Enter the same value as the key",
       "feedback-request-code": "Feedback Request Code",
-      "option-info": "Option Information",
       "field-mgmt": {
         "preview": "Preview"
       },
       "dialog": {
-        "create-role": {
-          "title": "Create Role",
-          "description": "Please enter a new role name."
-        },
         "delete-option": {
           "title": "Delete Option",
           "description": "This will not affect options in previous feedback."
-        },
-        "delete-role": {
-          "title": "Delete Role",
-          "description": "Are you sure you want to delete this role?\nMembers assigned to this role will also be removed."
         },
         "add-field": {
           "title": "Add Field"
@@ -216,15 +207,6 @@
     "sign-up-mgmt": "Login Management",
     "user-mgmt": "User Management"
   },
-  "project-setting-menu": {
-    "project-info": "Project Information",
-    "member-mgmt": "Member Management",
-    "role-mgmt": "Role Management",
-    "api-key-mgmt": "API Key Management",
-    "issue-tracker-mgmt": "Issue Tracker Management",
-    "webhook-integration": "Webhook Integration",
-    "delete-project": "Delete Project"
-  },
   "channel-setting-menu": {
     "channel-info": "Channel Information",
     "field-mgmt": "Field Management",
@@ -249,7 +231,11 @@
     "field": "You can define feedback data to be collected in the Channel by Field units. Please add Fields considering the data type and properties.",
     "image-config": "When collecting feedback in Image format, this screen allows you to set up Image Storage integration and configure whitelist for Image URL domains. For details, please refer to the Image <docs>Docs</docs>.",
     "field-preview": "Provides a preview of what your feedback will look like based on registered Field information. The preview uses example data for reference.",
-    "webhook": "This is the screen where you can set up Webhook integration according to event triggers occurring in User Feedback. For details, please refer to the Webhook <docs>Docs</docs>."
+    "webhook": "This is the screen where you can set up Webhook integration according to event triggers occurring in User Feedback. For details, please refer to the Webhook <docs>Docs</docs>.",
+    "ai-setting": "This is the screen for setting up the integration of Generative AI. To use AI features, essential information must be entered.",
+    "ai-usage": "This is the screen for checking and managing token usage related to AI feature usage.",
+    "ai-field-template": "This is the screen for defining the behavior of AI fields. You can enter instructions through templates and adjust advanced settings.",
+    "ai-issue-recommendation": "This is the screen for setting up the AI issue recommendation feature. After detailed configuration per channel, you can use the AI issue recommendation feature."
   },
   "hint": {
     "required": "Required",
@@ -298,7 +284,9 @@
       "next": "Next",
       "previous": "Previous",
       "addFilter": "Add Filter",
-      "edit": "Edit"
+      "edit": "Edit",
+      "process-ai-test": "AI test execution",
+      "setting": "Setting"
     },
     "project-setting-menu": {
       "project-info": "Project Information",
@@ -307,7 +295,7 @@
       "api-key-mgmt": "API Key Management",
       "issue-tracker-mgmt": "Issue Tracker Management",
       "webhook-integration": "Webhook Integration",
-      "delete-project": "Delete Project"
+      "generative-ai-setting": "Generative AI Integration"
     },
     "channel-setting-menu": {
       "channel-info": "Channel Information",
@@ -341,12 +329,12 @@
     },
     "text": {
       "no-data": {
+        "default": "There is no data yet.",
         "api-key": "No API Key has been generated.",
         "member": "No Member has been registered.",
         "channel": "No Channel has been created.",
         "webhook": "No Webhook has been registered.",
         "feedback": "No Feedback has been collected.",
-        "empty": "There is no data yet.",
         "filter": "There is no results.\nTry changing the query or filter conditions."
       },
       "required-step": "This is a required input step. Please enter the required information.",
@@ -368,7 +356,10 @@
       "request-email-auth": "Authentication has been requested.",
       "all-image-url-allow": "All Image URLs are allowed.",
       "select-project": "Please select a project.",
-      "no-category": "No Category"
+      "no-category": "No Category",
+      "token-threshold-percentage": "Reached {{percentage}}% of the limit",
+      "ai-issue-ready": "I will recommend issues for the feedback.",
+      "ai-issue-pending": "AI is analyzing the issues..."
     },
     "create-tenant": {
       "tenant": {
@@ -387,11 +378,23 @@
     "placeholder": {
       "select": "Please select.",
       "text": "Please enter.",
-      "text-or-generate": "Please enter or generate."
+      "text-or-generate": "Please enter or generate.",
+      "ai-endpoint-url": "Please enter only if a separate Endpoint URL configuration is required.",
+      "system-prompt": "If there is additional information that the Generative AI should refer to, please enter it.",
+      "ai-field-template-prompt": "Please enter instructions on how the Generative AI should process.",
+      "ai-field-reccommendation-prompt": "If there are additional instructions to request from the Generative AI, please enter them."
     },
     "toast": {
       "success": "Successfully processed.",
-      "copy": "Copied to clipboard."
+      "copy": "Copied to clipboard.",
+      "ai-usage-limit-approaching": {
+        "title": "AI Usage Limit Approaching",
+        "description": "Token usage has reached {{percentage}}% of the limit."
+      },
+      "ai-function-terminated": {
+        "title": "AI Function Terminated",
+        "description": "AI execution has been stopped due to exceeding token usage limit."
+      }
     },
     "webhook-card": {
       "feedback-creation": {
@@ -418,7 +421,20 @@
     },
     "description": {
       "create-project": "Project has been created successfully.\nNext, you need to create a Channel to collect feedback.\nProceed to the next step through 'Create Channel'.",
-      "create-channel": "Channel has been created successfully.\nNow you're ready to collect and manage user feedback.\nStart experiencing it in full through 'Get Started'."
+      "create-channel": "Channel has been created successfully.\nNow you're ready to collect and manage user feedback.\nStart experiencing it in full through 'Get Started'.",
+      "remaining-token-amount": "To check the monthly remaining token amount, please set a limit first.",
+      "token-threshold": "Set a limit for monthly token usage. If the limit is exceeded, AI functionality will be stopped.",
+      "pre-limit-notification": "You will receive a token usage notification when a certain level is reached based on the upper limit.",
+      "ai-field-template-form": "Set the basic information for the template.",
+      "ai-field-template-advanced-configuration": "You can change the connected model and temperature of the template.",
+      "ai-field-template-playground": "You can preview AI results in advance using the template and test data.",
+      "ai-issue-recommendation-form": "Set the basic information for AI issue recommendations.",
+      "ai-issue-recommendation-enable": "Set whether to use the AI issue recommendation feature.",
+      "ai-issue-recommendation-advanced-configuration": "You can change the connected model, temperature, and data reference amount for AI issue recommendations.",
+      "ai-issue-recommendation-data-reference-amount": "You can adjust the amount of issue data that the Generative AI should reference for AI issue recommendations.",
+      "ai-issue-recommendation-playground": "You can preview AI results in advance using the AI issue recommendation settings and test data.",
+      "ai-field-template-auto-processing": "Automatically executes AI fields.",
+      "ai-issue-recommendation-setting-required": "The AI issue recommendation feature requires configuration. Please set it up to use the feature."
     },
     "login-setting": {
       "oauth-description": "Provides a way to log in using OAuth2.0.",

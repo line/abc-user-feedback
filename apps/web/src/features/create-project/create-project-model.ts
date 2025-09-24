@@ -84,7 +84,7 @@ interface Action {
 export const CREATE_PROJECT_DEFAULT_INPUT: Input = {
   projectInfo: {
     name: '',
-    description: null,
+    description: '',
     timezone: getDefaultTimezone(),
   },
   roles: DEFAULT_ROLES,

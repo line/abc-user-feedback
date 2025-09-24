@@ -42,7 +42,6 @@ import type { PermissionType } from '../permission.type';
 import {
   ChannelFieldPermissionList,
   ChannelImageSettingPermissionList,
-  ChannelInfoPermissionList,
   ChannelPermissionText,
   FeedbackPermissionList,
   FeedbackPermissionText,
@@ -50,6 +49,7 @@ import {
   IssuePermissionText,
   PermissionList,
   ProjectApiKeyPermissionList,
+  ProjectGenerativeAIPermissionList,
   ProjectInfoPermissionList,
   ProjectMemberPermissionList,
   ProjectPermissionText,
@@ -148,10 +148,11 @@ const RoleFormSheet: React.FC<Props> = (props) => {
         current.delete(relatedPerm);
       });
     }
-
-    setValue('permissions', Array.from(current.values()), {
-      shouldDirty: true,
-    });
+    setValue(
+      'permissions',
+      Array.from(current.values()).filter((v) => PermissionList.includes(v)),
+      { shouldDirty: true },
+    );
   };
 
   const openDeleteDialog = () => {
@@ -259,9 +260,16 @@ const RoleFormSheet: React.FC<Props> = (props) => {
                 onChckedChange={checkPermission}
               />
               <PermissionRows
+                title="Generative AI"
+                permmissionsText={ProjectPermissionText}
+                permissions={ProjectGenerativeAIPermissionList}
+                currentPermissions={currentPerms}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
                 title="Channel Info"
                 permmissionsText={ChannelPermissionText}
-                permissions={ChannelInfoPermissionList}
+                permissions={['channel_update', 'channel_delete']}
                 currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
@@ -276,6 +284,13 @@ const RoleFormSheet: React.FC<Props> = (props) => {
                 title="Image Setting"
                 permmissionsText={ChannelPermissionText}
                 permissions={ChannelImageSettingPermissionList}
+                currentPermissions={currentPerms}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Create Channel"
+                permmissionsText={ChannelPermissionText}
+                permissions={['channel_create']}
                 currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
@@ -331,7 +346,7 @@ const PermissionRows = <T extends PermissionType>(
   } = props;
 
   return (
-    <AccordionItem value={title} className="border-none">
+    <AccordionItem value={title} divider={false}>
       <AccordionTrigger className="h-9 py-0">{title}</AccordionTrigger>
       <AccordionContent className="py-0">
         <div className="flex flex-col">

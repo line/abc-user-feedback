@@ -50,11 +50,11 @@
 }
 
 .button-ghost {
-  @apply bg-[var(--button-ghost-bg)] text-[var(--button-ghost-fg)] transition-colors [&:not(:disabled)]:hover:bg-[var(--button-ghost-bg-hover)];
+  @apply bg-[var(--button-ghost-bg)] text-[var(--button-ghost-fg)] transition-colors data-[state=open]:bg-[var(--button-ghost-bg-hover)] [&:not(:disabled)]:hover:bg-[var(--button-ghost-bg-hover)];
 }
 
 .button-outline {
-  @apply border border-[var(--button-outline-border)] bg-[var(--button-outline-bg)] text-[var(--button-outline-fg)] transition-colors [&:not(:disabled)]:hover:bg-[var(--button-outline-bg-hover)];
+  @apply border border-[var(--button-outline-border)] bg-[var(--button-outline-bg)] text-[var(--button-outline-fg)] transition-colors data-[state=open]:bg-[var(--button-outline-bg-hover)] [&:not(:disabled)]:hover:bg-[var(--button-outline-bg-hover)];
 }
 
 .button-loading-primary {

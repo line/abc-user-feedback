@@ -19,7 +19,10 @@ import { useOverlay } from '@toss/use-overlay';
 
 import { WarnIfUnsavedChangesDialog } from '../ui';
 
-const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
+const useWarnIfUnsavedChanges = (
+  hasUnsavedChanges: boolean,
+  excludePath?: string,
+) => {
   const router = useRouter();
   const overlay = useOverlay();
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +45,7 @@ const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
     ));
   };
 
-  // 닫기, 새로고침
+  // close and refresh page
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       if (hasUnsavedChanges) {
@@ -58,9 +61,11 @@ const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
     };
   }, [hasUnsavedChanges]);
 
-  // Browser 뒤로가기, 나가기 버튼
+  // back button and route change
   useEffect(() => {
     const handleBeforeChangeRoute = (url: string) => {
+      if (excludePath && url.includes(excludePath)) return;
+
       if (!hasUnsavedChanges || isLoading) return;
       openWarnIfUnsavedChangesDialog(url);
 

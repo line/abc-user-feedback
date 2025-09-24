@@ -17,3 +17,4 @@ export * from './chart-colors';
 export * from './date-format';
 export * from './path';
 export * from './issues';
+export * from './style.constants';

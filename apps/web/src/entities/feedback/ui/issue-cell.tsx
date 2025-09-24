@@ -22,11 +22,13 @@ import { useThrottle } from 'react-use';
 import {
   Combobox,
   ComboboxContent,
+  ComboboxEmpty,
   ComboboxGroup,
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
   ComboboxTrigger,
+  Icon,
   Tag,
   toast,
 } from '@ufb/react';
@@ -43,7 +45,7 @@ import { IssueBadge, useIssueSearchInfinite } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 
 import { useFeedbackSearch } from '../lib';
-import IssueCellEditCombobox from './issue-cell-edit-combobox.ui';
+import AiIssueComboboxGroup from './ai-issue-combobox-group.ui';
 
 interface IProps {
   issues?: Issue[];
@@ -104,8 +106,13 @@ const IssueCell: React.FC<IProps> = (props) => {
     return allIssueData.pages
       .map((v) => v?.items)
       .filter((v) => !!v)
-      .flat();
-  }, [allIssueData]);
+      .flat()
+      .sort(
+        (a, b) =>
+          (currentIssues.some((issue) => issue.id === a.id) ? -1 : 1) -
+          (currentIssues.some((issue) => issue.id === b.id) ? -1 : 1),
+      );
+  }, [allIssueData, currentIssues]);
 
   const { mutate: attatchIssue } = useMutation({
     mutationFn: async ({ issueId }: { issueId: number }) => {
@@ -125,7 +132,7 @@ const IssueCell: React.FC<IProps> = (props) => {
       toast.error(error.message);
     },
   });
-  const { mutateAsync: detecthIssue } = useMutation({
+  const { mutate: detachIssue } = useMutation({
     mutationFn: async ({ issueId }: { issueId: number }) => {
       if (!feedbackId) return;
 
@@ -156,6 +163,21 @@ const IssueCell: React.FC<IProps> = (props) => {
       },
     },
   });
+  const onClickIssue = (issueId: number) => {
+    if (currentIssues.some((v) => v.id === issueId)) {
+      detachIssue({ issueId });
+    } else {
+      attatchIssue({ issueId });
+    }
+  };
+  const onCreateIssue = async (name: string) => {
+    const data = await createIssue({
+      name,
+      description: '',
+    });
+    if (!data) return;
+    attatchIssue({ issueId: data.id });
+  };
 
   return (
     <div
@@ -182,26 +204,46 @@ const IssueCell: React.FC<IProps> = (props) => {
             )}
           </button>
         </ComboboxTrigger>
-        <ComboboxContent commandProps={{ filter: commandFilter }}>
+        <ComboboxContent
+          options={{ filter: commandFilter }}
+          className="w-[320px]"
+        >
           <ComboboxInput
             onClick={(e) => e.stopPropagation()}
             onValueChange={(value) => setInputValue(value)}
             value={inputValue}
           />
+          {!!feedbackId && !inputValue && (
+            <AiIssueComboboxGroup
+              projectId={projectId}
+              channelId={channelId}
+              feedbackId={feedbackId}
+              onSelect={async ({ name, option, id }) => {
+                if (option === 'CREATE') {
+                  await onCreateIssue(name);
+                }
+                if (option === 'EXISTING' && id) {
+                  onClickIssue(id);
+                }
+              }}
+              currentIssues={currentIssues}
+            />
+          )}
           <ComboboxList maxHeight="333px">
             <ComboboxGroup
               heading={
                 <span className="text-neutral-tertiary text-base-normal">
-                  Selected Issue List
+                  Issue List
                 </span>
               }
             >
-              {currentIssues.map((issue) => (
+              <ComboboxEmpty>{t('v2.text.no-data.default')}</ComboboxEmpty>
+              {allIssues.map((issue) => (
                 <ComboboxItem
                   key={issue.id}
-                  onSelect={() => detecthIssue({ issueId: issue.id })}
-                  className="flex justify-between"
+                  onSelect={() => onClickIssue(issue.id)}
                   value={issue.name}
+                  className="group justify-between"
                   disabled={!perms.includes('feedback_issue_update')}
                 >
                   <IssueBadge
@@ -209,71 +251,37 @@ const IssueCell: React.FC<IProps> = (props) => {
                     name={issue.name}
                     status={issue.status}
                   />
-                  <span className="text-neutral-tertiary text-small-normal">
-                    Remove
-                  </span>
+                  {currentIssues.some((v) => v.id === issue.id) ?
+                    <Icon name="RiCheckLine" size={16} />
+                  : <span className="text-small-normal text-neutral-tertiary opacity-0 transition-opacity group-hover:opacity-100">
+                      Add
+                    </span>
+                  }
                 </ComboboxItem>
               ))}
+
+              <InfiniteScrollArea
+                fetchNextPage={fetchNextPage}
+                hasNextPage={hasNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+              />
             </ComboboxGroup>
-            {!!allIssues.length && (
-              <ComboboxGroup
-                heading={
-                  <span className="text-neutral-tertiary text-base-normal">
-                    Issue List
-                  </span>
-                }
-              >
-                {allIssues
-                  .filter(
-                    (v) => !currentIssues.some((issue) => issue.id === v.id),
-                  )
-                  .map((issue) => (
-                    <ComboboxItem
-                      key={issue.id}
-                      onSelect={() => attatchIssue({ issueId: issue.id })}
-                      className="flex justify-between"
-                      value={issue.name}
-                      disabled={!perms.includes('feedback_issue_update')}
-                    >
-                      <IssueBadge
-                        key={issue.id}
-                        name={issue.name}
-                        status={issue.status}
-                      />
-                      <IssueCellEditCombobox issue={issue} />
-                    </ComboboxItem>
-                  ))}
-                <InfiniteScrollArea
-                  fetchNextPage={fetchNextPage}
-                  hasNextPage={hasNextPage}
-                  isFetchingNextPage={isFetchingNextPage}
-                />
-              </ComboboxGroup>
-            )}
-            {!!inputValue &&
-              perms.includes('issue_create') &&
-              !currentIssues.some((issue) => issue.name === inputValue) &&
-              !allIssues.some((issue) => issue.name === inputValue) && (
-                <div
-                  className="combobox-item"
-                  onClick={async () => {
-                    const name = inputValue.trim();
-                    const data = await createIssue({
-                      name,
-                      description: '',
-                    });
-                    if (!data) return;
-                    setInputValue(name);
-                    attatchIssue({ issueId: data.id });
-                  }}
-                >
-                  <span className="flex-1">{inputValue}</span>
-                  <span className="text-neutral-tertiary text-small-normal">
-                    Create
-                  </span>
-                </div>
-              )}
           </ComboboxList>
+          {!!inputValue &&
+            perms.includes('issue_create') &&
+            !currentIssues.some((issue) => issue.name === inputValue) &&
+            !allIssues.some((issue) => issue.name === inputValue) && (
+              <ComboboxItem
+                value={inputValue}
+                className="justify-between"
+                onSelect={() => onCreateIssue(inputValue)}
+              >
+                <IssueBadge name={inputValue} status="INIT" />
+                <span className="text-neutral-tertiary text-small-normal">
+                  Create
+                </span>
+              </ComboboxItem>
+            )}
         </ComboboxContent>
       </Combobox>
       {currentIssues.map((issue) => (

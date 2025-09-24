@@ -34,6 +34,22 @@
   .dialog-content {
     @apply max-w-[504px];
   }
+  .mask-l-to-primary {
+    mask-image: linear-gradient(
+      to left,
+      transparent,
+      var(--bg-primary) 20%,
+      var(--bg-primary)
+    );
+  }
+  .mask-r-to-primary {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      var(--bg-primary) 20%,
+      var(--bg-primary)
+    );
+  }
 }
 
 .setting-action-buttons .button {
@@ -111,13 +127,14 @@ th {
 
 .thumbnail-swiper {
   width: 464px;
-  height: 40px;
+  height: 70px;
 }
 
 .thumbnail-swiper .swiper-slide {
   width: 70px;
   height: 100%;
   opacity: 0.4;
+  @apply bg-neutral-tertiary;
 }
 
 .thumbnail-swiper .swiper-slide-thumb-active {

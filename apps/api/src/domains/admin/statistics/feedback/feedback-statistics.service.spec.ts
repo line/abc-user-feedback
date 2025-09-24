@@ -295,8 +295,8 @@ describe('FeedbackStatisticsService suite', () => {
 
       await feedbackStatsService.addCronJobByProjectId(projectId);
 
-      expect(schedulerRegistry.addCronJob).toBeCalledTimes(1);
-      expect(schedulerRegistry.addCronJob).toBeCalledWith(
+      expect(schedulerRegistry.addCronJob).toHaveBeenCalledTimes(1);
+      expect(schedulerRegistry.addCronJob).toHaveBeenCalledWith(
         `feedback-statistics-${projectId}`,
         expect.anything(),
       );
@@ -330,7 +330,7 @@ describe('FeedbackStatisticsService suite', () => {
         dayToCreate,
       );
 
-      expect(feedbackStatsRepo.manager.transaction).toBeCalledTimes(
+      expect(feedbackStatsRepo.manager.transaction).toHaveBeenCalledTimes(
         dayToCreate * channelCount,
       );
     });
@@ -357,9 +357,9 @@ describe('FeedbackStatisticsService suite', () => {
         count,
       });
 
-      expect(feedbackStatsRepo.findOne).toBeCalledTimes(1);
-      expect(feedbackStatsRepo.save).toBeCalledTimes(1);
-      expect(feedbackStatsRepo.save).toBeCalledWith({
+      expect(feedbackStatsRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(feedbackStatsRepo.save).toHaveBeenCalledTimes(1);
+      expect(feedbackStatsRepo.save).toHaveBeenCalledWith({
         count: 1 + count,
       });
     });
@@ -388,10 +388,10 @@ describe('FeedbackStatisticsService suite', () => {
         count,
       });
 
-      expect(feedbackStatsRepo.findOne).toBeCalledTimes(1);
-      expect(feedbackStatsRepo.createQueryBuilder).toBeCalledTimes(1);
-      expect(createQueryBuilder.values).toBeCalledTimes(1);
-      expect(createQueryBuilder.values).toBeCalledWith({
+      expect(feedbackStatsRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(feedbackStatsRepo.createQueryBuilder).toHaveBeenCalledTimes(1);
+      expect(createQueryBuilder.values).toHaveBeenCalledTimes(1);
+      expect(createQueryBuilder.values).toHaveBeenCalledWith({
         date: new Date(
           DateTime.fromJSDate(date).plus({ hours: 9 }).toISO()?.split('T')[0] +
             'T00:00:00',

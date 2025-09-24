@@ -13,6 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance, Type } from 'class-transformer';
 
@@ -33,7 +37,7 @@ export class FindChannelByIdResponseDto {
   description: string;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ required: false })
   imageConfig: ImageConfigResponseDto;
 
   @Expose()
@@ -54,6 +58,12 @@ export class FindChannelByIdResponseDto {
   fields: FindFieldsResponseDto[];
 
   public static transform(params: any): FindChannelByIdResponseDto {
+    params.fields = params.fields.map((field: any) => {
+      if (field.aiFieldTemplate) {
+        field.aiFieldTemplateId = field.aiFieldTemplate.id;
+      }
+      return field;
+    });
     return plainToInstance(FindChannelByIdResponseDto, params, {
       excludeExtraneousValues: true,
     });

@@ -14,7 +14,7 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
 
 export class ImageConfigRequestDto {
   @ApiProperty()
@@ -40,4 +40,8 @@ export class ImageConfigRequestDto {
   @ApiProperty({ nullable: true, type: [String] })
   @IsString({ each: true })
   domainWhiteList: string[];
+
+  @ApiProperty({ required: false })
+  @IsBoolean()
+  enablePresignedUrlDownload: boolean;
 }

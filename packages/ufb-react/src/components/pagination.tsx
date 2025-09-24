@@ -13,39 +13,39 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+'use client';
+
 import * as React from 'react';
 
 import { cn } from '../lib/utils';
 import type { ButtonProps } from './button';
 import { Button } from './button';
 import { Icon } from './icon';
+import useTheme from './use-theme';
 
-const DefaultValue = {
-  size: 'small',
-  radius: 'medium',
-} as const;
 const PaginationContext = React.createContext<ButtonProps>({
-  size: DefaultValue.size,
-  radius: DefaultValue.radius,
+  size: undefined,
+  radius: undefined,
 });
 
 type PaginationProps = React.ComponentProps<'nav'> &
   Pick<ButtonProps, 'size' | 'radius'>;
-const Pagination = ({
-  size = DefaultValue.size,
-  radius = DefaultValue.radius,
-  className,
-  ...props
-}: PaginationProps) => (
-  <PaginationContext.Provider value={{ size, radius }}>
-    <nav
-      role="navigation"
-      aria-label="pagination"
-      className={cn('pagination', className)}
-      {...props}
-    />
-  </PaginationContext.Provider>
-);
+const Pagination = ({ size, radius, className, ...props }: PaginationProps) => {
+  const { themeSize, themeRadius } = useTheme();
+
+  return (
+    <PaginationContext.Provider
+      value={{ size: size ?? themeSize, radius: radius ?? themeRadius }}
+    >
+      <nav
+        role="navigation"
+        aria-label="pagination"
+        className={cn('pagination', className)}
+        {...props}
+      />
+    </PaginationContext.Provider>
+  );
+};
 Pagination.displayName = 'Pagination';
 
 const PaginationContent = React.forwardRef<
@@ -77,8 +77,8 @@ const PaginationLink = ({
   return (
     <Button
       variant={isActive ? 'outline' : 'ghost'}
-      size={size ?? DefaultValue.size}
-      radius={radius ?? DefaultValue.radius}
+      size={size}
+      radius={radius}
       className={cn('pagination-link', className)}
       asChild
     >
@@ -96,8 +96,8 @@ const PaginationPrevious = ({
   return (
     <Button
       variant="ghost"
-      size={size ?? DefaultValue.size}
-      radius={radius ?? DefaultValue.radius}
+      size={size}
+      radius={radius}
       aria-label="Go to previous page"
       className={cn('pagination-previous', className)}
       asChild
@@ -119,8 +119,8 @@ const PaginationNext = ({
   return (
     <Button
       variant="ghost"
-      size={size ?? DefaultValue.size}
-      radius={radius ?? DefaultValue.radius}
+      size={size}
+      radius={radius}
       aria-label="Go to next page"
       className={cn('pagination-next', className)}
       asChild
@@ -144,8 +144,8 @@ const PaginationEllipsis = ({
       {...props}
       variant="ghost"
       aria-label="More Pages"
-      size={size ?? DefaultValue.size}
-      radius={radius ?? DefaultValue.radius}
+      size={size}
+      radius={radius}
       className={cn('pagination-ellipsis', className)}
     >
       <Icon name="RiMoreLine" />

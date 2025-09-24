@@ -19,3 +19,4 @@ export { default as RoleSetting } from './role-setting.ui';
 export { default as ApiKeySetting } from './api-key-setting.ui';
 export { default as IssueTrackerSetting } from './issue-tracker-setting.ui';
 export { default as WebhookSetting } from './webhook-setting.ui';
+export { default as GenerativeAiSetting } from './generative-ai-setting.ui';

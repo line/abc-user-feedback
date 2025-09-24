@@ -15,20 +15,10 @@
  */
 
 import { useMemo } from 'react';
-import { useTranslation } from 'next-i18next';
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@ufb/react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@ufb/react';
 
-import { cn } from '@/shared';
+import { cn, MultiSelectInput } from '@/shared';
 import type { Channel } from '@/entities/channel';
 
 interface Props {
@@ -53,8 +43,6 @@ const WebhookEventCard: React.FC<Props> = (props) => {
     title,
     description,
   } = props;
-
-  const { t } = useTranslation();
 
   const selectedValues = useMemo(
     () => eventChannels.map((v) => String(v.id)),
@@ -82,31 +70,19 @@ const WebhookEventCard: React.FC<Props> = (props) => {
             <p className="text-base-strong">{title}</p>
           </div>
           <div onClick={(e) => e.stopPropagation()}>
-            <Select
-              type="multiple"
-              values={
+            <MultiSelectInput
+              options={channels.map((channel) => ({
+                label: channel.name,
+                value: String(channel.id),
+              }))}
+              value={
                 eventChannelDisabled ?
                   channels.map((v) => String(v.id))
                 : selectedValues
               }
-              onValuesChange={setSelectedValues}
+              onChange={setSelectedValues}
               disabled={!checked}
-            >
-              <SelectTrigger className="max-w-[250px]">
-                <SelectValue placeholder={t('v2.placeholder.select')} />
-              </SelectTrigger>
-              <SelectContent>
-                {channels.map((channel) => (
-                  <SelectItem
-                    key={channel.id}
-                    value={String(channel.id)}
-                    disabled={!checked || eventChannelDisabled}
-                  >
-                    {channel.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            />
           </div>
         </button>
       </TooltipTrigger>
