@@ -39,10 +39,10 @@ importers:
   apps/api:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: ^3.893.0
+        specifier: ^3.895.0
         version: 3.895.0
       '@aws-sdk/s3-request-presigner':
-        specifier: ^3.893.0
+        specifier: ^3.895.0
         version: 3.895.0
       '@fastify/multipart':
         specifier: ^9.2.1
