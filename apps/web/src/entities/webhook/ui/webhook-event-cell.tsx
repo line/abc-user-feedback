@@ -57,9 +57,7 @@ const WebhookEventCell: React.FC<IProps> = (props) => {
         {(type === 'ISSUE_CREATION' || type === 'ISSUE_STATUS_CHANGE' ?
           data?.items
         : channels
-        )?.map(({ id, name }) => (
-          <DropdownItem key={id}>{name}</DropdownItem>
-        ))}
+        )?.map(({ id, name }) => <DropdownItem key={id}>{name}</DropdownItem>)}
       </DropdownContent>
     </Dropdown>
   );
