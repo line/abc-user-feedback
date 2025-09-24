@@ -103,7 +103,7 @@ async function bootstrap() {
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(server),
+    new FastifyAdapter(server as any),
     { bufferLogs: true },
   );
 

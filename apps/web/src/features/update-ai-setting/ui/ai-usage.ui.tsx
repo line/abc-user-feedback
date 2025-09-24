@@ -418,30 +418,46 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
           height={180}
         >
           <Tooltip
-            formatter={(value) => value.toLocaleString()}
+            formatter={(value: unknown) => {
+              if (typeof value === 'number') {
+                return value.toLocaleString();
+              }
+              return value;
+            }}
             cursor={{ fill: 'var(--bg-neutral-tertiary)' }}
             content={({ payload }) => {
               return (
                 <div className="bg-neutral-primary border-neutral-tertiary max-w-[240px] rounded border px-4 py-3 shadow-lg">
-                  {payload?.map(({ value, payload }, i) => (
-                    <div
-                      key={i}
-                      className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"
-                    >
-                      <div className="flex items-center gap-2">
-                        <div
-                          style={{
-                            backgroundColor: (payload as { fill: string }).fill,
-                          }}
-                          className="h-2 w-2 flex-shrink-0 rounded-full"
-                        />
-                        <p className="text-small-normal break-all">
-                          {(payload as { name: string | undefined }).name}
+                  {payload.map((item, i) => {
+                    const { value, payload: itemPayload } = item as {
+                      value: unknown;
+                      payload: unknown;
+                    };
+                    return (
+                      <div
+                        key={i}
+                        className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"
+                      >
+                        <div className="flex items-center gap-2">
+                          <div
+                            style={{
+                              backgroundColor: (itemPayload as { fill: string })
+                                .fill,
+                            }}
+                            className="h-2 w-2 flex-shrink-0 rounded-full"
+                          />
+                          <p className="text-small-normal break-all">
+                            {(itemPayload as { name: string | undefined }).name}
+                          </p>
+                        </div>
+                        <p>
+                          {typeof value === 'number' ?
+                            value.toLocaleString()
+                          : value}
                         </p>
                       </div>
-                      <p>{value?.toLocaleString()}</p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               );
             }}
@@ -467,7 +483,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
                     >
                       <tspan
                         x={viewBox.cx}
-                        y={(viewBox.cy ?? 0) - 12}
+                        y={viewBox.cy - 12}
                         className="text-title-h4 fill-neutral-primary"
                       >
                         {integrationData?.tokenThreshold ?
@@ -476,7 +492,7 @@ const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
                       </tspan>
                       <tspan
                         x={viewBox.cx}
-                        y={(viewBox.cy ?? 0) + 12}
+                        y={viewBox.cy + 12}
                         className="fill-neutral-secondary text-small-normal"
                       >
                         Remaining Tokens

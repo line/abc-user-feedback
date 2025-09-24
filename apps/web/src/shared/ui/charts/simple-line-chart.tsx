@@ -125,10 +125,11 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
   );
 };
 
-interface ICustomTooltipProps
-  extends Omit<TooltipProps<ValueType, NameType>, 'label'> {
+interface ICustomTooltipProps extends TooltipProps<ValueType, NameType> {
   noLabel: boolean;
-  label?: string;
+  label?: string | number;
+  payload?: unknown[];
+  active?: boolean;
 }
 
 const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
@@ -155,25 +156,40 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
         )}
       </h1>
       <div className="flex flex-col gap-1">
-        {payload.map(({ color, name, value, payload }, i) => (
-          <div
-            key={i}
-            className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"
-          >
-            {!noLabel && (
-              <div className="flex items-center gap-2">
-                <div
-                  style={{ background: color }}
-                  className="h-2 w-2 flex-shrink-0 rounded-full"
-                />
-                <p className="break-all">
-                  {name ?? (payload as { date: string | undefined }).date}
-                </p>
-              </div>
-            )}
-            <p>{value?.toLocaleString()}</p>
-          </div>
-        ))}
+        {payload.map((item, i) => {
+          const {
+            color,
+            name,
+            value,
+            payload: itemPayload,
+          } = item as {
+            color: string;
+            name: string;
+            value: unknown;
+            payload: unknown;
+          };
+          return (
+            <div
+              key={i}
+              className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"
+            >
+              {!noLabel && (
+                <div className="flex items-center gap-2">
+                  <div
+                    style={{ background: color }}
+                    className="h-2 w-2 flex-shrink-0 rounded-full"
+                  />
+                  <p className="break-all">
+                    {name || (itemPayload as { date: string | undefined }).date}
+                  </p>
+                </div>
+              )}
+              <p>
+                {typeof value === 'number' ? value.toLocaleString() : value}
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

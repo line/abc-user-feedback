@@ -66,20 +66,32 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
           data={data}
           margin={{ left: -20, right: 10, top: 10, bottom: 10 }}
           barSize={80}
-          onClick={(e: { activePayload?: { payload: Data }[] }) =>
-            onClick?.(e.activePayload?.[0]?.payload)
-          }
+          onClick={(nextState) => {
+            if (
+              'activePayload' in nextState &&
+              Array.isArray(nextState.activePayload) &&
+              nextState.activePayload.length > 0
+            ) {
+              const payload = nextState.activePayload[0] as { payload: Data };
+              onClick?.(payload.payload);
+            }
+          }}
         >
           <CartesianGrid
             vertical={false}
             stroke="var(--border-neutral-tertiary)"
           />
           <Tooltip
-            formatter={(value) => value.toLocaleString()}
+            formatter={(value: unknown) => {
+              if (typeof value === 'number') {
+                return value.toLocaleString();
+              }
+              return value;
+            }}
             cursor={{ fill: 'var(--bg-neutral-tertiary)' }}
             content={({ payload }) => (
               <div className="bg-neutral-primary border-neutral-tertiary max-w-[240px] rounded border px-4 py-3 shadow-lg">
-                {payload?.map(({ value, payload }, i) => (
+                {payload.map(({ value, payload: itemPayload }, i) => (
                   <div
                     key={i}
                     className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"
@@ -87,15 +99,20 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
                     <div className="flex items-center gap-2">
                       <div
                         style={{
-                          backgroundColor: (payload as { color: string }).color,
+                          backgroundColor: (itemPayload as { color: string })
+                            .color,
                         }}
                         className="h-2 w-2 flex-shrink-0 rounded-full"
                       />
                       <p className="text-small-normal break-all">
-                        {(payload as { name: string | undefined }).name}
+                        {(itemPayload as { name: string | undefined }).name}
                       </p>
                     </div>
-                    <p>{value?.toLocaleString()}</p>
+                    <p>
+                      {typeof value === 'number' ?
+                        value.toLocaleString()
+                      : value}
+                    </p>
                   </div>
                 ))}
               </div>
