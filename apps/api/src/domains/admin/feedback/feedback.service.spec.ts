@@ -81,6 +81,14 @@ describe('FeedbackService Test Suite', () => {
     // Clear all mocks to ensure test isolation
     jest.clearAllMocks();
 
+    // Set default configService mock to disable OpenSearch
+    jest
+      .spyOn(ConfigService.prototype, 'get')
+      .mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return false;
+        return false;
+      });
+
     const module = await Test.createTestingModule({
       imports: [TestConfig, ClsModule.forFeature()],
       providers: FeedbackServiceProviders,
