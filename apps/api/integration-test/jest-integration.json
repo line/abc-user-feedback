@@ -10,6 +10,7 @@
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
+  "transformIgnorePatterns": ["node_modules/(?!@faker-js|uuid)"],
   "setupFilesAfterEnv": [
     "<rootDir>/../integration-test/jest-integration.setup.ts"
   ],
