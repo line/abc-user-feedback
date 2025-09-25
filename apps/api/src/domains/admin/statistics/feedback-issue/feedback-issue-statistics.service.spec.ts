@@ -741,6 +741,7 @@ describe('FeedbackIssueStatisticsService suite', () => {
       jest
         .spyOn(feedbackIssueStatsRepo.manager, 'transaction')
         .mockImplementation(async (callback: any) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
           await callback(feedbackIssueStatsRepo.manager);
         });
 
