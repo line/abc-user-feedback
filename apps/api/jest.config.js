@@ -10,6 +10,7 @@ module.exports = {
   transform: {
     '^.+\\.(t|j)s$': ['@swc-node/jest'],
   },
+  transformIgnorePatterns: ['node_modules/(?!@faker-js|uuid)'],
   moduleFileExtensions: ['js', 'json', 'ts'],
   coverageDirectory: '../coverage',
   clearMocks: true,
