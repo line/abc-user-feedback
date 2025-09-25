@@ -270,7 +270,7 @@ describe('FieldService suite', () => {
 
       expect(osRepository.putMappings).toHaveBeenCalledWith({
         index: channelId.toString(),
-         
+
         mappings: expect.any(Object),
       });
     });
@@ -413,7 +413,7 @@ describe('FieldService suite', () => {
 
       expect(osRepository.putMappings).toHaveBeenCalledWith({
         index: channelId.toString(),
-         
+
         mappings: expect.any(Object),
       });
     });

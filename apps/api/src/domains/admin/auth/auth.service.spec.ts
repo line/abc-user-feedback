@@ -13,7 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
- 
+
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import { faker } from '@faker-js/faker';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
@@ -212,8 +214,9 @@ describe('auth service ', () => {
 
       // Mock the codeService.getDataByCodeAndType to return valid data
 
+      const authServiceAny = authService as any;
       jest
-        .spyOn(authService.codeService, 'getDataByCodeAndType')
+        .spyOn(authServiceAny.codeService, 'getDataByCodeAndType')
         .mockResolvedValue({
           userType: UserTypeEnum.GENERAL,
           roleId: faker.number.int(),
@@ -226,8 +229,8 @@ describe('auth service ', () => {
       mockUser.email = faker.internet.email();
 
       jest
-        .spyOn(authService.createUserService, 'createInvitationUser')
-        .mockResolvedValue(mockUser);
+        .spyOn(authServiceAny.createUserService, 'createInvitationUser')
+        .mockResolvedValue(mockUser as any);
 
       const user = await authService.signUpInvitationUser(dto);
 

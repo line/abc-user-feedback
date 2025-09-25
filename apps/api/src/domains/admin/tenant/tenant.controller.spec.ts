@@ -23,6 +23,7 @@ import {
   CountFeedbacksByTenantIdResponseDto,
   GetTenantResponseDto,
 } from './dtos/responses';
+import { LoginButtonTypeEnum } from './entities/enums';
 import { TenantController } from './tenant.controller';
 import { TenantService } from './tenant.service';
 
@@ -160,7 +161,7 @@ describe('TenantController', () => {
         accessTokenRequestURL: faker.internet.url(),
         userProfileRequestURL: faker.internet.url(),
         emailKey: 'email',
-        loginButtonType: 'GOOGLE',
+        loginButtonType: LoginButtonTypeEnum.GOOGLE,
         loginButtonName: 'Google Login',
       };
 

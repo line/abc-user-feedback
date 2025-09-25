@@ -251,7 +251,7 @@ describe('CodeService', () => {
         isVerified: false,
         expiredAt: new Date(Date.now() + 10 * 60 * 1000), // Future date
       };
-      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(mockEntity as any);
+      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(mockEntity as never);
 
       const { error } = await codeService.verifyCode({
         code: invalidCode,

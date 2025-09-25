@@ -14,6 +14,8 @@
  * under the License.
  */
 
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -43,6 +45,7 @@ describe('ChannelService', () => {
   let channelService: ChannelService;
   let channelRepo: Repository<ChannelEntity>;
   let fieldRepo: Repository<FieldEntity>;
+  let channelServiceAny: any;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -53,6 +56,7 @@ describe('ChannelService', () => {
     channelService = module.get<ChannelService>(ChannelService);
     channelRepo = module.get(getRepositoryToken(ChannelEntity));
     fieldRepo = module.get(getRepositoryToken(FieldEntity));
+    channelServiceAny = channelService as any;
   });
 
   describe('create', () => {
@@ -112,7 +116,7 @@ describe('ChannelService', () => {
 
       // Mock projectService.findById to throw error
       jest
-        .spyOn(channelService.projectService, 'findById')
+        .spyOn(channelServiceAny.projectService, 'findById')
         .mockRejectedValue(new Error('Project not found'));
 
       await expect(channelService.create(dto)).rejects.toThrow();
@@ -138,14 +142,14 @@ describe('ChannelService', () => {
       };
 
       jest
-        .spyOn(channelService.channelMySQLService, 'findAllByProjectId')
+        .spyOn(channelServiceAny.channelMySQLService, 'findAllByProjectId')
         .mockResolvedValue(mockChannels);
 
       const result = await channelService.findAllByProjectId(dto);
 
       expect(result).toEqual(mockChannels);
       expect(
-        channelService.channelMySQLService.findAllByProjectId,
+        channelServiceAny.channelMySQLService.findAllByProjectId,
       ).toHaveBeenCalledWith(dto);
     });
 
@@ -166,7 +170,7 @@ describe('ChannelService', () => {
       };
 
       jest
-        .spyOn(channelService.channelMySQLService, 'findAllByProjectId')
+        .spyOn(channelServiceAny.channelMySQLService, 'findAllByProjectId')
         .mockResolvedValue(mockChannels);
 
       const result = await channelService.findAllByProjectId(dto);
@@ -192,7 +196,7 @@ describe('ChannelService', () => {
       };
 
       jest
-        .spyOn(channelService.channelMySQLService, 'findAllByProjectId')
+        .spyOn(channelServiceAny.channelMySQLService, 'findAllByProjectId')
         .mockResolvedValue(mockChannels);
 
       const result = await channelService.findAllByProjectId(dto);
@@ -228,15 +232,15 @@ describe('ChannelService', () => {
       dto.projectId = channelFixture.project.id;
 
       jest
-        .spyOn(channelService.channelMySQLService, 'findOneBy')
+        .spyOn(channelServiceAny.channelMySQLService, 'findOneBy')
         .mockResolvedValue(channelFixture);
 
       const result = await channelService.checkName(dto);
 
       expect(result).toBe(true);
-      expect(channelService.channelMySQLService.findOneBy).toHaveBeenCalledWith(
-        dto,
-      );
+      expect(
+        channelServiceAny.channelMySQLService.findOneBy,
+      ).toHaveBeenCalledWith(dto);
     });
 
     it('checking name returns false when channel does not exist', async () => {
@@ -245,15 +249,15 @@ describe('ChannelService', () => {
       dto.projectId = faker.number.int();
 
       jest
-        .spyOn(channelService.channelMySQLService, 'findOneBy')
+        .spyOn(channelServiceAny.channelMySQLService, 'findOneBy')
         .mockResolvedValue(null);
 
       const result = await channelService.checkName(dto);
 
       expect(result).toBe(false);
-      expect(channelService.channelMySQLService.findOneBy).toHaveBeenCalledWith(
-        dto,
-      );
+      expect(
+        channelServiceAny.channelMySQLService.findOneBy,
+      ).toHaveBeenCalledWith(dto);
     });
   });
 
@@ -292,12 +296,12 @@ describe('ChannelService', () => {
       dto.fields = Array.from({ length: 3 }).map(createFieldDto);
 
       jest
-        .spyOn(channelService.fieldService, 'replaceMany')
+        .spyOn(channelServiceAny.fieldService, 'replaceMany')
         .mockResolvedValue(undefined);
 
       await channelService.updateFields(channelId, dto);
 
-      expect(channelService.fieldService.replaceMany).toHaveBeenCalledWith({
+      expect(channelServiceAny.fieldService.replaceMany).toHaveBeenCalledWith({
         channelId,
         fields: dto.fields,
       });
@@ -309,12 +313,12 @@ describe('ChannelService', () => {
       dto.fields = [];
 
       jest
-        .spyOn(channelService.fieldService, 'replaceMany')
+        .spyOn(channelServiceAny.fieldService, 'replaceMany')
         .mockResolvedValue(undefined);
 
       await channelService.updateFields(channelId, dto);
 
-      expect(channelService.fieldService.replaceMany).toHaveBeenCalledWith({
+      expect(channelServiceAny.fieldService.replaceMany).toHaveBeenCalledWith({
         channelId,
         fields: [],
       });
@@ -326,7 +330,7 @@ describe('ChannelService', () => {
       dto.fields = Array.from({ length: 3 }).map(createFieldDto);
 
       jest
-        .spyOn(channelService.fieldService, 'replaceMany')
+        .spyOn(channelServiceAny.fieldService, 'replaceMany')
         .mockRejectedValue(new Error('Field service error'));
 
       await expect(
@@ -342,13 +346,13 @@ describe('ChannelService', () => {
       channel.id = channelId;
 
       jest
-        .spyOn(channelService.channelMySQLService, 'delete')
+        .spyOn(channelServiceAny.channelMySQLService, 'delete')
         .mockResolvedValue(channel);
 
       const deletedChannel = await channelService.deleteById(channelId);
 
       expect(deletedChannel.id).toEqual(channel.id);
-      expect(channelService.channelMySQLService.delete).toHaveBeenCalledWith(
+      expect(channelServiceAny.channelMySQLService.delete).toHaveBeenCalledWith(
         channelId,
       );
     });
@@ -359,21 +363,21 @@ describe('ChannelService', () => {
       channel.id = channelId;
 
       // Mock config to enable OpenSearch
-      jest.spyOn(channelService.configService, 'get').mockReturnValue(true);
+      jest.spyOn(channelServiceAny.configService, 'get').mockReturnValue(true);
       jest
-        .spyOn(channelService.osRepository, 'deleteIndex')
+        .spyOn(channelServiceAny.osRepository, 'deleteIndex')
         .mockResolvedValue(undefined);
       jest
-        .spyOn(channelService.channelMySQLService, 'delete')
+        .spyOn(channelServiceAny.channelMySQLService, 'delete')
         .mockResolvedValue(channel);
 
       const deletedChannel = await channelService.deleteById(channelId);
 
       expect(deletedChannel.id).toEqual(channel.id);
-      expect(channelService.osRepository.deleteIndex).toHaveBeenCalledWith(
+      expect(channelServiceAny.osRepository.deleteIndex).toHaveBeenCalledWith(
         channelId.toString(),
       );
-      expect(channelService.channelMySQLService.delete).toHaveBeenCalledWith(
+      expect(channelServiceAny.channelMySQLService.delete).toHaveBeenCalledWith(
         channelId,
       );
     });
@@ -384,16 +388,16 @@ describe('ChannelService', () => {
       channel.id = channelId;
 
       // Mock config to disable OpenSearch
-      jest.spyOn(channelService.configService, 'get').mockReturnValue(false);
+      jest.spyOn(channelServiceAny.configService, 'get').mockReturnValue(false);
       jest
-        .spyOn(channelService.channelMySQLService, 'delete')
+        .spyOn(channelServiceAny.channelMySQLService, 'delete')
         .mockResolvedValue(channel);
 
       const deletedChannel = await channelService.deleteById(channelId);
 
       expect(deletedChannel.id).toEqual(channel.id);
-      expect(channelService.osRepository.deleteIndex).not.toHaveBeenCalled();
-      expect(channelService.channelMySQLService.delete).toHaveBeenCalledWith(
+      expect(channelServiceAny.osRepository.deleteIndex).not.toHaveBeenCalled();
+      expect(channelServiceAny.channelMySQLService.delete).toHaveBeenCalledWith(
         channelId,
       );
     });
@@ -402,7 +406,7 @@ describe('ChannelService', () => {
       const channelId = faker.number.int();
 
       jest
-        .spyOn(channelService.channelMySQLService, 'delete')
+        .spyOn(channelServiceAny.channelMySQLService, 'delete')
         .mockRejectedValue(new Error('MySQL service error'));
 
       await expect(channelService.deleteById(channelId)).rejects.toThrow();

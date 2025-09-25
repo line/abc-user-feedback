@@ -165,7 +165,6 @@ describe('AuthController', () => {
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
 
-       
       authService.signUpEmailUser.mockResolvedValue(undefined as any);
 
       const result = await authController.signUpEmailUser(dto);
@@ -209,7 +208,6 @@ describe('AuthController', () => {
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
 
-       
       authService.signUpInvitationUser.mockResolvedValue(undefined as any);
 
       const result = await authController.signUpInvitationUser(dto);
@@ -259,7 +257,6 @@ describe('AuthController', () => {
         refreshToken: faker.string.alphanumeric(32),
       };
 
-       
       authService.signIn.mockReturnValue(mockTokens as any);
 
       const result = authController.signInEmail(user);
@@ -281,7 +278,6 @@ describe('AuthController', () => {
         refreshToken: faker.string.alphanumeric(32),
       };
 
-       
       authService.refreshToken.mockReturnValue(mockTokens as any);
 
       const result = authController.refreshToken(user);

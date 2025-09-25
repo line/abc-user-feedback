@@ -367,7 +367,7 @@ describe('FeedbackStatisticsService suite', () => {
       jest.spyOn(feedbackRepo, 'count').mockResolvedValue(1);
       jest
         .spyOn(feedbackStatsRepo.manager, 'transaction')
-        .mockImplementation((callback) => {
+        .mockImplementation(async (callback: any) => {
           const mockManager = {
             createQueryBuilder: jest.fn().mockReturnValue({
               insert: jest.fn().mockReturnThis(),
@@ -379,7 +379,9 @@ describe('FeedbackStatisticsService suite', () => {
             }),
           };
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          return callback(mockManager as Parameters<typeof callback>[0]);
+          return await (callback as (manager: any) => Promise<any>)(
+            mockManager,
+          );
         });
 
       await feedbackStatsService.createFeedbackStatistics(
@@ -453,7 +455,9 @@ describe('FeedbackStatisticsService suite', () => {
       jest.spyOn(createQueryBuilder, 'values' as never).mockReturnThis();
       jest.spyOn(createQueryBuilder, 'orUpdate' as never).mockReturnThis();
       jest.spyOn(createQueryBuilder, 'updateEntity' as never).mockReturnThis();
-      jest.spyOn(createQueryBuilder, 'execute' as never).mockResolvedValue({});
+      jest
+        .spyOn(createQueryBuilder, 'execute' as never)
+        .mockResolvedValue({} as never);
 
       await feedbackStatsService.updateCount({
         channelId,

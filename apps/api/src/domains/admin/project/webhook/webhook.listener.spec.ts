@@ -14,6 +14,8 @@
  * under the License.
  */
 
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import { faker } from '@faker-js/faker';
 import { HttpService } from '@nestjs/axios';
 import { NotFoundException } from '@nestjs/common';
@@ -30,6 +32,7 @@ import { WebhookListener } from './webhook.listener';
 describe('webhook listener', () => {
   let webhookListener: WebhookListener;
   let httpService: HttpService;
+  let webhookListenerAny: any;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig],
@@ -37,6 +40,7 @@ describe('webhook listener', () => {
     }).compile();
     webhookListener = module.get(WebhookListener);
     httpService = module.get(HttpService);
+    webhookListenerAny = webhookListener as any;
   });
 
   describe('handleFeedbackCreation', () => {
@@ -68,7 +72,7 @@ describe('webhook listener', () => {
 
     it('throws NotFoundException when feedback is not found', async () => {
       // Mock repository to return null
-      const feedbackRepo = webhookListener.feedbackRepo;
+      const feedbackRepo = webhookListenerAny.feedbackRepo;
 
       jest.spyOn(feedbackRepo, 'findOne').mockResolvedValue(null);
 
@@ -172,7 +176,7 @@ describe('webhook listener', () => {
     });
 
     it('handles gracefully when feedback is not found for issue addition', async () => {
-      const feedbackRepo = webhookListener.feedbackRepo;
+      const feedbackRepo = webhookListenerAny.feedbackRepo;
       jest.spyOn(feedbackRepo, 'findOne').mockResolvedValue(null);
 
       jest
@@ -250,7 +254,7 @@ describe('webhook listener', () => {
     });
 
     it('handles gracefully when issue is not found for creation', async () => {
-      const issueRepo = webhookListener.issueRepo;
+      const issueRepo = webhookListenerAny.issueRepo;
       jest.spyOn(issueRepo, 'findOne').mockResolvedValue(null);
 
       jest
@@ -326,7 +330,7 @@ describe('webhook listener', () => {
     });
 
     it('handles gracefully when issue is not found for status change', async () => {
-      const issueRepo = webhookListener.issueRepo;
+      const issueRepo = webhookListenerAny.issueRepo;
       jest.spyOn(issueRepo, 'findOne').mockResolvedValue(null);
 
       jest
@@ -379,7 +383,7 @@ describe('webhook listener', () => {
 
   describe('edge cases and error scenarios', () => {
     it('handles empty webhook list gracefully', async () => {
-      const webhookRepo = webhookListener.webhookRepo;
+      const webhookRepo = webhookListenerAny.webhookRepo;
       jest.spyOn(webhookRepo, 'find').mockResolvedValue([]);
 
       jest
@@ -397,7 +401,7 @@ describe('webhook listener', () => {
     });
 
     it('handles inactive webhooks correctly', async () => {
-      const webhookRepo = webhookListener.webhookRepo;
+      const webhookRepo = webhookListenerAny.webhookRepo;
       // Mock to return empty array for inactive webhooks
       jest.spyOn(webhookRepo, 'find').mockResolvedValue([]);
 
@@ -414,7 +418,7 @@ describe('webhook listener', () => {
     });
 
     it('handles inactive events correctly', async () => {
-      const webhookRepo = webhookListener.webhookRepo;
+      const webhookRepo = webhookListenerAny.webhookRepo;
       // Mock to return empty array for inactive events
       jest.spyOn(webhookRepo, 'find').mockResolvedValue([]);
 
@@ -511,7 +515,7 @@ describe('webhook listener', () => {
     });
 
     it('logs successful webhook sends', async () => {
-      const loggerSpy = jest.spyOn(webhookListener.logger, 'log');
+      const loggerSpy = jest.spyOn(webhookListenerAny.logger, 'log');
 
       jest
         .spyOn(httpService, 'post')
@@ -527,7 +531,7 @@ describe('webhook listener', () => {
     });
 
     it('logs webhook retry attempts', async () => {
-      const loggerSpy = jest.spyOn(webhookListener.logger, 'warn');
+      const loggerSpy = jest.spyOn(webhookListenerAny.logger, 'warn');
       const axiosError: AxiosError = {
         name: 'AxiosError',
         message: 'Request failed',

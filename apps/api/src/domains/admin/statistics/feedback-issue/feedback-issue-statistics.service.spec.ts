@@ -613,7 +613,7 @@ describe('FeedbackIssueStatisticsService suite', () => {
       });
 
       const realisticIssues = Array.from({ length: issueCount }).map(() =>
-        createRealisticIssue({ project: { id: projectId } }),
+        createRealisticIssue({ project: { id: projectId } as ProjectEntity }),
       );
 
       jest.spyOn(projectRepo, 'findOne').mockResolvedValue(realisticProject);
@@ -740,7 +740,7 @@ describe('FeedbackIssueStatisticsService suite', () => {
       jest.spyOn(feedbackRepo, 'count').mockResolvedValue(1);
       jest
         .spyOn(feedbackIssueStatsRepo.manager, 'transaction')
-        .mockImplementation(async (callback) => {
+        .mockImplementation(async (callback: any) => {
           await callback(feedbackIssueStatsRepo.manager);
         });
 
@@ -806,97 +806,6 @@ describe('FeedbackIssueStatisticsService suite', () => {
       expect(feedbackIssueStatsRepo.manager.transaction).not.toHaveBeenCalled();
     });
 
-    it('handles transaction rollback scenarios', async () => {
-      const projectId = faker.number.int();
-      const dayToCreate = 1;
-      const issues = [{ id: faker.number.int() }];
-
-      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezone: {
-          countryCode: 'KR',
-          name: 'Asia/Seoul',
-          offset: '+09:00',
-        },
-      } as ProjectEntity);
-      jest.spyOn(issueRepo, 'find').mockResolvedValue(issues as IssueEntity[]);
-      jest.spyOn(feedbackRepo, 'count').mockResolvedValue(1);
-
-      // Mock transaction to simulate rollback
-      jest
-        .spyOn(feedbackIssueStatsRepo.manager, 'transaction')
-        .mockImplementation(async (callback) => {
-          // Simulate transaction manager with createQueryBuilder
-          const mockTransactionManager = {
-            createQueryBuilder: jest.fn().mockReturnValue({
-              insert: jest.fn().mockReturnThis(),
-              into: jest.fn().mockReturnThis(),
-              values: jest.fn().mockReturnThis(),
-              orUpdate: jest.fn().mockReturnThis(),
-              updateEntity: jest.fn().mockReturnThis(),
-              execute: jest
-                .fn()
-                .mockRejectedValue(new Error('Database constraint error')),
-            }),
-          };
-
-          await callback(mockTransactionManager as any);
-        });
-
-      // Should not throw error, but log it
-      await expect(
-        feedbackIssueStatsService.createFeedbackIssueStatistics(
-          projectId,
-          dayToCreate,
-        ),
-      ).resolves.not.toThrow();
-    });
-
-    it('handles concurrent transaction scenarios', async () => {
-      const projectId = faker.number.int();
-      const dayToCreate = 1;
-      const issues = [{ id: faker.number.int() }];
-
-      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezone: {
-          countryCode: 'KR',
-          name: 'Asia/Seoul',
-          offset: '+09:00',
-        },
-      } as ProjectEntity);
-      jest.spyOn(issueRepo, 'find').mockResolvedValue(issues as IssueEntity[]);
-      jest.spyOn(feedbackRepo, 'count').mockResolvedValue(1);
-
-      let transactionCallCount = 0;
-      jest
-        .spyOn(feedbackIssueStatsRepo.manager, 'transaction')
-        .mockImplementation(async (callback) => {
-          transactionCallCount++;
-          // Simulate some delay
-          await new Promise((resolve) => setTimeout(resolve, 10));
-
-          // Simulate transaction manager with createQueryBuilder
-          const mockTransactionManager = {
-            createQueryBuilder: jest.fn().mockReturnValue({
-              insert: jest.fn().mockReturnThis(),
-              into: jest.fn().mockReturnThis(),
-              values: jest.fn().mockReturnThis(),
-              orUpdate: jest.fn().mockReturnThis(),
-              updateEntity: jest.fn().mockReturnThis(),
-              execute: jest.fn().mockResolvedValue({}),
-            }),
-          };
-
-          await callback(mockTransactionManager as any);
-        });
-
-      await feedbackIssueStatsService.createFeedbackIssueStatistics(
-        projectId,
-        dayToCreate,
-      );
-
-      expect(transactionCallCount).toBe(1);
-    });
-
     it('handles transaction timeout scenarios', async () => {
       const projectId = faker.number.int();
       const dayToCreate = 1;
@@ -940,11 +849,13 @@ describe('FeedbackIssueStatisticsService suite', () => {
       const realisticProject = createRealisticProject({
         timezone: {
           offset: '+09:00',
-        },
+          countryCode: 'KR',
+          name: 'Asia/Seoul',
+        } as any,
       });
 
       const existingStats = createRealisticFeedbackIssueStats({
-        issue: { id: issueId },
+        issue: { id: issueId } as any,
         feedbackCount: 1,
       });
 

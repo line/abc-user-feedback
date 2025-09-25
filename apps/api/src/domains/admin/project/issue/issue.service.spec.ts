@@ -717,7 +717,7 @@ describe('IssueService test suite', () => {
 
       const result = await issueService.updateByCategoryId(dto);
 
-      expect(result.category.id).toBe(categoryId);
+      expect(result.category?.id).toBe(categoryId);
     });
 
     it('updating issue category throws exception when issue not found', async () => {
@@ -853,7 +853,7 @@ describe('IssueService test suite', () => {
         .mockResolvedValue(undefined);
       jest
         .spyOn(issueRepo, 'remove')
-        .mockResolvedValue(mockIssues as IssueEntity[]);
+        .mockResolvedValue(mockIssues[0] as IssueEntity);
 
       await issueService.deleteByIds(issueIds);
 
@@ -863,7 +863,7 @@ describe('IssueService test suite', () => {
 
     it('deleting issues by ids succeeds with empty array', async () => {
       jest.spyOn(issueRepo, 'find').mockResolvedValue([]);
-      jest.spyOn(issueRepo, 'remove').mockResolvedValue([]);
+      jest.spyOn(issueRepo, 'remove').mockResolvedValue([] as any);
 
       await issueService.deleteByIds(issueIds);
 
