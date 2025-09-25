@@ -76,7 +76,11 @@ describe('FeedbackService Test Suite', () => {
   let projectService: ProjectService;
   let configService: ConfigService;
   let eventEmitter: EventEmitter2;
+
   beforeEach(async () => {
+    // Clear all mocks to ensure test isolation
+    jest.clearAllMocks();
+
     const module = await Test.createTestingModule({
       imports: [TestConfig, ClsModule.forFeature()],
       providers: FeedbackServiceProviders,
@@ -108,14 +112,18 @@ describe('FeedbackService Test Suite', () => {
 
   describe('create', () => {
     beforeEach(() => {
+      // Clear mocks for each test to ensure isolation
+      jest.clearAllMocks();
+
       channelRepo.setImageConfig({
         domainWhiteList: ['example.com'],
       });
     });
     it('creating a feedback succeeds with valid inputs', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.number.int();
+      dto.channelId = faker.number.int({ min: 1, max: 1000 }); // Limit range for stability
       dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
+
       jest
         .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
@@ -126,8 +134,9 @@ describe('FeedbackService Test Suite', () => {
     });
     it('creating a feedback fails with an invalid channel', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.number.int();
+      dto.channelId = faker.number.int({ min: 1, max: 1000 });
       dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
+
       jest.spyOn(fieldRepo, 'find').mockResolvedValue([]);
 
       await expect(feedbackService.create(dto)).rejects.toThrow(
@@ -193,16 +202,20 @@ describe('FeedbackService Test Suite', () => {
       ];
       for (const { format, invalidValues } of formats) {
         for (const invalidValue of invalidValues) {
+          // Clear mocks for each test iteration
+          jest.clearAllMocks();
+
           const field = createFieldDto({
             format,
             property: FieldPropertyEnum.EDITABLE,
             status: FieldStatusEnum.ACTIVE,
           });
           const dto = new CreateFeedbackDto();
-          dto.channelId = faker.number.int();
+          dto.channelId = faker.number.int({ min: 1, max: 1000 });
           dto.data = {
             [field.key]: invalidValue,
           };
+
           const spy = jest
             .spyOn(fieldRepo, 'find')
             .mockResolvedValue([field] as FieldEntity[]);
@@ -215,18 +228,19 @@ describe('FeedbackService Test Suite', () => {
             ),
           );
 
-          spy.mockClear();
+          spy.mockRestore(); // Use mockRestore instead of mockClear
         }
       }
     });
     it('creating a feedback succeeds with valid inputs and issue names', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.number.int();
+      dto.channelId = faker.number.int({ min: 1, max: 1000 });
       dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
-      const issueNames = Array.from({
-        length: faker.number.int({ min: 1, max: 1 }),
-      }).map(() => faker.string.sample());
-      dto.data.issueNames = [...issueNames, faker.string.sample()];
+
+      // Use stable test data
+      const issueNames = ['test-issue-1', 'test-issue-2'];
+      dto.data.issueNames = [...issueNames, 'additional-issue'];
+
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue(null);
       jest
         .spyOn(feedbackStatsRepo, 'findOne')
@@ -251,12 +265,12 @@ describe('FeedbackService Test Suite', () => {
     });
     it('creating a feedback succeeds with valid inputs and an existent issue name', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.number.int();
+      dto.channelId = faker.number.int({ min: 1, max: 1000 });
       dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
-      const issueNames = Array.from({
-        length: faker.number.int({ min: 1, max: 1 }),
-      }).map(() => faker.string.sample());
-      dto.data.issueNames = [...issueNames];
+
+      // Use stable test data
+      dto.data.issueNames = ['existing-issue-1', 'existing-issue-2'];
+
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue(null);
       jest
         .spyOn(feedbackStatsRepo, 'findOne')
@@ -281,9 +295,12 @@ describe('FeedbackService Test Suite', () => {
     });
     it('creating a feedback succeeds with valid inputs and a nonexistent issue name', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.number.int();
+      dto.channelId = faker.number.int({ min: 1, max: 1000 });
       dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
-      dto.data.issueNames = [faker.string.sample()];
+
+      // Use stable test data
+      dto.data.issueNames = ['nonexistent-issue'];
+
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue(null);
       jest
         .spyOn(feedbackStatsRepo, 'findOne')
@@ -308,8 +325,10 @@ describe('FeedbackService Test Suite', () => {
     });
     it('creating a feedback fails with invalid image domain', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.number.int();
-      const fieldKey = faker.string.sample();
+      dto.channelId = faker.number.int({ min: 1, max: 1000 });
+
+      // Use stable test data
+      const fieldKey = 'test-image-field';
       const field = createFieldDto({
         key: fieldKey,
         format: FieldFormatEnum.images,
@@ -331,9 +350,11 @@ describe('FeedbackService Test Suite', () => {
     });
     it('creating a feedback fails with non-array issueNames', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.number.int();
+      dto.channelId = faker.number.int({ min: 1, max: 1000 });
       dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
-      dto.data.issueNames = faker.string.sample() as unknown as string[];
+
+      // Use stable test data
+      dto.data.issueNames = 'not-an-array' as unknown as string[];
 
       await expect(feedbackService.create(dto)).rejects.toThrow(
         new BadRequestException('issueNames must be array'),
@@ -341,22 +362,24 @@ describe('FeedbackService Test Suite', () => {
     });
     it('creating a feedback succeeds with OpenSearch enabled', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.number.int();
-      const fieldKey = faker.string.sample();
+      dto.channelId = faker.number.int({ min: 1, max: 1000 });
+
+      // Use stable test data
+      const fieldKey = 'test-field';
       const field = createFieldDto({
         key: fieldKey,
         format: FieldFormatEnum.text,
       });
-      dto.data = { [fieldKey]: faker.string.sample() };
+      dto.data = { [fieldKey]: 'test-value' };
 
       jest.spyOn(fieldRepo, 'find').mockResolvedValue([field] as FieldEntity[]);
-      jest
-        .spyOn(feedbackMySQLService, 'create')
-        .mockResolvedValue({ id: faker.number.int() } as any);
+      jest.spyOn(feedbackMySQLService, 'create').mockResolvedValue({
+        id: faker.number.int({ min: 1, max: 1000 }),
+      } as any);
       jest.spyOn(configService, 'get').mockReturnValue(true);
       jest
         .spyOn(feedbackOSService, 'create')
-        .mockResolvedValue({ id: faker.number.int() });
+        .mockResolvedValue({ id: faker.number.int({ min: 1, max: 1000 }) });
       jest.spyOn(eventEmitter, 'emit').mockImplementation(() => true);
 
       const feedback = await feedbackService.create(dto);
@@ -368,14 +391,14 @@ describe('FeedbackService Test Suite', () => {
 
   describe('findByChannelId', () => {
     it('should find feedbacks by channel id successfully', async () => {
-      const channelId = faker.number.int();
+      const channelId = faker.number.int({ min: 1, max: 1000 });
       const dto = new FindFeedbacksByChannelIdDto();
       dto.channelId = channelId;
       dto.query = {};
 
       const fields = [createFieldDto()];
       const mockFeedbacks = {
-        items: [{ id: faker.number.int(), data: {} }],
+        items: [{ id: faker.number.int({ min: 1, max: 1000 }), data: {} }],
         meta: {
           totalItems: 1,
           itemCount: 1,
@@ -390,7 +413,7 @@ describe('FeedbackService Test Suite', () => {
         .mockResolvedValue(fields as FieldEntity[]);
       jest.spyOn(channelService, 'findById').mockResolvedValue({
         feedbackSearchMaxDays: 30,
-        project: { id: faker.number.int() },
+        project: { id: faker.number.int({ min: 1, max: 1000 }) },
       } as unknown as any);
       jest.spyOn(configService, 'get').mockReturnValue(false);
       jest
@@ -405,7 +428,7 @@ describe('FeedbackService Test Suite', () => {
     });
     it('should throw error for invalid channel', async () => {
       const dto = new FindFeedbacksByChannelIdDto();
-      dto.channelId = faker.number.int();
+      dto.channelId = faker.number.int({ min: 1, max: 1000 });
 
       jest
         .spyOn(fieldService, 'findByChannelId')
@@ -416,8 +439,8 @@ describe('FeedbackService Test Suite', () => {
       );
     });
     it('should handle fieldKey query parameter', async () => {
-      const channelId = faker.number.int();
-      const fieldKey = faker.string.sample();
+      const channelId = faker.number.int({ min: 1, max: 1000 });
+      const fieldKey = 'test-field-key';
       const dto = new FindFeedbacksByChannelIdDto();
       dto.channelId = channelId;
       dto.query = { fieldKey };
@@ -439,7 +462,7 @@ describe('FeedbackService Test Suite', () => {
         .mockResolvedValue(fields as FieldEntity[]);
       jest.spyOn(channelService, 'findById').mockResolvedValue({
         feedbackSearchMaxDays: 30,
-        project: { id: faker.number.int() },
+        project: { id: faker.number.int({ min: 1, max: 1000 }) },
       } as unknown as any);
       jest.spyOn(configService, 'get').mockReturnValue(false);
       jest
@@ -452,9 +475,9 @@ describe('FeedbackService Test Suite', () => {
       expect(fieldService.findByChannelId).toHaveBeenCalledWith({ channelId });
     });
     it('should handle issueName query parameter', async () => {
-      const channelId = faker.number.int();
-      const issueName = faker.string.sample();
-      const issueId = faker.number.int();
+      const channelId = faker.number.int({ min: 1, max: 1000 });
+      const issueName = 'test-issue-name';
+      const issueId = faker.number.int({ min: 1, max: 1000 });
       const dto = new FindFeedbacksByChannelIdDto();
       dto.channelId = channelId;
       dto.query = { issueName };
@@ -478,7 +501,7 @@ describe('FeedbackService Test Suite', () => {
       jest.spyOn(issueService, 'findByName').mockResolvedValue(mockIssue);
       jest.spyOn(channelService, 'findById').mockResolvedValue({
         feedbackSearchMaxDays: 30,
-        project: { id: faker.number.int() },
+        project: { id: faker.number.int({ min: 1, max: 1000 }) },
       } as unknown as any);
       jest.spyOn(configService, 'get').mockReturnValue(false);
       jest
@@ -494,7 +517,7 @@ describe('FeedbackService Test Suite', () => {
 
   describe('findByChannelIdV2', () => {
     it('should find feedbacks by channel id v2 successfully', async () => {
-      const channelId = faker.number.int();
+      const channelId = faker.number.int({ min: 1, max: 1000 });
       const dto = {
         channelId,
         queries: [],
@@ -507,7 +530,7 @@ describe('FeedbackService Test Suite', () => {
 
       const fields = [createFieldDto()];
       const mockFeedbacks = {
-        items: [{ id: faker.number.int(), data: {} }],
+        items: [{ id: faker.number.int({ min: 1, max: 1000 }), data: {} }],
         meta: {
           totalItems: 1,
           itemCount: 1,
@@ -522,7 +545,7 @@ describe('FeedbackService Test Suite', () => {
         .mockResolvedValue(fields as FieldEntity[]);
       jest.spyOn(channelService, 'findById').mockResolvedValue({
         feedbackSearchMaxDays: 30,
-        project: { id: faker.number.int() },
+        project: { id: faker.number.int({ min: 1, max: 1000 }) },
       } as unknown as any);
       jest.spyOn(configService, 'get').mockReturnValue(false);
       jest
