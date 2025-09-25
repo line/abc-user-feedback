@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   displayName: 'api',
   rootDir: './src',
   testRegex: '.*\\.spec\\.ts$',
@@ -10,6 +10,7 @@ export default {
   transform: {
     '^.+\\.(t|j)s$': ['@swc-node/jest'],
   },
+  transformIgnorePatterns: ['node_modules/(?!(uuid)/)'],
   moduleFileExtensions: ['js', 'json', 'ts'],
   coverageDirectory: '../coverage',
   clearMocks: true,
