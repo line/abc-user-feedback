@@ -18,9 +18,12 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { CodeService } from '@/shared/code/code.service';
+
 import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
 import {
   createQueryBuilder,
+  getMockProvider,
   getRandomEnumValue,
   TestConfig,
 } from '@/test-utils/util-functions';
@@ -49,7 +52,10 @@ describe('UserService', () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig],
-      providers: UserServiceProviders,
+      providers: [
+        ...UserServiceProviders,
+        getMockProvider(CodeService, MockCodeService),
+      ],
     }).compile();
 
     userService = module.get(UserService);
@@ -433,6 +439,7 @@ describe('UserService', () => {
       jest
         .spyOn(userService, 'findById')
         .mockRejectedValue(new UserNotFoundException());
+      jest.spyOn(userRepo, 'save').mockResolvedValue({} as UserEntity);
 
       await expect(userService.updateUser(updateDto)).rejects.toThrow(
         UserNotFoundException,

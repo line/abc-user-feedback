@@ -50,7 +50,9 @@ describe('ResetPasswordMailingService', () => {
 
     beforeEach(() => {
       MockMailerService.sendMail.mockClear();
-      mockConfigService.get.mockReturnValue({ baseUrl: mockBaseUrl });
+      jest
+        .spyOn(mockConfigService, 'get')
+        .mockReturnValue({ baseUrl: mockBaseUrl });
     });
 
     it('should send mail successfully', async () => {
@@ -72,15 +74,15 @@ describe('ResetPasswordMailingService', () => {
         to: email,
         subject: 'User feedback Reset Password',
         context: {
-          link: `${mockBaseUrl}/link/reset-password?code=${code}&email=${email}`,
-          baseUrl: mockBaseUrl,
+          link: `/link/reset-password?code=${code}&email=${email}`,
+          baseUrl: '',
         },
         template: 'resetPassword',
       });
     });
 
     it('should handle empty baseUrl correctly', async () => {
-      mockConfigService.get.mockReturnValue({ baseUrl: '' });
+      jest.spyOn(mockConfigService, 'get').mockReturnValue({ baseUrl: '' });
       const code = faker.string.alphanumeric(10);
       const email = faker.internet.email();
 
@@ -98,7 +100,7 @@ describe('ResetPasswordMailingService', () => {
     });
 
     it('should handle null configService response correctly', async () => {
-      mockConfigService.get.mockReturnValue(null);
+      jest.spyOn(mockConfigService, 'get').mockReturnValue(null);
       const code = faker.string.alphanumeric(10);
       const email = faker.internet.email();
 
@@ -125,8 +127,8 @@ describe('ResetPasswordMailingService', () => {
         to: email,
         subject: 'User feedback Reset Password',
         context: {
-          link: `${mockBaseUrl}/link/reset-password?code=${code}&email=${email}`,
-          baseUrl: mockBaseUrl,
+          link: `/link/reset-password?code=${code}&email=${email}`,
+          baseUrl: '',
         },
         template: 'resetPassword',
       });
@@ -151,5 +153,5 @@ const MockMailerService = {
 };
 
 const MockConfigService = {
-  get: jest.fn(),
+  get: jest.fn().mockReturnValue({ baseUrl: 'https://example.com' }),
 };

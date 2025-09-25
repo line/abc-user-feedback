@@ -246,7 +246,7 @@ describe('user controller', () => {
       expect(MockUserService.deleteById).toHaveBeenCalledTimes(1);
       expect(MockUserService.deleteById).toHaveBeenCalledWith(userDto.id);
     });
-    it('Unauthorization', () => {
+    it('Unauthorization', async () => {
       const userDto = new UserDto();
       userDto.id = faker.number.int();
       userDto.type = UserTypeEnum.GENERAL;

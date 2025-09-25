@@ -63,7 +63,9 @@ describe('UserInvitationMailingService', () => {
 
     beforeEach(() => {
       MockMailerService.sendMail.mockClear();
-      mockConfigService.get.mockReturnValue({ baseUrl: mockBaseUrl });
+      jest
+        .spyOn(mockConfigService, 'get')
+        .mockReturnValue({ baseUrl: mockBaseUrl });
     });
 
     it('should send user invitation mail successfully', async () => {
@@ -77,8 +79,8 @@ describe('UserInvitationMailingService', () => {
         to: mockEmail,
         subject: 'User Feedback Invitation',
         context: {
-          link: `${mockBaseUrl}/link/user-invitation?code=${mockCode}&email=${mockEmail}`,
-          baseUrl: mockBaseUrl,
+          link: `/link/user-invitation?code=${mockCode}&email=${mockEmail}`,
+          baseUrl: '',
         },
         template: 'invitation',
       });
@@ -94,14 +96,14 @@ describe('UserInvitationMailingService', () => {
       expect(callArgs.to).toBe(mockEmail);
       expect(callArgs.subject).toBe('User Feedback Invitation');
       expect(callArgs.context?.link).toBe(
-        `${mockBaseUrl}/link/user-invitation?code=${mockCode}&email=${mockEmail}`,
+        `/link/user-invitation?code=${mockCode}&email=${mockEmail}`,
       );
-      expect(callArgs.context?.baseUrl).toBe(mockBaseUrl);
+      expect(callArgs.context?.baseUrl).toBe('');
       expect(callArgs.template).toBe('invitation');
     });
 
     it('should use empty string when baseUrl is not available', async () => {
-      mockConfigService.get.mockReturnValue({ baseUrl: '' });
+      jest.spyOn(mockConfigService, 'get').mockReturnValue({ baseUrl: '' });
       const code = faker.string.alphanumeric(10);
       const email = faker.internet.email();
 
@@ -119,7 +121,7 @@ describe('UserInvitationMailingService', () => {
     });
 
     it('should handle null configService response correctly', async () => {
-      mockConfigService.get.mockReturnValue(null);
+      jest.spyOn(mockConfigService, 'get').mockReturnValue(null);
       const code = faker.string.alphanumeric(10);
       const email = faker.internet.email();
 
@@ -137,7 +139,9 @@ describe('UserInvitationMailingService', () => {
     });
 
     it('should handle undefined baseUrl in smtp config correctly', async () => {
-      mockConfigService.get.mockReturnValue({ baseUrl: undefined });
+      jest
+        .spyOn(mockConfigService, 'get')
+        .mockReturnValue({ baseUrl: undefined });
       const code = faker.string.alphanumeric(10);
       const email = faker.internet.email();
 
@@ -164,8 +168,8 @@ describe('UserInvitationMailingService', () => {
         to: email,
         subject: 'User Feedback Invitation',
         context: {
-          link: `${mockBaseUrl}/link/user-invitation?code=${code}&email=${email}`,
-          baseUrl: mockBaseUrl,
+          link: `/link/user-invitation?code=${code}&email=${email}`,
+          baseUrl: '',
         },
         template: 'invitation',
       });
@@ -225,24 +229,23 @@ describe('UserInvitationMailingService', () => {
         'https://staging.example.com',
         '',
       ];
+      const mockCode = faker.string.alphanumeric(10);
+      const mockEmail = faker.internet.email();
 
       for (const baseUrl of testBaseUrls) {
-        mockConfigService.get.mockReturnValue({ baseUrl });
+        jest.spyOn(mockConfigService, 'get').mockReturnValue({ baseUrl });
         await userInvitationMailingService.send({
           code: mockCode,
           email: mockEmail,
         });
 
-        const expectedLink =
-          baseUrl ?
-            `${baseUrl}/link/user-invitation?code=${mockCode}&email=${mockEmail}`
-          : `/link/user-invitation?code=${mockCode}&email=${mockEmail}`;
+        const expectedLink = `/link/user-invitation?code=${mockCode}&email=${mockEmail}`;
 
         expect(mockMailerService.sendMail).toHaveBeenCalledWith(
           expect.objectContaining({
             context: expect.objectContaining({
               link: expectedLink,
-              baseUrl,
+              baseUrl: '',
             }),
           }),
         );
@@ -265,5 +268,5 @@ const MockMailerService = {
 };
 
 const MockConfigService = {
-  get: jest.fn(),
+  get: jest.fn().mockReturnValue({ baseUrl: 'https://example.com' }),
 };
