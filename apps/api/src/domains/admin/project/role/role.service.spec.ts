@@ -167,8 +167,8 @@ describe('RoleService', () => {
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
       jest
         .spyOn(roleRepo, 'save')
-        .mockImplementation(() =>
-          Promise.resolve(roles[0] as unknown as RoleEntity),
+        .mockImplementation((entities: any) =>
+          Promise.resolve(entities as any),
         );
 
       const result = await roleService.createMany(dtos);
