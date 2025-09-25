@@ -376,7 +376,10 @@ describe('FeedbackService Test Suite', () => {
       jest.spyOn(feedbackMySQLService, 'create').mockResolvedValue({
         id: faker.number.int({ min: 1, max: 1000 }),
       } as any);
-      jest.spyOn(configService, 'get').mockReturnValue(true);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return true;
+        return false;
+      });
       jest
         .spyOn(feedbackOSService, 'create')
         .mockResolvedValue({ id: faker.number.int({ min: 1, max: 1000 }) });
@@ -415,7 +418,10 @@ describe('FeedbackService Test Suite', () => {
         feedbackSearchMaxDays: 30,
         project: { id: faker.number.int({ min: 1, max: 1000 }) },
       } as unknown as any);
-      jest.spyOn(configService, 'get').mockReturnValue(false);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return false;
+        return false;
+      });
       jest
         .spyOn(feedbackMySQLService, 'findByChannelId')
         .mockResolvedValue(mockFeedbacks);
@@ -464,7 +470,10 @@ describe('FeedbackService Test Suite', () => {
         feedbackSearchMaxDays: 30,
         project: { id: faker.number.int({ min: 1, max: 1000 }) },
       } as unknown as any);
-      jest.spyOn(configService, 'get').mockReturnValue(false);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return false;
+        return false;
+      });
       jest
         .spyOn(feedbackMySQLService, 'findByChannelId')
         .mockResolvedValue(mockFeedbacks);
@@ -503,7 +512,10 @@ describe('FeedbackService Test Suite', () => {
         feedbackSearchMaxDays: 30,
         project: { id: faker.number.int({ min: 1, max: 1000 }) },
       } as unknown as any);
-      jest.spyOn(configService, 'get').mockReturnValue(false);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return false;
+        return false;
+      });
       jest
         .spyOn(feedbackMySQLService, 'findByChannelId')
         .mockResolvedValue(mockFeedbacks);
@@ -547,7 +559,10 @@ describe('FeedbackService Test Suite', () => {
         feedbackSearchMaxDays: 30,
         project: { id: faker.number.int({ min: 1, max: 1000 }) },
       } as unknown as any);
-      jest.spyOn(configService, 'get').mockReturnValue(false);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return false;
+        return false;
+      });
       jest
         .spyOn(feedbackMySQLService, 'findByChannelIdV2')
         .mockResolvedValue(mockFeedbacks);
@@ -601,7 +616,10 @@ describe('FeedbackService Test Suite', () => {
       jest
         .spyOn(feedbackMySQLService, 'updateFeedback')
         .mockResolvedValue(undefined);
-      jest.spyOn(configService, 'get').mockReturnValue(false);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return false;
+        return false;
+      });
 
       await feedbackService.updateFeedback(dto);
 
@@ -683,7 +701,10 @@ describe('FeedbackService Test Suite', () => {
       dto.channelId = faker.number.int();
 
       jest.spyOn(feedbackMySQLService, 'addIssue').mockResolvedValue(undefined);
-      jest.spyOn(configService, 'get').mockReturnValue(false);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return false;
+        return false;
+      });
       jest.spyOn(eventEmitter, 'emit').mockImplementation(() => true);
 
       await feedbackService.addIssue(dto);
@@ -698,7 +719,10 @@ describe('FeedbackService Test Suite', () => {
       dto.channelId = faker.number.int();
 
       jest.spyOn(feedbackMySQLService, 'addIssue').mockResolvedValue(undefined);
-      jest.spyOn(configService, 'get').mockReturnValue(true);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return true;
+        return false;
+      });
       jest
         .spyOn(feedbackOSService, 'upsertFeedbackItem')
         .mockResolvedValue(undefined);
@@ -721,7 +745,10 @@ describe('FeedbackService Test Suite', () => {
       jest
         .spyOn(feedbackMySQLService, 'removeIssue')
         .mockResolvedValue(undefined);
-      jest.spyOn(configService, 'get').mockReturnValue(false);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return false;
+        return false;
+      });
 
       await feedbackService.removeIssue(dto);
 
@@ -736,7 +763,10 @@ describe('FeedbackService Test Suite', () => {
       jest
         .spyOn(feedbackMySQLService, 'removeIssue')
         .mockResolvedValue(undefined);
-      jest.spyOn(configService, 'get').mockReturnValue(true);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return true;
+        return false;
+      });
       jest
         .spyOn(feedbackOSService, 'upsertFeedbackItem')
         .mockResolvedValue(undefined);
@@ -773,7 +803,10 @@ describe('FeedbackService Test Suite', () => {
       jest
         .spyOn(feedbackMySQLService, 'deleteByIds')
         .mockResolvedValue(undefined);
-      jest.spyOn(configService, 'get').mockReturnValue(false);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return false;
+        return false;
+      });
 
       await feedbackService.deleteByIds(dto);
 
@@ -787,7 +820,10 @@ describe('FeedbackService Test Suite', () => {
       jest
         .spyOn(feedbackMySQLService, 'deleteByIds')
         .mockResolvedValue(undefined);
-      jest.spyOn(configService, 'get').mockReturnValue(true);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return true;
+        return false;
+      });
       jest.spyOn(feedbackOSService, 'deleteByIds').mockResolvedValue(undefined);
 
       await feedbackService.deleteByIds(dto);
@@ -808,7 +844,10 @@ describe('FeedbackService Test Suite', () => {
         issues: [],
       };
 
-      jest.spyOn(configService, 'get').mockReturnValue(false);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return false;
+        return false;
+      });
       jest
         .spyOn(feedbackMySQLService, 'findById')
         .mockResolvedValue(mockFeedback);
@@ -873,7 +912,10 @@ describe('FeedbackService Test Suite', () => {
         project: { id: faker.number.int() },
       } as unknown as any);
       jest.spyOn(projectService, 'findById').mockResolvedValue(mockProject);
-      jest.spyOn(configService, 'get').mockReturnValue(false);
+      jest.spyOn(configService, 'get').mockImplementation((key: string) => {
+        if (key === 'opensearch.use') return false;
+        return false;
+      });
       jest.spyOn(feedbackMySQLService, 'findByChannelIdV2').mockResolvedValue({
         items: [],
         meta: {
