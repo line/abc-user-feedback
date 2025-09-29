@@ -31,14 +31,14 @@ import type { UserTypeEnum } from '@/entities/user';
 
 const scheme = z
   .object({
-    email: z.string().email(),
+    email: z.email(),
     type: z.literal('SUPER').or(z.literal('GENERAL')),
     projectId: z.number(),
     roleId: z.number(),
   })
   .or(
     z.object({
-      email: z.string().email(),
+      email: z.email(),
       type: z.literal('GENERAL'),
       projectId: z.number(),
       roleId: z.number(),
@@ -62,7 +62,7 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
   const { register, watch, setValue, handleSubmit, formState } =
     useForm<InvitationForm>({ resolver: zodResolver(scheme), defaultValues });
 
-  const { type, projectId } = watch();
+  const { type, projectId, roleId } = watch();
 
   const { data: projectData } = useAllProjects();
 
@@ -99,14 +99,18 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
         />
         <SelectInput
           label="Type"
-          value="GENERAL"
+          value={type}
           options={[
             { label: 'SUPER', value: 'SUPER' },
             { label: 'GENERAL', value: 'GENERAL' },
           ]}
-          onChange={(v) =>
-            setValue('type', v as UserTypeEnum, { shouldDirty: true })
-          }
+          onChange={(v) => {
+            setValue('type', v as UserTypeEnum, { shouldDirty: true });
+            if (type === 'SUPER') {
+              setValue('projectId', 0);
+              setValue('roleId', 0);
+            }
+          }}
           required
         />
         {type === 'GENERAL' && (
@@ -118,13 +122,15 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
                 label: name,
                 value: id.toString(),
               }))}
-              onChange={(v) =>
-                setValue('projectId', Number(v), { shouldDirty: true })
-              }
+              onChange={(v) => {
+                setValue('projectId', Number(v), { shouldDirty: true });
+                setValue('roleId', 0, { shouldDirty: true });
+              }}
+              value={projectId === 0 ? '' : projectId.toString()}
               error={formState.errors.projectId?.message}
               required
             />
-            {projectId && (
+            {projectId > 0 && (
               <SelectInput
                 label="Role"
                 placeholder={t('v2.placeholder.select')}
@@ -135,6 +141,7 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
                 onChange={(v) =>
                   setValue('roleId', Number(v), { shouldDirty: true })
                 }
+                value={roleId === 0 ? '' : roleId.toString()}
                 error={formState.errors.roleId?.message}
                 required
               />

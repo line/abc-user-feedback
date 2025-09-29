@@ -16,5 +16,5 @@
 import { z } from 'zod';
 
 export const requestResetPasswordWithEmailSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
 });
