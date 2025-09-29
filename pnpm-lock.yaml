@@ -739,8 +739,8 @@ importers:
         specifier: ^16.1.1
         version: 16.1.1(postcss@8.5.6)
       postcss-js:
-        specifier: ^5.0.0
-        version: 5.0.0(postcss@8.5.6)
+        specifier: ^5.0.1
+        version: 5.0.1(postcss@8.5.6)
       postcss-nesting:
         specifier: ^13.0.2
         version: 13.0.2(postcss@8.5.6)
@@ -8807,8 +8807,8 @@ packages:
     peerDependencies:
       postcss: ^8.4.21
 
-  postcss-js@5.0.0:
-    resolution: {integrity: sha512-wIYeafewkdxYTGL8ZLpwH4avehYTtPSbcL5Ldlxi7atDaoIyjN0zSeQ7kDJlpo0HGkYWAbVKuw9h4L/wnT2uKQ==}
+  postcss-js@5.0.1:
+    resolution: {integrity: sha512-PfV0Jx9berzyIJ9FlH6ElRJUTvUy4+K+j5DOA8hjZNRMVwtnSSH9JTTbohL8GTDM+Gtsl0SDugPCQatXKea9/Q==}
     engines: {node: ^20 || ^22 || >= 24}
     peerDependencies:
       postcss: ^8.4.21
@@ -20462,7 +20462,7 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.5.6
 
-  postcss-js@5.0.0(postcss@8.5.6):
+  postcss-js@5.0.1(postcss@8.5.6):
     dependencies:
       camelcase-css: 2.0.1
       postcss: 8.5.6
