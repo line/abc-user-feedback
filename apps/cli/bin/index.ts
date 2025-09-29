@@ -1,4 +1,19 @@
 #!/usr/bin/env node
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 import { Command } from 'commander';
 
 import packageJson from '../package.json';
@@ -17,7 +32,7 @@ program
   .command('init')
   .description('Generate config.toml template — use without .env')
   .option('--force', 'Overwrite existing file')
-  .action(async (opts) => {
+  .action((opts: { force?: boolean }) => {
     if (exists('config.toml') && !opts.force)
       throw new Error('config.toml already exists. Use --force to overwrite.');
     writeFile('config.toml', defaultConfigToml());
@@ -73,7 +88,7 @@ program
   .command('clean')
   .description('Clean up containers/networks/volumes')
   .option('--images', 'Also prune images')
-  .action(async (opts) => {
+  .action(async (opts: { images?: boolean }) => {
     const cfg = loadConfig();
 
     const composeContent = generateComposeContent(cfg);
@@ -87,7 +102,7 @@ program
     console.log('🧹 Cleanup completed successfully');
   });
 
-program.parseAsync().catch((e) => {
+program.parseAsync().catch((e: Error) => {
   console.error('❌ Error:', e.message);
   process.exit(1);
 });

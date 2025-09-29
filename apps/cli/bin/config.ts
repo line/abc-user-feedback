@@ -1,3 +1,18 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 import path from 'path';
 import * as TOML from 'toml';
 import { z } from 'zod';
@@ -36,7 +51,7 @@ const ConfigSchema = z.object({
       .default({ host: 'smtp4dev', port: 25, sender: 'user@feedback.com' }),
     opensearch: z.object({ enabled: z.boolean().default(false) }).optional(),
   }),
-  mysql: z.object({ port: z.number().default(13306) }),
+  mysql: z.object({ port: z.number().default(13306) }).optional(),
 });
 
 export type AppConfig = z.infer<typeof ConfigSchema>;
@@ -47,7 +62,7 @@ export function loadConfig(cwd = process.cwd()): AppConfig {
     throw new Error(
       "config.toml 이 없습니다. 먼저 'mystack init'을 실행하세요.",
     );
-  const main = TOML.parse(readFile(mainPath));
+  const main = TOML.parse(readFile(mainPath)) as unknown;
   const parsed = ConfigSchema.safeParse(main);
   if (!parsed.success)
     throw new Error(

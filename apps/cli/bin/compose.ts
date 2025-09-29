@@ -1,3 +1,18 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 import YAML from 'yaml';
 
 import type { AppConfig } from './config';
@@ -56,7 +71,7 @@ export function generateComposeContent(cfg: AppConfig) {
           MYSQL_PASSWORD: 'userfeedback',
           TZ: 'UTC',
         },
-        ports: [`${cfg.mysql.port}:3306`],
+        ports: [`${cfg.mysql?.port}:3306`],
         volumes: ['mysql:/var/lib/mysql'],
         restart: 'unless-stopped',
         healthcheck: {
@@ -75,18 +90,18 @@ export function generateComposeContent(cfg: AppConfig) {
         },
       },
     },
-    volumes: { mysql: {}, smtp4dev: {} },
+    volumes: { mysql: {}, smtp4dev: {} } as Record<string, object>,
   };
 
   const apiEnvVariables = {
     MASTER_API_KEY: cfg.api.master_api_key,
     ACCESS_TOKEN_EXPIRED_TIME: cfg.api.access_token_expired_time,
     REFRESH_TOKEN_EXPIRED_TIME: cfg.api.refresh_token_expired_time,
-    SMTP_USERNAME: cfg.api.smtp?.username,
-    SMTP_PASSWORD: cfg.api.smtp?.password,
-    SMTP_TLS: cfg.api.smtp?.tls,
-    SMTP_CIPHER_SPEC: cfg.api.smtp?.cipher_spec,
-    SMTP_OPPORTUNISTIC_TLS: cfg.api.smtp?.opportunistic_tls,
+    SMTP_USERNAME: cfg.api.smtp.username,
+    SMTP_PASSWORD: cfg.api.smtp.password,
+    SMTP_TLS: cfg.api.smtp.tls,
+    SMTP_CIPHER_SPEC: cfg.api.smtp.cipher_spec,
+    SMTP_OPPORTUNISTIC_TLS: cfg.api.smtp.opportunistic_tls,
     AUTO_FEEDBACK_DELETION_ENABLED: cfg.api.auto_feedback_deletion?.enabled,
     AUTO_FEEDBACK_DELETION_PERIOD_DAYS:
       cfg.api.auto_feedback_deletion?.period_days,
@@ -103,6 +118,39 @@ export function generateComposeContent(cfg: AppConfig) {
         `OPENSEARCH_NODE=http://opensearch:9200`,
       );
     }
+  }
+  if (cfg.mysql) {
+    doc.services.mysql = {
+      image: 'mysql:8.0',
+      command: [
+        '--default-authentication-plugin=mysql_native_password',
+        '--collation-server=utf8mb4_bin',
+      ],
+      environment: {
+        MYSQL_ROOT_PASSWORD: 'userfeedback',
+        MYSQL_DATABASE: 'userfeedback',
+        MYSQL_USER: 'userfeedback',
+        MYSQL_PASSWORD: 'userfeedback',
+        TZ: 'UTC',
+      },
+      ports: [`${cfg.mysql.port}:3306`],
+      volumes: ['mysql:/var/lib/mysql'],
+      restart: 'unless-stopped',
+      healthcheck: {
+        test: [
+          'CMD',
+          'mysqladmin',
+          'ping',
+          '-h',
+          'localhost',
+          '-uuserfeedback',
+          '-puserfeedback',
+        ],
+        interval: '10s',
+        timeout: '5s',
+        retries: '5',
+      },
+    };
   }
 
   if (cfg.api.opensearch) {
@@ -134,7 +182,7 @@ export function generateComposeContent(cfg: AppConfig) {
     doc.services.api.depends_on['opensearch-node'] = {
       condition: 'service_healthy',
     };
-    doc.volumes!['opensearch'] = {};
+    doc.volumes.opensearch = {};
   }
 
   const yml = YAML.stringify(doc);
