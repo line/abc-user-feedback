@@ -39,10 +39,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  ChartCard,
   DateRangePicker,
+  Legend,
+  LineChart,
   SelectInput,
   SettingAlert,
-  SimpleLineChart,
   useOAIMutation,
   useOAIQuery,
   useWarnIfUnsavedChanges,
@@ -280,6 +282,12 @@ export const AIUsageFormButton = () => {
   );
 };
 
+const dataKeys = [
+  { name: 'Total', color: '#4A90E2' },
+  { name: 'AI Field', color: '#50E3C2' },
+  { name: 'AI Issue', color: '#F5A623' },
+];
+
 const AIChartCard = ({ projectId }: { projectId: number }) => {
   const [dateRange, setDateRange] = useState<DateRangeType>({
     startDate: dayjs().startOf('month').toDate(),
@@ -334,25 +342,22 @@ const AIChartCard = ({ projectId }: { projectId: number }) => {
   }, [dailyData, dateRange]);
 
   return (
-    <SimpleLineChart
+    <ChartCard
       title="Token Usage"
-      height={334}
-      dataKeys={[
-        { name: 'Total', color: '#4A90E2' },
-        { name: 'AI Field', color: '#50E3C2' },
-        { name: 'AI Issue', color: '#F5A623' },
-      ]}
-      data={chartData}
-      filterContent={
-        <DateRangePicker
-          onChange={setDateRange}
-          value={dateRange}
-          maxDate={new Date()}
-          numberOfMonths={1}
-        />
+      extra={
+        <div className="flex gap-3">
+          <Legend dataKeys={dataKeys} />
+          <DateRangePicker
+            onChange={setDateRange}
+            value={dateRange}
+            maxDate={new Date()}
+            numberOfMonths={1}
+          />
+        </div>
       }
-      showLegend
-    />
+    >
+      <LineChart height={334} dataKeys={dataKeys} data={chartData} />
+    </ChartCard>
   );
 };
 const AIChartUsageCard = ({ projectId }: { projectId: number }) => {
