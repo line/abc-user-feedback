@@ -43,7 +43,7 @@
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
-    "@types/react": "^19.1.15",
+    "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@ufb/eslint-config": "workspace:^",
     "@ufb/prettier-config": "workspace:^",
