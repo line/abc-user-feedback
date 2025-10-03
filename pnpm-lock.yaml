@@ -151,7 +151,7 @@ importers:
         version: 6.0.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       nestjs-pino:
         specifier: ^4.4.1
-        version: 4.4.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(pino-http@10.5.0)(pino@9.12.0)(rxjs@7.8.2)
+        version: 4.4.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(pino-http@10.5.0)(pino@9.13.0)(rxjs@7.8.2)
       nestjs-typeorm-paginate:
         specifier: ^4.1.0
         version: 4.1.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(typeorm@0.3.27(babel-plugin-macros@3.1.0)(mysql2@3.15.1)(reflect-metadata@0.2.2)(ts-node@10.9.2(@swc/core@1.13.20(@swc/helpers@0.5.17))(@types/node@22.18.8)(typescript@5.9.3)))
@@ -434,8 +434,8 @@ importers:
         specifier: 2.4.3
         version: 2.4.3(next@15.5.4(@babel/core@7.28.4)(@opentelemetry/api@1.9.0)(@playwright/test@1.55.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
       pino:
-        specifier: ^9.12.0
-        version: 9.12.0
+        specifier: ^9.13.0
+        version: 9.13.0
       react:
         specifier: ^19.1.1
         version: 19.1.1
@@ -8943,8 +8943,8 @@ packages:
     resolution: {integrity: sha512-+YIodBB9sxcWeR8PrXC2K3gEDyfkUuVEITOcbqrfcj+z5QW4ioIcqZfYFbrLTYLsmAwunbS7nfU/dpBB6PZc1g==}
     hasBin: true
 
-  pino@9.12.0:
-    resolution: {integrity: sha512-0Gd0OezGvqtqMwgYxpL7P0pSHHzTJ0Lx992h+mNlMtRVfNnqweWmf0JmRWk5gJzHalyd2mxTzKjhiNbGS2Ztfw==}
+  pino@9.13.0:
+    resolution: {integrity: sha512-SpTXQhkQXekIKEe7c887S3lk3v90Q+/HVRZVyNAhe98PQc++6I5ec/R0pciH8/CciXjCoVZIZfRNicbC6KZgnw==}
     hasBin: true
 
   pino@9.7.0:
@@ -18386,7 +18386,7 @@ snapshots:
       fast-json-stringify: 6.0.1
       find-my-way: 9.3.0
       light-my-request: 6.6.0
-      pino: 9.12.0
+      pino: 9.13.0
       process-warning: 5.0.0
       rfdc: 1.4.1
       secure-json-parse: 4.0.0
@@ -20472,10 +20472,10 @@ snapshots:
       reflect-metadata: 0.2.2
       rxjs: 7.8.2
 
-  nestjs-pino@4.4.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(pino-http@10.5.0)(pino@9.12.0)(rxjs@7.8.2):
+  nestjs-pino@4.4.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(pino-http@10.5.0)(pino@9.13.0)(rxjs@7.8.2):
     dependencies:
       '@nestjs/common': 11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
-      pino: 9.12.0
+      pino: 9.13.0
       pino-http: 10.5.0
       rxjs: 7.8.2
 
@@ -20929,7 +20929,7 @@ snapshots:
       sonic-boom: 4.2.0
       thread-stream: 3.1.0
 
-  pino@9.12.0:
+  pino@9.13.0:
     dependencies:
       atomic-sleep: 1.0.0
       on-exit-leak-free: 2.1.2
