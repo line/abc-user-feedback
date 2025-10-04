@@ -151,7 +151,7 @@ importers:
         version: 6.0.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       nestjs-pino:
         specifier: ^4.4.1
-        version: 4.4.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(pino-http@10.5.0)(pino@10.0.0)(rxjs@7.8.2)
+        version: 4.4.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(pino-http@11.0.0)(pino@10.0.0)(rxjs@7.8.2)
       nestjs-typeorm-paginate:
         specifier: ^4.1.0
         version: 4.1.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(typeorm@0.3.27(babel-plugin-macros@3.1.0)(mysql2@3.15.1)(reflect-metadata@0.2.2)(ts-node@10.9.2(@swc/core@1.13.20(@swc/helpers@0.5.17))(@types/node@22.18.8)(typescript@5.9.3)))
@@ -171,8 +171,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       pino-http:
-        specifier: ^10.5.0
-        version: 10.5.0
+        specifier: ^11.0.0
+        version: 11.0.0
       pino-pretty:
         specifier: ^13.1.1
         version: 13.1.1
@@ -671,7 +671,7 @@ importers:
         version: link:../../tooling/typescript
       eslint:
         specifier: 'catalog:'
-        version: 9.37.0(jiti@1.21.7)
+        version: 9.37.0(jiti@2.4.2)
       prettier:
         specifier: 'catalog:'
         version: 3.5.3
@@ -8931,8 +8931,8 @@ packages:
   pino-abstract-transport@2.0.0:
     resolution: {integrity: sha512-F63x5tizV6WCh4R6RHyi2Ml+M70DNRXt/+HANowMflpgGFMAym/VKm6G7ZOQRjqN7XbGxK1Lg9t6ZrtzOaivMw==}
 
-  pino-http@10.5.0:
-    resolution: {integrity: sha512-hD91XjgaKkSsdn8P7LaebrNzhGTdB086W3pyPihX0EzGPjq5uBJBXo4N5guqNaK6mUjg9aubMF7wDViYek9dRA==}
+  pino-http@11.0.0:
+    resolution: {integrity: sha512-wqg5XIAGRRIWtTk8qPGxkbrfiwEWz1lgedVLvhLALudKXvg1/L2lTFgTGPJ4Z2e3qcRmxoFxDuSdMdMGNM6I1g==}
 
   pino-pretty@13.1.1:
     resolution: {integrity: sha512-TNNEOg0eA0u+/WuqH0MH0Xui7uqVk9D74ESOpjtebSQYbNWJk/dIxCXIxFsNfeN53JmtWqYHP2OrIZjT/CBEnA==}
@@ -8951,10 +8951,6 @@ packages:
 
   pino@9.13.1:
     resolution: {integrity: sha512-Szuj+ViDTjKPQYiKumGmEn3frdl+ZPSdosHyt9SnUevFosOkMY2b7ipxlEctNKPmMD/VibeBI+ZcZCJK+4DPuw==}
-    hasBin: true
-
-  pino@9.7.0:
-    resolution: {integrity: sha512-vnMCM6xZTb1WDmLvtG2lE/2p+t9hDEIvTWJsu6FejkE62vB7gDhvzrpFR4Cw2to+9JNQxVnkAKVPA1KPB98vWg==}
     hasBin: true
 
   pirates@4.0.7:
@@ -20493,11 +20489,11 @@ snapshots:
       reflect-metadata: 0.2.2
       rxjs: 7.8.2
 
-  nestjs-pino@4.4.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(pino-http@10.5.0)(pino@10.0.0)(rxjs@7.8.2):
+  nestjs-pino@4.4.1(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(pino-http@11.0.0)(pino@10.0.0)(rxjs@7.8.2):
     dependencies:
       '@nestjs/common': 11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       pino: 10.0.0
-      pino-http: 10.5.0
+      pino-http: 11.0.0
       rxjs: 7.8.2
 
   nestjs-typeorm-paginate@4.1.0(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(typeorm@0.3.27(babel-plugin-macros@3.1.0)(mysql2@3.15.1)(reflect-metadata@0.2.2)(ts-node@10.9.2(@swc/core@1.13.20(@swc/helpers@0.5.17))(@types/node@22.18.8)(typescript@5.9.3))):
@@ -20911,10 +20907,10 @@ snapshots:
     dependencies:
       split2: 4.2.0
 
-  pino-http@10.5.0:
+  pino-http@11.0.0:
     dependencies:
       get-caller-file: 2.0.5
-      pino: 9.7.0
+      pino: 10.0.0
       pino-std-serializers: 7.0.0
       process-warning: 5.0.0
 
@@ -20975,20 +20971,6 @@ snapshots:
       real-require: 0.2.0
       safe-stable-stringify: 2.5.0
       slow-redact: 0.3.0
-      sonic-boom: 4.2.0
-      thread-stream: 3.1.0
-
-  pino@9.7.0:
-    dependencies:
-      atomic-sleep: 1.0.0
-      fast-redact: 3.5.0
-      on-exit-leak-free: 2.1.2
-      pino-abstract-transport: 2.0.0
-      pino-std-serializers: 7.0.0
-      process-warning: 5.0.0
-      quick-format-unescaped: 4.0.4
-      real-require: 0.2.0
-      safe-stable-stringify: 2.5.0
       sonic-boom: 4.2.0
       thread-stream: 3.1.0
 
