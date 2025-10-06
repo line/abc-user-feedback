@@ -80,7 +80,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^30.0.0",
     "@types/node": "22.18.8",
-    "@types/react": "^19.2.0",
+    "@types/react": "^19.2.1",
     "@types/react-dom": "^19.2.0",
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
