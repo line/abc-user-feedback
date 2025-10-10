@@ -208,8 +208,8 @@ importers:
         specifier: ^11.0.10
         version: 11.0.10(@swc/cli@0.7.8(@swc/core@1.13.20(@swc/helpers@0.5.17))(chokidar@4.0.3))(@swc/core@1.13.20(@swc/helpers@0.5.17))(@types/node@22.18.9)
       '@nestjs/schematics':
-        specifier: ^11.0.8
-        version: 11.0.8(chokidar@4.0.3)(typescript@5.9.3)
+        specifier: ^11.0.9
+        version: 11.0.9(chokidar@4.0.3)(typescript@5.9.3)
       '@nestjs/testing':
         specifier: ^11.1.6
         version: 11.1.6(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.6)(@nestjs/platform-express@11.1.6)
@@ -3149,8 +3149,8 @@ packages:
       '@nestjs/common': ^10.0.0 || ^11.0.0
       '@nestjs/core': ^10.0.0 || ^11.0.0
 
-  '@nestjs/schematics@11.0.8':
-    resolution: {integrity: sha512-HKunkzfBYLpNyL/qP5wu0OBKVPrISJLnrB4r6S53fT99pEvopDcJAeIuznSAD1Dx1njUqpbTR/uGyD0xL1y0nw==}
+  '@nestjs/schematics@11.0.9':
+    resolution: {integrity: sha512-0NfPbPlEaGwIT8/TCThxLzrlz3yzDNkfRNpbL7FiplKq3w4qXpJg0JYwqgMEJnLQZm3L/L/5XjoyfJHUO3qX9g==}
     peerDependencies:
       typescript: '>=4.8.2'
 
@@ -13815,7 +13815,7 @@ snapshots:
       '@angular-devkit/schematics': 19.2.15(chokidar@4.0.3)
       '@angular-devkit/schematics-cli': 19.2.15(@types/node@22.18.9)(chokidar@4.0.3)
       '@inquirer/prompts': 7.8.0(@types/node@22.18.9)
-      '@nestjs/schematics': 11.0.8(chokidar@4.0.3)(typescript@5.8.3)
+      '@nestjs/schematics': 11.0.9(chokidar@4.0.3)(typescript@5.8.3)
       ansis: 4.1.0
       chokidar: 4.0.3
       cli-table3: 0.6.5
@@ -13934,7 +13934,7 @@ snapshots:
       '@nestjs/core': 11.1.6(@nestjs/common@11.1.6(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.6)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       cron: 4.3.3
 
-  '@nestjs/schematics@11.0.8(chokidar@4.0.3)(typescript@5.8.3)':
+  '@nestjs/schematics@11.0.9(chokidar@4.0.3)(typescript@5.8.3)':
     dependencies:
       '@angular-devkit/core': 19.2.17(chokidar@4.0.3)
       '@angular-devkit/schematics': 19.2.17(chokidar@4.0.3)
@@ -13945,7 +13945,7 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
-  '@nestjs/schematics@11.0.8(chokidar@4.0.3)(typescript@5.9.3)':
+  '@nestjs/schematics@11.0.9(chokidar@4.0.3)(typescript@5.9.3)':
     dependencies:
       '@angular-devkit/core': 19.2.17(chokidar@4.0.3)
       '@angular-devkit/schematics': 19.2.17(chokidar@4.0.3)
