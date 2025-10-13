@@ -132,6 +132,45 @@ describe('CodeService', () => {
         }),
       );
     });
+    it('set code with custom duration', async () => {
+      const dto = new SetCodeEmailVerificationDto();
+      dto.key = faker.string.sample();
+      dto.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+      dto.durationSec = 300; // 5 minutes
+      jest.spyOn(codeRepo, 'save');
+
+      const code = await codeService.setCode(dto);
+
+      expect(code).toHaveLength(6);
+      expect(codeRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          code,
+          type: dto.type,
+          key: dto.key,
+          isVerified: false,
+          expiredAt: expect.any(Date),
+        }),
+      );
+    });
+    it('set code with default duration when durationSec is not provided', async () => {
+      const dto = new SetCodeEmailVerificationDto();
+      dto.key = faker.string.sample();
+      dto.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+      jest.spyOn(codeRepo, 'save');
+
+      const code = await codeService.setCode(dto);
+
+      expect(code).toHaveLength(6);
+      expect(codeRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          code,
+          type: dto.type,
+          key: dto.key,
+          isVerified: false,
+          expiredAt: expect.any(Date),
+        }),
+      );
+    });
   });
   describe('verifyCode', () => {
     const key = faker.string.sample();
@@ -189,6 +228,196 @@ describe('CodeService', () => {
       const { error } = await codeService.verifyCode({ code, key, type });
       expect(error).toEqual(new BadRequestException('code expired'));
       MockDate.reset();
+    });
+    it('verifying code fails when already verified', async () => {
+      const { code, type } = codeFixture;
+      codeRepo.setIsVerified(true);
+
+      const { error } = await codeService.verifyCode({ code, key, type });
+      expect(error).toEqual(new BadRequestException('already verified'));
+    });
+    it('verifying code increments try count on invalid code', async () => {
+      const { type } = codeFixture;
+      const invalidCode = faker.string.sample(6);
+      const initialTryCount = 0; // Start with 0
+      const saveSpy = jest.spyOn(codeRepo, 'save');
+
+      // Mock findOne to return the entity with current tryCount
+      const mockEntity = {
+        ...codeFixture,
+        tryCount: initialTryCount,
+        key,
+        type,
+        isVerified: false,
+        expiredAt: new Date(Date.now() + 10 * 60 * 1000), // Future date
+      };
+      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(mockEntity as never);
+
+      const { error } = await codeService.verifyCode({
+        code: invalidCode,
+        key,
+        type,
+      });
+
+      expect(error).toEqual(new BadRequestException('invalid code'));
+      expect(saveSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          tryCount: initialTryCount + 1,
+        }),
+      );
+    });
+    it('updates existing code when key and type already exist', async () => {
+      const dto = new SetCodeEmailVerificationDto();
+      dto.key = faker.string.sample();
+      dto.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+
+      // Mock findOneBy to return an existing entity
+      const existingEntity = {
+        id: faker.number.int(),
+        type: dto.type,
+        key: dto.key,
+        code: faker.string.sample(6),
+        isVerified: false,
+        tryCount: 0,
+        expiredAt: new Date(),
+        data: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      } as CodeEntity;
+
+      jest.spyOn(codeRepo, 'findOneBy').mockReturnValue(existingEntity);
+      const saveSpy = jest.spyOn(codeRepo, 'save');
+
+      const code = await codeService.setCode(dto);
+
+      expect(code).toHaveLength(6);
+      expect(saveSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          code,
+          type: dto.type,
+          key: dto.key,
+          isVerified: false,
+        }),
+      );
+    });
+  });
+
+  describe('getDataByCodeAndType', () => {
+    it('returns data when code and type are valid', async () => {
+      const code = faker.string.sample(6);
+      const type = CodeTypeEnum.USER_INVITATION;
+      const expectedData = {
+        roleId: faker.number.int(),
+        userType: UserTypeEnum.GENERAL,
+        invitedBy: new UserDto(),
+      };
+      codeRepo.setData(expectedData);
+
+      const result = await codeService.getDataByCodeAndType(type, code);
+
+      expect(result).toEqual(expectedData);
+    });
+
+    it('throws NotFoundException when code is not found', async () => {
+      const code = faker.string.sample(6);
+      const type = CodeTypeEnum.USER_INVITATION;
+      codeRepo.setNull();
+
+      await expect(
+        codeService.getDataByCodeAndType(type, code),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('checkVerified', () => {
+    it('returns true when code is verified', async () => {
+      const key = faker.string.sample();
+      const type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+      codeRepo.setIsVerified(true);
+
+      const result = await codeService.checkVerified(type, key);
+
+      expect(result).toBe(true);
+    });
+
+    it('returns false when code is not verified', async () => {
+      const key = faker.string.sample();
+      const type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+      codeRepo.setIsVerified(false);
+
+      const result = await codeService.checkVerified(type, key);
+
+      expect(result).toBe(false);
+    });
+
+    it('throws NotFoundException when code is not found', async () => {
+      const key = faker.string.sample();
+      const type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+      codeRepo.setNull();
+
+      await expect(codeService.checkVerified(type, key)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe('createCode (private method)', () => {
+    it('generates 6-digit code', async () => {
+      const dto = new SetCodeEmailVerificationDto();
+      dto.key = faker.string.sample();
+      dto.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+
+      const code = await codeService.setCode(dto);
+
+      expect(code).toHaveLength(6);
+      expect(code).toMatch(/^\d{6}$/);
+    });
+
+    it('generates different codes on multiple calls', async () => {
+      const dto1 = new SetCodeEmailVerificationDto();
+      dto1.key = faker.string.sample();
+      dto1.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+
+      const dto2 = new SetCodeEmailVerificationDto();
+      dto2.key = faker.string.sample();
+      dto2.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+
+      const code1 = await codeService.setCode(dto1);
+      const code2 = await codeService.setCode(dto2);
+
+      expect(code1).not.toEqual(code2);
+    });
+  });
+
+  describe('Edge cases and error scenarios', () => {
+    it('handles empty key gracefully', async () => {
+      const dto = new SetCodeEmailVerificationDto();
+      dto.key = '';
+      dto.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+
+      const code = await codeService.setCode(dto);
+
+      expect(code).toHaveLength(6);
+    });
+
+    it('handles special characters in key', async () => {
+      const dto = new SetCodeEmailVerificationDto();
+      dto.key = 'test@example.com';
+      dto.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+
+      const code = await codeService.setCode(dto);
+
+      expect(code).toHaveLength(6);
+    });
+
+    it('handles very long key', async () => {
+      const dto = new SetCodeEmailVerificationDto();
+      dto.key = 'a'.repeat(1000);
+      dto.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+
+      const code = await codeService.setCode(dto);
+
+      expect(code).toHaveLength(6);
     });
   });
 });

@@ -37,7 +37,7 @@ export class WebhookService {
     private readonly channelRepo: Repository<ChannelEntity>,
   ) {}
 
-  private async validateEvent(event: EventDto): Promise<boolean> {
+  async validateEvent(event: EventDto): Promise<boolean> {
     const eventRequiresChannelIds = [
       EventTypeEnum.FEEDBACK_CREATION,
       EventTypeEnum.ISSUE_ADDITION,
