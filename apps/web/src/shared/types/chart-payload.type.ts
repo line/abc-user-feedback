@@ -13,14 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export type { NextPageWithLayout } from './page-with-layout.type';
-export * from './jwt.type';
-export * from './date-range.type';
-export * from './api.type';
-export * from './fetch-error.type';
-export * from './openapi.type';
-export * from './form-overlay-props.type';
-export * from './entity-table.type';
-export * from './search-query.type';
-export * from './common-form-item.type';
-export * from './chart-payload.type';
+export type PayloadItem = {
+  value: number;
+  payload: {
+    fill: string;
+    name: string | undefined;
+    color: string;
+  };
+};

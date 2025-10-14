@@ -15,19 +15,16 @@
  */
 
 import DescriptionTooltip from '../description-tooltip';
-import Legend from './legend';
 
 interface IProps extends React.PropsWithChildren {
   title: string;
   description?: string;
-  dataKeys?: { name: string; color: string }[];
-  showLegend?: boolean;
-  filterContent?: React.ReactNode;
+  extra?: React.ReactNode;
 }
 
 const ChartCard: React.FC<IProps> = (props) => {
-  const { children, description, title, dataKeys, filterContent, showLegend } =
-    props;
+  const { children, description, title, extra } = props;
+
   return (
     <div className="rounded-20 shadow-default border-neutral-tertiary bg-neutral-primary h-full border">
       <div className="border-neutral-tertiary flex items-center justify-between border-b px-6 py-5">
@@ -37,10 +34,7 @@ const ChartCard: React.FC<IProps> = (props) => {
             <DescriptionTooltip description={description} side="bottom" />
           )}
         </div>
-        <div className="flex gap-3">
-          {showLegend && <Legend dataKeys={dataKeys ?? []} />}
-          {filterContent}
-        </div>
+        <div>{extra}</div>
       </div>
       <div className="p-6">{children}</div>
     </div>

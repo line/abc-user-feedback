@@ -30,15 +30,7 @@ import {
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
 
-import {
-  Badge,
-  Button,
-  Icon,
-  toast,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@ufb/react';
+import { Badge, Button, Icon, toast } from '@ufb/react';
 
 import type { TableFilterField } from '@/shared';
 import {
@@ -317,20 +309,14 @@ const FeedbackTable = (props: Props) => {
               )}
             </>
           )}
-          <Tooltip>
-            <TooltipTrigger>
-              <DateRangePicker
-                onChange={updateDateRage}
-                value={dateRange}
-                maxDate={new Date()}
-                maxDays={currentChannel.feedbackSearchMaxDays}
-                allowEntirePeriod={currentChannel.feedbackSearchMaxDays === -1}
-              />
-            </TooltipTrigger>
-            <TooltipContent>
-              {t('tooltip.feedback-date-picker-button')}
-            </TooltipContent>
-          </Tooltip>
+          <DateRangePicker
+            onChange={updateDateRage}
+            value={dateRange}
+            maxDate={new Date()}
+            maxDays={currentChannel.feedbackSearchMaxDays}
+            allowEntirePeriod={currentChannel.feedbackSearchMaxDays === -1}
+            tooltipContent={t('tooltip.feedback-date-picker-button')}
+          />
           <TableFilterPopover
             filterFields={filterFields.filter(
               (v) =>
