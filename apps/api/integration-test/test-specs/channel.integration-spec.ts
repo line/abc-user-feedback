@@ -243,6 +243,52 @@ describe('ChannelController (integration)', () => {
           expect(body.items.length).toBe(0);
         });
     });
+
+    it('should return 404 when deleting non-existent channel', async () => {
+      await request(app.getHttpServer() as Server)
+        .delete(`/admin/projects/${project.id}/channels/999`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(404);
+    });
+
+    it('should return 401 when unauthorized', async () => {
+      await request(app.getHttpServer() as Server)
+        .delete(`/admin/projects/${project.id}/channels/1`)
+        .expect(401);
+    });
+  });
+
+  describe('Channel validation tests', () => {
+    it('should return 400 when creating channel with invalid field key', async () => {
+      const dto = new CreateChannelRequestDto();
+      dto.name = 'TestChannel';
+
+      const fieldDto = new CreateChannelRequestFieldDto();
+      fieldDto.name = 'TestField';
+      fieldDto.key = 'invalid-key!@#';
+      fieldDto.format = FieldFormatEnum.text;
+      fieldDto.property = FieldPropertyEnum.EDITABLE;
+      fieldDto.status = FieldStatusEnum.ACTIVE;
+
+      dto.fields = [fieldDto];
+
+      return request(app.getHttpServer() as Server)
+        .post(`/admin/projects/${project.id}/channels`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(dto)
+        .expect(400);
+    });
+
+    it('should return 400 when updating channel with invalid data', async () => {
+      const dto = new UpdateChannelRequestDto();
+      dto.name = '';
+
+      return request(app.getHttpServer() as Server)
+        .put(`/admin/projects/${project.id}/channels/1`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(dto)
+        .expect(400);
+    });
   });
 
   afterAll(async () => {

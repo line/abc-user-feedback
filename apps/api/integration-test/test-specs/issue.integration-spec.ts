@@ -210,7 +210,7 @@ describe('IssueController (integration)', () => {
     });
   });
 
-  describe('/admin/projects/:projectId/issues/:issueId (DELETE)', () => {
+  describe('/admin/projects/:projectId/issues (DELETE)', () => {
     it('should delete many issues', async () => {
       await request(app.getHttpServer() as Server)
         .delete(`/admin/projects/${project.id}/issues`)
@@ -235,6 +235,41 @@ describe('IssueController (integration)', () => {
           expect(body).toHaveProperty('items');
           expect(body.items.length).toBe(0);
         });
+    });
+
+    it('should return 200 when deleting with invalid issueIds', async () => {
+      await request(app.getHttpServer() as Server)
+        .delete(`/admin/projects/${project.id}/issues`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ issueIds: [] })
+        .expect(200);
+    });
+
+    it('should return 401 when unauthorized', async () => {
+      await request(app.getHttpServer() as Server)
+        .delete(`/admin/projects/${project.id}/issues`)
+        .send({ issueIds: [1] })
+        .expect(401);
+    });
+  });
+
+  describe('Issue validation tests', () => {
+    it('should return 404 when updating non-existent issue', async () => {
+      await request(app.getHttpServer() as Server)
+        .put(`/admin/projects/${project.id}/issues/999`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          name: 'NonExistentIssue',
+          description: 'This should fail',
+        })
+        .expect(400);
+    });
+
+    it('should return 404 when getting non-existent issue', async () => {
+      return request(app.getHttpServer() as Server)
+        .get(`/admin/projects/${project.id}/issues/999`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(400);
     });
   });
 
