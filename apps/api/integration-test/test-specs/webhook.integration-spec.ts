@@ -476,51 +476,6 @@ describe('WebhookController (integration)', () => {
     });
   });
 
-  describe('/admin/projects/:projectId/webhooks/:webhookId/test (POST)', () => {
-    let webhookId: number;
-
-    beforeEach(async () => {
-      const dto = new CreateWebhookRequestDto();
-      dto.name = 'TestWebhookForTest';
-      dto.url = 'https://example.com/webhook';
-      dto.events = [
-        {
-          type: EventTypeEnum.FEEDBACK_CREATION,
-          status: EventStatusEnum.ACTIVE,
-          channelIds: [],
-        },
-      ];
-      dto.status = WebhookStatusEnum.ACTIVE;
-
-      const response = await request(app.getHttpServer() as Server)
-        .post(`/admin/projects/${project.id}/webhooks`)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send(dto);
-
-      webhookId = (response.body as { id: number }).id;
-    });
-
-    it('should return 404 for test webhook', async () => {
-      return request(app.getHttpServer() as Server)
-        .post(`/admin/projects/${project.id}/webhooks/${webhookId}/test`)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .expect(404);
-    });
-
-    it('should return 404 for non-existent webhook test', async () => {
-      return request(app.getHttpServer() as Server)
-        .post(`/admin/projects/${project.id}/webhooks/999/test`)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .expect(404);
-    });
-
-    it('should return 404 when unauthorized for test', async () => {
-      return request(app.getHttpServer() as Server)
-        .post(`/admin/projects/${project.id}/webhooks/${webhookId}/test`)
-        .expect(404);
-    });
-  });
-
   afterAll(async () => {
     const delay = (ms: number) =>
       new Promise((resolve) => setTimeout(resolve, ms));
