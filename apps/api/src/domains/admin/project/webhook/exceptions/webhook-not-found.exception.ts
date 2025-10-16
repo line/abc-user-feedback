@@ -13,20 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { NotFoundException } from '@nestjs/common';
 
-import { ArrayDistinct } from '@/common/validators';
-import { PermissionEnum } from '../../permission.enum';
+import { ErrorCode } from '@ufb/shared';
 
-export class CreateRoleRequestDto {
-  @ApiProperty()
-  @IsString()
-  name: string;
-
-  @ApiProperty()
-  @IsEnum(PermissionEnum, { each: true })
-  @ArrayDistinct()
-  @IsNotEmpty()
-  permissions: PermissionEnum[];
+export class WebhookNotFoundException extends NotFoundException {
+  constructor() {
+    super({
+      code: ErrorCode.Webhook.WebhookNotFound,
+      message: 'Webhook not found',
+    });
+  }
 }

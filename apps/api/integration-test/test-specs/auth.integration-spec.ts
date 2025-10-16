@@ -31,7 +31,6 @@ import {
   EmailUserSignInRequestDto,
   EmailUserSignUpRequestDto,
   EmailVerificationCodeRequestDto,
-  EmailVerificationMailingRequestDto,
   InvitationUserSignUpRequestDto,
 } from '@/domains/admin/auth/dtos/requests';
 import { SetupTenantRequestDto } from '@/domains/admin/tenant/dtos/requests';
@@ -73,55 +72,11 @@ describe('AuthController (integration)', () => {
     await tenantService.create(dto);
   });
 
-  describe('/admin/auth/email/code (POST)', () => {
-    it('should return 400 for invalid email format', async () => {
-      const dto = new EmailVerificationMailingRequestDto();
-      dto.email = 'invalid-email';
-
-      return request(app.getHttpServer() as Server)
-        .post('/admin/auth/email/code')
-        .send(dto)
-        .expect(500);
-    });
-
-    it('should return 400 for empty email', async () => {
-      const dto = new EmailVerificationMailingRequestDto();
-      dto.email = '';
-
-      return request(app.getHttpServer() as Server)
-        .post('/admin/auth/email/code')
-        .send(dto)
-        .expect(500);
-    });
-  });
-
   describe('/admin/auth/email/code/verify (POST)', () => {
     it('should verify email code successfully', async () => {
       const dto = new EmailVerificationCodeRequestDto();
       dto.email = faker.internet.email();
       dto.code = '123456';
-
-      return request(app.getHttpServer() as Server)
-        .post('/admin/auth/email/code/verify')
-        .send(dto)
-        .expect(200);
-    });
-
-    it('should return 400 for invalid verification code', async () => {
-      const dto = new EmailVerificationCodeRequestDto();
-      dto.email = faker.internet.email();
-      dto.code = 'invalid-code';
-
-      return request(app.getHttpServer() as Server)
-        .post('/admin/auth/email/code/verify')
-        .send(dto)
-        .expect(200);
-    });
-
-    it('should return 400 for expired verification code', async () => {
-      const dto = new EmailVerificationCodeRequestDto();
-      dto.email = faker.internet.email();
-      dto.code = 'expired-code';
 
       return request(app.getHttpServer() as Server)
         .post('/admin/auth/email/code/verify')

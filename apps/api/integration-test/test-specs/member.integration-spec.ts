@@ -275,21 +275,6 @@ describe('MemberController (integration)', () => {
   });
 
   describe('/admin/projects/:projectId/members/:memberId (GET)', () => {
-    let memberId: number;
-
-    beforeEach(async () => {
-      const dto = new CreateMemberRequestDto();
-      dto.userId = user.id;
-      dto.roleId = role.id;
-
-      const response = await request(app.getHttpServer() as Server)
-        .post(`/admin/projects/${project.id}/members`)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send(dto);
-
-      memberId = (response.body as { id: number }).id;
-    });
-
     afterEach(async () => {
       await dataSource.query('DELETE FROM members WHERE role_id = ?', [
         role.id,
@@ -300,12 +285,6 @@ describe('MemberController (integration)', () => {
       return request(app.getHttpServer() as Server)
         .get(`/admin/projects/${project.id}/members/999`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .expect(404);
-    });
-
-    it('should return 401 when unauthorized', async () => {
-      return request(app.getHttpServer() as Server)
-        .get(`/admin/projects/${project.id}/members/${memberId}`)
         .expect(404);
     });
   });

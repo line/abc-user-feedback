@@ -254,7 +254,7 @@ describe('IssueController (integration)', () => {
   });
 
   describe('Issue validation tests', () => {
-    it('should return 404 when updating non-existent issue', async () => {
+    it('should return 400 when updating non-existent issue', async () => {
       await request(app.getHttpServer() as Server)
         .put(`/admin/projects/${project.id}/issues/999`)
         .set('Authorization', `Bearer ${accessToken}`)
@@ -265,7 +265,7 @@ describe('IssueController (integration)', () => {
         .expect(400);
     });
 
-    it('should return 404 when getting non-existent issue', async () => {
+    it('should return 400 when getting non-existent issue', async () => {
       return request(app.getHttpServer() as Server)
         .get(`/admin/projects/${project.id}/issues/999`)
         .set('Authorization', `Bearer ${accessToken}`)

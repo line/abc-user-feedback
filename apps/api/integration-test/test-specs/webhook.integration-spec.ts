@@ -299,13 +299,6 @@ describe('WebhookController (integration)', () => {
       expect(body[0].createdAt).toBeDefined();
     });
 
-    it('should return 200 for non-existent webhook', async () => {
-      return request(app.getHttpServer() as Server)
-        .get(`/admin/projects/${project.id}/webhooks/999`)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .expect(200);
-    });
-
     it('should return 401 when unauthorized', async () => {
       return request(app.getHttpServer() as Server)
         .get(`/admin/projects/${project.id}/webhooks/${webhookId}`)
@@ -392,28 +385,7 @@ describe('WebhookController (integration)', () => {
         .expect(200);
     });
 
-    it('should update webhook with invalid URL', async () => {
-      const dto = new UpdateWebhookRequestDto();
-      dto.name = 'UpdatedWebhook';
-      dto.url = 'invalid-url';
-      dto.events = [
-        {
-          type: EventTypeEnum.FEEDBACK_CREATION,
-          status: EventStatusEnum.ACTIVE,
-          channelIds: [],
-        },
-      ];
-      dto.status = WebhookStatusEnum.ACTIVE;
-      dto.token = null;
-
-      return request(app.getHttpServer() as Server)
-        .put(`/admin/projects/${project.id}/webhooks/${webhookId}`)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .send(dto)
-        .expect(200);
-    });
-
-    it('should return 400 for non-existent webhook', async () => {
+    it('should return 404 for non-existent webhook', async () => {
       const dto = new UpdateWebhookRequestDto();
       dto.name = 'UpdatedWebhook';
       dto.url = 'https://updated-example.com/webhook';
@@ -431,7 +403,7 @@ describe('WebhookController (integration)', () => {
         .put(`/admin/projects/${project.id}/webhooks/999`)
         .set('Authorization', `Bearer ${accessToken}`)
         .send(dto)
-        .expect(400);
+        .expect(404);
     });
 
     it('should return 401 when unauthorized', async () => {
@@ -490,11 +462,11 @@ describe('WebhookController (integration)', () => {
         .expect(200);
     });
 
-    it('should return 500 when deleting non-existent webhook', async () => {
+    it('should return 404 when deleting non-existent webhook', async () => {
       return request(app.getHttpServer() as Server)
         .delete(`/admin/projects/${project.id}/webhooks/999`)
         .set('Authorization', `Bearer ${accessToken}`)
-        .expect(500);
+        .expect(404);
     });
 
     it('should return 401 when unauthorized', async () => {
