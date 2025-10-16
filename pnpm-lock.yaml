@@ -483,8 +483,8 @@ importers:
         specifier: ^7.28.4
         version: 7.28.4
       '@rollup/plugin-commonjs':
-        specifier: ^28.0.7
-        version: 28.0.7(rollup@4.34.8)
+        specifier: ^28.0.8
+        version: 28.0.8(rollup@4.34.8)
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.9.3)
@@ -4104,8 +4104,8 @@ packages:
     peerDependencies:
       react: '>=18.2.0'
 
-  '@rollup/plugin-commonjs@28.0.7':
-    resolution: {integrity: sha512-6cE2Wr/MkpdtTS8gXlCn9Zdmf7e9Xm96yFqOwFEXuvYLAHtjRf57/n6GEVF4K8NSesT1eKdBtcDA/SQdpW/8nA==}
+  '@rollup/plugin-commonjs@28.0.8':
+    resolution: {integrity: sha512-o1Ug9PxYsF61R7/NXO/GgMZZproLd/WH2XA53Tp9ppf6bU1lMlTtC/gUM6zM3mesi2E0rypk+PNtVrELREyWEQ==}
     engines: {node: '>=16.0.0 || 14 >= 14.17'}
     peerDependencies:
       rollup: ^2.68.0||^3.0.0||^4.0.0
@@ -14846,7 +14846,7 @@ snapshots:
     dependencies:
       react: 19.2.0
 
-  '@rollup/plugin-commonjs@28.0.7(rollup@4.34.8)':
+  '@rollup/plugin-commonjs@28.0.8(rollup@4.34.8)':
     dependencies:
       '@rollup/pluginutils': 5.1.4(rollup@4.34.8)
       commondir: 1.0.1
