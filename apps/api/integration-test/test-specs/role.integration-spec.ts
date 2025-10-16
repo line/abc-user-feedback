@@ -172,7 +172,6 @@ describe('RoleController (integration)', () => {
 
   describe('/admin/projects/:projectId/roles (GET)', () => {
     beforeEach(async () => {
-      // 테스트용 역할 생성
       const dto = new CreateRoleRequestDto();
       dto.name = 'TestRoleForList';
       dto.permissions = [PermissionEnum.feedback_download_read];
@@ -329,7 +328,6 @@ describe('RoleController (integration)', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
-      // 삭제된 Role이 목록에 없는지 확인
       const response = await request(app.getHttpServer() as Server)
         .get(`/admin/projects/${project.id}/roles`)
         .set('Authorization', `Bearer ${accessToken}`)

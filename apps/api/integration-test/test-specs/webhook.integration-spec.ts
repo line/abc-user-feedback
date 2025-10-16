@@ -208,7 +208,6 @@ describe('WebhookController (integration)', () => {
 
   describe('/admin/projects/:projectId/webhooks (GET)', () => {
     beforeEach(async () => {
-      // 테스트용 웹훅 생성
       const dto = new CreateWebhookRequestDto();
       dto.name = 'TestWebhookForList';
       dto.url = 'https://example.com/webhook';
