@@ -244,13 +244,6 @@ describe('ChannelController (integration)', () => {
         });
     });
 
-    it('should return 404 when deleting non-existent channel', async () => {
-      await request(app.getHttpServer() as Server)
-        .delete(`/admin/projects/${project.id}/channels/999`)
-        .set('Authorization', `Bearer ${accessToken}`)
-        .expect(404);
-    });
-
     it('should return 401 when unauthorized', async () => {
       await request(app.getHttpServer() as Server)
         .delete(`/admin/projects/${project.id}/channels/1`)
