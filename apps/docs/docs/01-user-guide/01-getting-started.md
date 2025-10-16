@@ -264,17 +264,6 @@ API 요청이 성공하면 다음과 같은 응답을 받습니다:
 
 기본 설정과 첫 피드백 수집이 완료되었습니다!
 
-### 지원 요청
-
-문제가 지속되는 경우:
-
-- 브라우저 개발자 도구에서 에러 로그 확인
-- 시스템 로그 검토
-- [GitHub Issues](https://github.com/line/abc-user-feedback/issues)에 문의
-- [GitHub Discussions](https://github.com/line/abc-user-feedback/discussions)에서 커뮤니티 도움 요청
-
----
-
 ## 관련 문서
 
 - [프로젝트 관리](./02-project-management.md) - 프로젝트 설정 및 팀 관리

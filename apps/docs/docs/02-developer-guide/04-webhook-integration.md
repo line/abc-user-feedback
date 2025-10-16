@@ -1,7 +1,7 @@
 ---
 sidebar_position: 4
-title: "웹훅 연동"
-description: "웹훅을 활용하여 외부 시스템과 실시간 연동하는 방법과 구현 예시를 안내합니다."
+title: '웹훅 연동'
+description: '웹훅을 활용하여 외부 시스템과 실시간 연동하는 방법과 구현 예시를 안내합니다.'
 ---
 
 # 웹훅 연동
@@ -184,41 +184,41 @@ x-webhook-token: your-secret-token
 ### 구현 예시 (Node.js/Express)
 
 ```javascript
-const express = require("express");
+const express = require('express');
 const app = express();
 
 app.use(express.json());
 
-app.post("/webhook", (req, res) => {
+app.post('/webhook', (req, res) => {
   const { event, data } = req.body;
-  const token = req.headers["x-webhook-token"];
+  const token = req.headers['x-webhook-token'];
 
   // 토큰 검증
-  if (token !== "your-secret-token") {
-    return res.status(401).json({ error: "Unauthorized" });
+  if (token !== 'your-secret-token') {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
   // 이벤트 처리
   switch (event) {
-    case "FEEDBACK_CREATION":
-      console.log("새 피드백 생성:", data.feedback);
+    case 'FEEDBACK_CREATION':
+      console.log('새 피드백 생성:', data.feedback);
       // 피드백 처리 로직
       break;
-    case "ISSUE_CREATION":
-      console.log("새 이슈 생성:", data.issue);
+    case 'ISSUE_CREATION':
+      console.log('새 이슈 생성:', data.issue);
       // 이슈 처리 로직
       break;
-    case "ISSUE_STATUS_CHANGE":
+    case 'ISSUE_STATUS_CHANGE':
       console.log(
-        "이슈 상태 변경:",
+        '이슈 상태 변경:',
         data.issue,
-        "이전 상태:",
-        data.previousStatus
+        '이전 상태:',
+        data.previousStatus,
       );
       // 상태 변경 처리 로직
       break;
-    case "ISSUE_ADDITION":
-      console.log("이슈 추가:", data.addedIssue);
+    case 'ISSUE_ADDITION':
+      console.log('이슈 추가:', data.addedIssue);
       // 이슈 추가 처리 로직
       break;
   }
@@ -227,7 +227,7 @@ app.post("/webhook", (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log("웹훅 리스너 서버가 포트 3000에서 실행 중입니다.");
+  console.log('웹훅 리스너 서버가 포트 3000에서 실행 중입니다.');
 });
 ```
 
@@ -259,7 +259,7 @@ app.listen(3000, () => {
 
 ```javascript
 // FEEDBACK_CREATION 이벤트를 받아서 자동 번역
-if (event === "FEEDBACK_CREATION") {
+if (event === 'FEEDBACK_CREATION') {
   const translatedMessage = await translateText(data.feedback.message);
   // 번역된 내용을 피드백에 업데이트
   await updateFeedback(data.feedback.id, { translatedMessage });
@@ -270,11 +270,11 @@ if (event === "FEEDBACK_CREATION") {
 
 ```javascript
 // ISSUE_CREATION 이벤트를 받아서 외부 시스템에 티켓 생성
-if (event === "ISSUE_CREATION") {
+if (event === 'ISSUE_CREATION') {
   const ticketId = await createExternalTicket({
     title: data.issue.name,
     description: data.issue.description,
-    priority: "medium",
+    priority: 'medium',
   });
   // 외부 티켓 ID를 이슈에 저장
   await updateIssue(data.issue.id, { externalIssueId: ticketId });
@@ -285,39 +285,13 @@ if (event === "ISSUE_CREATION") {
 
 ```javascript
 // ISSUE_STATUS_CHANGE 이벤트를 받아서 팀에 알림
-if (event === "ISSUE_STATUS_CHANGE") {
+if (event === 'ISSUE_STATUS_CHANGE') {
   await sendSlackNotification({
-    channel: "#feedback-alerts",
+    channel: '#feedback-alerts',
     message: `이슈 "${data.issue.name}"의 상태가 ${data.previousStatus}에서 ${data.issue.status}로 변경되었습니다.`,
   });
 }
 ```
-
----
-
-## 문제 해결 체크리스트
-
-### Webhook이 호출되지 않는 경우
-
-- [ ] Webhook URL이 올바르게 설정되어 있는지 확인
-- [ ] URL이 HTTPS로 시작하는지 확인
-- [ ] 서버가 실행 중이고 해당 포트가 열려있는지 확인
-- [ ] 방화벽이 인바운드 연결을 차단하지 않는지 확인
-- [ ] ABC User Feedback에서 이벤트 타입이 올바르게 선택되어 있는지 확인
-
-### Webhook은 호출되지만 처리되지 않는 경우
-
-- [ ] 서버 로그에서 에러 메시지 확인
-- [ ] 요청 본문의 JSON 형식이 올바른지 확인
-- [ ] Content-Type 헤더가 `application/json`인지 확인
-- [ ] 토큰 검증 로직이 올바른지 확인
-
-### 외부 서비스 연동 실패
-
-- [ ] API 키나 토큰이 유효한지 확인
-- [ ] 외부 서비스의 API 한도에 도달하지 않았는지 확인
-- [ ] 네트워크 연결 및 DNS 해석 상태 확인
-- [ ] 재시도 로직이 올바르게 구현되어 있는지 확인
 
 ---
 
