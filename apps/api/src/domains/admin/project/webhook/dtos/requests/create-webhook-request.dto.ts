@@ -38,6 +38,7 @@ export class CreateWebhookRequestDto {
 
   @ApiProperty({ type: [EventDto] })
   @IsArray()
+  @IsNotEmpty()
   events: EventDto[];
 
   @ApiProperty({ nullable: true, type: String })
