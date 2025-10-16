@@ -1,6 +1,7 @@
 import { test as teardown } from '@playwright/test';
 
 import { createConnection } from './database-utils';
+import { cleanupOpenSearchAfterTest } from './opensearch-utils';
 
 export async function globalTeardown() {
   const connection = await createConnection();
@@ -27,6 +28,13 @@ export async function globalTeardown() {
 teardown('teardown', async () => {
   try {
     await globalTeardown();
+
+    try {
+      await cleanupOpenSearchAfterTest();
+    } catch (error) {
+      console.warn('OpenSearch cleanup failed:', error);
+    }
+
     console.log('Tearing down succeeds.');
   } catch (e) {
     console.log('Tearing down fails.', e);
