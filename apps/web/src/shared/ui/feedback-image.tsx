@@ -32,12 +32,6 @@ const FeedbackImage = ({ url, onClick }: Props) => {
   const { data: channelData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
-    queryOptions: {
-      enabled:
-        router.isReady &&
-        Number.isFinite(projectId) &&
-        Number.isFinite(channelId),
-    },
   });
 
   const imageKey = useMemo(() => {
