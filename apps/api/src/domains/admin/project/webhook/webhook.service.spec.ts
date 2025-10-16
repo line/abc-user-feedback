@@ -381,4 +381,305 @@ describe('webhook service', () => {
       });
     });
   });
+
+  describe('findById', () => {
+    it('should return webhook with events and channels when webhook exists', async () => {
+      const webhookId = webhookFixture.id;
+      jest.spyOn(webhookRepo, 'find').mockResolvedValue([webhookFixture]);
+
+      const result = await webhookService.findById(webhookId);
+
+      expect(result).toEqual([webhookFixture]);
+      expect(webhookRepo.find).toHaveBeenCalledWith({
+        where: { id: webhookId },
+        relations: { events: { channels: true } },
+      });
+    });
+
+    it('should return empty array when webhook does not exist', async () => {
+      const webhookId = faker.number.int();
+      jest.spyOn(webhookRepo, 'find').mockResolvedValue([]);
+
+      const result = await webhookService.findById(webhookId);
+
+      expect(result).toEqual([]);
+      expect(webhookRepo.find).toHaveBeenCalledWith({
+        where: { id: webhookId },
+        relations: { events: { channels: true } },
+      });
+    });
+  });
+
+  describe('findByProjectId', () => {
+    it('should return webhooks for given project when webhooks exist', async () => {
+      const projectId = webhookFixture.project.id;
+      const webhooks = [webhookFixture];
+      jest.spyOn(webhookRepo, 'find').mockResolvedValue(webhooks);
+
+      const result = await webhookService.findByProjectId(projectId);
+
+      expect(result).toEqual(webhooks);
+      expect(webhookRepo.find).toHaveBeenCalledWith({
+        where: { project: { id: projectId } },
+        relations: { events: { channels: true } },
+      });
+    });
+
+    it('should return empty array when no webhooks exist for project', async () => {
+      const projectId = faker.number.int();
+      jest.spyOn(webhookRepo, 'find').mockResolvedValue([]);
+
+      const result = await webhookService.findByProjectId(projectId);
+
+      expect(result).toEqual([]);
+      expect(webhookRepo.find).toHaveBeenCalledWith({
+        where: { project: { id: projectId } },
+        relations: { events: { channels: true } },
+      });
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete webhook when webhook exists', async () => {
+      const webhookId = webhookFixture.id;
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValue(webhookFixture);
+      jest.spyOn(webhookRepo, 'remove').mockResolvedValue(webhookFixture);
+
+      await webhookService.delete(webhookId);
+
+      expect(webhookRepo.findOne).toHaveBeenCalledWith({
+        where: { id: webhookId },
+      });
+      expect(webhookRepo.remove).toHaveBeenCalledWith(webhookFixture);
+    });
+
+    it('should delete webhook even when webhook does not exist', async () => {
+      const webhookId = faker.number.int();
+      const emptyWebhook = new WebhookEntity();
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValue(null);
+      jest.spyOn(webhookRepo, 'remove').mockResolvedValue(emptyWebhook);
+
+      await webhookService.delete(webhookId);
+
+      expect(webhookRepo.findOne).toHaveBeenCalledWith({
+        where: { id: webhookId },
+      });
+      expect(webhookRepo.remove).toHaveBeenCalledWith(emptyWebhook);
+    });
+  });
+
+  describe('validateEvent', () => {
+    describe('events requiring channel IDs', () => {
+      it('should return true when FEEDBACK_CREATION has valid channel IDs', async () => {
+        const channelIds = [faker.number.int(), faker.number.int()];
+        jest
+          .spyOn(channelRepo, 'findBy')
+          .mockResolvedValue(
+            channelIds.map((id) => ({ id })) as ChannelEntity[],
+          );
+
+        const result = await webhookService.validateEvent({
+          status: EventStatusEnum.ACTIVE,
+          type: EventTypeEnum.FEEDBACK_CREATION,
+          channelIds,
+        });
+
+        expect(result).toBe(true);
+        expect(channelRepo.findBy).toHaveBeenCalledWith({
+          id: expect.objectContaining({ _type: 'in', _value: channelIds }),
+        });
+      });
+
+      it('should return false when FEEDBACK_CREATION has invalid channel IDs', async () => {
+        const channelIds = [faker.number.int(), faker.number.int()];
+        jest
+          .spyOn(channelRepo, 'findBy')
+          .mockResolvedValue([{ id: channelIds[0] }] as ChannelEntity[]);
+
+        const result = await webhookService.validateEvent({
+          status: EventStatusEnum.ACTIVE,
+          type: EventTypeEnum.FEEDBACK_CREATION,
+          channelIds,
+        });
+
+        expect(result).toBe(false);
+      });
+
+      it('should return true when ISSUE_ADDITION has valid channel IDs', async () => {
+        const channelIds = [faker.number.int()];
+        jest
+          .spyOn(channelRepo, 'findBy')
+          .mockResolvedValue(
+            channelIds.map((id) => ({ id })) as ChannelEntity[],
+          );
+
+        const result = await webhookService.validateEvent({
+          status: EventStatusEnum.ACTIVE,
+          type: EventTypeEnum.ISSUE_ADDITION,
+          channelIds,
+        });
+
+        expect(result).toBe(true);
+      });
+
+      it('should return false when ISSUE_ADDITION has invalid channel IDs', async () => {
+        const channelIds = [faker.number.int()];
+        jest.spyOn(channelRepo, 'findBy').mockResolvedValue([]);
+
+        const result = await webhookService.validateEvent({
+          status: EventStatusEnum.ACTIVE,
+          type: EventTypeEnum.ISSUE_ADDITION,
+          channelIds,
+        });
+
+        expect(result).toBe(false);
+      });
+    });
+
+    describe('events excluding channel IDs', () => {
+      it('should return true when ISSUE_CREATION has empty channel IDs', async () => {
+        const result = await webhookService.validateEvent({
+          status: EventStatusEnum.ACTIVE,
+          type: EventTypeEnum.ISSUE_CREATION,
+          channelIds: [],
+        });
+
+        expect(result).toBe(true);
+      });
+
+      it('should return false when ISSUE_CREATION has non-empty channel IDs', async () => {
+        const result = await webhookService.validateEvent({
+          status: EventStatusEnum.ACTIVE,
+          type: EventTypeEnum.ISSUE_CREATION,
+          channelIds: [faker.number.int()],
+        });
+
+        expect(result).toBe(false);
+      });
+
+      it('should return true when ISSUE_STATUS_CHANGE has empty channel IDs', async () => {
+        const result = await webhookService.validateEvent({
+          status: EventStatusEnum.ACTIVE,
+          type: EventTypeEnum.ISSUE_STATUS_CHANGE,
+          channelIds: [],
+        });
+
+        expect(result).toBe(true);
+      });
+
+      it('should return false when ISSUE_STATUS_CHANGE has non-empty channel IDs', async () => {
+        const result = await webhookService.validateEvent({
+          status: EventStatusEnum.ACTIVE,
+          type: EventTypeEnum.ISSUE_STATUS_CHANGE,
+          channelIds: [faker.number.int()],
+        });
+
+        expect(result).toBe(false);
+      });
+    });
+
+    it('should return false for unknown event type', async () => {
+      const result = await webhookService.validateEvent({
+        status: EventStatusEnum.ACTIVE,
+        type: 'UNKNOWN_EVENT_TYPE' as EventTypeEnum,
+        channelIds: [],
+      });
+
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('create - additional edge cases', () => {
+    it('should handle empty events array', async () => {
+      const dto: CreateWebhookDto = createCreateWebhookDto({
+        events: [],
+      });
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValue(null);
+
+      const webhook = await webhookService.create(dto);
+
+      expect(webhook.events).toEqual([]);
+    });
+
+    it('should handle null token', async () => {
+      const dto: CreateWebhookDto = createCreateWebhookDto({
+        token: null,
+      });
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValue(null);
+
+      const webhook = await webhookService.create(dto);
+
+      expect(webhook.token).toBeNull();
+    });
+
+    it('should handle undefined token', async () => {
+      const dto: CreateWebhookDto = {
+        projectId: webhookFixture.project.id,
+        name: faker.string.sample(),
+        url: faker.internet.url(),
+        token: undefined as any, // TypeScript 타입 체크를 우회하여 undefined 전달
+        status: WebhookStatusEnum.ACTIVE,
+        events: [
+          {
+            status: EventStatusEnum.ACTIVE,
+            type: EventTypeEnum.FEEDBACK_CREATION,
+            channelIds: [faker.number.int()],
+          },
+        ],
+      };
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValue(null);
+
+      const webhook = await webhookService.create(dto);
+
+      // undefined가 실제로 어떻게 처리되는지 확인
+      expect(webhook.token).toBeDefined();
+      expect(typeof webhook.token).toBe('string');
+    });
+  });
+
+  describe('update - additional edge cases', () => {
+    it('should handle updating non-existent webhook', async () => {
+      const dto: UpdateWebhookDto = createUpdateWebhookDto({
+        id: faker.number.int(),
+      });
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValueOnce(null);
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValueOnce(null);
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValueOnce(null);
+      jest.spyOn(webhookRepo, 'save').mockResolvedValue(webhookFixture);
+
+      const webhook = await webhookService.update(dto);
+
+      expect(webhook).toBeDefined();
+      expect(webhookRepo.save).toHaveBeenCalled();
+    });
+
+    it('should handle updating webhook with same name but different ID', async () => {
+      const dto: UpdateWebhookDto = createUpdateWebhookDto({
+        name: webhookFixture.name,
+        id: faker.number.int(),
+      });
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValueOnce(webhookFixture);
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValueOnce(null);
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValueOnce(null);
+      jest.spyOn(webhookRepo, 'save').mockResolvedValue(webhookFixture);
+
+      const webhook = await webhookService.update(dto);
+
+      expect(webhook).toBeDefined();
+    });
+
+    it('should handle updating webhook with null token', async () => {
+      const dto: UpdateWebhookDto = createUpdateWebhookDto({
+        token: null,
+      });
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValueOnce(webhookFixture);
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValueOnce(null);
+      jest.spyOn(webhookRepo, 'findOne').mockResolvedValueOnce(null);
+      jest.spyOn(webhookRepo, 'save').mockResolvedValue(webhookFixture);
+
+      const webhook = await webhookService.update(dto);
+
+      expect(webhook.token).toBeNull();
+    });
+  });
 });

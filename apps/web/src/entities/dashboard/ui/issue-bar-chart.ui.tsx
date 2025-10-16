@@ -19,10 +19,11 @@ import { useTranslation } from 'next-i18next';
 import { ToggleGroup, ToggleGroupItem } from '@ufb/react';
 
 import {
+  BarChart,
+  ChartCard,
   ISSUES,
   Path,
-  SimpleBarChart,
-  SimplePieChart,
+  PieChart,
   useOAIQuery,
 } from '@/shared';
 import type { IssueStatus } from '@/entities/issue';
@@ -44,7 +45,7 @@ const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const [type, setType] = useState('bar');
 
-  const { data } = useOAIQuery({
+  const { data: statisticsData } = useOAIQuery({
     path: '/api/admin/statistics/issue/count-by-status',
     variables: { projectId },
     queryOptions: {
@@ -57,82 +58,89 @@ const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
   const onChangeType = (type: 'bar' | 'pie') => (v: string) => {
     setType(v === '' ? type : v);
   };
+  const data = ISSUES(t).map(({ key, name }) => ({
+    name,
+    value: +(
+      statisticsData?.statistics.find((v) => v.status === key)?.count ?? 0
+    ),
+    color: COLOR_MAP[key],
+  }));
+  const onClickIssue = (name: string | undefined) => {
+    if (!name) return;
+    const issue = ISSUES(t).find((v) => v.name === name);
+    window.open(
+      Path.ISSUE.replace('[projectId]', projectId.toString()) +
+        '?queries=' +
+        JSON.stringify([{ key: 'status', value: issue?.key, condition: 'IS' }]),
+      '_blank',
+    );
+  };
 
   return (
-    <>
+    <ChartCard
+      title={t('chart.issue-status-count.title')}
+      description={t('chart.issue-status-count.description')}
+      extra={
+        <ToggleGroup
+          type="single"
+          value={type}
+          onValueChange={onChangeType('pie')}
+        >
+          <ToggleGroupItem value="bar">Bar</ToggleGroupItem>
+          <ToggleGroupItem value="pie">Pie</ToggleGroupItem>
+        </ToggleGroup>
+      }
+    >
       {type === 'pie' && (
-        <SimplePieChart
-          data={ISSUES(t).map(({ key, name }) => ({
-            name,
-            value: +(
-              data?.statistics.find((v) => v.status === key)?.count ?? 0
-            ),
-            color: COLOR_MAP[key],
-          }))}
-          title={t('chart.issue-status-count.title')}
-          description={t('chart.issue-status-count.description')}
-          height={415}
-          filterContent={
-            <ToggleGroup
-              type="single"
-              value={type}
-              onValueChange={onChangeType('pie')}
-            >
-              <ToggleGroupItem value="bar">Bar</ToggleGroupItem>
-              <ToggleGroupItem value="pie">Pie</ToggleGroupItem>
-            </ToggleGroup>
-          }
-          onClick={(data) => {
-            if (!data) return;
-            const issue = ISSUES(t).find((v) => v.name === data.name);
-            window.open(
-              Path.ISSUE.replace('[projectId]', projectId.toString()) +
-                '?queries=' +
-                JSON.stringify([
-                  { key: 'status', value: issue?.key, condition: 'IS' },
-                ]),
-              '_blank',
-            );
-          }}
-        />
+        <div className="flex items-center">
+          <PieChart data={data} onClick={onClickIssue} height={415} />
+          <IssueLegend data={data} />
+        </div>
       )}
       {type === 'bar' && (
-        <SimpleBarChart
-          data={ISSUES(t).map(({ key, name }) => ({
-            name,
-            value: +(
-              data?.statistics.find((v) => v.status === key)?.count ?? 0
-            ),
-            color: COLOR_MAP[key],
-          }))}
-          title={t('chart.issue-status-count.title')}
-          description={t('chart.issue-status-count.description')}
-          height={415}
-          filterContent={
-            <ToggleGroup
-              type="single"
-              value={type}
-              onValueChange={onChangeType('bar')}
-            >
-              <ToggleGroupItem value="bar">Bar</ToggleGroupItem>
-              <ToggleGroupItem value="pie">Pie</ToggleGroupItem>
-            </ToggleGroup>
-          }
-          onClick={(data) => {
-            if (!data) return;
-            const issue = ISSUES(t).find((v) => v.name === data.name);
-            window.open(
-              Path.ISSUE.replace('[projectId]', projectId.toString()) +
-                '?queries=' +
-                JSON.stringify([
-                  { key: 'status', value: issue?.key, condition: 'IS' },
-                ]),
-              '_blank',
-            );
-          }}
-        />
+        <BarChart data={data} height={415} onClick={onClickIssue} />
       )}
-    </>
+    </ChartCard>
+  );
+};
+interface IssueLegendProps {
+  data?: { name: string; value: number; color: string }[];
+}
+
+const IssueLegend: React.FC<IssueLegendProps> = ({ data }) => {
+  return (
+    <div className="w-full">
+      <table className="table">
+        <thead>
+          <tr>
+            <th className="table-head !text-large-strong text-neutral-primary h-auto">
+              Status
+            </th>
+            <th className="table-head !text-large-strong text-neutral-primary h-auto">
+              Issue Count
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {data?.map((item, index) => (
+            <tr key={`item-${index}`}>
+              <td className="!text-large-normal text-neutral-primary table-cell py-2">
+                <div className="flex items-center gap-2">
+                  <span
+                    className="h-2 w-2 flex-shrink-0 rounded-full"
+                    style={{ backgroundColor: item.color }}
+                  />
+                  <span>{item.name}</span>
+                </div>
+              </td>
+              <td className="!text-large-normal text-neutral-primary table-cell py-2">
+                {item.value}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

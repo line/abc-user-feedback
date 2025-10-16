@@ -14,12 +14,15 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
 
 import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { ApiKeyController } from './api-key.controller';
 import { ApiKeyService } from './api-key.service';
+import { CreateApiKeyResponseDto } from './dtos/responses/create-api-key-response.dto';
+import { FindApiKeysResponseDto } from './dtos/responses/find-api-keys-response.dto';
 
 const MockApiKeyService = {
   create: jest.fn(),
@@ -45,63 +48,324 @@ describe('ApiKeyController', () => {
     apiKeyController = module.get(ApiKeyController);
   });
 
-  describe('create ', () => {
-    it('creating succeeds without an api key', async () => {
-      jest.spyOn(MockApiKeyService, 'create');
-      const projectId = faker.number.int();
+  describe('create', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
 
-      await apiKeyController.create(projectId, {});
+    it('should create API key successfully without providing value', async () => {
+      const projectId = faker.number.int();
+      const mockApiKey = {
+        id: faker.number.int(),
+        value: faker.string.alphanumeric(20),
+        createdAt: faker.date.recent(),
+      };
+
+      MockApiKeyService.create.mockResolvedValue(mockApiKey);
+
+      const result = await apiKeyController.create(projectId, {});
 
       expect(MockApiKeyService.create).toHaveBeenCalledTimes(1);
+      expect(MockApiKeyService.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          projectId,
+          value: undefined,
+        }),
+      );
+      expect(result).toBeInstanceOf(CreateApiKeyResponseDto);
+      expect(result.id).toBe(mockApiKey.id);
+      expect(result.value).toBe(mockApiKey.value);
+      expect(result.createdAt).toStrictEqual(mockApiKey.createdAt);
     });
-    it('creating succeeds with an api key', async () => {
-      jest.spyOn(MockApiKeyService, 'create');
+
+    it('should create API key successfully with provided value', async () => {
+      const projectId = faker.number.int();
+      const value = faker.string.alphanumeric(20);
+      const mockApiKey = {
+        id: faker.number.int(),
+        value,
+        createdAt: faker.date.recent(),
+      };
+
+      MockApiKeyService.create.mockResolvedValue(mockApiKey);
+
+      const result = await apiKeyController.create(projectId, { value });
+
+      expect(MockApiKeyService.create).toHaveBeenCalledTimes(1);
+      expect(MockApiKeyService.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          projectId,
+          value,
+        }),
+      );
+      expect(result).toBeInstanceOf(CreateApiKeyResponseDto);
+      expect(result.id).toBe(mockApiKey.id);
+      expect(result.value).toBe(mockApiKey.value);
+      expect(result.createdAt).toStrictEqual(mockApiKey.createdAt);
+    });
+
+    it('should throw BadRequestException when API key value is invalid length', async () => {
+      const projectId = faker.number.int();
+      const value = faker.string.alphanumeric(15); // Invalid length
+      const errorMessage = 'Invalid Api Key value';
+
+      MockApiKeyService.create.mockRejectedValue(
+        new BadRequestException(errorMessage),
+      );
+
+      await expect(
+        apiKeyController.create(projectId, { value }),
+      ).rejects.toThrow(BadRequestException);
+      expect(MockApiKeyService.create).toHaveBeenCalledTimes(1);
+    });
+
+    it('should throw BadRequestException when API key already exists', async () => {
+      const projectId = faker.number.int();
+      const value = faker.string.alphanumeric(20);
+      const errorMessage = 'Api Key already exists';
+
+      MockApiKeyService.create.mockRejectedValue(
+        new BadRequestException(errorMessage),
+      );
+
+      await expect(
+        apiKeyController.create(projectId, { value }),
+      ).rejects.toThrow(BadRequestException);
+      expect(MockApiKeyService.create).toHaveBeenCalledTimes(1);
+    });
+
+    it('should throw NotFoundException when project does not exist', async () => {
       const projectId = faker.number.int();
       const value = faker.string.alphanumeric(20);
 
-      await apiKeyController.create(projectId, { value });
+      MockApiKeyService.create.mockRejectedValue(
+        new NotFoundException('Project not found'),
+      );
 
+      await expect(
+        apiKeyController.create(projectId, { value }),
+      ).rejects.toThrow(NotFoundException);
+      expect(MockApiKeyService.create).toHaveBeenCalledTimes(1);
+    });
+
+    it('should propagate other exceptions from service', async () => {
+      const projectId = faker.number.int();
+      const error = new Error('Database connection failed');
+
+      MockApiKeyService.create.mockRejectedValue(error);
+
+      await expect(apiKeyController.create(projectId, {})).rejects.toThrow(
+        error,
+      );
       expect(MockApiKeyService.create).toHaveBeenCalledTimes(1);
     });
   });
   describe('findAll', () => {
-    it('', async () => {
-      jest.spyOn(MockApiKeyService, 'findAllByProjectId');
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should return all API keys for a project successfully', async () => {
+      const projectId = faker.number.int();
+      const mockApiKeys = [
+        {
+          id: faker.number.int(),
+          value: faker.string.alphanumeric(20),
+          createdAt: faker.date.recent(),
+          deletedAt: null,
+        },
+        {
+          id: faker.number.int(),
+          value: faker.string.alphanumeric(20),
+          createdAt: faker.date.recent(),
+          deletedAt: faker.date.recent(),
+        },
+      ];
+
+      MockApiKeyService.findAllByProjectId.mockResolvedValue(mockApiKeys);
+
+      const result = await apiKeyController.findAll(projectId);
+
+      expect(MockApiKeyService.findAllByProjectId).toHaveBeenCalledTimes(1);
+      expect(MockApiKeyService.findAllByProjectId).toHaveBeenCalledWith(
+        projectId,
+      );
+      expect(result).toBeInstanceOf(FindApiKeysResponseDto);
+      expect(result.items).toHaveLength(2);
+      expect(result.items[0].id).toBe(mockApiKeys[0].id);
+      expect(result.items[0].value).toBe(mockApiKeys[0].value);
+      expect(result.items[1].id).toBe(mockApiKeys[1].id);
+      expect(result.items[1].value).toBe(mockApiKeys[1].value);
+    });
+
+    it('should return empty array when no API keys exist for project', async () => {
       const projectId = faker.number.int();
 
-      await apiKeyController.findAll(projectId);
+      MockApiKeyService.findAllByProjectId.mockResolvedValue([]);
 
+      const result = await apiKeyController.findAll(projectId);
+
+      expect(MockApiKeyService.findAllByProjectId).toHaveBeenCalledTimes(1);
+      expect(MockApiKeyService.findAllByProjectId).toHaveBeenCalledWith(
+        projectId,
+      );
+      expect(result).toBeInstanceOf(FindApiKeysResponseDto);
+      expect(result.items).toHaveLength(0);
+    });
+
+    it('should propagate exceptions from service', async () => {
+      const projectId = faker.number.int();
+      const error = new Error('Database connection failed');
+
+      MockApiKeyService.findAllByProjectId.mockRejectedValue(error);
+
+      await expect(apiKeyController.findAll(projectId)).rejects.toThrow(error);
       expect(MockApiKeyService.findAllByProjectId).toHaveBeenCalledTimes(1);
     });
   });
   describe('softDelete', () => {
-    it('', async () => {
-      jest.spyOn(MockApiKeyService, 'softDeleteById');
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should soft delete API key successfully', async () => {
       const apiKeyId = faker.number.int();
+
+      MockApiKeyService.softDeleteById.mockResolvedValue(undefined);
 
       await apiKeyController.softDelete(apiKeyId);
 
       expect(MockApiKeyService.softDeleteById).toHaveBeenCalledTimes(1);
+      expect(MockApiKeyService.softDeleteById).toHaveBeenCalledWith(apiKeyId);
+    });
+
+    it('should propagate exceptions from service', async () => {
+      const apiKeyId = faker.number.int();
+      const error = new Error('Database connection failed');
+
+      MockApiKeyService.softDeleteById.mockRejectedValue(error);
+
+      await expect(apiKeyController.softDelete(apiKeyId)).rejects.toThrow(
+        error,
+      );
+      expect(MockApiKeyService.softDeleteById).toHaveBeenCalledTimes(1);
     });
   });
+
   describe('recover', () => {
-    it('', async () => {
-      jest.spyOn(MockApiKeyService, 'recoverById');
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should recover soft deleted API key successfully', async () => {
       const apiKeyId = faker.number.int();
+
+      MockApiKeyService.recoverById.mockResolvedValue(undefined);
 
       await apiKeyController.recover(apiKeyId);
 
       expect(MockApiKeyService.recoverById).toHaveBeenCalledTimes(1);
+      expect(MockApiKeyService.recoverById).toHaveBeenCalledWith(apiKeyId);
+    });
+
+    it('should propagate exceptions from service', async () => {
+      const apiKeyId = faker.number.int();
+      const error = new Error('Database connection failed');
+
+      MockApiKeyService.recoverById.mockRejectedValue(error);
+
+      await expect(apiKeyController.recover(apiKeyId)).rejects.toThrow(error);
+      expect(MockApiKeyService.recoverById).toHaveBeenCalledTimes(1);
     });
   });
+
   describe('delete', () => {
-    it('', async () => {
-      jest.spyOn(MockApiKeyService, 'deleteById');
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should permanently delete API key successfully', async () => {
       const apiKeyId = faker.number.int();
+
+      MockApiKeyService.deleteById.mockResolvedValue(undefined);
 
       await apiKeyController.delete(apiKeyId);
 
       expect(MockApiKeyService.deleteById).toHaveBeenCalledTimes(1);
+      expect(MockApiKeyService.deleteById).toHaveBeenCalledWith(apiKeyId);
+    });
+
+    it('should propagate exceptions from service', async () => {
+      const apiKeyId = faker.number.int();
+      const error = new Error('Database connection failed');
+
+      MockApiKeyService.deleteById.mockRejectedValue(error);
+
+      await expect(apiKeyController.delete(apiKeyId)).rejects.toThrow(error);
+      expect(MockApiKeyService.deleteById).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Integration Tests', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('should handle complete API key lifecycle', async () => {
+      const projectId = faker.number.int();
+      const apiKeyId = faker.number.int();
+      const mockApiKey = {
+        id: apiKeyId,
+        value: faker.string.alphanumeric(20),
+        createdAt: faker.date.recent(),
+      };
+
+      // Create API key
+      MockApiKeyService.create.mockResolvedValue(mockApiKey);
+      const createResult = await apiKeyController.create(projectId, {});
+      expect(createResult.id).toBe(apiKeyId);
+
+      // Find all API keys
+      MockApiKeyService.findAllByProjectId.mockResolvedValue([mockApiKey]);
+      const findAllResult = await apiKeyController.findAll(projectId);
+      expect(findAllResult.items).toHaveLength(1);
+
+      // Soft delete API key
+      MockApiKeyService.softDeleteById.mockResolvedValue(undefined);
+      await apiKeyController.softDelete(apiKeyId);
+      expect(MockApiKeyService.softDeleteById).toHaveBeenCalledWith(apiKeyId);
+
+      // Recover API key
+      MockApiKeyService.recoverById.mockResolvedValue(undefined);
+      await apiKeyController.recover(apiKeyId);
+      expect(MockApiKeyService.recoverById).toHaveBeenCalledWith(apiKeyId);
+
+      // Permanently delete API key
+      MockApiKeyService.deleteById.mockResolvedValue(undefined);
+      await apiKeyController.delete(apiKeyId);
+      expect(MockApiKeyService.deleteById).toHaveBeenCalledWith(apiKeyId);
+    });
+
+    it('should handle concurrent operations gracefully', async () => {
+      const projectId = faker.number.int();
+      const apiKeyId = faker.number.int();
+
+      // Simulate concurrent operations
+      const operations = [
+        apiKeyController.findAll(projectId),
+        apiKeyController.softDelete(apiKeyId),
+        apiKeyController.recover(apiKeyId),
+      ];
+
+      MockApiKeyService.findAllByProjectId.mockResolvedValue([]);
+      MockApiKeyService.softDeleteById.mockResolvedValue(undefined);
+      MockApiKeyService.recoverById.mockResolvedValue(undefined);
+
+      await Promise.all(operations);
+
+      expect(MockApiKeyService.findAllByProjectId).toHaveBeenCalledTimes(1);
+      expect(MockApiKeyService.softDeleteById).toHaveBeenCalledTimes(1);
+      expect(MockApiKeyService.recoverById).toHaveBeenCalledTimes(1);
     });
   });
 });

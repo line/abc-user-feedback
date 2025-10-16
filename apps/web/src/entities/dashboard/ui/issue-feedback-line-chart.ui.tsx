@@ -32,11 +32,13 @@ import {
 } from '@ufb/react';
 
 import {
+  ChartCard,
   client,
   commandFilter,
   getDayCount,
   InfiniteScrollArea,
-  SimpleLineChart,
+  Legend,
+  LineChart,
   useOAIQuery,
 } from '@/shared';
 import type { Issue } from '@/entities/issue';
@@ -130,77 +132,79 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   };
 
   return (
-    <SimpleLineChart
+    <ChartCard
       title={t('chart.issue-comparison.title')}
       description={`${t('chart.issue-comparison.description')} (${dayjs(
         from,
       ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
-      height={400}
-      dataKeys={dataKeys}
-      data={chartData}
-      showLegend
-      filterContent={
-        <Combobox>
-          <ComboboxTrigger>
-            <Icon name="RiFilter3Line" />
-            Filter
-          </ComboboxTrigger>
-          <ComboboxContent options={{ filter: commandFilter }}>
-            <ComboboxInput
-              onValueChange={(value) => setSearchName(value)}
-              value={searchName}
-            />
-            <ComboboxList maxHeight="200px">
-              <ComboboxEmpty>No results found.</ComboboxEmpty>
-              <ComboboxGroup
-                heading={
-                  <span className="text-neutral-tertiary text-base-normal">
-                    Selected Issue
-                  </span>
-                }
-              >
-                {currentIssues.map((issue) => (
-                  <ComboboxItem
-                    key={issue.id}
-                    onSelect={() => handleIssueUncheck(issue)}
-                  >
-                    <IssueBadge name={issue.name} status={issue.status} />
-                  </ComboboxItem>
-                ))}
-              </ComboboxGroup>
-              {allIssues.length > 0 && (
+      extra={
+        <div className="flex gap-3">
+          <Legend dataKeys={dataKeys} />
+          <Combobox>
+            <ComboboxTrigger>
+              <Icon name="RiFilter3Line" />
+              Filter
+            </ComboboxTrigger>
+            <ComboboxContent options={{ filter: commandFilter }}>
+              <ComboboxInput
+                onValueChange={(value) => setSearchName(value)}
+                value={searchName}
+              />
+              <ComboboxList maxHeight="200px">
+                <ComboboxEmpty>No results found.</ComboboxEmpty>
                 <ComboboxGroup
                   heading={
                     <span className="text-neutral-tertiary text-base-normal">
-                      Issue List
+                      Selected Issue
                     </span>
                   }
                 >
-                  {allIssues
-                    .filter(
-                      (v) => !currentIssues.some((issue) => issue.id === v.id),
-                    )
-                    .map((issue) => (
-                      <ComboboxItem
-                        key={issue.id}
-                        value={issue.name}
-                        onSelect={() => handleIssueCheck(issue)}
-                      >
-                        <IssueBadge name={issue.name} status={issue.status} />
-                      </ComboboxItem>
-                    ))}
-                  <InfiniteScrollArea
-                    fetchNextPage={fetchNextPage}
-                    hasNextPage={hasNextPage}
-                    isFetchingNextPage={isFetchingNextPage}
-                  />
+                  {currentIssues.map((issue) => (
+                    <ComboboxItem
+                      key={issue.id}
+                      onSelect={() => handleIssueUncheck(issue)}
+                    >
+                      <IssueBadge name={issue.name} status={issue.status} />
+                    </ComboboxItem>
+                  ))}
                 </ComboboxGroup>
-              )}
-            </ComboboxList>
-          </ComboboxContent>
-        </Combobox>
+                {allIssues.length > 0 && (
+                  <ComboboxGroup
+                    heading={
+                      <span className="text-neutral-tertiary text-base-normal">
+                        Issue List
+                      </span>
+                    }
+                  >
+                    {allIssues
+                      .filter(
+                        (v) =>
+                          !currentIssues.some((issue) => issue.id === v.id),
+                      )
+                      .map((issue) => (
+                        <ComboboxItem
+                          key={issue.id}
+                          value={issue.name}
+                          onSelect={() => handleIssueCheck(issue)}
+                        >
+                          <IssueBadge name={issue.name} status={issue.status} />
+                        </ComboboxItem>
+                      ))}
+                    <InfiniteScrollArea
+                      fetchNextPage={fetchNextPage}
+                      hasNextPage={hasNextPage}
+                      isFetchingNextPage={isFetchingNextPage}
+                    />
+                  </ComboboxGroup>
+                )}
+              </ComboboxList>
+            </ComboboxContent>
+          </Combobox>
+        </div>
       }
-    />
+    >
+      <LineChart height={400} dataKeys={dataKeys} data={chartData} />
+    </ChartCard>
   );
 };
 

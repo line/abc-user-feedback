@@ -23,6 +23,7 @@ import type { TenantRepositoryStub } from '@/test-utils/stubs';
 import { TestConfig } from '@/test-utils/util-functions';
 import { CreateUserServiceProviders } from '../../../test-utils/providers/create-user.service.providers';
 import { MemberEntity } from '../project/member/member.entity';
+import { MemberService } from '../project/member/member.service';
 import { TenantEntity } from '../tenant/tenant.entity';
 import { CreateUserService } from './create-user.service';
 import type { CreateEmailUserDto, CreateInvitationUserDto } from './dtos';
@@ -33,6 +34,7 @@ import {
   NotAllowedDomainException,
   UserAlreadyExistsException,
 } from './exceptions';
+import { UserPasswordService } from './user-password.service';
 
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
@@ -40,6 +42,8 @@ describe('CreateUserService', () => {
   let userRepo: Repository<UserEntity>;
   let tenantRepo: TenantRepositoryStub;
   let memberRepo: Repository<MemberEntity>;
+  let memberService: MemberService;
+  let userPasswordService: UserPasswordService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -52,6 +56,8 @@ describe('CreateUserService', () => {
     userRepo = module.get(getRepositoryToken(UserEntity));
     tenantRepo = module.get(getRepositoryToken(TenantEntity));
     memberRepo = module.get(getRepositoryToken(MemberEntity));
+    memberService = module.get(MemberService);
+    userPasswordService = module.get(UserPasswordService);
   });
 
   describe('createOAuthUser', () => {
@@ -67,10 +73,15 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe('OAUTH');
     });
-    it('createing a user with OAuth fails with an invalid email', async () => {
+    it('creating a user with OAuth fails when user already exists', async () => {
       const dto: CreateOAuthUserDto = {
         email: faker.internet.email(),
       };
+      const existingUser = {
+        id: faker.number.int(),
+        email: dto.email,
+      } as UserEntity;
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(existingUser);
 
       await expect(createUserService.createOAuthUser(dto)).rejects.toThrow(
         UserAlreadyExistsException,
@@ -182,6 +193,92 @@ describe('CreateUserService', () => {
       expect(user.type).toBe(UserTypeEnum.SUPER);
       expect(memberRepo.save).toHaveBeenCalledTimes(1);
     });
+
+    it('creating a user by invitation fails when user already exists', async () => {
+      const dto: CreateInvitationUserDto = {
+        email: faker.internet.email().split('@')[0] + '@linecorp.com',
+        password: faker.internet.password(),
+        type: UserTypeEnum.GENERAL,
+      };
+      const existingUser = {
+        id: faker.number.int(),
+        email: dto.email,
+      } as UserEntity;
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(existingUser);
+
+      await expect(createUserService.createInvitationUser(dto)).rejects.toThrow(
+        UserAlreadyExistsException,
+      );
+    });
+
+    it('creating a user by invitation succeeds when allowDomains is empty', async () => {
+      tenantRepo.setAllowDomains([]);
+      const dto: CreateInvitationUserDto = {
+        email: faker.internet.email().split('@')[0] + '@anydomain.com',
+        password: faker.internet.password(),
+        type: UserTypeEnum.GENERAL,
+      };
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+
+      const user = await createUserService.createInvitationUser(dto);
+
+      expect(user.id).toBeDefined();
+      expect(user.email).toBe(dto.email);
+      expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
+      expect(user.type).toBe(UserTypeEnum.GENERAL);
+    });
+
+    it('creating a user by invitation succeeds when allowDomains is null', async () => {
+      tenantRepo.setAllowDomains(undefined);
+      const dto: CreateInvitationUserDto = {
+        email: faker.internet.email().split('@')[0] + '@anydomain.com',
+        password: faker.internet.password(),
+        type: UserTypeEnum.GENERAL,
+      };
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+
+      const user = await createUserService.createInvitationUser(dto);
+
+      expect(user.id).toBeDefined();
+      expect(user.email).toBe(dto.email);
+      expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
+      expect(user.type).toBe(UserTypeEnum.GENERAL);
+    });
+
+    it('creating a user by invitation fails when memberService.create throws error', async () => {
+      const roleId = faker.number.int();
+      const dto: CreateInvitationUserDto = {
+        email: faker.internet.email().split('@')[0] + '@linecorp.com',
+        password: faker.internet.password(),
+        type: UserTypeEnum.GENERAL,
+        roleId,
+      };
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
+      jest
+        .spyOn(memberService, 'create')
+        .mockRejectedValue(new Error('Member creation failed'));
+
+      await expect(createUserService.createInvitationUser(dto)).rejects.toThrow(
+        'Member creation failed',
+      );
+    });
+
+    it('creating a user by invitation fails when userPasswordService.createHashPassword throws error', async () => {
+      const dto: CreateInvitationUserDto = {
+        email: faker.internet.email().split('@')[0] + '@linecorp.com',
+        password: faker.internet.password(),
+        type: UserTypeEnum.GENERAL,
+      };
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+      jest
+        .spyOn(userPasswordService, 'createHashPassword')
+        .mockRejectedValue(new Error('Password hashing failed'));
+
+      await expect(createUserService.createInvitationUser(dto)).rejects.toThrow(
+        'Password hashing failed',
+      );
+    });
   });
 
   describe('createEmailUser', () => {
@@ -213,6 +310,69 @@ describe('CreateUserService', () => {
 
       await expect(createUserService.createEmailUser(dto)).rejects.toThrow(
         NotAllowedDomainException,
+      );
+    });
+
+    it('creating a user with email fails when user already exists', async () => {
+      const dto: CreateEmailUserDto = {
+        email: faker.internet.email().split('@')[0] + '@linecorp.com',
+        password: faker.internet.password(),
+      };
+      const existingUser = {
+        id: faker.number.int(),
+        email: dto.email,
+      } as UserEntity;
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(existingUser);
+
+      await expect(createUserService.createEmailUser(dto)).rejects.toThrow(
+        UserAlreadyExistsException,
+      );
+    });
+
+    it('creating a user with email succeeds when allowDomains is empty', async () => {
+      tenantRepo.setAllowDomains([]);
+      const dto: CreateEmailUserDto = {
+        email: faker.internet.email().split('@')[0] + '@anydomain.com',
+        password: faker.internet.password(),
+      };
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+
+      const user = await createUserService.createEmailUser(dto);
+
+      expect(user.id).toBeDefined();
+      expect(user.email).toBe(dto.email);
+      expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
+      expect(user.type).toBe(UserTypeEnum.GENERAL);
+    });
+
+    it('creating a user with email succeeds when allowDomains is null', async () => {
+      tenantRepo.setAllowDomains(undefined);
+      const dto: CreateEmailUserDto = {
+        email: faker.internet.email().split('@')[0] + '@anydomain.com',
+        password: faker.internet.password(),
+      };
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+
+      const user = await createUserService.createEmailUser(dto);
+
+      expect(user.id).toBeDefined();
+      expect(user.email).toBe(dto.email);
+      expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
+      expect(user.type).toBe(UserTypeEnum.GENERAL);
+    });
+
+    it('creating a user with email fails when userPasswordService.createHashPassword throws error', async () => {
+      const dto: CreateEmailUserDto = {
+        email: faker.internet.email().split('@')[0] + '@linecorp.com',
+        password: faker.internet.password(),
+      };
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+      jest
+        .spyOn(userPasswordService, 'createHashPassword')
+        .mockRejectedValue(new Error('Password hashing failed'));
+
+      await expect(createUserService.createEmailUser(dto)).rejects.toThrow(
+        'Password hashing failed',
       );
     });
   });

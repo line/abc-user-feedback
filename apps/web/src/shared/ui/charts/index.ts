@@ -13,6 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as SimpleBarChart } from './simple-bar-chart';
-export { default as SimpleLineChart } from './simple-line-chart';
-export { default as SimplePieChart } from './simple-pie-chart';
+
+export { default as BarChart } from './bar-chart';
+export { default as LineChart } from './line-chart';
+export { default as PieChart } from './pie-chart';
+export { default as ChartCard } from './chart-card';
+export { default as Legend } from './legend';

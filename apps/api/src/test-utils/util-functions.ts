@@ -257,9 +257,11 @@ export const MockOpensearchRepository = {
   deleteIndex: jest.fn(),
   putMappings: jest.fn(),
   createData: jest.fn(),
-  getData: jest.fn(),
+  getData: jest.fn().mockResolvedValue({ items: [], total: 0 }),
   updateData: jest.fn(),
   getTotal: jest.fn(),
+  deleteBulkData: jest.fn(),
+  scroll: jest.fn().mockResolvedValue({ items: [], total: 0 }),
 };
 
 export function removeUndefinedValues<T extends object>(obj: T): T {
