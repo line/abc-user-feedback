@@ -61,7 +61,7 @@
     "react-i18next": "^16.1.0",
     "react-select": "^5.10.2",
     "react-use": "^17.6.0",
-    "recharts": "^3.2.1",
+    "recharts": "^3.3.0",
     "sharp": "^0.34.4",
     "swiper": "^12.0.2",
     "tailwind-merge": "^3.3.1",
