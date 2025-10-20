@@ -13,6 +13,10 @@
     {
       "matchPackageNames": ["nuqs"],
       "allowedVersions": "<=2.4.3"
+    },
+    {
+      "matchPackageNames": ["@swc/core"],
+      "allowedVersions": "<=1.13.5"
     }
   ],
   "updateInternalDeps": true,

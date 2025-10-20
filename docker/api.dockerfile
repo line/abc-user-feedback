@@ -23,7 +23,6 @@ RUN npm install -g corepack@latest
 RUN corepack enable
 
 # First install dependencies (as they change less often)
-COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
@@ -33,7 +32,6 @@ RUN pnpm install -w source-map-support
 COPY --from=builder /app/out/full/ .
 COPY turbo.json ./
 COPY .turbo/ ./.turbo/
-COPY .git/ ./.git/
 
 ARG TURBO_TOKEN
 ENV TURBO_TOKEN=${TURBO_TOKEN}
