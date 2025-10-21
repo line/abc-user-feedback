@@ -1,10 +1,21 @@
 import { expect, test as setup } from '@playwright/test';
 
-import { initializeOpenSearchForTest } from './opensearch-utils';
+import { initializeDatabaseForTest } from './utils/database-utils';
+import { initializeOpenSearchForTest } from './utils/opensearch-utils';
 
 const authFile = 'playwright/.auth/user.json';
 
 setup('tenant create and authenticate', async ({ page }) => {
+  try {
+    await initializeDatabaseForTest();
+    console.log('Database initialized for test');
+  } catch (error) {
+    console.warn(
+      'Database initialization failed, continuing without database cleanup:',
+      error,
+    );
+  }
+
   try {
     await initializeOpenSearchForTest();
     console.log('OpenSearch initialized for test');

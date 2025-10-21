@@ -1,21 +1,6 @@
 import { expect, test } from '@playwright/test';
 
 export default () => {
-  // test.afterEach(async ({ page }) => {
-  //   await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
-  //   await page.waitForLoadState('networkidle');
-  //   await page.getByText('Settings').click();
-
-  //   await page.waitForTimeout(2000);
-
-  //   // Settings 페이지에서 프로젝트 삭제 버튼 클릭
-  //   await page.getByRole('button', { name: 'Delete Project' }).click();
-  //   await page.waitForTimeout(1000);
-  //   await page.getByRole('button', { name: 'Delete' }).click();
-  //   await page.waitForTimeout(1000);
-  //   await expect(page.getByText('TestProject')).toHaveCount(0);
-  // });
-
   test('creating a project succeeds', async ({ page }) => {
     await page.goto('http://localhost:3000/main/project/create', {
       waitUntil: 'domcontentloaded',

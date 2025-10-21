@@ -1,33 +1,15 @@
 import { test as teardown } from '@playwright/test';
 
-import { createConnection } from './database-utils';
-import { cleanupOpenSearchAfterTest } from './opensearch-utils';
-
-export async function globalTeardown() {
-  const connection = await createConnection();
-  try {
-    await connection.execute(`DELETE FROM tenant WHERE site_name = ?`, [
-      'TestTenant',
-    ]);
-    await connection.execute('ALTER TABLE tenant AUTO_INCREMENT = 1');
-    await connection.execute('ALTER TABLE projects AUTO_INCREMENT = 1');
-    await connection.execute('ALTER TABLE channels AUTO_INCREMENT = 1');
-    await connection.execute('ALTER TABLE fields AUTO_INCREMENT = 1');
-    await connection.execute('ALTER TABLE feedbacks AUTO_INCREMENT = 1');
-    await connection.execute(`DELETE FROM users WHERE email = ?`, [
-      'user@feedback.com',
-    ]);
-    await connection.execute('ALTER TABLE users AUTO_INCREMENT = 1');
-    await connection.execute('DELETE FROM histories');
-    await connection.execute('ALTER TABLE histories AUTO_INCREMENT = 1');
-  } finally {
-    await connection.end();
-  }
-}
+import { cleanupDatabaseAfterTest } from './utils/database-utils';
+import { cleanupOpenSearchAfterTest } from './utils/opensearch-utils';
 
 teardown('teardown', async () => {
   try {
-    await globalTeardown();
+    try {
+      await cleanupDatabaseAfterTest();
+    } catch (error) {
+      console.warn('Database cleanup failed:', error);
+    }
 
     try {
       await cleanupOpenSearchAfterTest();

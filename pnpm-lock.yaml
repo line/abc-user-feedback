@@ -319,6 +319,9 @@ importers:
 
   apps/e2e:
     devDependencies:
+      '@opensearch-project/opensearch':
+        specifier: ^3.5.1
+        version: 3.5.1
       '@playwright/test':
         specifier: ^1.56.0
         version: 1.56.0
