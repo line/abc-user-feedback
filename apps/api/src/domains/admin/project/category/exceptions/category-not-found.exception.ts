@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { BadRequestException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 
 import { ErrorCode } from '@ufb/shared';
 
-export class CategoryNotFoundException extends BadRequestException {
+export class CategoryNotFoundException extends NotFoundException {
   constructor() {
     super({
       code: ErrorCode.Category.CategoryNotFound,

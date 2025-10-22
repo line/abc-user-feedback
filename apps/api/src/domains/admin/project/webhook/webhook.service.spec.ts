@@ -30,7 +30,10 @@ import { getRandomEnumValue, TestConfig } from '@/test-utils/util-functions';
 import { WebhookServiceProviders } from '../../../../test-utils/providers/webhook.service.provider';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import type { CreateWebhookDto, UpdateWebhookDto } from './dtos';
-import { WebhookAlreadyExistsException } from './exceptions';
+import {
+  WebhookAlreadyExistsException,
+  WebhookNotFoundException,
+} from './exceptions';
 import { WebhookEntity } from './webhook.entity';
 import { WebhookService } from './webhook.service';
 
@@ -453,18 +456,17 @@ describe('webhook service', () => {
       expect(webhookRepo.remove).toHaveBeenCalledWith(webhookFixture);
     });
 
-    it('should delete webhook even when webhook does not exist', async () => {
+    it('should throw WebhookNotFoundException when webhook does not exist', async () => {
       const webhookId = faker.number.int();
-      const emptyWebhook = new WebhookEntity();
       jest.spyOn(webhookRepo, 'findOne').mockResolvedValue(null);
-      jest.spyOn(webhookRepo, 'remove').mockResolvedValue(emptyWebhook);
 
-      await webhookService.delete(webhookId);
+      await expect(webhookService.delete(webhookId)).rejects.toThrow(
+        new WebhookNotFoundException(),
+      );
 
       expect(webhookRepo.findOne).toHaveBeenCalledWith({
         where: { id: webhookId },
       });
-      expect(webhookRepo.remove).toHaveBeenCalledWith(emptyWebhook);
     });
   });
 
@@ -638,7 +640,7 @@ describe('webhook service', () => {
   });
 
   describe('update - additional edge cases', () => {
-    it('should handle updating non-existent webhook', async () => {
+    it('should throw WebhookNotFoundException when updating non-existent webhook', async () => {
       const dto: UpdateWebhookDto = createUpdateWebhookDto({
         id: faker.number.int(),
       });
@@ -647,10 +649,9 @@ describe('webhook service', () => {
       jest.spyOn(webhookRepo, 'findOne').mockResolvedValueOnce(null);
       jest.spyOn(webhookRepo, 'save').mockResolvedValue(webhookFixture);
 
-      const webhook = await webhookService.update(dto);
-
-      expect(webhook).toBeDefined();
-      expect(webhookRepo.save).toHaveBeenCalled();
+      await expect(webhookService.update(dto)).rejects.toThrow(
+        new WebhookNotFoundException(),
+      );
     });
 
     it('should handle updating webhook with same name but different ID', async () => {
