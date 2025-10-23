@@ -14,7 +14,7 @@ export default () => {
       await expect(page.locator('tbody')).not.toContainText('test text');
     });
 
-    test('creating issue and attaching to feedback succeeds', async ({
+    test('creating an issue and attaching it to a feedback succeeds', async ({
       page,
     }) => {
       await page.goto('http://localhost:3000', {
