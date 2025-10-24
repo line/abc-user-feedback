@@ -483,8 +483,8 @@ importers:
         specifier: ^7.28.5
         version: 7.28.5
       '@rollup/plugin-commonjs':
-        specifier: ^28.0.8
-        version: 28.0.8(rollup@4.34.8)
+        specifier: ^28.0.9
+        version: 28.0.9(rollup@4.34.8)
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.9.3)
@@ -987,6 +987,7 @@ packages:
   '@aws-sdk/middleware-expect-continue@3.916.0':
     resolution: {integrity: sha512-p7TMLZZ/j5NbC7/cz7xNgxLz/OHYuh91MeCZdCedJiyh3rx6gunFtl9eiDtrh+Y8hjs0EwR0zYIuhd6pL1O8zg==}
     engines: {node: '>=18.0.0'}
+    deprecated: '@aws-sdk/middleware-expect-continue v3.916.0 contains an accidental console.log statement (https://github.com/aws/aws-sdk-js-v3/pull/7454), please upgrade to v3.917.0+'
 
   '@aws-sdk/middleware-flexible-checksums@3.916.0':
     resolution: {integrity: sha512-CBRRg6slHHBYAm26AWY/pECHK0vVO/peDoNhZiAzUNt4jV6VftotjszEJ904pKGOr7/86CfZxtCnP3CCs3lQjA==}
@@ -4128,8 +4129,8 @@ packages:
     peerDependencies:
       react: '>=18.2.0'
 
-  '@rollup/plugin-commonjs@28.0.8':
-    resolution: {integrity: sha512-o1Ug9PxYsF61R7/NXO/GgMZZproLd/WH2XA53Tp9ppf6bU1lMlTtC/gUM6zM3mesi2E0rypk+PNtVrELREyWEQ==}
+  '@rollup/plugin-commonjs@28.0.9':
+    resolution: {integrity: sha512-PIR4/OHZ79romx0BVVll/PkwWpJ7e5lsqFa3gFfcrFPWwLXLV39JVUzQV9RKjWerE7B845Hqjj9VYlQeieZ2dA==}
     engines: {node: '>=16.0.0 || 14 >= 14.17'}
     peerDependencies:
       rollup: ^2.68.0||^3.0.0||^4.0.0
@@ -15087,7 +15088,7 @@ snapshots:
     dependencies:
       react: 19.2.0
 
-  '@rollup/plugin-commonjs@28.0.8(rollup@4.34.8)':
+  '@rollup/plugin-commonjs@28.0.9(rollup@4.34.8)':
     dependencies:
       '@rollup/pluginutils': 5.1.4(rollup@4.34.8)
       commondir: 1.0.1
