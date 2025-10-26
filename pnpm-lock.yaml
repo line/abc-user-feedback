@@ -45,8 +45,8 @@ importers:
         specifier: ^3.917.0
         version: 3.917.0
       '@fastify/multipart':
-        specifier: ^9.2.1
-        version: 9.2.1
+        specifier: ^9.3.0
+        version: 9.3.0
       '@fastify/static':
         specifier: ^8.3.0
         version: 8.3.0
@@ -671,7 +671,7 @@ importers:
         version: link:../../tooling/typescript
       eslint:
         specifier: 'catalog:'
-        version: 9.38.0(jiti@1.21.7)
+        version: 9.38.0(jiti@2.4.2)
       prettier:
         specifier: 'catalog:'
         version: 3.5.3
@@ -2306,8 +2306,8 @@ packages:
   '@fastify/middie@9.0.3':
     resolution: {integrity: sha512-7OYovKXp9UKYeVMcjcFLMcSpoMkmcZmfnG+eAvtdiatN35W7c+r9y1dRfpA+pfFVNuHGGqI3W+vDTmjvcfLcMA==}
 
-  '@fastify/multipart@9.2.1':
-    resolution: {integrity: sha512-U4221XDMfzCUtfzsyV1/PkR4MNgKI0158vUUyn/oF2Tl6RxMc+N7XYLr5fZXQiEC+Fmw5zFaTjxsTGTgtDtK+g==}
+  '@fastify/multipart@9.3.0':
+    resolution: {integrity: sha512-NpeKipTOjjL1dA7SSlRMrOWWtrE8/0yKOmeudkdQoEaz4sVDJw5MVdZIahsWhvpc3YTN7f04f9ep/Y65RKoOWA==}
 
   '@fastify/proxy-addr@5.0.0':
     resolution: {integrity: sha512-37qVVA1qZ5sgH7KpHkkC4z9SK6StIsIcOmpjvMPXNb3vx2GQxhZocogVYbr2PbbeLCQxYIPDok307xEvRZOzGA==}
@@ -12990,7 +12990,7 @@ snapshots:
       path-to-regexp: 8.3.0
       reusify: 1.1.0
 
-  '@fastify/multipart@9.2.1':
+  '@fastify/multipart@9.3.0':
     dependencies:
       '@fastify/busboy': 3.1.1
       '@fastify/deepmerge': 3.1.0
