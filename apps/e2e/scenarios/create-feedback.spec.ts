@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 export default () => {
   test.describe('create-feedback suite', () => {
@@ -47,6 +48,26 @@ export default () => {
       await page.waitForTimeout(2000);
 
       await expect(page.locator('tbody')).toContainText('test text');
+
+      let dateSelector = page.getByText(
+        `${dayjs().subtract(364, 'day').format('YYYY-MM-DD')} ~ ${dayjs().format('YYYY-MM-DD')}`,
+      );
+
+      await expect(dateSelector).toBeVisible();
+      await dateSelector.click();
+      await page.getByText('Yesterday').click();
+      await page.getByText('Save').click();
+      await page.waitForTimeout(2000);
+
+      await expect(page.getByText('There is no data yet')).toBeVisible();
+
+      dateSelector = page.getByText(
+        `${dayjs().subtract(1, 'day').format('YYYY-MM-DD')} ~ ${dayjs().subtract(1, 'day').format('YYYY-MM-DD')}`,
+      );
+      await dateSelector.click();
+      await page.getByText('Today').click();
+      await page.getByText('Save').click();
+      await page.waitForTimeout(2000);
     });
   });
 };
