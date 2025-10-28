@@ -19,6 +19,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -68,6 +69,7 @@ type UserProfileResponse = Record<string, string>;
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
   private REDIRECT_URI = `${process.env.BASE_URL}/auth/oauth-callback`;
 
   constructor(
@@ -97,7 +99,14 @@ export class AuthService {
       key: email,
     });
 
-    await this.emailVerificationMailingService.send({ code, email });
+    // Skip email sending in development/test environment
+    if (process.env.NODE_ENV !== 'production') {
+      this.logger.warn(
+        `Skipping email sending for code: ${code}, email: ${email}`,
+      );
+    } else {
+      await this.emailVerificationMailingService.send({ code, email });
+    }
 
     return DateTime.utc()
       .plus({ seconds: 5 * 60 })
