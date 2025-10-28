@@ -87,6 +87,16 @@ export default () => {
 
       await expect(page.locator('tbody')).toContainText('test text1');
       await expect(page.locator('tbody')).toContainText('test text2');
+
+      await page.getByText('View').click();
+      await page.getByText('ID').nth(1).click();
+      await page.getByText('Created').nth(1).click();
+      await page.getByText('Updated').nth(1).click();
+
+      await page.getByText('Expand').first().click();
+      await page.waitForTimeout(500);
+      await page.getByText('Expand').first().click();
+      await page.waitForTimeout(500);
     });
   });
 };
