@@ -4,7 +4,6 @@ import axios from 'axios';
 export default () => {
   test.describe('create-issue suite', () => {
     test.afterEach(async ({ page }) => {
-      await page.getByText('test text').first().click();
       await page.getByRole('button', { name: 'Delete' }).click();
 
       await expect(page.getByText('Delete').nth(3)).toBeVisible();
@@ -61,6 +60,27 @@ export default () => {
       await page.waitForTimeout(2000);
 
       await page.getByText('test_issue').first().click();
+      await page.waitForTimeout(2000);
+
+      await page
+        .locator('button[data-slot="popover-trigger"]:has-text("+")')
+        .first()
+        .click();
+
+      await page.getByText('test text').first().click();
+
+      await page
+        .locator('button[data-slot="popover-trigger"]:has-text("+")')
+        .nth(1)
+        .click();
+      await page.waitForTimeout(2000);
+
+      await page.keyboard.insertText('test_issue2');
+
+      await page.getByText('Create', { exact: true }).click();
+      await page.waitForTimeout(2000);
+
+      await page.keyboard.press('Enter');
       await page.waitForTimeout(2000);
     });
   });
