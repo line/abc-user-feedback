@@ -102,6 +102,7 @@ const Opensearch = {
 
 const Webhook = {
   WebhookAlreadyExists: 'WebhookAlreadyExists',
+  WebhookNotFound: 'WebhookNotFound',
 };
 
 export const ErrorCode = {
