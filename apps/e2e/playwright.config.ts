@@ -88,6 +88,7 @@ export default defineConfig({
       port: 4000,
       reuseExistingServer: true,
       env: {
+        BASE_URL: 'http://localhost:3000',
         MYSQL_PRIMARY_URL:
           'mysql://userfeedback:userfeedback@localhost:13307/e2e',
         MYSQL_SECONDARY_URLS:
