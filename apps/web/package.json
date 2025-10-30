@@ -37,7 +37,6 @@
     "@ufb/tailwindcss": "workspace:*",
     "axios": "^1.12.2",
     "axios-auth-refresh": "^3.3.6",
-    "babel-plugin-react-compiler": "19.1.0-rc.3",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "cookies-next": "^6.1.1",

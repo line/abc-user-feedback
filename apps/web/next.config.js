@@ -12,7 +12,6 @@ const nextConfig = {
   transpilePackages: ['@ufb/react'],
   compiler: { removeConsole: process.env.NODE_ENV === 'production' },
   images: { remotePatterns: [{ hostname: '*' }] },
-  reactCompiler: true,
 };
 
 export default nextConfig;
