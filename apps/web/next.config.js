@@ -7,13 +7,12 @@ createJiti(fileURLToPath(import.meta.url))('./src/env');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
   i18n: i18nConfig.default.i18n,
   output: 'standalone',
-  eslint: { ignoreDuringBuilds: true },
   transpilePackages: ['@ufb/react'],
   compiler: { removeConsole: process.env.NODE_ENV === 'production' },
   images: { remotePatterns: [{ hostname: '*' }] },
+  reactCompiler: true,
 };
 
 export default nextConfig;
