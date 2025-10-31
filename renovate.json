@@ -17,6 +17,10 @@
     {
       "matchPackageNames": ["@swc/core"],
       "allowedVersions": "<=1.13.5"
+    },
+    {
+      "matchPackageNames": ["next"],
+      "allowedVersions": "<16.0.0"
     }
   ],
   "updateInternalDeps": true,
