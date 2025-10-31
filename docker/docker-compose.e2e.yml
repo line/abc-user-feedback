@@ -38,5 +38,3 @@ services:
       - AUTO_MIGRATION=true
       - MASTER_API_KEY=MASTER_API_KEY
       - NODE_OPTIONS="--max_old_space_size=3072"
-      - OPENSEARCH_USE=true
-      - OPENSEARCH_NODE=http://host.docker.internal:9200

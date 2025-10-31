@@ -32,9 +32,6 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-      - name: Build and run
-        run: |
-          docker compose -f "./docker/docker-compose.e2e.yml" up -d
 
       - name: Setup e2e test
         run: |
