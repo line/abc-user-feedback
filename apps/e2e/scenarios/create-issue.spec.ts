@@ -4,6 +4,7 @@ import axios from 'axios';
 export default () => {
   test.describe('create-issue suite', () => {
     test.afterEach(async ({ page }) => {
+      await page.waitForTimeout(10000);
       await page.getByRole('button', { name: 'Delete' }).click();
 
       await expect(page.getByText('Delete').nth(3)).toBeVisible();
@@ -25,7 +26,7 @@ export default () => {
       await page.waitForTimeout(2000);
       await page.getByPlaceholder('Please enter.').first().fill('test_issue');
       await page.getByRole('button', { name: 'Save' }).click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(10000);
 
       await page.getByRole('radio', { name: 'Feedback' }).click();
       await page.waitForURL(/.*channelId.*/, { timeout: 10000 });
@@ -57,7 +58,7 @@ export default () => {
       await expect(page.locator('tbody')).toContainText('test text');
 
       await page.getByText('+').first().click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(10000);
 
       await page.getByText('test_issue').first().click();
       await page.waitForTimeout(2000);
