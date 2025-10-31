@@ -57,8 +57,11 @@ export default () => {
 
       await expect(page.locator('tbody')).toContainText('test text');
 
-      await page.getByText('+').first().click();
-      await page.waitForTimeout(10000);
+      await page
+        .locator('button[data-slot="popover-trigger"]:has-text("+")')
+        .first()
+        .click();
+      await page.waitForTimeout(2000);
 
       await page.getByText('test_issue').first().click();
       await page.waitForTimeout(2000);
