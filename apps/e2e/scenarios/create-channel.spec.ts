@@ -7,7 +7,7 @@ export default () => {
         waitUntil: 'domcontentloaded',
       });
       await page.waitForLoadState('domcontentloaded');
-      await page.waitForTimeout(5000);
+      await page.waitForTimeout(30000);
 
       await page.getByRole('radio', { name: 'Settings' }).click();
       await page.waitForTimeout(1000);
