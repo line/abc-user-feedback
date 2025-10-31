@@ -5,7 +5,9 @@ export default () => {
   test.describe('create-issue suite', () => {
     test.afterEach(async ({ page }) => {
       await page.waitForTimeout(10000);
-      await page.getByRole('button', { name: 'Delete' }).click();
+      await page
+        .getByRole('button', { name: 'Delete' })
+        .click({ timeout: 10000 });
 
       await expect(page.getByText('Delete').nth(3)).toBeVisible();
       await page.getByText('Delete').nth(3).click();
@@ -28,7 +30,9 @@ export default () => {
       await page.getByRole('button', { name: 'Save' }).click();
       await page.waitForTimeout(10000);
 
-      await page.getByRole('radio', { name: 'Feedback' }).click();
+      await page
+        .getByRole('radio', { name: 'Feedback' })
+        .click({ timeout: 10000 });
       await page.waitForURL(/.*channelId.*/, { timeout: 10000 });
 
       await expect(page.getByText('There is no data yet')).toBeVisible();
