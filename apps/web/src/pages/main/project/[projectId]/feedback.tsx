@@ -26,6 +26,7 @@ import type { TableFilterField } from '@/shared';
 import { useAllChannels, useOAIQuery } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { useCheckAIUsageLimit } from '@/entities/ai';
+import type { Channel } from '@/entities/channel';
 import { useRoutingChannelCreation } from '@/entities/channel/lib';
 import { FeedbackTable } from '@/entities/feedback';
 import { ProjectGuard } from '@/entities/project';
@@ -36,34 +37,85 @@ import serverSideTranslations from '@/server-side-translations';
 interface IProps {
   projectId: number;
 }
-
 const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   const { projectId } = props;
-
-  const router = useRouter();
-  const { t } = useTranslation();
-
-  useCheckAIUsageLimit(projectId);
-
   const { data: channels, isLoading } = useAllChannels(projectId);
-  const { openChannelInProgress } = useRoutingChannelCreation(projectId);
-
   const [currentChannelId, setCurrentChannelId] = useQueryState<number>(
     'channelId',
     parseAsInteger.withDefault(-1),
   );
 
-  const { data: channelData, isLoading: isChannelLoading } = useOAIQuery({
+  useCheckAIUsageLimit(projectId);
+
+  useEffect(() => {
+    if (!channels) return;
+    void setCurrentChannelId(channels.items[0]?.id ?? null);
+  }, [channels]);
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Icon name="RiLoader4Line" className="animate-spin" />
+      </div>
+    );
+  }
+
+  if (channels?.meta.totalItems === 0 || currentChannelId === -1) {
+    return <EmptyChannel projectId={projectId} />;
+  }
+
+  return (
+    <FeedbackContainer
+      projectId={projectId}
+      channelId={currentChannelId}
+      channels={channels?.items ?? []}
+      onChangeChannelId={setCurrentChannelId}
+    />
+  );
+};
+
+const EmptyChannel = (props: { projectId: number }) => {
+  const { projectId } = props;
+  const { t } = useTranslation();
+  const { openChannelInProgress } = useRoutingChannelCreation(projectId);
+
+  return (
+    <div className="flex h-full items-center justify-center">
+      <div className="flex flex-col items-center gap-2">
+        <Image
+          src="/assets/images/channel-make.svg"
+          alt="No channels"
+          width={200}
+          height={200}
+        />
+        <p className="text-neutral-secondary text-center">
+          {t('v2.text.no-data.channel')}
+        </p>
+        <Button onClick={openChannelInProgress}>
+          {t('v2.text.create-channel')}
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+const FeedbackContainer = (props: {
+  projectId: number;
+  channelId: number;
+  channels: Channel[];
+  onChangeChannelId: (channelId: number) => void;
+}) => {
+  const { projectId, channelId, channels, onChangeChannelId } = props;
+
+  const router = useRouter();
+
+  const { data: channelData, isLoading } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
-    variables: { channelId: currentChannelId, projectId },
+    variables: { channelId, projectId },
     queryOptions: {
-      enabled: currentChannelId !== -1,
+      enabled: channelId !== -1,
     },
   });
-
-  const currentChannel = useMemo(() => {
-    return channels?.items.find((channel) => channel.id === currentChannelId);
-  }, [channels, currentChannelId]);
 
   const fields = useMemo(
     () => [...(channelData?.fields ?? [])].sort((a, b) => a.order - b.order),
@@ -146,12 +198,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       .filter((v) => !!v?.key) as TableFilterField[];
   }, [channelData]);
 
-  useEffect(() => {
-    if (!channels || currentChannelId !== -1) return;
-    void setCurrentChannelId(channels.items[0]?.id ?? null);
-  }, [channels, currentChannelId]);
-
-  if (isLoading || isChannelLoading) {
+  if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
         <Icon name="RiLoader4Line" className="animate-spin" />
@@ -159,28 +206,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     );
   }
 
-  if (channels?.meta.totalItems === 0 && currentChannelId === -1) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <div className="flex flex-col items-center gap-2">
-          <Image
-            src="/assets/images/channel-make.svg"
-            alt="No channels"
-            width={200}
-            height={200}
-          />
-          <p className="text-neutral-secondary text-center">
-            {t('v2.text.no-data.channel')}
-          </p>
-          <Button onClick={openChannelInProgress}>
-            {t('v2.text.create-channel')}
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  if (!currentChannel) {
+  if (!channelData) {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="flex flex-col items-center gap-2">
@@ -189,12 +215,12 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             Channel is invalid.
           </p>
           <Button
-            onClick={() =>
-              router.replace({
+            onClick={async () => {
+              await router.replace({
                 pathname: router.pathname,
                 query: { projectId },
-              })
-            }
+              });
+            }}
           >
             Reload
           </Button>
@@ -205,15 +231,16 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
 
   return (
     <FeedbackTable
-      channels={channels?.items ?? []}
-      currentChannel={currentChannel}
-      setCurrentChannelId={setCurrentChannelId}
+      channels={channels}
+      currentChannel={channelData}
+      setCurrentChannelId={onChangeChannelId}
       projectId={projectId}
       filterFields={filterFields}
       fields={fields}
     />
   );
 };
+
 FeedbackManagementPage.getLayout = (page: React.ReactElement<IProps>) => {
   return (
     <Layout projectId={page.props.projectId} title="Feedback">
@@ -227,7 +254,6 @@ export const getServerSideProps: GetServerSideProps = async ({
   locale,
 }) => {
   const projectId = parseInt(query.projectId as string);
-
   return {
     props: {
       ...(await serverSideTranslations(locale)),
