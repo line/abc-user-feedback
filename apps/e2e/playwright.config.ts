@@ -87,6 +87,7 @@ export default defineConfig({
       command: 'cd ../api && pnpm build && pnpm start',
       port: 4000,
       reuseExistingServer: true,
+      timeout: 120 * 1000,
       env: {
         JWT_SECRET: 'jwtsecretjwtsecretjwtsecret',
         BASE_URL: 'http://localhost:3000',
@@ -111,6 +112,7 @@ export default defineConfig({
       command: 'cd ../web && pnpm build && pnpm start',
       port: 3000,
       reuseExistingServer: true,
+      timeout: 120 * 1000,
       env: {
         NEXT_PUBLIC_API_BASE_URL: 'http://localhost:4000',
       },
