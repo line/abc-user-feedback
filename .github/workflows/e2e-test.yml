@@ -44,7 +44,6 @@ jobs:
 
       - name: Setup e2e test
         run: |
-          cd apps/e2e
           npm install -g corepack@latest
           corepack enable
           pnpm install --frozen-lockfile
