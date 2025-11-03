@@ -57,7 +57,12 @@ type AppPropsWithLayout = AppProps<PageProps> & {
 function App({ Component, pageProps }: AppPropsWithLayout) {
   const { dehydratedState, ...otherProps } = pageProps;
 
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: { queries: { staleTime: 1000 * 60 } },
+      }),
+  );
   const getLayout = Component.getLayout ?? ((page) => page);
   const { setUser, user, randomId } = useUserStore();
   const router = useRouter();
