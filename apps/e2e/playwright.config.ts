@@ -113,7 +113,7 @@ export default defineConfig({
     },
     {
       command:
-        process.env.CI !== 'true' ?
+        !process.env.CI ?
           'cd ../.. && pnpm dev:web'
         : 'cd ../.. && pnpm build:web',
       port: 3000,

@@ -51,4 +51,4 @@ jobs:
 
       - name: Run e2e tests
         run: |
-          pnpm test:e2e
+          CI=true pnpm test:e2e
