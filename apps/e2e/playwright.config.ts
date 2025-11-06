@@ -7,7 +7,7 @@ export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json');
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// require('dotenv').config();
+require('dotenv').config();
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -84,9 +84,12 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: 'cd ../api && pnpm build && pnpm start',
+      command:
+        !process.env.CI ?
+          'cd ../.. && pnpm dev:api'
+        : 'cd ../.. && pnpm build:api',
       port: 4000,
-      reuseExistingServer: true,
+      reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
       env: {
         JWT_SECRET: 'jwtsecretjwtsecretjwtsecret',
@@ -109,9 +112,12 @@ export default defineConfig({
       },
     },
     {
-      command: 'cd ../web && pnpm build && pnpm start',
+      command:
+        process.env.CI !== 'true' ?
+          'cd ../.. && pnpm dev:web'
+        : 'cd ../.. && pnpm build:web',
       port: 3000,
-      reuseExistingServer: true,
+      reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
       env: {
         NEXT_PUBLIC_API_BASE_URL: 'http://localhost:4000',

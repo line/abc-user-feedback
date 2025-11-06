@@ -29,8 +29,8 @@ jobs:
         image: opensearchproject/opensearch:2.4.1
         env:
           discovery.type: single-node
-          bootstrap.memory_lock: "true"
-          plugins.security.disabled: "true"
+          bootstrap.memory_lock: 'true'
+          plugins.security.disabled: 'true'
         options: >-
           --health-cmd="curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"'"
           --health-interval=10s
@@ -51,5 +51,4 @@ jobs:
 
       - name: Run e2e tests
         run: |
-          pnpm build
           pnpm test:e2e
