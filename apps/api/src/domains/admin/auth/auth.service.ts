@@ -26,6 +26,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AxiosError, AxiosResponse } from 'axios';
 import * as bcrypt from 'bcrypt';
 import { DateTime } from 'luxon';
+import type { StringValue } from 'ms';
 import { catchError, lastValueFrom, map } from 'rxjs';
 import { Transactional } from 'typeorm-transactional';
 
@@ -209,11 +210,15 @@ export class AuthService {
     return {
       accessToken: this.jwtService.sign(
         { sub: id, email, department, name, type },
-        { expiresIn: accessTokenExpiredTime },
+        {
+          expiresIn: (accessTokenExpiredTime ?? '10m') as StringValue | number,
+        },
       ),
       refreshToken: this.jwtService.sign(
         { sub: id, email },
-        { expiresIn: refreshTokenExpiredTime },
+        {
+          expiresIn: (refreshTokenExpiredTime ?? '1h') as StringValue | number,
+        },
       ),
     };
   }
