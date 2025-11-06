@@ -7,7 +7,7 @@ export default () => {
         waitUntil: 'domcontentloaded',
       });
       await page.waitForLoadState('domcontentloaded');
-      await page.waitForTimeout(30000);
+      await page.waitForTimeout(1000);
 
       await page.getByRole('radio', { name: 'Settings' }).click();
       await page.waitForTimeout(1000);
@@ -18,7 +18,7 @@ export default () => {
       await page.getByRole('button', { name: 'Next' }).click();
 
       await page.getByText('Add Field').first().click();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
 
       await page.waitForSelector('input[name="key"]', { state: 'visible' });
       await page.locator('input[name="key"]').click();
@@ -26,7 +26,7 @@ export default () => {
       await page.getByRole('button', { name: 'Confirm' }).click();
 
       await page.getByText('Add Field').first().click();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
 
       await page.waitForSelector('input[name="key"]', { state: 'visible' });
       await page.locator('input[name="key"]').click();
@@ -36,14 +36,14 @@ export default () => {
         .locator('select[aria-hidden="true"]')
         .first()
         .selectOption('images');
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
 
       await page.getByRole('button', { name: 'Confirm' }).click();
 
       await page.getByRole('button', { name: 'Complete' }).click();
-      await page.waitForTimeout(1500);
+      await page.waitForTimeout(1000);
       await page.getByRole('button', { name: 'Start' }).click();
-      await page.waitForTimeout(1500);
+      await page.waitForTimeout(1000);
       await expect(
         page.getByRole('tab', { name: 'TestChannel' }).first(),
       ).toContainText('TestChannel');

@@ -4,14 +4,13 @@ import axios from 'axios';
 export default () => {
   test.describe('create-issue suite', () => {
     test.afterEach(async ({ page }) => {
-      await page.waitForTimeout(10000);
       await page
         .getByRole('button', { name: 'Delete' })
-        .click({ timeout: 10000 });
+        .click({ timeout: 1000 });
 
       await expect(page.getByText('Delete').nth(3)).toBeVisible();
       await page.getByText('Delete').nth(3).click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await expect(page.locator('tbody')).not.toContainText('test text');
     });
@@ -25,15 +24,15 @@ export default () => {
 
       await page.getByRole('radio', { name: 'Issue' }).click();
       await page.getByRole('button', { name: 'Create Issue' }).click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
       await page.getByPlaceholder('Please enter.').first().fill('test_issue');
       await page.getByRole('button', { name: 'Save' }).click();
-      await page.waitForTimeout(10000);
+      await page.waitForTimeout(1000);
 
       await page
         .getByRole('radio', { name: 'Feedback' })
-        .click({ timeout: 10000 });
-      await page.waitForURL(/.*channelId.*/, { timeout: 10000 });
+        .click({ timeout: 1000 });
+      await page.waitForURL(/.*channelId.*/, { timeout: 1000 });
 
       await expect(page.getByText('There is no data yet')).toBeVisible();
 
@@ -57,7 +56,7 @@ export default () => {
         { waitUntil: 'domcontentloaded' },
       );
 
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await expect(page.locator('tbody')).toContainText('test text');
 
@@ -65,10 +64,10 @@ export default () => {
         .locator('button[data-slot="popover-trigger"]:has-text("+")')
         .first()
         .click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await page.getByText('test_issue').first().click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await page
         .locator('button[data-slot="popover-trigger"]:has-text("+")')
@@ -81,15 +80,15 @@ export default () => {
         .locator('button[data-slot="popover-trigger"]:has-text("+")')
         .nth(1)
         .click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await page.keyboard.insertText('test_issue2');
 
       await page.getByText('Create', { exact: true }).click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await page.keyboard.press('Enter');
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
     });
   });
 };

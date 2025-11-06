@@ -5,12 +5,12 @@ export default () => {
   test.describe('create-feedback-with-image suite', () => {
     test.afterEach(async ({ page }) => {
       await page.getByText('test text').first().click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
       await page.getByRole('button', { name: 'Delete' }).click();
 
       await expect(page.getByText('Delete').nth(3)).toBeVisible();
       await page.getByText('Delete').nth(3).click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await expect(page.locator('tbody')).not.toContainText('test text');
     });
@@ -47,13 +47,13 @@ export default () => {
         `http://localhost:3000/main/project/${projectId}/feedback?channelId=${channelId}`,
         { waitUntil: 'domcontentloaded' },
       );
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await page.getByText('Image').nth(1).click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await page.getByText('Cancel').nth(1).click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
     });
   });
 };

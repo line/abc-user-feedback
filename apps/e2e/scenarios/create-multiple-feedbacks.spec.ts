@@ -9,18 +9,18 @@ export default () => {
       await page.getByRole('checkbox').nth(1).click();
 
       await page.getByText('Delete Feedback').click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await page.getByRole('button', { name: 'Delete' }).click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await page.getByRole('checkbox').first().click();
 
       await page.getByText('Delete Feedback').click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await page.getByRole('button', { name: 'Delete' }).click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
     });
 
     test('creating multiple feedbacks succeeds', async ({ page }) => {
@@ -55,17 +55,17 @@ export default () => {
         { waitUntil: 'domcontentloaded' },
       );
 
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await expect(page.locator('tbody')).toContainText('test text');
 
       await expect(page.getByText('Page 1 of 2')).toBeVisible();
 
       await page.getByRole('button', { name: '20', exact: true }).click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await page.getByRole('menuitem', { name: '30', exact: true }).click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
     });
   });
 };

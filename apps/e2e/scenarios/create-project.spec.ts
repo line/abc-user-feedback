@@ -7,9 +7,9 @@ export default () => {
     });
 
     await expect(page.getByRole('button', { name: 'Next' })).toBeVisible({
-      timeout: 60000,
+      timeout: 1000,
     });
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(1000);
 
     await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Next' }).click();
@@ -19,13 +19,13 @@ export default () => {
     await page.locator("input[name='name']").fill('TestProject');
 
     await page.getByRole('button', { name: 'Next' }).click();
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(1000);
 
     await page.getByRole('button', { name: 'Next' }).click();
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(1000);
 
     await page.getByRole('button', { name: 'Complete' }).click();
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(1000);
 
     await expect(
       page.getByRole('heading', {

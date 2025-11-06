@@ -41,49 +41,49 @@ export default () => {
         { waitUntil: 'domcontentloaded' },
       );
 
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await expect(page.locator('tbody')).toContainText('test text1');
       await expect(page.locator('tbody')).toContainText('test text2');
 
       await page.getByText('Filter').click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await page.getByRole('button', { name: 'ID' }).click();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
 
       await page.getByRole('option', { name: 'message' }).click();
 
       await page.getByPlaceholder('Please enter').fill('test text1');
 
       await page.getByRole('button', { name: 'Confirm' }).click();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
 
       await expect(page.locator('tbody')).toContainText('test text1');
       await expect(page.locator('tbody')).not.toContainText('test text2');
 
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
 
       await page.getByText('Filter').click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await page.getByText('Add Filter').click();
 
       await page.getByRole('button', { name: 'ID' }).click();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
 
       await page.getByRole('option', { name: 'message' }).click();
 
       await page.getByPlaceholder('Please enter').nth(1).fill('test text2');
 
       await page.getByText('And', { exact: true }).click();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
 
       await page.getByRole('option', { name: 'Or', exact: true }).click();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
 
       await page.getByRole('button', { name: 'Confirm' }).click();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
 
       await expect(page.locator('tbody')).toContainText('test text1');
       await expect(page.locator('tbody')).toContainText('test text2');
@@ -94,9 +94,9 @@ export default () => {
       await page.getByText('Updated').nth(1).click();
 
       await page.getByText('Expand').first().click();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
       await page.getByText('Expand').first().click();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
     });
   });
 };

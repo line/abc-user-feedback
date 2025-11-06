@@ -10,7 +10,7 @@ export default () => {
 
       await expect(page.getByText('Delete').nth(3)).toBeVisible();
       await page.getByText('Delete').nth(3).click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await expect(page.locator('tbody')).not.toContainText('test text');
     });
@@ -45,7 +45,7 @@ export default () => {
         { waitUntil: 'domcontentloaded' },
       );
 
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await expect(page.locator('tbody')).toContainText('test text');
 
@@ -57,7 +57,7 @@ export default () => {
       await dateSelector.click();
       await page.getByText('Yesterday').click();
       await page.getByText('Save').click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
 
       await expect(page.getByText('There is no data yet')).toBeVisible();
 
@@ -67,7 +67,7 @@ export default () => {
       await dateSelector.click();
       await page.getByText('Today').click();
       await page.getByText('Save').click();
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(1000);
     });
   });
 };
