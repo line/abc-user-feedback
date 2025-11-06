@@ -87,7 +87,7 @@ export default defineConfig({
       command:
         !process.env.CI ?
           'cd ../.. && pnpm dev:api'
-        : 'cd ../.. && pnpm build:api',
+        : 'cd ../.. && pnpm build:api && cd apps/api && pnpm start',
       port: 4000,
       reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
@@ -115,7 +115,7 @@ export default defineConfig({
       command:
         !process.env.CI ?
           'cd ../.. && pnpm dev:web'
-        : 'cd ../.. && pnpm build:web',
+        : 'cd ../.. && pnpm build:web && cd apps/web && pnpm start',
       port: 3000,
       reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
