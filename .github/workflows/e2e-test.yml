@@ -31,7 +31,7 @@ jobs:
     #     - 9200:9200
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       # - name: Build and run
       #   run: |
       #     docker compose -f "./docker/docker-compose.e2e.yml" up -d
