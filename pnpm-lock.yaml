@@ -132,8 +132,8 @@ importers:
         specifier: ^5.0.5
         version: 5.0.5
       fastify:
-        specifier: ^5.6.1
-        version: 5.6.1
+        specifier: ^5.6.2
+        version: 5.6.2
       joi:
         specifier: ^18.0.1
         version: 18.0.1
@@ -7023,6 +7023,9 @@ packages:
 
   fastify@5.6.1:
     resolution: {integrity: sha512-WjjlOciBF0K8pDUPZoGPhqhKrQJ02I8DKaDIfO51EL0kbSMwQFl85cRwhOvmSDWoukNOdTo27gLN549pLCcH7Q==}
+
+  fastify@5.6.2:
+    resolution: {integrity: sha512-dPugdGnsvYkBlENLhCgX8yhyGCsCPrpA8lFWbTNU428l+YOnLgYHR69hzV8HWPC79n536EqzqQtvhtdaCE0dKg==}
 
   fastq@1.19.1:
     resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
@@ -18488,6 +18491,24 @@ snapshots:
       rfdc: 1.4.1
       secure-json-parse: 4.0.0
       semver: 7.7.2
+      toad-cache: 3.7.0
+
+  fastify@5.6.2:
+    dependencies:
+      '@fastify/ajv-compiler': 4.0.2
+      '@fastify/error': 4.1.0
+      '@fastify/fast-json-stringify-compiler': 5.0.2
+      '@fastify/proxy-addr': 5.0.0
+      abstract-logging: 2.0.1
+      avvio: 9.1.0
+      fast-json-stringify: 6.0.1
+      find-my-way: 9.3.0
+      light-my-request: 6.6.0
+      pino: 10.1.0
+      process-warning: 5.0.0
+      rfdc: 1.4.1
+      secure-json-parse: 4.0.0
+      semver: 7.7.3
       toad-cache: 3.7.0
 
   fastq@1.19.1:
