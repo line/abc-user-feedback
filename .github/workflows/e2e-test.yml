@@ -7,43 +7,48 @@ on:
 jobs:
   e2e-test:
     runs-on: ubuntu-latest
-    # services:
-    #   mysql:
-    #     image: mysql:8.0.39
-    #     env:
-    #       MYSQL_ROOT_PASSWORD: userfeedback
-    #       MYSQL_DATABASE: e2e
-    #       MYSQL_USER: userfeedback
-    #       MYSQL_PASSWORD: userfeedback
-    #       TZ: UTC
-    #     ports:
-    #       - 13307:3306
-    #     options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-    #   smtp:
-    #     image: rnwood/smtp4dev:v3
-    #     ports:
-    #       - 5080:80
-    #       - 25:25
-    #       - 143:143
-    # opensearch:
-    #   image: opensearchproject/opensearch:2.4.1
-    #   ports:
-    #     - 9200:9200
+    services:
+      mysql:
+        image: mysql:8.0.39
+        env:
+          MYSQL_ROOT_PASSWORD: userfeedback
+          MYSQL_DATABASE: e2e
+          MYSQL_USER: userfeedback
+          MYSQL_PASSWORD: userfeedback
+          TZ: UTC
+        ports:
+          - 13307:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      smtp:
+        image: rnwood/smtp4dev:v3
+        ports:
+          - 5080:80
+          - 25:25
+          - 143:143
+      opensearch:
+        image: opensearchproject/opensearch:2.4.1
+        env:
+          discovery.type: single-node
+          bootstrap.memory_lock: 'true'
+          plugins.security.disabled: 'true'
+        options: >-
+          --health-cmd="curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 9200:9200
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-      # - name: Build and run
-      #   run: |
-      #     docker compose -f "./docker/docker-compose.e2e.yml" up -d
 
-      # - name: Setup e2e test
-      #   run: |
-      #     cd apps/e2e
-      #     npm install -g corepack@latest
-      #     pnpm install --frozen-lockfile
-      #     pnpm playwright install
+      - name: Setup e2e test
+        run: |
+          npm install -g corepack@latest
+          corepack enable
+          pnpm install --frozen-lockfile
+          pnpm playwright install
 
-      # - name: Run e2e tests
-      #   run: |
-      #     pnpm build
-      #     pnpm test:e2e
+      - name: Run e2e tests
+        run: |
+          CI=true pnpm test:e2e

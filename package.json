@@ -8,6 +8,8 @@
   },
   "scripts": {
     "build": "turbo run build",
+    "build:api": "turbo run build -F api...",
+    "build:web": "turbo run build -F web...",
     "clean": "git clean -xdf node_modules .turbo",
     "clean:workspaces": "turbo run clean",
     "dev": "turbo watch dev --continue",

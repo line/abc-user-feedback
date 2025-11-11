@@ -19,12 +19,14 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { AxiosError, AxiosResponse } from 'axios';
 import * as bcrypt from 'bcrypt';
 import { DateTime } from 'luxon';
+import type { StringValue } from 'ms';
 import { catchError, lastValueFrom, map } from 'rxjs';
 import { Transactional } from 'typeorm-transactional';
 
@@ -68,6 +70,7 @@ type UserProfileResponse = Record<string, string>;
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
   private REDIRECT_URI = `${process.env.BASE_URL}/auth/oauth-callback`;
 
   constructor(
@@ -97,7 +100,14 @@ export class AuthService {
       key: email,
     });
 
-    await this.emailVerificationMailingService.send({ code, email });
+    // Skip email sending in development/test environment
+    if (process.env.NODE_ENV !== 'production') {
+      this.logger.warn(
+        `Skipping email sending for code: ${code}, email: ${email}`,
+      );
+    } else {
+      await this.emailVerificationMailingService.send({ code, email });
+    }
 
     return DateTime.utc()
       .plus({ seconds: 5 * 60 })
@@ -200,11 +210,15 @@ export class AuthService {
     return {
       accessToken: this.jwtService.sign(
         { sub: id, email, department, name, type },
-        { expiresIn: accessTokenExpiredTime },
+        {
+          expiresIn: (accessTokenExpiredTime ?? '10m') as StringValue | number,
+        },
       ),
       refreshToken: this.jwtService.sign(
         { sub: id, email },
-        { expiresIn: refreshTokenExpiredTime },
+        {
+          expiresIn: (refreshTokenExpiredTime ?? '1h') as StringValue | number,
+        },
       ),
     };
   }

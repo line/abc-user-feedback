@@ -210,15 +210,11 @@ const DateRangePicker: React.FC<IProps> = (props) => {
       toast.error(t('text.date.date-range-over-max-days', { maxDays }));
       return;
     }
-    onChange(
-      (
-        currentValue &&
-          currentValue.startDate === null &&
-          currentValue.endDate === null
-      ) ?
-        null
-      : currentValue,
-    );
+    const shouldSetNull =
+      currentValue !== null &&
+      currentValue.startDate === null &&
+      currentValue.endDate === null;
+    onChange(shouldSetNull ? null : currentValue);
     setIsOpen(false);
   };
 

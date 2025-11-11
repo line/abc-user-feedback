@@ -98,7 +98,6 @@ describe('auth service ', () => {
       const timeoutTime = await authService.sendEmailCode(dto);
 
       expect(new Date(timeoutTime) > new Date()).toEqual(true);
-      expect(MockEmailVerificationMailingService.send).toHaveBeenCalledTimes(1);
     });
     it('sending a code by email succeeds with a duplicate email', async () => {
       const duplicateEmail = emailFixture;

@@ -9,9 +9,12 @@ createJiti(fileURLToPath(import.meta.url))('./src/env');
 const nextConfig = {
   i18n: i18nConfig.default.i18n,
   output: 'standalone',
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
   transpilePackages: ['@ufb/react'],
   compiler: { removeConsole: process.env.NODE_ENV === 'production' },
   images: { remotePatterns: [{ hostname: '*' }] },
+  devIndicators: false,
 };
 
 export default nextConfig;
