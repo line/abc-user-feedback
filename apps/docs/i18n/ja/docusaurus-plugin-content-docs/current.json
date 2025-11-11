@@ -1,0 +1,27 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.docs.category.소개": {
+    "message": "紹介",
+    "description": "The label for category Introduction in sidebar docs"
+  },
+  "sidebar.docs.category.사용자 가이드": {
+    "message": "ユーザーガイド",
+    "description": "The label for category User Guide in sidebar docs"
+  },
+  "sidebar.docs.category.설정": {
+    "message": "設定",
+    "description": "The label for category Settings in sidebar docs"
+  },
+  "sidebar.docs.category.개발자 가이드": {
+    "message": "開発者ガイド",
+    "description": "The label for category Developer Guide in sidebar docs"
+  },
+  "sidebar.docs.category.설치": {
+    "message": "インストール",
+    "description": "The label for category Installation in sidebar docs"
+  }
+}
+

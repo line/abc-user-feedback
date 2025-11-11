@@ -159,6 +159,6 @@ SMTP 오류가 발생하면 로그에 상세 메시지가 표시됩니다.
 
 ## 관련 문서
 
-- [Docker Hub 설치 가이드](./01-docker-hub-images.md)
-- [환경 변수 설정](./05-configuration.md)
-- [초기 셋팅 가이드](/docs/01-user-guide/01-getting-started.md)
+- [Docker Hub 설치 가이드](./docker-hub-images)
+- [환경 변수 설정](./configuration)
+- [초기 셋팅 가이드](/user-guide/getting-started)

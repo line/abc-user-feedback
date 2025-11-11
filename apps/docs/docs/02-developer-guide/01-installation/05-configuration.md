@@ -152,6 +152,6 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 
 ## 관련 문서
 
-- [Docker 설치 가이드](./01-docker-hub-images.md)
-- [SMTP 연동 가이드](./04-smtp-configuration.md)
-- [초기 셋팅 가이드](/docs/01-user-guide/01-getting-started.md)
+- [Docker 설치 가이드](./docker-hub-images)
+- [SMTP 연동 가이드](./smtp-configuration)
+- [초기 셋팅 가이드](/user-guide/getting-started)
