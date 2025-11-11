@@ -40,9 +40,7 @@ describe('EmailVerificationMailingService', () => {
         {
           provide: ConfigService,
           useValue: {
-            get: jest
-              .fn()
-              .mockReturnValue({ baseUrl: 'http://localhost:3000' }),
+            get: jest.fn().mockReturnValue('http://localhost:3000'),
           },
         },
       ],
@@ -131,7 +129,7 @@ describe('EmailVerificationMailingService', () => {
     });
 
     it('should use empty string when smtp config is not available', async () => {
-      // Configure ConfigService to return undefined baseUrl
+      // Configure ConfigService to return undefined
       const module = await Test.createTestingModule({
         imports: [TestConfig],
         providers: [
@@ -143,7 +141,7 @@ describe('EmailVerificationMailingService', () => {
           {
             provide: ConfigService,
             useValue: {
-              get: jest.fn().mockReturnValue({ baseUrl: undefined }),
+              get: jest.fn().mockReturnValue(undefined),
             },
           },
         ],
