@@ -56,7 +56,15 @@ Ensure that the endpoint you provide is secure and can accept POST requests with
 
 ABC User Feedback's webhook supports the following event types, each with its own specific payload structure:
 
-#### FEEDBACK_CREATION
+| No. | Title              | Description                        |
+|-----|--------------------|------------------------------------|
+| 1   | FEEDBACK_CREATION  | When the new Feedback is created.  |
+| 2   | ISSUE_ADDITION  | When an Issue is added to a feedback.  |
+| 3   | ISSUE_CREATION  | When the new Issue is created.  |
+| 4   | ISSUE_STATUS_CHANGE  | When the Issue status is changed.  |
+
+
+#### 1. FEEDBACK_CREATION
 
 This event is triggered when a new piece of feedback is created.
 
@@ -95,7 +103,7 @@ This event is triggered when a new piece of feedback is created.
 }
 ```
 
-#### ISSUE_ADDITION
+#### 2. ISSUE_ADDITION
 
 This event is triggered when an issue is added to an existing piece of feedback.
 
@@ -144,7 +152,7 @@ This event is triggered when an issue is added to an existing piece of feedback.
 }
 ```
 
-#### ISSUE_CREATION
+#### 3. ISSUE_CREATION
 
 This event is triggered when a new issue is created within a project.
 
@@ -172,7 +180,7 @@ This event is triggered when a new issue is created within a project.
 }
 ```
 
-#### ISSUE_STATUS_CHANGE
+#### 4. ISSUE_STATUS_CHANGE
 
 This event is triggered when the status of an issue is updated.
 

@@ -16,7 +16,7 @@
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
 
-import { getDayCount, SimpleLineChart, useOAIQuery } from '@/shared';
+import { ChartCard, getDayCount, LineChart, useOAIQuery } from '@/shared';
 
 import { useLineChartData } from '../lib';
 
@@ -53,15 +53,14 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   );
 
   return (
-    <SimpleLineChart
+    <ChartCard
       title={t('chart.issue-trend.title')}
       description={`${t('chart.issue-trend.description')} (${dayjs(from).format(
         'YYYY/MM/DD',
       )} - ${dayjs(to).format('YYYY/MM/DD')})`}
-      height={400}
-      data={chartData}
-      dataKeys={dataKeys}
-    />
+    >
+      <LineChart height={400} data={chartData} dataKeys={dataKeys} />
+    </ChartCard>
   );
 };
 

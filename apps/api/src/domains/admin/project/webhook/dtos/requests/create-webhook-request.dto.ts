@@ -14,7 +14,7 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsEnum, IsString } from 'class-validator';
+import { IsArray, IsEnum, IsNotEmpty, IsString, IsUrl } from 'class-validator';
 
 import { WebhookStatusEnum } from '@/common/enums';
 import { TokenValidator } from '@/common/validators/token-validator';
@@ -24,10 +24,12 @@ import { EventDto } from '..';
 export class CreateWebhookRequestDto {
   @ApiProperty()
   @IsString()
+  @IsNotEmpty()
   name: string;
 
   @ApiProperty()
   @IsString()
+  @IsUrl()
   url: string;
 
   @ApiProperty({ enum: WebhookStatusEnum })
@@ -36,6 +38,7 @@ export class CreateWebhookRequestDto {
 
   @ApiProperty({ type: [EventDto] })
   @IsArray()
+  @IsNotEmpty()
   events: EventDto[];
 
   @ApiProperty({ nullable: true, type: String })

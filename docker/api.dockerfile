@@ -1,6 +1,6 @@
 # The web Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
 # Make sure you update this Dockerfile, the Dockerfile in the web workspace and copy that over to Dockerfile in the docs.
-FROM node:22.19.0-alpine AS base
+FROM node:22.21.0-alpine AS base
 
 FROM base AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -23,7 +23,6 @@ RUN npm install -g corepack@latest
 RUN corepack enable
 
 # First install dependencies (as they change less often)
-COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
@@ -33,7 +32,6 @@ RUN pnpm install -w source-map-support
 COPY --from=builder /app/out/full/ .
 COPY turbo.json ./
 COPY .turbo/ ./.turbo/
-COPY .git/ ./.git/
 
 RUN pnpm dlx turbo run build --filter=api...
 

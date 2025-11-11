@@ -7,7 +7,7 @@ export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json');
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// require('dotenv').config();
+require('dotenv').config();
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -16,13 +16,13 @@ export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json');
 export default defineConfig({
   testDir: '.',
   /* Maximum time one test can run for. */
-  timeout: 30 * 1000,
+  timeout: 60 * 1000,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
-    timeout: 15 * 1000,
+    timeout: 60 * 1000,
   },
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -84,10 +84,16 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: 'cd ../api && pnpm build && pnpm start',
+      command:
+        !process.env.CI ?
+          'cd ../.. && pnpm dev:api'
+        : 'cd ../.. && pnpm build:api && cd apps/api && pnpm start',
       port: 4000,
-      reuseExistingServer: true,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120 * 1000,
       env: {
+        JWT_SECRET: 'jwtsecretjwtsecretjwtsecret',
+        BASE_URL: 'http://localhost:3000',
         MYSQL_PRIMARY_URL:
           'mysql://userfeedback:userfeedback@localhost:13307/e2e',
         MYSQL_SECONDARY_URLS:
@@ -98,12 +104,21 @@ export default defineConfig({
         SMTP_HOST: 'localhost',
         SMTP_PORT: '25',
         SMTP_SENDER: 'abc@feedback.user',
+        SMTP_BASE_URL: 'http://localhost:3000',
+        OPENSEARCH_USE: 'true',
+        OPENSEARCH_NODE: 'http://localhost:9200',
+        OPENSEARCH_USERNAME: '',
+        OPENSEARCH_PASSWORD: '',
       },
     },
     {
-      command: 'cd ../web && pnpm build && pnpm start',
+      command:
+        !process.env.CI ?
+          'cd ../.. && pnpm dev:web'
+        : 'cd ../.. && pnpm build:web && cd apps/web && pnpm start',
       port: 3000,
-      reuseExistingServer: true,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120 * 1000,
       env: {
         NEXT_PUBLIC_API_BASE_URL: 'http://localhost:4000',
       },

@@ -135,7 +135,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
         <SelectInput
           label="Role"
           placeholder={t('v2.placeholder.select')}
-          value={(getValues('role.id') as number | undefined)?.toString()}
+          value={getValues('role.id')?.toString()}
           options={roles.map((v) => ({ label: v.name, value: `${v.id}` }))}
           onChange={(v) => {
             const role = roles.find((role) => String(role.id) === v);

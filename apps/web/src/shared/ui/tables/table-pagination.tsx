@@ -63,7 +63,9 @@ const TablePagination = <T,>(props: IProps<T>) => {
                 {PAGE_SIZES.map((pageSize) => (
                   <DropdownItem
                     key={pageSize}
-                    onClick={() => table.setPageSize(pageSize)}
+                    onClick={() =>
+                      table.setPagination({ pageIndex: 0, pageSize })
+                    }
                   >
                     {pageSize}
                   </DropdownItem>

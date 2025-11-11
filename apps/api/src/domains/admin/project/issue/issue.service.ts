@@ -406,7 +406,7 @@ export class IssueService {
 
     if (!issue) throw new IssueNotFoundException();
 
-    if (!issue.category || issue.category.id !== categoryId) {
+    if (issue.category?.id !== categoryId) {
       throw new BadRequestException('Category id does not match');
     }
 

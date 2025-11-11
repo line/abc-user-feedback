@@ -26,7 +26,7 @@ const MockFeedbackStatisticsService = {
   getIssuedRatio: jest.fn(),
 };
 
-describe('Feedback Statistics Controller', () => {
+describe('FeedbackStatisticsController', () => {
   let feedbackStatisticsController: FeedbackStatisticsController;
 
   beforeEach(async () => {
@@ -45,44 +45,247 @@ describe('Feedback Statistics Controller', () => {
     );
   });
 
-  it('getCountByDateByChannel', async () => {
-    jest.spyOn(MockFeedbackStatisticsService, 'getCountByDateByChannel');
-    const startDate = '2023-01-01';
-    const endDate = '2023-12-01';
-    const interval = ['day', 'week', 'month'][
-      faker.number.int({ min: 0, max: 2 })
-    ] as 'day' | 'week' | 'month';
-    const channelIds = [faker.number.int(), faker.number.int()];
-
-    await feedbackStatisticsController.getCountByDateByChannel(
-      startDate,
-      endDate,
-      interval,
-      channelIds.join(','),
-    );
-
-    expect(
-      MockFeedbackStatisticsService.getCountByDateByChannel,
-    ).toHaveBeenCalledTimes(1);
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('getCount', async () => {
-    jest.spyOn(MockFeedbackStatisticsService, 'getCountByDateByChannel');
-    const from = faker.date.past();
-    const to = faker.date.future();
-    const projectId = faker.number.int();
-    await feedbackStatisticsController.getCount(from, to, projectId);
-    expect(MockFeedbackStatisticsService.getCount).toHaveBeenCalledTimes(1);
+  describe('getCountByDateByChannel', () => {
+    it('should call service with correct parameters and return transformed response', async () => {
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-01';
+      const interval = 'day' as const;
+      const channelIds = '1,2,3';
+      const mockServiceResponse = {
+        channels: [
+          {
+            id: 1,
+            name: 'Channel 1',
+            statistics: [
+              {
+                startDate: '2023-01-01',
+                endDate: '2023-01-01',
+                count: 10,
+              },
+            ],
+          },
+        ],
+      };
+
+      MockFeedbackStatisticsService.getCountByDateByChannel.mockResolvedValue(
+        mockServiceResponse,
+      );
+
+      const result = await feedbackStatisticsController.getCountByDateByChannel(
+        startDate,
+        endDate,
+        interval,
+        channelIds,
+      );
+
+      expect(
+        MockFeedbackStatisticsService.getCountByDateByChannel,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        MockFeedbackStatisticsService.getCountByDateByChannel,
+      ).toHaveBeenCalledWith({
+        startDate,
+        endDate,
+        interval,
+        channelIds: [1, 2, 3],
+      });
+      expect(result).toEqual(mockServiceResponse);
+    });
+
+    it('should handle empty channelIds string', async () => {
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-01';
+      const interval = 'week' as const;
+      const channelIds = '';
+      const mockServiceResponse = { channels: [] };
+
+      MockFeedbackStatisticsService.getCountByDateByChannel.mockResolvedValue(
+        mockServiceResponse,
+      );
+
+      const result = await feedbackStatisticsController.getCountByDateByChannel(
+        startDate,
+        endDate,
+        interval,
+        channelIds,
+      );
+
+      expect(
+        MockFeedbackStatisticsService.getCountByDateByChannel,
+      ).toHaveBeenCalledWith({
+        startDate,
+        endDate,
+        interval,
+        channelIds: [],
+      });
+      expect(result).toEqual(mockServiceResponse);
+    });
+
+    it('should filter out invalid channelIds', async () => {
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-01';
+      const interval = 'month' as const;
+      const channelIds = '1,invalid,3,abc';
+      const mockServiceResponse = { channels: [] };
+
+      MockFeedbackStatisticsService.getCountByDateByChannel.mockResolvedValue(
+        mockServiceResponse,
+      );
+
+      const result = await feedbackStatisticsController.getCountByDateByChannel(
+        startDate,
+        endDate,
+        interval,
+        channelIds,
+      );
+
+      expect(
+        MockFeedbackStatisticsService.getCountByDateByChannel,
+      ).toHaveBeenCalledWith({
+        startDate,
+        endDate,
+        interval,
+        channelIds: [1, 3],
+      });
+      expect(result).toEqual(mockServiceResponse);
+    });
   });
 
-  it('getIssuedRatio', async () => {
-    jest.spyOn(MockFeedbackStatisticsService, 'getIssuedRatio');
-    const from = faker.date.past();
-    const to = faker.date.future();
-    const projectId = faker.number.int();
-    await feedbackStatisticsController.getIssuedRatio(from, to, projectId);
-    expect(MockFeedbackStatisticsService.getIssuedRatio).toHaveBeenCalledTimes(
-      1,
-    );
+  describe('getCount', () => {
+    it('should call service with correct parameters and return transformed response', async () => {
+      const from = faker.date.past();
+      const to = faker.date.future();
+      const projectId = faker.number.int();
+      const mockServiceResponse = { count: 42 };
+
+      MockFeedbackStatisticsService.getCount.mockResolvedValue(
+        mockServiceResponse,
+      );
+
+      const result = await feedbackStatisticsController.getCount(
+        from,
+        to,
+        projectId,
+      );
+
+      expect(MockFeedbackStatisticsService.getCount).toHaveBeenCalledTimes(1);
+      expect(MockFeedbackStatisticsService.getCount).toHaveBeenCalledWith({
+        from,
+        to,
+        projectId,
+      });
+      expect(result).toEqual(mockServiceResponse);
+    });
+
+    it('should handle zero count response', async () => {
+      const from = faker.date.past();
+      const to = faker.date.future();
+      const projectId = faker.number.int();
+      const mockServiceResponse = { count: 0 };
+
+      MockFeedbackStatisticsService.getCount.mockResolvedValue(
+        mockServiceResponse,
+      );
+
+      const result = await feedbackStatisticsController.getCount(
+        from,
+        to,
+        projectId,
+      );
+
+      expect(MockFeedbackStatisticsService.getCount).toHaveBeenCalledWith({
+        from,
+        to,
+        projectId,
+      });
+      expect(result).toEqual(mockServiceResponse);
+    });
+  });
+
+  describe('getIssuedRatio', () => {
+    it('should call service with correct parameters and return transformed response', async () => {
+      const from = faker.date.past();
+      const to = faker.date.future();
+      const projectId = faker.number.int();
+      const mockServiceResponse = { ratio: 0.75 };
+
+      MockFeedbackStatisticsService.getIssuedRatio.mockResolvedValue(
+        mockServiceResponse,
+      );
+
+      const result = await feedbackStatisticsController.getIssuedRatio(
+        from,
+        to,
+        projectId,
+      );
+
+      expect(
+        MockFeedbackStatisticsService.getIssuedRatio,
+      ).toHaveBeenCalledTimes(1);
+      expect(MockFeedbackStatisticsService.getIssuedRatio).toHaveBeenCalledWith(
+        {
+          from,
+          to,
+          projectId,
+        },
+      );
+      expect(result).toEqual(mockServiceResponse);
+    });
+
+    it('should handle zero ratio response', async () => {
+      const from = faker.date.past();
+      const to = faker.date.future();
+      const projectId = faker.number.int();
+      const mockServiceResponse = { ratio: 0 };
+
+      MockFeedbackStatisticsService.getIssuedRatio.mockResolvedValue(
+        mockServiceResponse,
+      );
+
+      const result = await feedbackStatisticsController.getIssuedRatio(
+        from,
+        to,
+        projectId,
+      );
+
+      expect(MockFeedbackStatisticsService.getIssuedRatio).toHaveBeenCalledWith(
+        {
+          from,
+          to,
+          projectId,
+        },
+      );
+      expect(result).toEqual(mockServiceResponse);
+    });
+
+    it('should handle maximum ratio response', async () => {
+      const from = faker.date.past();
+      const to = faker.date.future();
+      const projectId = faker.number.int();
+      const mockServiceResponse = { ratio: 1 };
+
+      MockFeedbackStatisticsService.getIssuedRatio.mockResolvedValue(
+        mockServiceResponse,
+      );
+
+      const result = await feedbackStatisticsController.getIssuedRatio(
+        from,
+        to,
+        projectId,
+      );
+
+      expect(MockFeedbackStatisticsService.getIssuedRatio).toHaveBeenCalledWith(
+        {
+          from,
+          to,
+          projectId,
+        },
+      );
+      expect(result).toEqual(mockServiceResponse);
+    });
   });
 });

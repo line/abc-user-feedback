@@ -27,9 +27,6 @@ import {
   ComboboxSelectItem,
   ComboboxTrigger,
   Icon,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
 } from '@ufb/react';
 
 import { DateRangePicker, parseAsDateRange } from '@/shared';
@@ -166,20 +163,14 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
     <div className="flex flex-col gap-5 pb-14">
       <div className="flex items-center justify-end">
         <div className="flex items-center gap-2">
-          <Tooltip>
-            <TooltipTrigger>
-              <DateRangePicker
-                value={dateRange}
-                onChange={onChangeDateRange}
-                maxDate={dayjs().subtract(1, 'day').toDate()}
-                options={options}
-                maxDays={365}
-              />
-            </TooltipTrigger>
-            <TooltipContent>
-              {t('tooltip.dashboard-date-picker-button')}
-            </TooltipContent>
-          </Tooltip>
+          <DateRangePicker
+            value={dateRange}
+            onChange={onChangeDateRange}
+            maxDate={dayjs().subtract(1, 'day').toDate()}
+            options={options}
+            maxDays={365}
+            tooltipContent={t('tooltip.dashboard-date-picker-button')}
+          />
           <Combobox>
             <ComboboxTrigger>
               <Icon name="RiEyeLine" />

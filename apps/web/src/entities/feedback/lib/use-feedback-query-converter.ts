@@ -161,7 +161,7 @@ const useFeedbackQueryConverter = (input: {
       .filter((v) => !!v) as TableFilter[];
   }, [queries, filterFields]);
 
-  const onChageTableFilters = useCallback(
+  const onChangeTableFilters = useCallback(
     async (tableFilters: TableFilter[], operator: TableFilterOperator) => {
       const result = await Promise.all(
         tableFilters.map(async ({ condition, format, key, value }) => ({
@@ -184,18 +184,22 @@ const useFeedbackQueryConverter = (input: {
     [dateRange],
   );
 
+  const filteredQueries = queries.filter((query) =>
+    filterFields.some((field) => field.key === query.key),
+  );
+
+  const filteredTableFilters = tableFilters.filter((v) =>
+    filterFields.some((vv) => vv.key === v.key),
+  );
+
   return {
-    queries: queries
-      .filter((query) => filterFields.some((field) => field.key === query.key))
-      .filter((v) => !!v.value),
+    queries: filteredQueries,
     defaultQueries,
-    tableFilters: tableFilters.filter((v) =>
-      filterFields.some((vv) => vv.key === v.key),
-    ),
+    tableFilters: filteredTableFilters,
     operator,
     dateRange,
-    updateTableFilters: onChageTableFilters,
-    updateDateRage: onChangeDateRange,
+    updateTableFilters: onChangeTableFilters,
+    updateDateRange: onChangeDateRange,
     resetDateRange: () =>
       setDefaultQueries(defaultDateRange ? [defaultDateRange] : []),
   };
