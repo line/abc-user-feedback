@@ -97,12 +97,10 @@ SMTP_OPPORTUNISTIC_TLS=true
 ### 4.1 메일 발송 테스트
 
 1. **이메일 인증 테스트**:
-
    - 관리자 또는 사용자 계정 생성
    - 이메일 인증 코드 발송 확인
 
 2. **비밀번호 재설정 테스트**:
-
    - 비밀번호 재설정 요청
    - 재설정 링크가 포함된 메일 수신 확인
 
@@ -159,6 +157,6 @@ SMTP 오류가 발생하면 로그에 상세 메시지가 표시됩니다.
 
 ## 관련 문서
 
-- [Docker Hub 설치 가이드](./docker-hub-images)
-- [환경 변수 설정](./configuration)
-- [초기 셋팅 가이드](/user-guide/getting-started)
+- [Docker Hub 설치 가이드](./01-docker-hub-images.md)
+- [환경 변수 설정](./05-configuration.md)
+- [초기 셋팅 가이드](/docs/01-user-guide/01-getting-started.md)
