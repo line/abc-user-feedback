@@ -104,7 +104,6 @@ export default defineConfig({
         SMTP_HOST: 'localhost',
         SMTP_PORT: '25',
         SMTP_SENDER: 'abc@feedback.user',
-        SMTP_BASE_URL: 'http://localhost:3000',
         OPENSEARCH_USE: 'true',
         OPENSEARCH_NODE: 'http://localhost:9200',
         OPENSEARCH_USERNAME: '',
