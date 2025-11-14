@@ -89,7 +89,7 @@
     "eslint": "catalog:",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
-    "jest-fixed-jsdom": "^0.0.10",
+    "jest-fixed-jsdom": "^0.0.11",
     "jiti": "1.21.7",
     "next-router-mock": "^1.0.4",
     "openapi-typescript": "^7.10.1",
