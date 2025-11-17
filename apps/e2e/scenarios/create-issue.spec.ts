@@ -59,8 +59,6 @@ export default () => {
       await expect(page.locator('tbody')).toContainText('test text');
 
       await page.getByRole('button', { name: '+' }).first().click();
-      await page.waitForTimeout(2000);
-
       const testIssue = page.getByText('test_issue').first();
       await expect(testIssue).toBeVisible();
       await testIssue.click();
