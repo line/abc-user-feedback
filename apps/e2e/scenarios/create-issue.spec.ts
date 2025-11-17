@@ -62,8 +62,9 @@ export default () => {
         .locator('button[data-slot="popover-trigger"]:has-text("+")')
         .first()
         .click({ delay: 500 });
-      await page.waitForTimeout(3000);
+      await page.waitForTimeout(2000);
 
+      await expect(page.getByText('test_issue').first()).toBeVisible();
       await page.getByText('test_issue').first().click();
       await page.waitForTimeout(1000);
 
