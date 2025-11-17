@@ -20,6 +20,26 @@ services:
       - mysql:/var/lib/mysql
     restart: unless-stopped
 
+  mysql-for-e2e:
+    hostname: mysql-for-e2e
+    image: mysql:8.0
+    command:
+      [
+        '--default-authentication-plugin=mysql_native_password',
+        '--collation-server=utf8mb4_bin',
+      ]
+    environment:
+      MYSQL_ROOT_PASSWORD: userfeedback
+      MYSQL_DATABASE: e2e
+      MYSQL_USER: userfeedback
+      MYSQL_PASSWORD: userfeedback
+      TZ: UTC
+    ports:
+      - 13307:3306
+    volumes:
+      - mysql-for-e2e:/var/lib/mysql-for-e2e
+    restart: unless-stopped
+
   smtp4dev:
     image: rnwood/smtp4dev:v3
     ports:
@@ -69,5 +89,6 @@ services:
 
 volumes:
   mysql:
+  mysql-for-e2e:
   smtp4dev:
   opensearch:

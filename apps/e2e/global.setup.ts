@@ -26,7 +26,9 @@ setup('tenant create and authenticate', async ({ page }) => {
     );
   }
 
-  await page.goto('http://localhost:3000/tenant/create');
+  await page.goto('http://localhost:3000/tenant/create', {
+    waitUntil: 'domcontentloaded',
+  });
   await page.waitForTimeout(1000);
 
   await page.locator("input[name='siteName']").click();
@@ -60,7 +62,9 @@ setup('tenant create and authenticate', async ({ page }) => {
   await page.getByRole('button', { name: 'Confirm', exact: true }).click();
   await page.waitForTimeout(1000);
 
-  await page.goto('http://localhost:3000/auth/sign-in');
+  await page.goto('http://localhost:3000/auth/sign-in', {
+    waitUntil: 'domcontentloaded',
+  });
   await page.waitForTimeout(1000);
 
   await expect(page.locator('body', { hasText: 'TestTenant' })).toContainText(
