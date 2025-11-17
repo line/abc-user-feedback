@@ -58,27 +58,18 @@ export default () => {
 
       await expect(page.locator('tbody')).toContainText('test text');
 
-      await page
-        .locator('button[data-slot="popover-trigger"]:has-text("+")')
-        .first()
-        .click({ delay: 500 });
+      await page.getByRole('button', { name: '+' }).first().click();
       await page.waitForTimeout(2000);
 
       await expect(page.getByText('test_issue').first()).toBeVisible();
       await page.getByText('test_issue').first().click();
       await page.waitForTimeout(1000);
 
-      await page
-        .locator('button[data-slot="popover-trigger"]:has-text("+")')
-        .first()
-        .click();
+      await page.getByRole('button', { name: '+' }).first().click();
 
       await page.getByText('test text').first().click();
 
-      await page
-        .locator('button[data-slot="popover-trigger"]:has-text("+")')
-        .nth(1)
-        .click();
+      await page.getByRole('button', { name: '+' }).first().click();
       await page.waitForTimeout(1000);
 
       await page.keyboard.insertText('test_issue2');
