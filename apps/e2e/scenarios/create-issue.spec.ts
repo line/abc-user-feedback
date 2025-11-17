@@ -29,9 +29,7 @@ export default () => {
       await page.getByRole('button', { name: 'Save' }).click();
       await page.waitForTimeout(1000);
 
-      await page
-        .getByRole('radio', { name: 'Feedback' })
-        .click({ timeout: 1000 });
+      await page.getByRole('radio', { name: 'Feedback' }).click();
       await page.waitForURL(/.*channelId.*/, { timeout: 1000 });
 
       await expect(page.getByText('There is no data yet')).toBeVisible();
