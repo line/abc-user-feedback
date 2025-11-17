@@ -113,9 +113,8 @@ export function generateComposeContent(cfg: AppConfig) {
       doc.services.api.environment.push(`${key}=${value}`);
     }
     if (key === 'OPENSEARCH_USE' && value === true) {
-      console.log('value: ', value);
       doc.services.api.environment.push(
-        `OPENSEARCH_NODE=http://opensearch:9200`,
+        `OPENSEARCH_NODE=http://opensearch-node:9200`,
       );
     }
   }
@@ -183,6 +182,21 @@ export function generateComposeContent(cfg: AppConfig) {
       condition: 'service_healthy',
     };
     doc.volumes.opensearch = {};
+
+    doc.services['opensearch-dashboards'] = {
+      image: 'opensearchproject/opensearch-dashboards:2.16.0',
+      restart: 'unless-stopped',
+      ports: ['5601:5601'],
+      environment: [
+        'OPENSEARCH_HOSTS=["http://opensearch-node:9200"]',
+        'DISABLE_SECURITY_DASHBOARDS_PLUGIN=true',
+      ],
+      depends_on: {
+        'opensearch-node': {
+          condition: 'service_healthy',
+        },
+      },
+    };
   }
 
   const yml = YAML.stringify(doc);

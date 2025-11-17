@@ -99,8 +99,8 @@ export class AuthService {
       key: email,
     });
 
-    // Skip email sending in development/test environment
-    if (process.env.NODE_ENV !== 'production') {
+    // Skip email sending in test environment
+    if (process.env.NODE_ENV === 'test') {
       this.logger.warn(
         `Skipping email sending for code: ${code}, email: ${email}`,
       );
