@@ -15,15 +15,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@eslint/compat": "^1.4.1",
-    "@next/eslint-plugin-next": "^16.0.1",
+    "@eslint/compat": "^2.0.0",
+    "@next/eslint-plugin-next": "^16.0.3",
     "@ufb/eslint-plugin-header": "workspace:*",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-compiler": "beta",
     "eslint-plugin-react-hooks": "^6.1.1",
-    "eslint-plugin-turbo": "^2.6.0",
+    "eslint-plugin-turbo": "^2.6.1",
     "typescript-eslint": "^8.46.0"
   },
   "devDependencies": {
