@@ -61,8 +61,9 @@ export default () => {
       await page.getByRole('button', { name: '+' }).first().click();
       await page.waitForTimeout(2000);
 
-      await expect(page.getByText('test_issue').first()).toBeVisible();
-      await page.getByText('test_issue').first().click();
+      const testIssue = page.getByText('test_issue').first();
+      await expect(testIssue).toBeVisible();
+      await testIssue.click();
       await page.waitForTimeout(1000);
 
       await page.getByRole('button', { name: '+' }).first().click();
