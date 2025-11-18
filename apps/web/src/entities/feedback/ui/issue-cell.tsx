@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useMemo, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'next-i18next';
@@ -37,7 +38,6 @@ import {
   client,
   cn,
   commandFilter,
-  InfiniteScrollArea,
   useOAIMutation,
   usePermissions,
 } from '@/shared';
@@ -46,6 +46,11 @@ import type { Issue } from '@/entities/issue';
 
 import { useFeedbackSearch } from '../lib';
 import AiIssueComboboxGroup from './ai-issue-combobox-group.ui';
+
+const InfiniteScrollArea = dynamic(
+  () => import('@/shared/ui/infinite-scroll-area.ui'),
+  { ssr: false },
+);
 
 interface IProps {
   issues?: Issue[];
