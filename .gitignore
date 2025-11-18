@@ -44,9 +44,11 @@ volumes
 .cache
 
 # playwright
-playwright-report
-test-results
-user.json
+
+test-results/
+playwright-report/
+blob-report/
+playwright/
 
 # JetBrains
 .idea

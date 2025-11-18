@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build --turbopack",
+    "build": "next build",
     "clean": "git clean -xdf .next .turbo node_modules coverage .swc .cache",
     "dev": "next dev --turbopack",
     "format": "prettier --check . --ignore-path ../../.gitignore --ignore-path .prettierignore",
