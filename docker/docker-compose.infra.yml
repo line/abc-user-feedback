@@ -5,8 +5,8 @@ services:
     image: mysql:8.0
     command:
       [
-        '--default-authentication-plugin=mysql_native_password',
-        '--collation-server=utf8mb4_bin',
+        "--default-authentication-plugin=mysql_native_password",
+        "--collation-server=utf8mb4_bin",
       ]
     environment:
       MYSQL_ROOT_PASSWORD: userfeedback
@@ -25,8 +25,8 @@ services:
     image: mysql:8.0
     command:
       [
-        '--default-authentication-plugin=mysql_native_password',
-        '--collation-server=utf8mb4_bin',
+        "--default-authentication-plugin=mysql_native_password",
+        "--collation-server=utf8mb4_bin",
       ]
     environment:
       MYSQL_ROOT_PASSWORD: userfeedback
@@ -59,7 +59,7 @@ services:
       - node.name=opensearch-node
       - discovery.type=single-node
       - bootstrap.memory_lock=true
-      - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
       - plugins.security.disabled=true
       - OPENSEARCH_INITIAL_ADMIN_PASSWORD=UserFeedback123!@#
     ulimits:
@@ -83,7 +83,7 @@ services:
       - 5601:5601
     environment:
       - 'OPENSEARCH_HOSTS=["http://opensearch-node:9200"]'
-      - 'DISABLE_SECURITY_DASHBOARDS_PLUGIN=true'
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
     depends_on:
       - opensearch-node
 
