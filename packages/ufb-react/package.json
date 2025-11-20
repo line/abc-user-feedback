@@ -36,14 +36,14 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
-    "lucide-react": "^0.553.0",
+    "lucide-react": "^0.554.0",
     "react-day-picker": "8.10.1",
-    "react-hook-form": "^7.66.0",
+    "react-hook-form": "^7.66.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
-    "@types/react": "^19.2.5",
+    "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
     "@ufb/eslint-config": "workspace:^",
     "@ufb/prettier-config": "workspace:^",
