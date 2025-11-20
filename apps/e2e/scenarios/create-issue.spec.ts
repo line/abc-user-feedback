@@ -29,9 +29,7 @@ export default () => {
       await page.getByRole('button', { name: 'Save' }).click();
       await page.waitForTimeout(1000);
 
-      await page
-        .getByRole('radio', { name: 'Feedback' })
-        .click({ timeout: 1000 });
+      await page.getByRole('radio', { name: 'Feedback' }).click();
       await page.waitForURL(/.*channelId.*/, { timeout: 1000 });
 
       await expect(page.getByText('There is no data yet')).toBeVisible();
@@ -56,30 +54,21 @@ export default () => {
         { waitUntil: 'domcontentloaded' },
       );
 
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(2000);
 
       await expect(page.locator('tbody')).toContainText('test text');
 
-      await page
-        .locator('button[data-slot="popover-trigger"]:has-text("+")')
-        .first()
-        .click();
+      await page.getByRole('button', { name: '+' }).first().click();
+      const testIssue = page.getByText('test_issue').first();
+      await expect(testIssue).toBeVisible();
+      await testIssue.click();
       await page.waitForTimeout(1000);
 
-      await page.getByText('test_issue').first().click();
-      await page.waitForTimeout(1000);
-
-      await page
-        .locator('button[data-slot="popover-trigger"]:has-text("+")')
-        .first()
-        .click();
+      await page.getByRole('button', { name: '+' }).first().click();
 
       await page.getByText('test text').first().click();
 
-      await page
-        .locator('button[data-slot="popover-trigger"]:has-text("+")')
-        .nth(1)
-        .click();
+      await page.getByRole('button', { name: '+' }).first().click();
       await page.waitForTimeout(1000);
 
       await page.keyboard.insertText('test_issue2');

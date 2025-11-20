@@ -19,11 +19,11 @@ import Joi from 'joi';
 export const jwtConfigSchema = Joi.object({
   JWT_SECRET: Joi.string().required(),
   ACCESS_TOKEN_EXPIRED_TIME: Joi.string().default('10m'),
-  REFESH_TOKEN_EXPIRED_TIME: Joi.string().default('1h'),
+  REFRESH_TOKEN_EXPIRED_TIME: Joi.string().default('1h'),
 });
 
 export const jwtConfig = registerAs('jwt', () => ({
   secret: process.env.JWT_SECRET,
   accessTokenExpiredTime: process.env.ACCESS_TOKEN_EXPIRED_TIME,
-  refreshTokenExpiredTime: process.env.REFESH_TOKEN_EXPIRED_TIME,
+  refreshTokenExpiredTime: process.env.REFRESH_TOKEN_EXPIRED_TIME,
 }));

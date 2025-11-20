@@ -1,13 +1,9 @@
 import * as path from 'path';
 import { defineConfig, devices } from '@playwright/test';
 
-export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json');
+import 'dotenv/config';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-require('dotenv').config();
+export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json');
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -43,7 +39,7 @@ export default defineConfig({
     // baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
     video: 'on',
     screenshot: 'only-on-failure',
   },
@@ -104,7 +100,6 @@ export default defineConfig({
         SMTP_HOST: 'localhost',
         SMTP_PORT: '25',
         SMTP_SENDER: 'abc@feedback.user',
-        SMTP_BASE_URL: 'http://localhost:3000',
         OPENSEARCH_USE: 'true',
         OPENSEARCH_NODE: 'http://localhost:9200',
         OPENSEARCH_USERNAME: '',

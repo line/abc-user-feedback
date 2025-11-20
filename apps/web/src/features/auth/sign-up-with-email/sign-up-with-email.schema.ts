@@ -18,7 +18,7 @@ import { z } from 'zod';
 //
 export const signUpWithEmailSchema = z
   .object({
-    email: z.string().email(),
+    email: z.email(),
     emailState: z.enum(['NOT_VERIFIED', 'VERIFING', 'EXPIRED', 'VERIFIED']),
     code: z.string().length(6),
     password: z.string().min(8),

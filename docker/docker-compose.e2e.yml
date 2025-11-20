@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   web:
@@ -10,7 +10,7 @@ services:
     ports:
       - 3000:3000
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - 'host.docker.internal:host-gateway'
     environment:
       - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
     depends_on:
@@ -25,15 +25,13 @@ services:
     ports:
       - 4000:4000
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - 'host.docker.internal:host-gateway'
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@host.docker.internal:13307/e2e
-      - BASE_URL=http://host.docker.internal:3000
       - SMTP_HOST=localhost
       - SMTP_PORT=25
       - SMTP_SENDER=abc@feedback.user
-      - SMTP_BASE_URL=http://localhost:3000
       - APP_PORT=4000
       - AUTO_MIGRATION=true
       - MASTER_API_KEY=MASTER_API_KEY

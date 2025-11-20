@@ -160,6 +160,50 @@ async function bootstrap() {
 
   await app.listen(port, address);
   DefaultLogger.log(`🚀 Application is running on: ${await app.getUrl()}`);
+
+  if (process.env.REFESH_TOKEN_EXPIRED_TIME) {
+    DefaultLogger.warn(
+      '⚠️  Environment variable name has changed: REFESH_TOKEN_EXPIRED_TIME -> REFRESH_TOKEN_EXPIRED_TIME',
+    );
+    DefaultLogger.warn(
+      `   Current value in use: ${process.env.REFESH_TOKEN_EXPIRED_TIME}`,
+    );
+    DefaultLogger.warn(
+      '   Please update the environment variable name to REFRESH_TOKEN_EXPIRED_TIME.',
+    );
+    DefaultLogger.warn('   The old environment variable is no longer used.');
+  }
+
+  if (process.env.ENABLE_AUTO_FEEDBACK_DELETION) {
+    DefaultLogger.warn(
+      '⚠️  Environment variable name has changed: ENABLE_AUTO_FEEDBACK_DELETION -> AUTO_FEEDBACK_DELETION_ENABLED',
+    );
+    DefaultLogger.warn(
+      `   Current value in use: ${process.env.ENABLE_AUTO_FEEDBACK_DELETION}`,
+    );
+    DefaultLogger.warn(
+      '   Please update the environment variable name to AUTO_FEEDBACK_DELETION_ENABLED.',
+    );
+    DefaultLogger.warn('   The old environment variable is no longer used.');
+  }
+
+  if (process.env.BASE_URL || process.env.SMTP_BASE_URL) {
+    DefaultLogger.warn(
+      '⚠️  Environment variable names have been merged: BASE_URL, SMTP_BASE_URL -> ADMIN_WEB_URL',
+    );
+    if (process.env.BASE_URL) {
+      DefaultLogger.warn(`   Current BASE_URL value: ${process.env.BASE_URL}`);
+    }
+    if (process.env.SMTP_BASE_URL) {
+      DefaultLogger.warn(
+        `   Current SMTP_BASE_URL value: ${process.env.SMTP_BASE_URL}`,
+      );
+    }
+    DefaultLogger.warn(
+      '   Please update to use ADMIN_WEB_URL instead of BASE_URL and SMTP_BASE_URL.',
+    );
+    DefaultLogger.warn('   The old environment variables are no longer used.');
+  }
 }
 
 void bootstrap();

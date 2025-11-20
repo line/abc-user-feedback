@@ -2,31 +2,7 @@
 
 ![cover image](./assets/cover.png)
 
-ABC User Feedback is a standalone web application designed to manage Voice of Customer (VOC) data. It enables you to efficiently gather and categorize customer feedback. With AI-powered insights, you can manage feedback more effectively. The application is currently utilized in services reaching 10 million monthly active users (MAU).
-## Quick Start
-
-To quickly set up and run the application locally, follow these steps:
-
-1. **Clone the Repository**:
-
-   ```bash
-   git clone https://github.com/line/abc-user-feedback
-   cd abc-user-feedback
-   ```
-
-2. **Install Dependencies**:
-
-   ```bash
-   pnpm install
-   ```
-
-3. **Start the Application**:
-   ```bash
-   npx auf-cli init
-   npx auf-cli start
-   ```
-
-For more detailed setup instructions, refer to the [Getting Started](#getting-started) section.
+ABC User Feedback is a standalone web application designed to manage Voice of Customer (VoC) data. It enables you to efficiently gather and categorize customer feedback. The application is currently utilized in services with a reach of 10 million MAU.
 
 <p align="center">
   <video src="https://github.com/user-attachments/assets/a2ef7a1a-41ec-4cec-b7d1-bda5fbd7d48b" width="100%" />
@@ -78,9 +54,7 @@ Before you begin, ensure you have the following installed:
 - SMTP - for mail verification during making accounts
 - [OpenSearch v2.16](https://opensearch.org/) - for performance on searching feedback
 
-You can use the [docker-compose.infra-amd64.yml](/docker/docker-compose.infra-amd64.yml) file for requirements.
-
-For ARM architecture, use the [docker-compose.infra-arm64.yml](/docker/docker-compose.infra-arm64.yml) file.
+You can use the [docker-compose.infra.yml](/docker/docker-compose.infra.yml) file for requirements.
 
 ### Docker Hub Images
 
@@ -149,7 +123,7 @@ npm run migration:run
 pnpm dev
 ```
 
-### Build Docker Image
+### Option3. Build Docker Image
 
 For your code build, you can build a Docker image using Docker Compose. Refer to [remote caching](https://turbo.build/repo/docs/core-concepts/remote-caching) and [deploying with Docker](https://turbo.build/repo/docs/handbook/deploying-with-docker) using `turborepo`.
 

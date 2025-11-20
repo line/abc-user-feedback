@@ -3,7 +3,7 @@
 if [[ ${1} == "help" || "$#" -lt 2 ]]; then
     echo "Usage: sh ${0} APP VER"
     echo "APP        APP of docker image"
-    echo "              ex. api, web"
+    echo "              ex. api, web, docs"
     echo "VER           Version of docker image"
     echo "              ex. 1.0.0, 1.1.0, ..."
     exit;
@@ -26,7 +26,7 @@ echo "TAG:${TAG}"
 echo ""
 echo "docker image build start - ${TAG}"
 
-docker build --platform linux/amd64 -t ${TAG} -f ${DOCKER_FILE} ${APP_DIR}
+docker build -t ${TAG} -f ${DOCKER_FILE} ${APP_DIR}
 
 if [[ $? -ne 0 ]]; then
     echo "docker image build failed - ${TAG}"

@@ -33,7 +33,7 @@ import { AnonymousLayout } from '@/widgets/anonymous-layout';
 import serverSideTranslations from '@/server-side-translations';
 
 const signInWithEmailSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(8),
 });
 

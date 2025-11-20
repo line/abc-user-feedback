@@ -33,12 +33,6 @@ COPY --from=builder /app/out/full/ .
 COPY turbo.json ./
 COPY .turbo/ ./.turbo/
 
-ARG TURBO_TOKEN
-ENV TURBO_TOKEN=${TURBO_TOKEN}
-
-ARG TURBO_TEAM
-ENV TURBO_TEAM=${TURBO_TEAM}
-
 RUN pnpm dlx turbo run build --filter=api...
 
 FROM base AS runner
@@ -51,4 +45,4 @@ USER nestjs
 
 COPY --from=installer --chown=nestjs:nodejs /app .
 
-CMD node -r source-map-support/register apps/api/dist/main.js
+CMD ["node", "-r", "source-map-support/register", "apps/api/dist/main.js"]

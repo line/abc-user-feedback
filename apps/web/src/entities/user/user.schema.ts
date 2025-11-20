@@ -18,7 +18,7 @@ import { z } from 'zod';
 
 export const userSchema = z.object({
   id: z.number(),
-  email: z.string().email(),
+  email: z.email(),
   type: z.union([z.literal('SUPER'), z.literal('GENERAL')]),
   name: z.string().max(20).trim().nullable(),
   department: z.string().max(50).trim().nullable(),
@@ -91,7 +91,7 @@ export const invitedUserSignupSchema = z
     password: z.string().min(8),
     confirmPassword: z.string().min(8),
     code: z.string(),
-    email: z.string().email(),
+    email: z.email(),
   })
   .refine(({ password, confirmPassword }) => password === confirmPassword, {
     message: 'must equal Password',
