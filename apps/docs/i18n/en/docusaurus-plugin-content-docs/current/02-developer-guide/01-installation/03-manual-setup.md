@@ -65,7 +65,7 @@ pnpm build
 Create a `.env` file in the `apps/api` directory and configure it by referring to `.env.example`:
 
 ```env
-# Required enviroment variables
+# Required environment variables
 JWT_SECRET=DEV
 
 MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@localhost:13306/userfeedback # required
@@ -73,7 +73,7 @@ MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@localhost:13306/userfeedback
 ACCESS_TOKEN_EXPIRED_TIME=10m # default: 10m
 REFRESH_TOKEN_EXPIRED_TIME=1h # default: 1h
 
-# Optional enviroment variables
+# Optional environment variables
 
 # APP_PORT=4000 # default: 4000
 # APP_ADDRESS=0.0.0.0 # default: 0.0.0.0
