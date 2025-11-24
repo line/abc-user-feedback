@@ -81,12 +81,13 @@ ABC User Feedback supports a command line tool (`auf-cli`) that easily runs both
 With this tool, you can initialize the infrastructure and run the app using a pre-configured Docker image. Since the CLI is executable with `npx`, only an `npm` environment is required, with no additional dependencies.
 
 ```bash
-npx auf-cli init # initialize infrastructure
-npx auf-cli start # start app
-npx auf-cli stop # stop app
+npx auf-cli init   # initialize infrastructure
+npx auf-cli start  # start app
+npx auf-cli stop   # stop app
+npx auf-cli clean  # clean volumes (use --images to also clean unused images)
 ```
 
-Refer to the [npm package site](https://www.npmjs.com/package/auf-cli) for more details.
+Refer to the [npm package site](https://www.npmjs.com/package/auf-cli) or the [CLI tool documentation](./apps/docs/docs/02-developer-guide/01-installation/02-cli-tool.md) for more details.
 
 ### Manual Setup (Local)
 
@@ -102,30 +103,36 @@ cd abc-user-feedback
 pnpm install
 ```
 
-2. **Spin Up Required Infrastructure** (MySQL, OpenSearch, etc.) using Docker Compose:
+2. **Build All Packages**:
 
 ```bash
-docker-compose -f docker/docker-compose.infra-amd64.yml up -d
+pnpm build
 ```
 
-3. **Create `.env` Files** in `apps/api` and `apps/web` by referring to `.env.example` ([web environment variables](./apps/web/README.md), [api environment variables](./apps/api/README.md)).
+3. **Spin Up Required Infrastructure** (MySQL, OpenSearch, etc.) using Docker Compose:
 
-4. **Apply Database Migrations**:
+```bash
+docker-compose -f docker/docker-compose.infra.yml up -d
+```
+
+4. **Create `.env` Files** in `apps/api` and `apps/web` by referring to `.env.example` ([web environment variables](./apps/web/README.md), [api environment variables](./apps/api/README.md)).
+
+5. **Apply Database Migrations**:
 
 ```bash
 cd apps/api
 npm run migration:run
 ```
 
-5. **Start Developing**: Run the `dev` target of both apps in the root directory:
+6. **Start Developing**: Run the `dev` target of both apps in the root directory:
 
 ```bash
 pnpm dev
 ```
 
-### Option3. Build Docker Image
+### Building Docker Images
 
-For your code build, you can build a Docker image using Docker Compose. Refer to [remote caching](https://turbo.build/repo/docs/core-concepts/remote-caching) and [deploying with Docker](https://turbo.build/repo/docs/handbook/deploying-with-docker) using `turborepo`.
+You can build Docker images using Docker Compose for your code. Refer to [remote caching](https://turbo.build/repo/docs/core-concepts/remote-caching) and [deploying with Docker](https://turbo.build/repo/docs/handbook/deploying-with-docker) using `turborepo`.
 
 ```
 docker compose -f docker-compose.yml build

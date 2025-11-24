@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
-title: "수동 설치"
-description: "소스 코드에서 직접 ABC User Feedback을 빌드하고 실행하는 수동 설치 가이드"
+title: '수동 설치'
+description: '소스 코드에서 직접 ABC User Feedback을 빌드하고 실행하는 수동 설치 가이드'
 ---
 
 # 수동 설치
@@ -52,44 +52,61 @@ ABC User Feedback은 모노레포 구조를 사용하며 TurboRepo를 통해 관
 pnpm install
 ```
 
+의존성 설치 후, 모든 패키지를 빌드합니다:
+
+```bash
+pnpm build
+```
+
 ## 환경 변수 설정
 
 ### API 서버 환경 변수
 
-`apps/api` 디렉토리에 `.env` 파일을 생성하고 다음처럼 구성합니다:
+`apps/api` 디렉토리에 `.env` 파일을 생성하고 `.env.example`을 참조하여 구성합니다:
 
 ```env
-# 필수 환경 변수
-JWT_SECRET=your-jwt-secret-key
-MYSQL_PRIMARY_URL=mysql://username:password@localhost:3306/database
-ACCESS_TOKEN_EXPIRED_TIME=10m
-REFRESH_TOKEN_EXPIRED_TIME=1h
+# Required enviroment variables
+JWT_SECRET=DEV
 
-# 선택적 환경 변수
-APP_PORT=4000
-APP_ADDRESS=0.0.0.0
-AUTO_MIGRATION=true
+MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@localhost:13306/userfeedback # required
 
-# SMTP 설정
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_USERNAME=your-username
-SMTP_PASSWORD=your-password
-SMTP_SENDER=noreply@example.com
+ACCESS_TOKEN_EXPIRED_TIME=10m # default: 10m
+REFRESH_TOKEN_EXPIRED_TIME=1h # default: 1h
 
-# OpenSearch 설정 (선택사항)
-OPENSEARCH_USE=false
-# OPENSEARCH_NODE=http://localhost:9200
-# OPENSEARCH_USERNAME=admin
-# OPENSEARCH_PASSWORD=admin
+# Optional enviroment variables
+
+# APP_PORT=4000 # default: 4000
+# APP_ADDRESS=0.0.0.0 # default: 0.0.0.0
+
+# MYSQL_SECONDARY_URLS= ["mysql://userfeedback:userfeedback@localhost:13306/userfeedback"] # optional
+
+SMTP_HOST=localhost # required
+SMTP_PORT=25 # required
+SMTP_SENDER=user@feedback.com # required
+# SMTP_USERNAME= # optional
+# SMTP_PASSWORD= # optional
+# SMTP_TLS= # default: false
+# SMTP_CIPHER_SPEC= # default: TLSv1.2 if SMTP_TLS=true
+# SMTP_OPPORTUNISTIC_TLS= # default: true if SMTP_TLS=true
+
+# OPENSEARCH_USE=false # default: false
+# OPENSEARCH_NODE= # required if OPENSEARCH_USE=true
+# OPENSEARCH_USERNAME= # optional
+# OPENSEARCH_PASSWORD= # optional
+
+# AUTO_MIGRATION=true # default: true
+
+# MASTER_API_KEY= # default: none
+
+# AUTO_FEEDBACK_DELETION_ENABLED=false # default: false
+# AUTO_FEEDBACK_DELETION_PERIOD_DAYS=365*5
 ```
 
 ### Web 서버 환경 변수
 
-`apps/web` 디렉토리에 `.env` 파일을 생성하고 다음처럼 구성합니다:
+`apps/web` 디렉토리에 `.env` 파일을 생성하고 `.env.example`을 참조하여 구성합니다:
 
 ```env
-# 필수 환경 변수
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 ```
 
@@ -233,21 +250,18 @@ API 서버가 실행 중일 때 다음 엔드포인트에서 Swagger 문서를 �
 ### 일반적인 문제
 
 1. **의존성 설치 오류**:
-
    - Node.js 버전이 v22.19.0 이상인지 확인하세요.
    - pnpm 버전이 v10.15.0 이상인지 확인하세요.
    - pnpm을 최신 버전으로 업데이트하세요.
    - `pnpm install --force`를 시도해보세요.
 
 2. **데이터베이스 연결 오류**:
-
    - MySQL 서버가 실행 중인지 확인하세요.
    - 데이터베이스 자격 증명이 올바른지 확인하세요.
    - `MYSQL_PRIMARY_URL` 환경 변수 형식이 올바른지 확인하세요.
    - Docker 인프라를 사용하는 경우 MySQL이 포트 13306(3306이 아님)에서 실행되는지 확인하세요.
 
 3. **빌드 오류**:
-
    - UI 패키지가 빌드되었는지 확인하세요 (`pnpm build:ui`).
    - 모든 의존성이 설치되었는지 확인하세요.
    - TypeScript 오류를 확인하세요.
