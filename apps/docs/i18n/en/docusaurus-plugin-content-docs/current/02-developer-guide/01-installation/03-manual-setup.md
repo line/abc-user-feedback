@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
-title: "Manual Installation"
-description: "Manual installation guide for building and running ABC User Feedback directly from source code"
+title: 'Manual Installation'
+description: 'Manual installation guide for building and running ABC User Feedback directly from source code'
 ---
 
 # Manual Installation
@@ -52,44 +52,61 @@ ABC User Feedback uses a monorepo structure managed through TurboRepo. To instal
 pnpm install
 ```
 
+After installing dependencies, build all packages:
+
+```bash
+pnpm build
+```
+
 ## Environment Variable Configuration
 
 ### API Server Environment Variables
 
-Create a `.env` file in the `apps/api` directory and configure as follows:
+Create a `.env` file in the `apps/api` directory and configure it by referring to `.env.example`:
 
 ```env
 # Required environment variables
-JWT_SECRET=your-jwt-secret-key
-MYSQL_PRIMARY_URL=mysql://username:password@localhost:3306/database
-ACCESS_TOKEN_EXPIRED_TIME=10m
-REFRESH_TOKEN_EXPIRED_TIME=1h
+JWT_SECRET=DEV
+
+MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@localhost:13306/userfeedback # required
+
+ACCESS_TOKEN_EXPIRED_TIME=10m # default: 10m
+REFRESH_TOKEN_EXPIRED_TIME=1h # default: 1h
 
 # Optional environment variables
-APP_PORT=4000
-APP_ADDRESS=0.0.0.0
-AUTO_MIGRATION=true
 
-# SMTP settings
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_USERNAME=your-username
-SMTP_PASSWORD=your-password
-SMTP_SENDER=noreply@example.com
+# APP_PORT=4000 # default: 4000
+# APP_ADDRESS=0.0.0.0 # default: 0.0.0.0
 
-# OpenSearch settings (optional)
-OPENSEARCH_USE=false
-# OPENSEARCH_NODE=http://localhost:9200
-# OPENSEARCH_USERNAME=admin
-# OPENSEARCH_PASSWORD=admin
+# MYSQL_SECONDARY_URLS= ["mysql://userfeedback:userfeedback@localhost:13306/userfeedback"] # optional
+
+SMTP_HOST=localhost # required
+SMTP_PORT=25 # required
+SMTP_SENDER=user@feedback.com # required
+# SMTP_USERNAME= # optional
+# SMTP_PASSWORD= # optional
+# SMTP_TLS= # default: false
+# SMTP_CIPHER_SPEC= # default: TLSv1.2 if SMTP_TLS=true
+# SMTP_OPPORTUNISTIC_TLS= # default: true if SMTP_TLS=true
+
+# OPENSEARCH_USE=false # default: false
+# OPENSEARCH_NODE= # required if OPENSEARCH_USE=true
+# OPENSEARCH_USERNAME= # optional
+# OPENSEARCH_PASSWORD= # optional
+
+# AUTO_MIGRATION=true # default: true
+
+# MASTER_API_KEY= # default: none
+
+# AUTO_FEEDBACK_DELETION_ENABLED=false # default: false
+# AUTO_FEEDBACK_DELETION_PERIOD_DAYS=365*5
 ```
 
 ### Web Server Environment Variables
 
-Create a `.env` file in the `apps/web` directory and configure as follows:
+Create a `.env` file in the `apps/web` directory and configure it by referring to `.env.example`:
 
 ```env
-# Required environment variables
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 ```
 
@@ -233,21 +250,18 @@ When the API server is running, you can check Swagger documentation at the follo
 ### Common Issues
 
 1. **Dependency Installation Errors**:
-
    - Verify Node.js version is v22.19.0 or higher.
    - Verify pnpm version is v10.15.0 or higher.
    - Update pnpm to the latest version.
    - Try `pnpm install --force`.
 
 2. **Database Connection Errors**:
-
    - Verify MySQL server is running.
    - Verify database credentials are correct.
    - Verify `MYSQL_PRIMARY_URL` environment variable format is correct.
    - If using Docker infrastructure, verify MySQL is running on port 13306 (not 3306).
 
 3. **Build Errors**:
-
    - Verify UI packages are built (`pnpm build:ui`).
    - Verify all dependencies are installed.
    - Check TypeScript errors.
@@ -256,4 +270,3 @@ When the API server is running, you can check Swagger documentation at the follo
    - Verify environment variables are set correctly.
    - Verify required ports are available.
    - Check error messages in logs.
-

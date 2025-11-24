@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
-title: "手動インストール"
-description: "ソースコードから直接ABC User Feedbackをビルドして実行する手動インストールガイド"
+title: '手動インストール'
+description: 'ソースコードから直接ABC User Feedbackをビルドして実行する手動インストールガイド'
 ---
 
 # 手動インストール
@@ -52,44 +52,61 @@ ABC User FeedbackはTurboRepoを通じて管理されるモノレポ構造を使
 pnpm install
 ```
 
+依存関係のインストール後、すべてのパッケージをビルドします：
+
+```bash
+pnpm build
+```
+
 ## 環境変数設定
 
 ### APIサーバー環境変数
 
-`apps/api`ディレクトリに`.env`ファイルを作成し、次のように構成します：
+`apps/api`ディレクトリに`.env`ファイルを作成し、`.env.example`を参照して構成します：
 
 ```env
-# 必須環境変数
-JWT_SECRET=your-jwt-secret-key
-MYSQL_PRIMARY_URL=mysql://username:password@localhost:3306/database
-ACCESS_TOKEN_EXPIRED_TIME=10m
-REFRESH_TOKEN_EXPIRED_TIME=1h
+# Required environment variables
+JWT_SECRET=DEV
 
-# オプション環境変数
-APP_PORT=4000
-APP_ADDRESS=0.0.0.0
-AUTO_MIGRATION=true
+MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@localhost:13306/userfeedback # required
 
-# SMTP設定
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_USERNAME=your-username
-SMTP_PASSWORD=your-password
-SMTP_SENDER=noreply@example.com
+ACCESS_TOKEN_EXPIRED_TIME=10m # default: 10m
+REFRESH_TOKEN_EXPIRED_TIME=1h # default: 1h
 
-# OpenSearch設定（オプション）
-OPENSEARCH_USE=false
-# OPENSEARCH_NODE=http://localhost:9200
-# OPENSEARCH_USERNAME=admin
-# OPENSEARCH_PASSWORD=admin
+# Optional environment variables
+
+# APP_PORT=4000 # default: 4000
+# APP_ADDRESS=0.0.0.0 # default: 0.0.0.0
+
+# MYSQL_SECONDARY_URLS= ["mysql://userfeedback:userfeedback@localhost:13306/userfeedback"] # optional
+
+SMTP_HOST=localhost # required
+SMTP_PORT=25 # required
+SMTP_SENDER=user@feedback.com # required
+# SMTP_USERNAME= # optional
+# SMTP_PASSWORD= # optional
+# SMTP_TLS= # default: false
+# SMTP_CIPHER_SPEC= # default: TLSv1.2 if SMTP_TLS=true
+# SMTP_OPPORTUNISTIC_TLS= # default: true if SMTP_TLS=true
+
+# OPENSEARCH_USE=false # default: false
+# OPENSEARCH_NODE= # required if OPENSEARCH_USE=true
+# OPENSEARCH_USERNAME= # optional
+# OPENSEARCH_PASSWORD= # optional
+
+# AUTO_MIGRATION=true # default: true
+
+# MASTER_API_KEY= # default: none
+
+# AUTO_FEEDBACK_DELETION_ENABLED=false # default: false
+# AUTO_FEEDBACK_DELETION_PERIOD_DAYS=365*5
 ```
 
 ### ウェブサーバー環境変数
 
-`apps/web`ディレクトリに`.env`ファイルを作成し、次のように構成します：
+`apps/web`ディレクトリに`.env`ファイルを作成し、`.env.example`を参照して構成します：
 
 ```env
-# 必須環境変数
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 ```
 
@@ -233,21 +250,18 @@ APIサーバーが実行中の場合、次のエンドポイントでSwaggerド�
 ### 一般的な問題
 
 1. **依存関係インストールエラー**：
-
    - Node.jsバージョンがv22.19.0以上であることを確認してください。
    - pnpmバージョンがv10.15.0以上であることを確認してください。
    - pnpmを最新バージョンに更新してください。
    - `pnpm install --force`を試してください。
 
 2. **データベース接続エラー**：
-
    - MySQLサーバーが実行中であることを確認してください。
    - データベース認証情報が正しいことを確認してください。
    - `MYSQL_PRIMARY_URL`環境変数の形式が正しいことを確認してください。
    - Dockerインフラを使用する場合、MySQLがポート13306（3306ではない）で実行されていることを確認してください。
 
 3. **ビルドエラー**：
-
    - UIパッケージがビルドされていることを確認してください（`pnpm build:ui`）。
    - すべての依存関係がインストールされていることを確認してください。
    - TypeScriptエラーを確認してください。
@@ -256,4 +270,3 @@ APIサーバーが実行中の場合、次のエンドポイントでSwaggerド�
    - 環境変数が正しく設定されていることを確認してください。
    - 必要なポートが利用可能であることを確認してください。
    - ログのエラーメッセージを確認してください。
-
