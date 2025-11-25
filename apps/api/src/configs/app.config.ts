@@ -22,6 +22,7 @@ export const appConfigSchema = Joi.object({
   APP_PORT: Joi.number().default(4000),
   APP_ADDRESS: Joi.string().default('0.0.0.0'),
   ADMIN_WEB_URL: Joi.string().default('http://localhost:3000'),
+  BASE_URL: Joi.string().optional(),
   AUTO_FEEDBACK_DELETION_ENABLED: Joi.boolean().default(false),
   AUTO_FEEDBACK_DELETION_PERIOD_DAYS: Joi.number().when(
     'AUTO_FEEDBACK_DELETION_ENABLED',
@@ -37,6 +38,7 @@ export const appConfig = registerAs('app', () => ({
   port: process.env.APP_PORT,
   address: process.env.APP_ADDRESS,
   adminWebUrl: process.env.ADMIN_WEB_URL,
+  baseUrl: process.env.BASE_URL,
   enableAutoFeedbackDeletion:
     process.env.AUTO_FEEDBACK_DELETION_ENABLED === 'true',
   autoFeedbackDeletionPeriodDays:

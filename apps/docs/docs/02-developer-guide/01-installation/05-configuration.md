@@ -35,15 +35,16 @@ sidebar_position: 5
 
 ### 선택 환경 변수
 
-| 환경 변수              | 설명                            | 기본값                  | 예시                        |
-| ---------------------- | ------------------------------- | ----------------------- | --------------------------- |
-| `APP_PORT`             | API 서버 포트                   | `4000`                  | `4000`                      |
-| `APP_ADDRESS`          | 바인딩 주소                     | `0.0.0.0`               | `127.0.0.1`                 |
-| `ADMIN_WEB_URL`        | 관리자 웹 URL                   | `http://localhost:3000` | `https://admin.company.com` |
-| `MYSQL_SECONDARY_URLS` | 보조 DB URL (JSON 배열)         | 없음                    | `["mysql://..."]`           |
-| `AUTO_MIGRATION`       | 앱 시작 시 DB 자동 마이그레이션 | `true`                  | `false`                     |
-| `MASTER_API_KEY`       | 마스터 권한 API 키 (선택)       | 없음                    | `abc123xyz`                 |
-| `NODE_OPTIONS`         | Node 실행 옵션                  | 없음                    | `--max_old_space_size=4096` |
+| 환경 변수              | 설명                                        | 기본값                  | 예시                        |
+| ---------------------- | ------------------------------------------- | ----------------------- | --------------------------- |
+| `APP_PORT`             | API 서버 포트                               | `4000`                  | `4000`                      |
+| `APP_ADDRESS`          | 바인딩 주소                                 | `0.0.0.0`               | `127.0.0.1`                 |
+| `ADMIN_WEB_URL`        | 관리자 웹 URL                               | `http://localhost:3000` | `https://admin.company.com` |
+| `BASE_URL`             | API 서버의 공개 URL (Swagger 문서에서 사용) | 없음                    | `https://api.example.com`   |
+| `MYSQL_SECONDARY_URLS` | 보조 DB URL (JSON 배열)                     | 없음                    | `["mysql://..."]`           |
+| `AUTO_MIGRATION`       | 앱 시작 시 DB 자동 마이그레이션             | `true`                  | `false`                     |
+| `MASTER_API_KEY`       | 마스터 권한 API 키 (선택)                   | 없음                    | `abc123xyz`                 |
+| `NODE_OPTIONS`         | Node 실행 옵션                              | 없음                    | `--max_old_space_size=4096` |
 
 ---
 
@@ -129,6 +130,7 @@ ACCESS_TOKEN_EXPIRED_TIME=10m
 REFRESH_TOKEN_EXPIRED_TIME=1h
 SMTP_HOST=smtp.example.com
 SMTP_SENDER=noreply@example.com
+# BASE_URL=https://api.example.com  # 리버스 프록시 뒤에서 서빙하는 경우 설정
 
 # apps/web/.env
 NEXT_PUBLIC_API_BASE_URL=http://localhost:4000

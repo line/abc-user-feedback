@@ -14,15 +14,27 @@
  * under the License.
  */
 import { Controller, Get, Req, Res } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { FastifyReply, FastifyRequest } from 'fastify';
+
+import type { ConfigServiceType } from '@/types/config-service.type';
 
 @Controller()
 @ApiExcludeController()
 export class APIController {
+  constructor(
+    private readonly configService: ConfigService<ConfigServiceType>,
+  ) {}
+
   @Get('docs/redoc')
   getAPIDocs(@Req() request: FastifyRequest, @Res() reply: FastifyReply) {
     const { hostname } = request;
+    const appConfig = this.configService.get('app', { infer: true });
+    const baseUrl = appConfig?.baseUrl;
+
+    const specUrl =
+      baseUrl ? `${baseUrl}/docs-json` : `//${hostname}/docs-json`;
 
     const html = `<!DOCTYPE html>
     <html>
@@ -44,7 +56,7 @@ export class APIController {
         </style>
       </head>
       <body>
-        <redoc spec-url='//${hostname}/docs-json'></redoc>
+        <redoc spec-url='${specUrl}'></redoc>
         <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"> </script>
       </body>
     </html>`;
