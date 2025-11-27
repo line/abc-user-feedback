@@ -98,6 +98,8 @@ SMTP_SENDER=user@feedback.com # required
 
 # MASTER_API_KEY= # default: none
 
+# BASE_URL=https://api.example.com # Swaggerドキュメントで使用するAPIサーバーの公開URL（オプション）
+
 # AUTO_FEEDBACK_DELETION_ENABLED=false # default: false
 # AUTO_FEEDBACK_DELETION_PERIOD_DAYS=365*5
 ```
@@ -244,6 +246,8 @@ APIサーバーが実行中の場合、次のエンドポイントでSwaggerド�
 - **管理者APIドキュメント**: http://localhost:4000/admin-docs
 - **OpenAPI JSON**: http://localhost:4000/docs-json
 - **管理者OpenAPI JSON**: http://localhost:4000/admin-docs-json
+
+> **注意**: APIサーバーをリバースプロキシの後ろで異なるURLで提供する場合、`BASE_URL`環境変数を設定すると、Swaggerドキュメントで正しいAPIエンドポイントURLが生成されます。例: `BASE_URL=https://api.example.com`
 
 ## トラブルシューティング
 

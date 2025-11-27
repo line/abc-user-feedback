@@ -98,6 +98,8 @@ SMTP_SENDER=user@feedback.com # required
 
 # MASTER_API_KEY= # default: none
 
+# BASE_URL=https://api.example.com # Public API server URL used in Swagger documentation (optional)
+
 # AUTO_FEEDBACK_DELETION_ENABLED=false # default: false
 # AUTO_FEEDBACK_DELETION_PERIOD_DAYS=365*5
 ```
@@ -244,6 +246,8 @@ When the API server is running, you can check Swagger documentation at the follo
 - **Admin API Documentation**: http://localhost:4000/admin-docs
 - **OpenAPI JSON**: http://localhost:4000/docs-json
 - **Admin OpenAPI JSON**: http://localhost:4000/admin-docs-json
+
+> **Note**: If you are serving the API server on a different URL (e.g., behind a reverse proxy), you can set the `BASE_URL` environment variable to generate correct API endpoint URLs in the Swagger documentation. Example: `BASE_URL=https://api.example.com`
 
 ## Troubleshooting
 

@@ -98,6 +98,8 @@ SMTP_SENDER=user@feedback.com # required
 
 # MASTER_API_KEY= # default: none
 
+# BASE_URL=http://localhost:4000
+
 # AUTO_FEEDBACK_DELETION_ENABLED=false # default: false
 # AUTO_FEEDBACK_DELETION_PERIOD_DAYS=365*5
 ```
@@ -244,6 +246,8 @@ API 서버가 실행 중일 때 다음 엔드포인트에서 Swagger 문서를 �
 - **관리자 API 문서**: http://localhost:4000/admin-docs
 - **OpenAPI JSON**: http://localhost:4000/docs-json
 - **관리자 OpenAPI JSON**: http://localhost:4000/admin-docs-json
+
+> **참고**: API 서버를 리버스 프록시 뒤에서 다른 URL로 서빙하는 경우, `BASE_URL` 환경 변수를 설정하면 Swagger 문서에서 올바른 API 엔드포인트 URL이 생성됩니다. 예: `BASE_URL=https://api.example.com`
 
 ## 문제 해결
 

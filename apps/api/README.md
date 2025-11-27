@@ -85,6 +85,7 @@ The following is a list of environment variables used by the application, along 
 | Environment                          | Description                                                    | Default Value                                  |
 | ------------------------------------ | -------------------------------------------------------------- | ---------------------------------------------- |
 | `ADMIN_WEB_URL`                      | Admin Web URL                                                  | `http://localhost:3000`                        |
+| `BASE_URL`                           | Public API server URL used in Swagger documentation            | _optional_                                     |
 | `APP_PORT`                           | The port that the server runs on                               | `4000`                                         |
 | `APP_ADDRESS`                        | The address that the server binds to                           | `0.0.0.0`                                      |
 | `MYSQL_SECONDARY_URLS`               | Secondary MySQL connection URLs (must be in JSON array format) | _optional_                                     |
@@ -109,6 +110,8 @@ Please ensure that you set the required environment variables before starting th
 ## Swagger
 
 The swagger documentation can be found on the `/docs` endpoint.
+
+If you are serving the API server on a different URL (e.g., behind a reverse proxy), you can set the `BASE_URL` environment variable to specify the public URL. This will be used in the Swagger documentation to generate correct API endpoint URLs.
 
 ## Dashboard statistics data migration
 

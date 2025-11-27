@@ -124,39 +124,51 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.useLogger(app.get(Logger));
 
-  const adminDocumentConfig = new DocumentBuilder()
+  const configService = app.get(ConfigService<ConfigServiceType>);
+  const appConfig = configService.get('app', { infer: true }) ?? {
+    port: 4000,
+    address: 'localhost',
+    baseUrl: undefined,
+  };
+  const baseUrl = appConfig.baseUrl;
+
+  const adminDocumentConfigBuilder = new DocumentBuilder()
     .setTitle('User Feedback Admin API Document')
     .setDescription('User feedback Admin API description')
     .setVersion('1.0.0')
     .addBearerAuth()
-    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' }, 'apiKey')
-    .build();
+    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' }, 'apiKey');
+  if (baseUrl) {
+    adminDocumentConfigBuilder.addServer(baseUrl);
+  }
+  const adminDocumentConfig = adminDocumentConfigBuilder.build();
   const excludeModules = [APIModule, HealthModule, MigrationModule];
   const adminDocument = SwaggerModule.createDocument(app, adminDocumentConfig, {
     include: domainModules.filter((module) => !excludeModules.includes(module)),
   });
   SwaggerModule.setup('admin-docs', app, adminDocument);
 
-  const documentConfig = new DocumentBuilder()
+  const documentConfigBuilder = new DocumentBuilder()
     .setTitle('User Feedback API Document')
     .setDescription(
       `You can use this API to integrate with your own service or system. This API is protected by a simple API key authentication, so please do not expose this API to the public. You can make an API key in the admin setting page. You should put the API key in the header with the key name 'x-api-key'.
       `,
     )
     .setVersion('1.0.0')
-    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' }, 'apiKey')
-    .build();
+    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' }, 'apiKey');
+  if (baseUrl) {
+    documentConfigBuilder.addServer(baseUrl);
+  }
+  const documentConfig = documentConfigBuilder.build();
   const document = SwaggerModule.createDocument(app, documentConfig, {
     include: [APIModule],
   });
   SwaggerModule.setup('docs', app, document);
 
-  const configService = app.get(ConfigService<ConfigServiceType>);
-  const { port, address }: { port: number; address: string } =
-    configService.get('app', { infer: true }) ?? {
-      port: 4000,
-      address: 'localhost',
-    };
+  const { port, address }: { port: number; address: string } = {
+    port: appConfig.port ? Number(appConfig.port) : 4000,
+    address: appConfig.address ?? 'localhost',
+  };
 
   await app.listen(port, address);
   DefaultLogger.log(`🚀 Application is running on: ${await app.getUrl()}`);
@@ -187,22 +199,17 @@ async function bootstrap() {
     DefaultLogger.warn('   The old environment variable is no longer used.');
   }
 
-  if (process.env.BASE_URL || process.env.SMTP_BASE_URL) {
+  if (process.env.SMTP_BASE_URL) {
     DefaultLogger.warn(
-      '⚠️  Environment variable names have been merged: BASE_URL, SMTP_BASE_URL -> ADMIN_WEB_URL',
+      '⚠️  Environment variable name has changed: SMTP_BASE_URL -> ADMIN_WEB_URL',
     );
-    if (process.env.BASE_URL) {
-      DefaultLogger.warn(`   Current BASE_URL value: ${process.env.BASE_URL}`);
-    }
-    if (process.env.SMTP_BASE_URL) {
-      DefaultLogger.warn(
-        `   Current SMTP_BASE_URL value: ${process.env.SMTP_BASE_URL}`,
-      );
-    }
     DefaultLogger.warn(
-      '   Please update to use ADMIN_WEB_URL instead of BASE_URL and SMTP_BASE_URL.',
+      `   Current SMTP_BASE_URL value: ${process.env.SMTP_BASE_URL}`,
     );
-    DefaultLogger.warn('   The old environment variables are no longer used.');
+    DefaultLogger.warn(
+      '   Please update to use ADMIN_WEB_URL instead of SMTP_BASE_URL.',
+    );
+    DefaultLogger.warn('   The old environment variable is no longer used.');
   }
 }
 
