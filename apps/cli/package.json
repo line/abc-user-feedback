@@ -31,7 +31,7 @@
     "commander": "^14.0.2",
     "js-toml": "^1.0.2",
     "toml": "^3.0.0",
-    "yaml": "^2.8.1",
+    "yaml": "^2.8.2",
     "zod": "^4.1.13"
   },
   "devDependencies": {
