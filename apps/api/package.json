@@ -91,7 +91,7 @@
     "@swc/core": "1.13.5",
     "@swc/helpers": "^0.5.17",
     "@types/bcrypt": "^6.0.0",
-    "@types/express": "^5.0.5",
+    "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/luxon": "^3.7.1",
     "@types/node": "24.10.1",
