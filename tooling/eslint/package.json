@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@eslint/compat": "^2.0.0",
-    "@next/eslint-plugin-next": "^16.0.6",
+    "@next/eslint-plugin-next": "^16.0.7",
     "@ufb/eslint-plugin-header": "workspace:*",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
