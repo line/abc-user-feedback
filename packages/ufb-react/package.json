@@ -51,7 +51,7 @@
     "@ufb/tsconfig": "workspace:^",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "react": "^19.2.0",
+    "react": "^19.2.1",
     "tailwindcss": "catalog:",
     "typescript": "catalog:"
   },
