@@ -57,7 +57,7 @@
     "react": "^19.2.1",
     "react-content-loader": "^7.1.1",
     "react-dom": "^19.2.1",
-    "react-hook-form": "^7.67.0",
+    "react-hook-form": "^7.68.0",
     "react-i18next": "^16.3.5",
     "react-select": "^5.10.2",
     "react-use": "^17.6.0",
