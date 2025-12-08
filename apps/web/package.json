@@ -44,7 +44,7 @@
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.19",
     "framer-motion": "^12.23.25",
-    "i18next": "^25.7.1",
+    "i18next": "^25.7.2",
     "immer": "^11.0.1",
     "jwt-decode": "^4.0.0",
     "linkify": "^0.2.1",
