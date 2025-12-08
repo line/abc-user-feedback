@@ -24,7 +24,7 @@
     "glob": "^13.0.0",
     "postcss": "^8.5.6",
     "postcss-import": "^16.1.1",
-    "postcss-js": "^5.0.1",
+    "postcss-js": "^5.0.2",
     "postcss-nesting": "^13.0.2",
     "prettier": "catalog:",
     "tailwindcss": "catalog:"
