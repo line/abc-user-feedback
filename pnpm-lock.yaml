@@ -13,8 +13,8 @@ catalogs:
       specifier: ^3.5.3
       version: 3.6.2
     tailwindcss:
-      specifier: ^3.4.18
-      version: 3.4.18
+      specifier: ^3.4.19
+      version: 3.4.19
     typescript:
       specifier: ^5.9.3
       version: 5.9.3
@@ -541,7 +541,7 @@ importers:
         version: 3.4.0
       tailwind-scrollbar-hide:
         specifier: ^4.0.0
-        version: 4.0.0(tailwindcss@3.4.18(yaml@2.8.2))
+        version: 4.0.0(tailwindcss@3.4.19(yaml@2.8.2))
       zod:
         specifier: ^4.1.13
         version: 4.1.13
@@ -625,8 +625,8 @@ importers:
         specifier: 'catalog:'
         version: 3.6.2
       tailwindcss:
-        specifier: ^3.4.18
-        version: 3.4.18(yaml@2.8.2)
+        specifier: ^3.4.19
+        version: 3.4.19(yaml@2.8.2)
       ts-toolbelt:
         specifier: ^9.6.0
         version: 9.6.0
@@ -750,7 +750,7 @@ importers:
         version: 19.2.1
       tailwindcss:
         specifier: 'catalog:'
-        version: 3.4.18(yaml@2.8.2)
+        version: 3.4.19(yaml@2.8.2)
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -819,7 +819,7 @@ importers:
         version: 3.6.2
       tailwindcss:
         specifier: 'catalog:'
-        version: 3.4.18(yaml@2.8.2)
+        version: 3.4.19(yaml@2.8.2)
 
   tooling/eslint:
     dependencies:
@@ -12113,8 +12113,8 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.0.0 || >= 4.0.0 || >= 4.0.0-beta.8 || >= 4.0.0-alpha.20'
 
-  tailwindcss@3.4.18:
-    resolution: {integrity: sha512-6A2rnmW5xZMdw11LYjhcI5846rt9pbLSabY5XPxo+XWdxwZaFEn47Go4NzFiHu9sNNmr/kXivP1vStfvMaK1GQ==}
+  tailwindcss@3.4.19:
+    resolution: {integrity: sha512-3ofp+LL8E+pK/JuPLPggVAIaEuhvIz4qNcf3nA1Xn2o/7fb7s/TYpHhwGDv1ZU3PkBluUVaF8PyCHcm48cKLWQ==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -27505,11 +27505,11 @@ snapshots:
 
   tailwind-merge@3.4.0: {}
 
-  tailwind-scrollbar-hide@4.0.0(tailwindcss@3.4.18(yaml@2.8.2)):
+  tailwind-scrollbar-hide@4.0.0(tailwindcss@3.4.19(yaml@2.8.2)):
     dependencies:
-      tailwindcss: 3.4.18(yaml@2.8.2)
+      tailwindcss: 3.4.19(yaml@2.8.2)
 
-  tailwindcss@3.4.18(yaml@2.8.2):
+  tailwindcss@3.4.19(yaml@2.8.2):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
