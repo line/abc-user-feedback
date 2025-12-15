@@ -49,7 +49,7 @@ const config: Config = {
             'https://github.com/line/abc-user-feedback/tree/feat/docs/apps/docs',
         },
         gtag: {
-          trackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID,
+          trackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID ?? '',
           anonymizeIP: true,
         },
       },
