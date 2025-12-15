@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@docusaurus/core": "3.9.2",
+    "@docusaurus/plugin-google-gtag": "^3.9.2",
     "@docusaurus/preset-classic": "3.9.2",
     "@mdx-js/react": "^3.1.1",
     "clsx": "^2.1.1",
@@ -31,6 +32,7 @@
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
+    "dotenv": "^17.2.3",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
