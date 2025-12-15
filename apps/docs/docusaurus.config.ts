@@ -48,10 +48,12 @@ const config: Config = {
           editUrl:
             'https://github.com/line/abc-user-feedback/tree/feat/docs/apps/docs',
         },
-        gtag: {
-          trackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID ?? '',
-          anonymizeIP: true,
-        },
+        ...(process.env.GOOGLE_ANALYTICS_TRACKING_ID && {
+          gtag: {
+            trackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID,
+            anonymizeIP: true,
+          },
+        }),
       },
     ],
   ],
@@ -79,12 +81,14 @@ const config: Config = {
         },
       ],
     },
-    metadata: [
-      {
-        name: 'google-site-verification',
-        content: process.env.GOOGLE_SITE_VERIFICATION, // Replace with your actual code
-      },
-    ],
+    ...(process.env.GOOGLE_SITE_VERIFICATION && {
+      metadata: [
+        {
+          name: 'google-site-verification',
+          content: process.env.GOOGLE_SITE_VERIFICATION,
+        },
+      ],
+    }),
     footer: {
       copyright: `Copyright © ${new Date().getFullYear()} ABC User Feedback.`,
     },
