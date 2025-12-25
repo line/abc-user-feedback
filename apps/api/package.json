@@ -89,7 +89,7 @@
     "@swc-node/jest": "^1.9.1",
     "@swc/cli": "0.7.9",
     "@swc/core": "1.13.5",
-    "@swc/helpers": "^0.5.17",
+    "@swc/helpers": "^0.5.18",
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
