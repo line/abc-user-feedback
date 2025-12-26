@@ -8,6 +8,8 @@ sidebar_position: 2
 
 API 키는 외부 시스템이 ABC User Feedback과 안전하게 연동할 수 있도록 하는 인증 수단입니다. 이 문서에서는 API 키 생성부터 관리, 보안 유지까지 화면 중심으로 설명합니다.
 
+![api-key-setting.png](/img/api-key/api-key-setting.png)
+
 ---
 
 ## API 키 개요
@@ -77,6 +79,8 @@ API 키 관리 화면에서 우측 상단의 **Create API Key** 버튼을 클릭
 ---
 
 ## API 키 상태 관리
+
+![api-key-detail.png](/img/api-key/api-key-detail.png)
 
 ### Active / Inactive 전환
 

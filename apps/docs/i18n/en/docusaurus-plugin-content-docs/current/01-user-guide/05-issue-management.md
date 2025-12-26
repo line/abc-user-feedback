@@ -8,6 +8,8 @@ sidebar_position: 5
 
 **Issues** are a core feature for systematically managing problems or improvements found in feedback. This document covers all issue management features, from issue creation to category management and various view modes.
 
+![issue](/img/issue/1.png)
+
 ---
 
 ## Issue Overview
@@ -24,13 +26,13 @@ Issues are used for the following purposes:
 
 Each issue has the following status:
 
-| Status            | Description    | When Used                |
-| ----------------- | -------------- | ------------------------ |
-| **New**           | Newly registered | Initial issue creation   |
-| **On Review**     | Under review   | When assignee starts review |
-| **In Progress**   | In progress    | During actual work       |
-| **Resolved**      | Resolved       | Problem solved and completed |
-| **On Hold**       | Temporarily on hold | Waiting for additional info or deferred |
+| Status          | Description         | When Used                               |
+| --------------- | ------------------- | --------------------------------------- |
+| **New**         | Newly registered    | Initial issue creation                  |
+| **On Review**   | Under review        | When assignee starts review             |
+| **In Progress** | In progress         | During actual work                      |
+| **Resolved**    | Resolved            | Problem solved and completed            |
+| **On Hold**     | Temporarily on hold | Waiting for additional info or deferred |
 
 ---
 
@@ -54,12 +56,12 @@ The most common method, creating an issue based on specific feedback.
 2. Click the **+ Create Issue** button at the top left
 3. Enter information in the issue creation dialog:
 
-| Item            | Description                    | Required | Example                     |
-| --------------- | ------------------------------ | -------- | -------------------------- |
-| **Title**       | Issue title                    | Required | `Login button malfunction` |
-| **Description** | Detailed description           | Optional | `Occurs in specific browser` |
-| **Category**    | Issue classification           | Optional | `Bug`                      |
-| **Status**      | Initial status (default: New) | Optional | `New`                      |
+| Item            | Description                   | Required | Example                      |
+| --------------- | ----------------------------- | -------- | ---------------------------- |
+| **Title**       | Issue title                   | Required | `Login button malfunction`   |
+| **Description** | Detailed description          | Optional | `Occurs in specific browser` |
+| **Category**    | Issue classification          | Optional | `Bug`                        |
+| **Status**      | Initial status (default: New) | Optional | `New`                        |
 
 ### Editing Issues
 
@@ -73,15 +75,15 @@ You can modify information of created issues.
 
 #### Editable Items
 
-| Item            | Editable | Description                          |
-| --------------- | -------- | ------------------------------------ |
-| **Title**       | ✅ Yes   | Issue title                          |
-| **Description** | ✅ Yes   | Detailed description                 |
+| Item            | Editable | Description                                 |
+| --------------- | -------- | ------------------------------------------- |
+| **Title**       | ✅ Yes   | Issue title                                 |
+| **Description** | ✅ Yes   | Detailed description                        |
 | **Category**    | ✅ Yes   | Issue classification (select from dropdown) |
-| **Status**      | ✅ Yes   | Current progress status              |
-| **Ticket**      | ✅ Yes   | External issue tracker ticket number |
-| **ID**          | ❌ No    | System auto-generated               |
-| **Created**     | ❌ No    | Creation date/time                   |
+| **Status**      | ✅ Yes   | Current progress status                     |
+| **Ticket**      | ✅ Yes   | External issue tracker ticket number        |
+| **ID**          | ❌ No    | System auto-generated                       |
+| **Created**     | ❌ No    | Creation date/time                          |
 
 #### Save and Cancel
 
@@ -121,6 +123,8 @@ You can delete issues that are no longer needed.
 
 Kanban view is a viewing method that allows visual management by separating issues into columns by status.
 
+![issue-kanban](/img/issue/2.png)
+
 ### Accessing Kanban View
 
 1. Click the **Issue** tab in the top menu
@@ -132,13 +136,13 @@ Columns are organized by each status, and issues are displayed as cards.
 
 #### Kanban Column Structure
 
-| Column          | Display Information      | Card Count Display |
-| --------------- | ------------------------ | ------------------ |
-| **New**         | Newly registered issues  | Number at top      |
-| **On Review**   | Issues under review      | Number at top      |
-| **In Progress** | Issues in progress       | Number at top      |
-| **Resolved**    | Resolved issues          | Number at top      |
-| **On Hold**     | Issues on hold           | Number at top      |
+| Column          | Display Information     | Card Count Display |
+| --------------- | ----------------------- | ------------------ |
+| **New**         | Newly registered issues | Number at top      |
+| **On Review**   | Issues under review     | Number at top      |
+| **In Progress** | Issues in progress      | Number at top      |
+| **Resolved**    | Resolved issues         | Number at top      |
+| **On Hold**     | Issues on hold          | Number at top      |
 
 #### Issue Card Information
 
@@ -170,12 +174,12 @@ You can display only issues matching specific conditions using the filter functi
 
 #### Filter Condition Examples
 
-| Filter Type   | Condition Example               | Use Case                  |
-| ------------- | ------------------------------- | ------------------------- |
-| **Category**  | Category = "Bug"                | Check only bug issues     |
-| **Title**     | Title contains "Login"          | Find login-related issues |
-| **Created**   | Created >= 2024-03-01           | Issues created after specific date |
-| **Status**    | Status != "Resolved"            | Display only unresolved issues |
+| Filter Type  | Condition Example      | Use Case                           |
+| ------------ | ---------------------- | ---------------------------------- |
+| **Category** | Category = "Bug"       | Check only bug issues              |
+| **Title**    | Title contains "Login" | Find login-related issues          |
+| **Created**  | Created >= 2024-03-01  | Issues created after specific date |
+| **Status**   | Status != "Resolved"   | Display only unresolved issues     |
 
 ### Kanban View Sorting
 
@@ -235,11 +239,11 @@ You can sort by clicking each column header.
 
 #### Each Sort Content
 
-| Sort Criteria        | Use Case                  |
-| -------------------- | ------------------------- |
-| **Created ↓**        | Check latest issues first |
+| Sort Criteria        | Use Case                      |
+| -------------------- | ----------------------------- |
+| **Created ↓**        | Check latest issues first     |
 | **Feedback Count ↓** | Prioritize high-impact issues |
-| **Status**           | Check grouped by status  |
+| **Status**           | Check grouped by status       |
 
 ---
 
@@ -258,14 +262,14 @@ Issue categories are a feature that allows systematic management by classifying 
 
 Commonly used category classifications:
 
-| Category      | Description                   | Priority | Example Team |
-| ------------- | ----------------------------- | -------- | ------------ |
-| **Bug**       | Function malfunction, errors | High     | Development Team |
-| **Feature Request** | New feature addition requests | Medium   | Planning Team |
-| **Improvement** | Existing feature enhancement  | Medium   | UX Team      |
-| **Performance** | Speed, stability issues       | High     | Infrastructure Team |
-| **UI/UX**     | User interface problems       | Low      | Design Team  |
-| **Documentation** | Help, guide related           | Low      | Technical Documentation Team |
+| Category            | Description                   | Priority | Example Team                 |
+| ------------------- | ----------------------------- | -------- | ---------------------------- |
+| **Bug**             | Function malfunction, errors  | High     | Development Team             |
+| **Feature Request** | New feature addition requests | Medium   | Planning Team                |
+| **Improvement**     | Existing feature enhancement  | Medium   | UX Team                      |
+| **Performance**     | Speed, stability issues       | High     | Infrastructure Team          |
+| **UI/UX**           | User interface problems       | Low      | Design Team                  |
+| **Documentation**   | Help, guide related           | Low      | Technical Documentation Team |
 
 ### Category Management
 
@@ -305,119 +309,8 @@ When you want to check only issues of a specific category:
 
 ---
 
-## Issue Usage Guide
-
-### Efficient Issue Management Workflow
-
-#### 1. Feedback-Based Issue Creation
-
-```
-Feedback Collection → Analysis → Issue Creation → Category Classification
-```
-
-**Step-by-Step Guide**:
-
-1. **Daily feedback review**: Check newly registered feedback
-2. **Pattern analysis**: Group feedback with similar content
-3. **Issue creation**: Create issues for common problems
-4. **Priority setting**: Manage priority through category and status
-
-#### 2. Issue Status Management Process
-
-```
-New → On Review → In Progress → Resolved
-     ↓
-   On Hold (if needed)
-```
-
-**Actions by Status**:
-
-- **New**: New issue occurs, initial classification and priority setting
-- **On Review**: Assignee assignment, detailed analysis and solution review
-- **In Progress**: Actual development/modification work in progress
-- **On Hold**: Additional information needed, waiting for external dependencies
-- **Resolved**: Problem solved, notify feedback providers
-
-### Data Analysis and Insight Derivation
-
-#### Issue Pattern Analysis
-
-1. **Category Distribution Analysis**:
-
-   - What type of problems occur most frequently?
-   - What is the trend of issue increase in specific categories?
-
-2. **Resolution Time Analysis**:
-
-   - Average resolution time by category
-   - Time taken for status transitions
-
-3. **Feedback Correlation Analysis**:
-   - Prioritize issues with many linked feedback
-   - Adjust priority based on user impact
-
-#### Performance Indicators (KPI) Setting
-
-| Indicator              | Calculation Method                         | Example Target |
-| ---------------------- | ------------------------------------------ | -------------- |
-| **Issue Resolution Rate** | Resolved / Total Issues × 100              | 90% or higher  |
-| **Average Resolution Time** | Total resolution time / Resolved issues    | Within 7 days  |
-| **New Issue Increase Rate** | This month's new / Last month's new × 100  | 20% or lower   |
-| **Category Recurrence Rate** | Recurring issues in same category / Total issues | 10% or lower   |
-
-### Issue Management Best Practices
-
-#### Issue Title Writing Guide
-
-**Good Issue Title Examples**:
-
-- ✅ `Password reset button disabled on login page`
-- ✅ `App crashes when uploading images on mobile`
-- ✅ `Payment page loading takes more than 5 seconds`
-
-**Issue Titles to Avoid**:
-
-- ❌ `Bug exists`
-- ❌ `Problem occurred`
-- ❌ `User complaint`
-
-#### Category Classification Criteria
-
-**Classification by Function**:
-
-- `Login/Authentication`, `Payment`, `Search`, `Notification`, etc.
-
-**Classification by Severity**:
-
-- `Critical`: Service outage level
-- `High`: Major function failure
-- `Medium`: Partial function problem
-- `Low`: Improvement
-
-**Classification by Responsible Team**:
-
-- `Frontend`, `Backend`, `Infrastructure`, `Design`, etc.
-
-### External Tool Integration Usage
-
-#### Advantages of Issue Tracker Integration
-
-When integrated with external issue trackers (Jira, GitHub Issues, etc.):
-
-1. **Development workflow integration**: Link with development team's existing tools
-2. **Progress synchronization**: Track status changes of external tickets
-3. **Communication centralization**: Manage all related information in one place
-4. **Enhanced reporting**: Analyze correlation between development progress and user feedback
-
-#### Integration Setup Guide
-
-> **Note**: External issue tracker integration can be configured in **Settings > Issue Tracker Management**. For details, refer to the [Issue Tracker Integration Guide](/en/user-guide/settings/issue-tracker-management).
-
----
-
 ## Related Documents
 
 - [Feedback Management](./04-feedback-management.md) - How to create and link issues from feedback
 - [Issue Tracker Integration](/en/user-guide/settings/issue-tracker-management) - Integration settings with external tools
 - [Project Management](./02-project-management.md) - Team composition and permission management
-

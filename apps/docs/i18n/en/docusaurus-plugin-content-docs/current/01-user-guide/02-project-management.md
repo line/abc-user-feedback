@@ -46,19 +46,23 @@ There are two ways to create a new project:
 
 ### Step 1: Project Basic Information
 
+![create-project-1](/img/project/1.png)
+
 When creating a project, enter the following information:
 
-| Item            | Description                                                      | Example                                    |
-| --------------- | ---------------------------------------------------------------- | ------------------------------------------ |
-| **Name**        | Project name (required)                                          | `Mobile App`, `Customer Service`, `Beta Service` |
-| **Description** | Brief description (optional)                                     | `iOS/Android app user feedback collection` |
-| **Time Zone**   | Used as the time reference for feedback and reports (required)    | `Asia/Seoul`                               |
+| Item            | Description                                                    | Example                                          |
+| --------------- | -------------------------------------------------------------- | ------------------------------------------------ |
+| **Name**        | Project name (required)                                        | `Mobile App`, `Customer Service`, `Beta Service` |
+| **Description** | Brief description (optional)                                   | `iOS/Android app user feedback collection`       |
+| **Time Zone**   | Used as the time reference for feedback and reports (required) | `Asia/Seoul`                                     |
 
 > The time zone affects **dashboard statistics**.
 
 **After completion**: After entering all information, click the **Next** button.
 
 ### Step 2: Add Team Members (Optional)
+
+![create-project-2](/img/project/2.png)
 
 This step can be **skipped**. You can add members later from the project settings at any time.
 
@@ -75,6 +79,8 @@ This step can be **skipped**. You can add members later from the project setting
 
 ### Step 3: Generate API Key (Optional)
 
+![create-project-3](/img/project/3.png)
+
 API keys are used when collecting feedback from external systems. You can generate them later from the settings menu, so you can skip this step now.
 
 #### Key Generation Method
@@ -84,6 +90,8 @@ API keys are used when collecting feedback from external systems. You can genera
 3. Copy the generated key and store it in a safe place
 
 ### Project Creation Complete
+
+![create-project-4](/img/project/4.png)
 
 After completing all steps, a **summary screen** appears:
 
@@ -101,6 +109,8 @@ After completing all steps, a **summary screen** appears:
 
 ## Managing Project Settings
 
+![project-setting.png](/img/project/project-setting.png)
+
 ### Access Method
 
 To change project settings:
@@ -112,10 +122,10 @@ To change project settings:
 
 You can modify the following items at any time:
 
-| Item            | Description                                    | Notes                                      |
-| --------------- | ---------------------------------------------- | ------------------------------------------ |
-| **Name**        | Project name                                   | Name displayed to team members             |
-| **Description** | Description (optional)                         | Purpose of the project                     |
+| Item            | Description                                         | Notes                               |
+| --------------- | --------------------------------------------------- | ----------------------------------- |
+| **Name**        | Project name                                        | Name displayed to team members      |
+| **Description** | Description (optional)                              | Purpose of the project              |
 | **Time Zone**   | Time reference for statistics and time-related data | Changes do not affect existing data |
 
 **Save method**: After making changes, click the **Save** button at the top right.
@@ -145,6 +155,8 @@ To completely delete a project:
 
 ## Member Management
 
+![member-setting.png](/img/project/member-setting.png)
+
 ### Viewing Member List
 
 To view members currently participating in the project:
@@ -154,24 +166,26 @@ To view members currently participating in the project:
 
 The member list displays the following information:
 
-| Item       | Description                      |
-| ---------- | -------------------------------- |
-| Email      | Account email                    |
-| Name       | User name (from profile)         |
-| Department | Department                       |
-| Role       | Role within the project          |
-| Joined     | Project participation date       |
+| Item       | Description                |
+| ---------- | -------------------------- |
+| Email      | Account email              |
+| Name       | User name (from profile)   |
+| Department | Department                 |
+| Role       | Role within the project    |
+| Joined     | Project participation date |
 
-### Inviting New Members
+### Inviting New
+
+![member-register.png](/img/project/member-register.png)
 
 #### Invitation Procedure
 
 1. Click the **Register Member** button
 2. Enter invitation information:
 
-| Item      | Description                                   |
-| --------- | --------------------------------------------- |
-| **Email** | Email of the user to invite                   |
+| Item      | Description                                  |
+| --------- | -------------------------------------------- |
+| **Email** | Email of the user to invite                  |
 | **Role**  | Role to assign (Admin, Editor, Viewer, etc.) |
 
 3. Click the **Invite** button to complete the invitation
@@ -197,17 +211,21 @@ To remove a member from the project:
 
 ## Role and Permission Management
 
+![role-setting.png](/img/project/role-setting.png)
+
 ### Default Roles
 
 The system provides the following default roles:
 
-| Role      | Permission Summary                                      |
-| --------- | ------------------------------------------------------- |
-| **Admin** | Access to all features. Includes project deletion       |
+| Role       | Permission Summary                                                     |
+| ---------- | ---------------------------------------------------------------------- |
+| **Admin**  | Access to all features. Includes project deletion                      |
 | **Editor** | Can create, modify, and delete feedback/issues. Cannot access settings |
-| **Viewer** | View only. Cannot modify, delete, or access settings    |
+| **Viewer** | View only. Cannot modify, delete, or access settings                   |
 
 ### Creating Custom Roles
+
+![role-create.png](/img/project/role-create.png)
 
 You can create custom roles when more granular permissions are needed:
 
@@ -221,89 +239,89 @@ For each role, you can set the following feature-specific permissions:
 
 #### Feedback Permissions
 
-| Permission Item                        | Description                    |
-| -------------------------------------- | ------------------------------ |
-| **Download Feedback**                  | Download feedback data         |
-| **Edit Feedback**                      | Edit feedback                  |
-| **Delete Feedback**                    | Delete feedback                |
-| **Attach/Detach Issue in Feedback**    | Link/unlink issues with feedback |
+| Permission Item                     | Description                      |
+| ----------------------------------- | -------------------------------- |
+| **Download Feedback**               | Download feedback data           |
+| **Edit Feedback**                   | Edit feedback                    |
+| **Delete Feedback**                 | Delete feedback                  |
+| **Attach/Detach Issue in Feedback** | Link/unlink issues with feedback |
 
 #### Issue Permissions
 
-| Permission Item  | Description    |
-| ---------------- | -------------- |
-| **Create Issue** | Create issues  |
-| **Edit Issue**   | Edit issues    |
-| **Delete Issue** | Delete issues  |
+| Permission Item  | Description   |
+| ---------------- | ------------- |
+| **Create Issue** | Create issues |
+| **Edit Issue**   | Edit issues   |
+| **Delete Issue** | Delete issues |
 
 #### Project Management
 
-| Permission Item         | Description              |
-| ----------------------- | ------------------------ |
-| **Edit Project Info**   | Edit project information |
-| **Delete Project**      | Delete project           |
+| Permission Item       | Description              |
+| --------------------- | ------------------------ |
+| **Edit Project Info** | Edit project information |
+| **Delete Project**    | Delete project           |
 
 #### Member Management
 
-| Permission Item               | Description              |
-| ----------------------------- | ------------------------ |
-| **Read Project Member**       | View project members     |
-| **Create Project Member**      | Invite project members   |
-| **Edit Project Member**       | Edit project members     |
-| **Delete Project Member**     | Remove project members   |
+| Permission Item           | Description            |
+| ------------------------- | ---------------------- |
+| **Read Project Member**   | View project members   |
+| **Create Project Member** | Invite project members |
+| **Edit Project Member**   | Edit project members   |
+| **Delete Project Member** | Remove project members |
 
 #### Role Management
 
-| Permission Item             | Description          |
-| --------------------------- | -------------------- |
-| **Read Project Role**       | View project roles   |
-| **Create Project Role**     | Create project roles  |
-| **Edit Project Role**       | Edit project roles   |
-| **Delete Project Role**     | Delete project roles |
+| Permission Item         | Description          |
+| ----------------------- | -------------------- |
+| **Read Project Role**   | View project roles   |
+| **Create Project Role** | Create project roles |
+| **Edit Project Role**   | Edit project roles   |
+| **Delete Project Role** | Delete project roles |
 
 #### API Key Management
 
-| Permission Item      | Description    |
-| -------------------- | -------------- |
-| **Read API Key**     | View API keys  |
-| **Create API Key**   | Create API keys |
-| **Edit API Key**     | Edit API keys  |
-| **Delete API Key**   | Delete API keys |
+| Permission Item    | Description     |
+| ------------------ | --------------- |
+| **Read API Key**   | View API keys   |
+| **Create API Key** | Create API keys |
+| **Edit API Key**   | Edit API keys   |
+| **Delete API Key** | Delete API keys |
 
 #### Issue Tracker
 
-| Permission Item          | Description            |
-| ------------------------ | ---------------------- |
-| **Read Issue Tracker**   | View issue tracker     |
-| **Edit Issue Tracker**   | Configure issue tracker |
+| Permission Item        | Description             |
+| ---------------------- | ----------------------- |
+| **Read Issue Tracker** | View issue tracker      |
+| **Edit Issue Tracker** | Configure issue tracker |
 
 #### Webhook Management
 
-| Permission Item      | Description    |
-| -------------------- | -------------- |
-| **Read Webhook**     | View webhooks  |
-| **Create Webhook**   | Create webhooks |
-| **Edit Webhook**     | Edit webhooks  |
-| **Delete Webhook**   | Delete webhooks |
+| Permission Item    | Description     |
+| ------------------ | --------------- |
+| **Read Webhook**   | View webhooks   |
+| **Create Webhook** | Create webhooks |
+| **Edit Webhook**   | Edit webhooks   |
+| **Delete Webhook** | Delete webhooks |
 
 #### AI and Channel Settings
 
-| Permission Item          | Description      |
-| ------------------------ | ---------------- |
-| **Read Generative AI**   | View AI settings |
-| **Edit Generative AI**   | Edit AI settings |
+| Permission Item        | Description      |
+| ---------------------- | ---------------- |
+| **Read Generative AI** | View AI settings |
+| **Edit Generative AI** | Edit AI settings |
 
 #### Channel-Related Settings
 
-| Permission Item          | Description            |
-| ------------------------ | ---------------------- |
-| **Edit Channel Info**    | Edit channel information |
-| **Delete Channel**       | Delete channel         |
-| **Read Field**           | View fields            |
-| **Edit Field**           | Edit fields            |
-| **Read Image Setting**   | View image settings    |
-| **Edit Image Setting**   | Edit image settings    |
-| **Create Channel**       | Create new channels    |
+| Permission Item        | Description              |
+| ---------------------- | ------------------------ |
+| **Edit Channel Info**  | Edit channel information |
+| **Delete Channel**     | Delete channel           |
+| **Read Field**         | View fields              |
+| **Edit Field**         | Edit fields              |
+| **Read Image Setting** | View image settings      |
+| **Edit Image Setting** | Edit image settings      |
+| **Create Channel**     | Create new channels      |
 
 ### Permission Setting Tips
 
@@ -327,4 +345,3 @@ For each role, you can set the following feature-specific permissions:
 - [Channel Management](./03-channel-management.md) - Channel creation and field settings
 - [Feedback Management](./04-feedback-management.md) - Feedback collection and analysis
 - [API Integration](/en/developer-guide/api-integration) - API key usage
-

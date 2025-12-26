@@ -46,6 +46,8 @@ ABC User Feedback에서 **프로젝트**는 피드백을 수집하고 분석하�
 
 ### Step 1: 프로젝트 기본 정보
 
+![create-project-1](/img/project/1.png)
+
 프로젝트 생성 시 다음 정보를 입력합니다:
 
 | 항목            | 설명                                                   | 예시                                   |
@@ -59,6 +61,8 @@ ABC User Feedback에서 **프로젝트**는 피드백을 수집하고 분석하�
 **완료 후**: 모든 정보를 입력한 뒤 **Next** 버튼을 클릭합니다.
 
 ### Step 2: 팀 멤버 추가 (선택)
+
+![create-project-2](/img/project/2.png)
 
 이 단계는 **건너뛸 수 있습니다**. 나중에 프로젝트 설정에서 언제든 추가 가능합니다.
 
@@ -75,6 +79,8 @@ ABC User Feedback에서 **프로젝트**는 피드백을 수집하고 분석하�
 
 ### Step 3: API 키 발급 (선택)
 
+![create-project-3](/img/project/3.png)
+
 API 키는 외부 시스템에서 피드백을 수집할 때 사용됩니다. 설정 메뉴에서 나중에 발급 가능하므로 지금 생략해도 됩니다.
 
 #### 키 생성 방법
@@ -84,6 +90,8 @@ API 키는 외부 시스템에서 피드백을 수집할 때 사용됩니다. �
 3. 생성된 키를 복사해 안전한 장소에 저장합니다
 
 ### 프로젝트 생성 완료
+
+![create-project-4](/img/project/4.png)
 
 모든 단계를 완료하면 **요약 화면**이 나타납니다:
 
@@ -100,6 +108,8 @@ API 키는 외부 시스템에서 피드백을 수집할 때 사용됩니다. �
 ---
 
 ## 프로젝트 설정 관리
+
+![project-setting.png](/img/project/project-setting.png)
 
 ### 접근 방법
 
@@ -145,6 +155,8 @@ API 키는 외부 시스템에서 피드백을 수집할 때 사용됩니다. �
 
 ## 멤버 관리
 
+![member-setting.png](/img/project/member-setting.png)
+
 ### 멤버 목록 확인
 
 현재 프로젝트에 참여한 멤버를 확인하려면:
@@ -163,6 +175,8 @@ API 키는 외부 시스템에서 피드백을 수집할 때 사용됩니다. �
 | Joined     | 프로젝트 참여일           |
 
 ### 새 멤버 초대
+
+![member-register.png](/img/project/member-register.png)
 
 #### 초대 절차
 
@@ -197,6 +211,8 @@ API 키는 외부 시스템에서 피드백을 수집할 때 사용됩니다. �
 
 ## 역할 및 권한 관리
 
+![role-setting.png](/img/project/role-setting.png)
+
 ### 기본 제공 역할
 
 시스템에서는 다음 기본 역할을 제공합니다:
@@ -208,6 +224,8 @@ API 키는 외부 시스템에서 피드백을 수집할 때 사용됩니다. �
 | **Viewer** | 조회만 가능. 수정, 삭제, 설정 접근 불가        |
 
 ### 커스텀 역할 생성
+
+![role-create.png](/img/project/role-create.png)
 
 더 세분화된 권한이 필요한 경우 커스텀 역할을 생성할 수 있습니다:
 

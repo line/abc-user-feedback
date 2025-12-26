@@ -8,6 +8,8 @@ description: '외부 시스템과 자동 연동을 위해 웹훅을 설정하고
 
 웹훅은 ABC User Feedback에서 **특정 이벤트 발생 시 외부 시스템으로 자동 알림**을 전송하는 기능입니다. 피드백 생성, 이슈 상태 변경 등의 이벤트를 실시간으로 외부 서비스(Slack, Discord, 자체 서버 등)에 전달할 수 있습니다. 자세한 연동 가이드는 [웹훅 연동](/docs/02-developer-guide/04-webhook-integration.md) 문서를 참고하세요.
 
+![webhook-setting](/img/webhook/webhook-setting.png)
+
 ---
 
 ## 접근 방법
@@ -18,6 +20,8 @@ description: '외부 시스템과 자동 연동을 위해 웹훅을 설정하고
 ---
 
 ## Webhook Integration 화면 개요
+
+![webhook-list.png](/img/webhook/webhook-list.png)
 
 웹훅 연동 화면은 다음처럼 구성됩니다:
 
@@ -34,6 +38,8 @@ description: '외부 시스템과 자동 연동을 위해 웹훅을 설정하고
 ---
 
 ## 새 웹훅 생성하기
+
+![webhook-create](/img/webhook/webhook-create.png)
 
 ### 1. 웹훅 등록 시작
 
