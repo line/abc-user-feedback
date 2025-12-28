@@ -429,11 +429,11 @@ importers:
         specifier: ^0.13.10
         version: 0.13.10(typescript@5.9.3)(zod@4.2.1)
       '@tanstack/react-query':
-        specifier: ^5.90.12
-        version: 5.90.12(react@19.2.3)
+        specifier: ^5.90.13
+        version: 5.90.13(react@19.2.3)
       '@tanstack/react-query-devtools':
         specifier: ^5.91.1
-        version: 5.91.1(@tanstack/react-query@5.90.12(react@19.2.3))(react@19.2.3)
+        version: 5.91.1(@tanstack/react-query@5.90.13(react@19.2.3))(react@19.2.3)
       '@tanstack/react-table':
         specifier: ^8.21.3
         version: 8.21.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -5381,8 +5381,8 @@ packages:
       zod:
         optional: true
 
-  '@tanstack/query-core@5.90.12':
-    resolution: {integrity: sha512-T1/8t5DhV/SisWjDnaiU2drl6ySvsHj1bHBCWNXd+/T+Hh1cf6JodyEYMd5sgwm+b/mETT4EV3H+zCVczCU5hg==}
+  '@tanstack/query-core@5.90.13':
+    resolution: {integrity: sha512-3VzxSkv4ojPPHu0WfOwZ/W5CuN7evAXPzQS+Py2glGxk59Wp+k2T/wgRfrgXAcX1kCTvD9RYUcVEHkMXkEN5jw==}
 
   '@tanstack/query-devtools@5.91.1':
     resolution: {integrity: sha512-l8bxjk6BMsCaVQH6NzQEE/bEgFy1hAs5qbgXl0xhzezlaQbPk6Mgz9BqEg2vTLPOHD8N4k+w/gdgCbEzecGyNg==}
@@ -5393,8 +5393,8 @@ packages:
       '@tanstack/react-query': ^5.90.10
       react: ^18 || ^19
 
-  '@tanstack/react-query@5.90.12':
-    resolution: {integrity: sha512-graRZspg7EoEaw0a8faiUASCyJrqjKPdqJ9EwuDRUF9mEYJ1YPczI9H+/agJ0mOJkPCJDk0lsz5QTrLZ/jQ2rg==}
+  '@tanstack/react-query@5.90.13':
+    resolution: {integrity: sha512-i6DY9wnghE0ghHJfDrnnFNatn4CNBzMZv4xPzKB7Lb9zMAoImAxPKoGK9gLOm79aopDa07p6ytlFFWotvwj3DQ==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -12978,6 +12978,7 @@ packages:
   whatwg-encoding@3.1.1:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
+    deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
   whatwg-mimetype@4.0.0:
     resolution: {integrity: sha512-QaKxh0eNIi2mE9p2vEdzfagOKHCcj1pJ56EEHGQOVxp8r9/iszLUUV7v89x9O1p/T+NlTM5W7jW6+cz4Fq1YVg==}
@@ -19245,19 +19246,19 @@ snapshots:
       typescript: 5.9.3
       zod: 4.2.1
 
-  '@tanstack/query-core@5.90.12': {}
+  '@tanstack/query-core@5.90.13': {}
 
   '@tanstack/query-devtools@5.91.1': {}
 
-  '@tanstack/react-query-devtools@5.91.1(@tanstack/react-query@5.90.12(react@19.2.3))(react@19.2.3)':
+  '@tanstack/react-query-devtools@5.91.1(@tanstack/react-query@5.90.13(react@19.2.3))(react@19.2.3)':
     dependencies:
       '@tanstack/query-devtools': 5.91.1
-      '@tanstack/react-query': 5.90.12(react@19.2.3)
+      '@tanstack/react-query': 5.90.13(react@19.2.3)
       react: 19.2.3
 
-  '@tanstack/react-query@5.90.12(react@19.2.3)':
+  '@tanstack/react-query@5.90.13(react@19.2.3)':
     dependencies:
-      '@tanstack/query-core': 5.90.12
+      '@tanstack/query-core': 5.90.13
       react: 19.2.3
 
   '@tanstack/react-table@8.21.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
