@@ -29,7 +29,7 @@
   "devDependencies": {
     "@ufb/prettier-config": "workspace:*",
     "prettier": "catalog:",
-    "turbo": "^2.7.2",
+    "turbo": "^2.7.3",
     "typescript": "catalog:"
   },
   "prettier": "@ufb/prettier-config",
