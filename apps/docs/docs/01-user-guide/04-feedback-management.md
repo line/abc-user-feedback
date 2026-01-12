@@ -8,6 +8,8 @@ sidebar_position: 4
 
 피드백은 ABC User Feedback의 핵심 데이터입니다. 이 문서에서는 피드백 생성부터 분석, 관리까지 피드백과 관련된 모든 기능을 다룹니다.
 
+![feedback](/img/feedback/0.png)
+
 ---
 
 ## 피드백 생성
@@ -106,6 +108,8 @@ curl -X POST http://your-domain.com/api/v1/projects/{projectId}/channels/{channe
 
 대량의 피드백 데이터에서 원하는 정보를 빠르게 찾기 위한 다양한 도구들을 제공합니다.
 
+![feedback-option](/img/feedback/1.png)
+
 ### 날짜 필터링
 
 상단의 **Date** 버튼으로 조회 기간을 설정할 수 있습니다.
@@ -120,9 +124,11 @@ curl -X POST http://your-domain.com/api/v1/projects/{projectId}/channels/{channe
 | **지난 30일**   | 최근 1개월 데이터       | 월간 트렌드 파악 |
 | **사용자 정의** | 시작일-종료일 직접 설정 | 특정 기간 분석   |
 
-### 고급 필터
+### 필터
 
 **Filter** 버튼을 클릭하면 다양한 조건으로 피드백을 필터링할 수 있습니다.
+
+![feedback-filter](/img/feedback/2.png)
 
 #### 필터 구조
 
@@ -214,6 +220,8 @@ And: rating is 4
 #### 접근 방법
 
 피드백 테이블에서 **행을 클릭**하면 우측에 상세 보기 패널이 열립니다.
+
+![feedback-detail](/img/feedback/3.png)
 
 ### 상세 패널 구성
 

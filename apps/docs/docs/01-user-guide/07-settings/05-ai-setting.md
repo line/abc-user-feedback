@@ -21,6 +21,8 @@ AI 설정을 완료하면 **AI 필드 템플릿**, **AI 이슈 추천**, **AI �
 
 ## AI 제공자 선택 및 설정
 
+![ai-setting.png](/img/ai/ai-setting.png)
+
 ### 1. 제공자 선택
 
 현재 지원되는 AI 제공자 OpenAI, Google Gemini 중 하나를 선택합니다:
@@ -49,6 +51,8 @@ AI가 모든 요청을 처리할 때 참고할 **기본 지시사항**을 설정
 
 ## AI 사용량 모니터링
 
+![ai-usage.png](/img/ai/ai-usage.png)
+
 **AI Usage** 탭에서 AI 기능 사용량과 비용을 모니터링할 수 있습니다.
 
 ### 사용량 대시보드
@@ -62,6 +66,8 @@ AI가 모든 요청을 처리할 때 참고할 **기본 지시사항**을 설정
 ---
 
 ## AI 필드 템플릿 관리
+
+![ai-field-template.png](/img/ai/ai-field-template.png)
 
 AI 설정을 완료한 후, **AI Field Template** 탭에서 피드백 자동 분석 템플릿을 관리할 수 있습니다.
 
@@ -78,8 +84,9 @@ AI 설정을 완료한 후, **AI Field Template** 탭에서 피드백 자동 분
 
 ### 커스텀 템플릿 생성
 
-1. **Create New** 카드 클릭
+![ai-field-template-create.png](/img/ai/ai-field-template-create.png)
 
+1. **Create New** 카드 클릭
 2. 템플릿 정보 입력
 
 | 항목            | 설명                  |
@@ -187,9 +194,13 @@ AI 필드 설정이 완료되면 피드백 목록과 상세 화면에서 AI 분�
 
 ## AI 이슈 추천 설정
 
+![ai-issue-recommendation.png](/img/ai/ai-issue-recommendation.png)
+
 **AI Issue Recommendation** 탭에서 피드백 기반 자동 이슈 추천 기능을 설정할 수 있습니다.
 
-### 추천 설정 생성
+### AI 이슈 추천 설정 생성
+
+![ai-issue-recommendation-create.png](/img/ai/ai-issue-recommendation-create.png)
 
 1. **Create New** 버튼 클릭
 2. 설정 항목 입력
@@ -209,7 +220,7 @@ AI 필드 설정이 완료되면 피드백 목록과 상세 화면에서 AI 분�
 | **Temperature**           | 창의성 조절                           |
 | **Data Reference Amount** | 참조할 이슈 양 (이슈와 관련 피드백들) |
 
-### 추천 기능 테스트
+### AI 이슈 추천 기능 테스트
 
 입력된 설정에 대해 Playground에서 테스트:
 

@@ -8,6 +8,8 @@ sidebar_position: 4
 
 Feedback is the core data of ABC User Feedback. This document covers all features related to feedback, from creation to analysis and management.
 
+![feedback](/img/feedback/0.png)
+
 ---
 
 ## Creating Feedback
@@ -95,10 +97,10 @@ Access the feedback list to view and manage created feedback.
 
 The feedback list is displayed in table format with the following basic structure:
 
-| Column Type      | Description                      | Example                         |
-| ---------------- | -------------------------------- | ------------------------------- |
-| **Default Columns** | Displayed for all channels      | ID, Created, Updated, Issue     |
-| **Custom Columns** | Displayed according to channel field settings | Message, UserEmail, Category |
+| Column Type         | Description                                   | Example                      |
+| ------------------- | --------------------------------------------- | ---------------------------- |
+| **Default Columns** | Displayed for all channels                    | ID, Created, Updated, Issue  |
+| **Custom Columns**  | Displayed according to channel field settings | Message, UserEmail, Category |
 
 ---
 
@@ -106,23 +108,27 @@ The feedback list is displayed in table format with the following basic structur
 
 Various tools are provided to quickly find desired information from large amounts of feedback data.
 
+![feedback-option](/img/feedback/1.png)
+
 ### Date Filtering
 
 You can set the viewing period with the **Date** button at the top.
 
 #### Available Period Options
 
-| Option          | Description                    | Use Case        |
-| --------------- | ------------------------------ | --------------- |
-| **Today**       | Feedback registered today      | Real-time monitoring |
-| **Yesterday**   | Previous day's feedback         | Daily review    |
-| **Last 7 Days** | Recent 1 week of data          | Weekly analysis |
-| **Last 30 Days** | Recent 1 month of data         | Monthly trend analysis |
-| **Custom**      | Set start-end date directly    | Specific period analysis |
+| Option           | Description                 | Use Case                 |
+| ---------------- | --------------------------- | ------------------------ |
+| **Today**        | Feedback registered today   | Real-time monitoring     |
+| **Yesterday**    | Previous day's feedback     | Daily review             |
+| **Last 7 Days**  | Recent 1 week of data       | Weekly analysis          |
+| **Last 30 Days** | Recent 1 month of data      | Monthly trend analysis   |
+| **Custom**       | Set start-end date directly | Specific period analysis |
 
-### Advanced Filters
+### Filters
 
 Click the **Filter** button to filter feedback by various conditions.
+
+![feedback-filter](/img/feedback/2.png)
 
 #### Filter Structure
 
@@ -136,15 +142,15 @@ Or: Feedback that satisfies at least one condition
 
 #### Filter Options by Field Type
 
-| Field Type      | Available Operators                    | Example                      |
-| --------------- | -------------------------------------- | ---------------------------- |
-| **text**        | Contains (partial match)                | message contains "bug"       |
-| **keyword**     | Is (exact match)                        | category is "Feature Request" |
-| **number**      | Is (exact match)                        | rating == 3                  |
-| **select**      | Is (exact match)                        |                              |
-| **multiSelect** | Is (exact match), Contains (partial match) |                              |
-| **aiField**     | Contains (partial match)                |                              |
-| **date**        | Is (exact match), Between (period match) | created between date range   |
+| Field Type      | Available Operators                        | Example                       |
+| --------------- | ------------------------------------------ | ----------------------------- |
+| **text**        | Contains (partial match)                   | message contains "bug"        |
+| **keyword**     | Is (exact match)                           | category is "Feature Request" |
+| **number**      | Is (exact match)                           | rating == 3                   |
+| **select**      | Is (exact match)                           |                               |
+| **multiSelect** | Is (exact match), Contains (partial match) |                               |
+| **aiField**     | Contains (partial match)                   |                               |
+| **date**        | Is (exact match), Between (period match)   | created between date range    |
 
 #### Filter Usage Examples
 
@@ -215,6 +221,8 @@ You can view detailed information of individual feedback and edit or delete it a
 
 Click a **row** in the feedback table to open the detail view panel on the right.
 
+![feedback-detail](/img/feedback/3.png)
+
 ### Detail Panel Structure
 
 The detail panel is structured as follows:
@@ -238,10 +246,10 @@ Click the **Edit** button in the detail panel to switch to edit mode.
 
 #### Editable Items
 
-| Item            | Editable | Notes                                                          |
-| --------------- | -------- | -------------------------------------------------------------- |
-| **Default Fields** | ❌ No    | ID, creation date, etc.                                        |
-| **Custom Fields** | ✅ Yes   | Varies by field setting Property, not possible if Status is Inactive |
+| Item               | Editable | Notes                                                                |
+| ------------------ | -------- | -------------------------------------------------------------------- |
+| **Default Fields** | ❌ No    | ID, creation date, etc.                                              |
+| **Custom Fields**  | ✅ Yes   | Varies by field setting Property, not possible if Status is Inactive |
 
 #### Completing Edits
 
@@ -314,10 +322,10 @@ When clicking the Export button, you can select the download format.
 
 #### Supported Formats
 
-| Format      | Extension | Advantages                      | Recommended Use Cases            |
-| ----------- | --------- | ------------------------------- | -------------------------------- |
-| **CSV**     | `.csv`    | Lightweight and highly compatible | Excel, Google Sheets analysis    |
-| **Excel**   | `.xlsx`   | Format preservation, multi-sheet support | Detailed analysis, report creation |
+| Format    | Extension | Advantages                               | Recommended Use Cases              |
+| --------- | --------- | ---------------------------------------- | ---------------------------------- |
+| **CSV**   | `.csv`    | Lightweight and highly compatible        | Excel, Google Sheets analysis      |
+| **Excel** | `.xlsx`   | Format preservation, multi-sheet support | Detailed analysis, report creation |
 
 ---
 
@@ -326,4 +334,3 @@ When clicking the Export button, you can select the download format.
 - [Channel Management](./03-channel-management.md) - Channel and field settings for feedback collection
 - [Issue Management](./05-issue-management.md) - Creating and managing issues from feedback
 - [API Integration](/en/developer-guide/api-integration) - How to send feedback from external systems
-

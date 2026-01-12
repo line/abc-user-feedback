@@ -8,6 +8,8 @@ sidebar_position: 2
 
 API keys are authentication means that allow external systems to securely integrate with ABC User Feedback. This document explains API key creation, management, and security maintenance from a UI perspective.
 
+![api-key-setting.png](/img/api-key/api-key-setting.png)
+
 ---
 
 ## API Key Overview
@@ -60,12 +62,12 @@ Created API keys are managed in table format.
 
 #### Table Column Information
 
-| Column        | Description             | Display Format            |
-| ------------- | ----------------------- | ------------------------- |
-| **API Key**   | Generated key value     | `AbcdEfgh...`             |
-| **Status**    | Current activation status | Active / Inactive      |
-| **Created**   | Key creation date/time  | `2024-03-15 14:30`       |
-| **Actions**  | Management action buttons | Status change, delete buttons |
+| Column      | Description               | Display Format                |
+| ----------- | ------------------------- | ----------------------------- |
+| **API Key** | Generated key value       | `AbcdEfgh...`                 |
+| **Status**  | Current activation status | Active / Inactive             |
+| **Created** | Key creation date/time    | `2024-03-15 14:30`            |
+| **Actions** | Management action buttons | Status change, delete buttons |
 
 #### Key Identification Method
 
@@ -78,16 +80,18 @@ Since the full key value cannot be viewed again, distinguish keys using the foll
 
 ## API Key Status Management
 
+![api-key-detail.png](/img/api-key/api-key-detail.png)
+
 ### Active / Inactive Toggle
 
 Each API key can be activated/deactivated immediately.
 
 #### Status Meanings
 
-| Status         | Description                      | API Call Result    |
-| -------------- | -------------------------------- | ------------------ |
-| **Active**     | Available for actual API calls   | Normal processing  |
-| **Inactive**   | Call blocked state               | 401 Unauthorized   |
+| Status       | Description                    | API Call Result   |
+| ------------ | ------------------------------ | ----------------- |
+| **Active**   | Available for actual API calls | Normal processing |
+| **Inactive** | Call blocked state             | 401 Unauthorized  |
 
 #### Status Change Method
 
@@ -128,4 +132,3 @@ When you click the **Delete** button, the key is immediately deleted and removed
 
 - [API Integration Guide](/en/developer-guide/api-integration) - Actual integration implementation using API keys
 - [Project Management](/en/user-guide/project-management) - API key management per project
-

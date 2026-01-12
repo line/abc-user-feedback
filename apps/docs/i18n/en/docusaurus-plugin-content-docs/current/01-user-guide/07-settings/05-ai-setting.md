@@ -21,6 +21,8 @@ After completing AI settings, you can use all features such as **AI Field Templa
 
 ## AI Provider Selection and Settings
 
+![ai-setting.png](/img/ai/ai-setting.png)
+
 ### 1. Provider Selection
 
 Select one of the currently supported AI providers: OpenAI, Google Gemini:
@@ -49,6 +51,8 @@ After entering all information, click the **Save** button at the top right.
 
 ## AI Usage Monitoring
 
+![ai-usage.png](/img/ai/ai-usage.png)
+
 You can monitor AI feature usage and costs in the **AI Usage** tab.
 
 ### Usage Dashboard
@@ -63,30 +67,33 @@ Information you can check:
 
 ## AI Field Template Management
 
+![ai-field-template.png](/img/ai/ai-field-template.png)
+
 After completing AI settings, you can manage automatic feedback analysis templates in the **AI Field Template** tab.
 
 ### Default Templates
 
 Default templates provided by the system:
 
-| Template                 | Description                       | Usage Example               |
-| ------------------------- | -------------------------------- | --------------------------- |
-| **Feedback Summary**      | Summarize feedback in one sentence | Grasp core of long feedback |
-| **Sentiment Analysis**    | Sentiment analysis (positive/negative/neutral) | Analyze customer satisfaction trends |
-| **Translation**           | Translate feedback to English     | Integrate multilingual feedback analysis |
-| **Keyword Extraction**    | Extract 2-3 core keywords         | Auto-tag issue categories   |
+| Template               | Description                                    | Usage Example                            |
+| ---------------------- | ---------------------------------------------- | ---------------------------------------- |
+| **Feedback Summary**   | Summarize feedback in one sentence             | Grasp core of long feedback              |
+| **Sentiment Analysis** | Sentiment analysis (positive/negative/neutral) | Analyze customer satisfaction trends     |
+| **Translation**        | Translate feedback to English                  | Integrate multilingual feedback analysis |
+| **Keyword Extraction** | Extract 2-3 core keywords                      | Auto-tag issue categories                |
 
 ### Creating Custom Templates
 
-1. Click the **Create New** card
+![ai-field-template-create.png](/img/ai/ai-field-template-create.png)
 
+1. Click the **Create New** card
 2. Enter template information
 
-| Item            | Description                  |
-| --------------- | ---------------------------- |
-| **Title**       | Template name                |
-| **Prompt**      | Instruction sentence for AI  |
-| **Model**       | Select AI model to use       |
+| Item            | Description                     |
+| --------------- | ------------------------------- |
+| **Title**       | Template name                   |
+| **Prompt**      | Instruction sentence for AI     |
+| **Model**       | Select AI model to use          |
 | **Temperature** | Creativity adjustment (0.0~1.0) |
 
 3. Test in Playground
@@ -112,15 +119,15 @@ Add AI fields in **Settings > Channel List > [Select Channel] > Field Management
 
 #### AI Field Setting Items
 
-| Item                    | Description                       | Required |
-| ----------------------- | --------------------------------- | -------- |
-| **Key**                 | Unique field identifier           | Required |
-| **Display Name**        | Name displayed in UI              | Required |
-| **Format**              | Select `aiField`                  | Required |
-| **Template**            | Select created AI field template  | Required |
-| **Target Field**        | Text field to be analyzed         | Required |
-| **Property**            | Editable or Read Only             | Required |
-| **AI Field Automation** | Auto execution                    | Optional |
+| Item                    | Description                      | Required |
+| ----------------------- | -------------------------------- | -------- |
+| **Key**                 | Unique field identifier          | Required |
+| **Display Name**        | Name displayed in UI             | Required |
+| **Format**              | Select `aiField`                 | Required |
+| **Template**            | Select created AI field template | Required |
+| **Target Field**        | Text field to be analyzed        | Required |
+| **Property**            | Editable or Read Only            | Required |
+| **AI Field Automation** | Auto execution                   | Optional |
 
 #### Setting Example
 
@@ -187,29 +194,33 @@ You can manually execute AI analysis in the feedback detail screen.
 
 ## AI Issue Recommendation Settings
 
+![ai-issue-recommendation.png](/img/ai/ai-issue-recommendation.png)
+
 You can set up automatic issue recommendation features based on feedback in the **AI Issue Recommendation** tab.
 
-### Creating Recommendation Settings
+### Creating AI Issue Recommendation Settings
+
+![ai-issue-recommendation-create.png](/img/ai/ai-issue-recommendation-create.png)
 
 1. Click **Create New** button
 2. Enter setting items
 
-| Item             | Description                         | Required |
-| ---------------- | ----------------------------------- | --------- |
-| **Channel**      | Select channel to apply             | Required |
-| **Target Field** | Field to analyze (e.g., message)   | Required |
-| **Prompt**       | Recommendation criteria prompt      | Optional |
-| **Enable**       | Feature activation toggle           | Required |
+| Item             | Description                      | Required |
+| ---------------- | -------------------------------- | -------- |
+| **Channel**      | Select channel to apply          | Required |
+| **Target Field** | Field to analyze (e.g., message) | Required |
+| **Prompt**       | Recommendation criteria prompt   | Optional |
+| **Enable**       | Feature activation toggle        | Required |
 
 3. Advanced Settings
 
-| Setting                      | Description                                  |
-| ---------------------------- | -------------------------------------------- |
-| **Model**                    | Model to use                                 |
-| **Temperature**              | Creativity adjustment                        |
-| **Data Reference Amount**    | Amount of issues to reference (issues and related feedback) |
+| Setting                   | Description                                                 |
+| ------------------------- | ----------------------------------------------------------- |
+| **Model**                 | Model to use                                                |
+| **Temperature**           | Creativity adjustment                                       |
+| **Data Reference Amount** | Amount of issues to reference (issues and related feedback) |
 
-### Testing Recommendation Feature
+### Testing AI Issue Recommendation Feature
 
 Test in Playground with entered settings:
 
@@ -259,4 +270,3 @@ You can use AI issue recommendations even when multiple feedback are selected, e
 - [Field Settings](/en/user-guide/feedback-management) - How to apply AI fields to channels
 - [Issue Creation and Status Management](/en/user-guide/issue-management) - How to use AI recommended issues
 - [Feedback Checking and Filtering](/en/user-guide/feedback-management) - How to check AI analysis results
-

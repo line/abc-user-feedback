@@ -34,11 +34,13 @@ To create a new channel:
 
 ### Step 1: Channel Basic Information
 
-| Item                               | Description                                                 | Example                               |
-| ---------------------------------- | ----------------------------------------------------------- | ------------------------------------- |
-| **Name**                           | Channel name (required)                                     | `Web Feedback`, `App Review`, `Customer Service` |
-| **Description**                    | Brief channel description (optional)                         | `Website user opinion collection`     |
-| **Maximum Feedback Search Period** | Maximum searchable period for feedback (30/90/180/365 days, all) | `90 days`                             |
+![channel-create-1](/img/channel/1.png)
+
+| Item                               | Description                                                      | Example                                          |
+| ---------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------ |
+| **Name**                           | Channel name (required)                                          | `Web Feedback`, `App Review`, `Customer Service` |
+| **Description**                    | Brief channel description (optional)                             | `Website user opinion collection`                |
+| **Maximum Feedback Search Period** | Maximum searchable period for feedback (30/90/180/365 days, all) | `90 days`                                        |
 
 #### Notes on Maximum Feedback Search Period Setting
 
@@ -51,18 +53,20 @@ To create a new channel:
 
 ### Step 2: Field Configuration
 
+![channel-create-2](/img/channel/2.png)
+
 Define the data structure to collect in the channel. This directly affects the API request structure and feedback table configuration.
 
 #### Default System Fields
 
 Fields automatically included in all channels:
 
-| Key         | Format      | Property   | Description            |
-| ----------- | ----------- | ---------- | ---------------------- |
-| `id`        | number      | Read Only  | Unique feedback ID     |
-| `createdAt` | date        | Read Only  | Feedback creation time |
-| `updatedAt` | date        | Read Only  | Feedback modification time |
-| `issues`    | multiSelect | Editable   | List of linked issues  |
+| Key         | Format      | Property  | Description                |
+| ----------- | ----------- | --------- | -------------------------- |
+| `id`        | number      | Read Only | Unique feedback ID         |
+| `createdAt` | date        | Read Only | Feedback creation time     |
+| `updatedAt` | date        | Read Only | Feedback modification time |
+| `issues`    | multiSelect | Editable  | List of linked issues      |
 
 > These fields cannot be deleted or have their main properties modified.
 
@@ -73,27 +77,27 @@ Add fields that match actual business requirements.
 1. Click the **Add Field** button
 2. Enter field information
 
-| Item             | Description                                               | Example                           |
-| ---------------- | --------------------------------------------------------- | --------------------------------- |
-| **Key**          | Unique identifier (uppercase/lowercase letters, numbers, `_`) | `message`, `rating`               |
-| **Display Name** | Name displayed in UI                                      | `Feedback Content`, `User Email`  |
-| **Format**       | Data format (see table below)                             | `text`, `keyword`, `number`       |
-| **Property**     | `Editable` (can input) / `Read Only` (view only)          | `Editable`                        |
-| **Status**       | `Active` / `Inactive`                                      | `Active`                          |
-| **Description**  | Easy-to-understand description for team members (optional) | `User-entered feedback content`   |
+| Item             | Description                                                   | Example                          |
+| ---------------- | ------------------------------------------------------------- | -------------------------------- |
+| **Key**          | Unique identifier (uppercase/lowercase letters, numbers, `_`) | `message`, `rating`              |
+| **Display Name** | Name displayed in UI                                          | `Feedback Content`, `User Email` |
+| **Format**       | Data format (see table below)                                 | `text`, `keyword`, `number`      |
+| **Property**     | `Editable` (can input) / `Read Only` (view only)              | `Editable`                       |
+| **Status**       | `Active` / `Inactive`                                         | `Active`                         |
+| **Description**  | Easy-to-understand description for team members (optional)    | `User-entered feedback content`  |
 
 ### Field Format Types
 
-| Format        | Description              | Usage Example                    | API Example                 |
-| ------------- | ------------------------ | -------------------------------- | --------------------------- |
-| `text`        | Free text input          | Feedback content, detailed description | `"App keeps freezing"`      |
-| `keyword`     | Short keyword/tag        | Version info, page name          | `"v1.2.3"`                  |
-| `number`      | Number                   | Rating, age, usage time          | `5`                         |
-| `date`        | Date                     | Occurrence date, expiration date | `"2024-03-01T00:00:00Z"`    |
-| `select`      | Single selection         | Category, priority              | `"Feature Request"`         |
-| `multiSelect` | Multiple selection       | Tags, related features           | `["Bug", "UI"]`             |
-| `images`      | Image URL array          | Screenshots, attachments        | `["https://..."]`           |
-| `aiField`     | AI analysis result field | Sentiment analysis, summary, keyword extraction | `"Positive"`                |
+| Format        | Description              | Usage Example                                   | API Example              |
+| ------------- | ------------------------ | ----------------------------------------------- | ------------------------ |
+| `text`        | Free text input          | Feedback content, detailed description          | `"App keeps freezing"`   |
+| `keyword`     | Short keyword/tag        | Version info, page name                         | `"v1.2.3"`               |
+| `number`      | Number                   | Rating, age, usage time                         | `5`                      |
+| `date`        | Date                     | Occurrence date, expiration date                | `"2024-03-01T00:00:00Z"` |
+| `select`      | Single selection         | Category, priority                              | `"Feature Request"`      |
+| `multiSelect` | Multiple selection       | Tags, related features                          | `["Bug", "UI"]`          |
+| `images`      | Image URL array          | Screenshots, attachments                        | `["https://..."]`        |
+| `aiField`     | AI analysis result field | Sentiment analysis, summary, keyword extraction | `"Positive"`             |
 
 > **About images format**: For detailed image setting methods, refer to the [Image Settings](/en/user-guide/settings/image-setting) document.
 >
@@ -103,24 +107,24 @@ Add fields that match actual business requirements.
 
 #### Web Feedback Channel
 
-| Key           | Display Name | Format  | Purpose                   |
-| ------------- | ------------ | ------- | ------------------------- |
-| `message`     | Feedback Content | text    | User opinion              |
-| `userEmail`   | Email        | keyword | Contact (optional)        |
-| `pageUrl`     | Page URL     | keyword | Feedback occurrence location |
-| `category`    | Category     | select  | Bug/Feature Request/Improvement |
-| `priority`    | Priority     | select  | High/Medium/Low           |
-| `screenshots` | Screenshots  | images  | Problem situation capture |
+| Key           | Display Name     | Format  | Purpose                         |
+| ------------- | ---------------- | ------- | ------------------------------- |
+| `message`     | Feedback Content | text    | User opinion                    |
+| `userEmail`   | Email            | keyword | Contact (optional)              |
+| `pageUrl`     | Page URL         | keyword | Feedback occurrence location    |
+| `category`    | Category         | select  | Bug/Feature Request/Improvement |
+| `priority`    | Priority         | select  | High/Medium/Low                 |
+| `screenshots` | Screenshots      | images  | Problem situation capture       |
 
 #### Mobile App Review Channel
 
-| Key          | Display Name | Format  | Purpose             |
-| ------------ | ------------ | ------- | ------------------- |
-| `message`    | Review Content | text    | User review         |
-| `rating`     | Rating       | number  | 1-5 point rating    |
-| `appVersion` | App Version  | keyword | For bug tracking    |
-| `deviceType` | Device Type  | select  | iOS/Android         |
-| `crashLogs`  | Crash Logs   | text    | Technical error info |
+| Key          | Display Name   | Format  | Purpose              |
+| ------------ | -------------- | ------- | -------------------- |
+| `message`    | Review Content | text    | User review          |
+| `rating`     | Rating         | number  | 1-5 point rating     |
+| `appVersion` | App Version    | keyword | For bug tracking     |
+| `deviceType` | Device Type    | select  | iOS/Android          |
+| `crashLogs`  | Crash Logs     | text    | Technical error info |
 
 ### Field Preview
 
@@ -130,9 +134,20 @@ This preview matches the field structure required for API requests.
 
 **After completion**: Proceed to the next step with the **Next** button.
 
+### Step 3: Channel Creation Complete
+
+![create-channel-3](/img/channel/3.png)
+
+Once all steps are completed, a **summary screen** appears:
+
+- Channel information: Name, description, time zone
+- Field information
+
 ---
 
 ## Field Management
+
+![field-management.png](/img/channel/field-management.png)
 
 ### Editing Fields
 
@@ -176,6 +191,8 @@ You can filter fields by the following conditions using the top controls:
 
 ## Channel Information Management
 
+![channel-setting](/img/channel/channel-setting.png)
+
 ### Editing Channel Basic Information
 
 You can modify the basic information of created channels.
@@ -187,12 +204,12 @@ You can modify the basic information of created channels.
 
 #### Editable Items
 
-| Item                               | Editable | Notes                      |
-| ---------------------------------- | -------- | -------------------------- |
-| **Channel ID**                     | ❌ No    | Internal system identifier |
+| Item                               | Editable | Notes                          |
+| ---------------------------------- | -------- | ------------------------------ |
+| **Channel ID**                     | ❌ No    | Internal system identifier     |
 | **Channel Name**                   | ✅ Yes   | Name displayed to team members |
-| **Description**                    | ✅ Yes   | Channel purpose            |
-| **Maximum Feedback Search Period** | ✅ Yes   | May affect performance     |
+| **Description**                    | ✅ Yes   | Channel purpose                |
+| **Maximum Feedback Search Period** | ✅ Yes   | May affect performance         |
 
 ### Channel Deletion
 
@@ -218,4 +235,3 @@ You can delete channels that are no longer in use.
 - [Feedback Management](./04-feedback-management.md) - Analysis and utilization of collected feedback
 - [API Integration](/en/developer-guide/api-integration) - Integration methods with external systems
 - [AI Integration](/en/user-guide/settings/ai-setting) - AI feature settings
-
