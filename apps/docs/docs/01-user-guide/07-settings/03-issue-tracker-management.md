@@ -45,7 +45,6 @@ sidebar_position: 3
 - **Issue Tracking System**: 연동할 시스템 선택 드롭다운
 - **Connection Settings**: 연결 정보 입력 영역
 - **Link Preview**: 생성될 링크 미리보기
-- **Test Connection**: 연결 테스트 버튼
 
 ---
 
