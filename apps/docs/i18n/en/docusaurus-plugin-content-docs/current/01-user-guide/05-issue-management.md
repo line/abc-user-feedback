@@ -254,8 +254,6 @@ Issue categories are a feature that allows systematic management by classifying 
 ### Purpose of Categories
 
 - **Issue classification**: Distinguish bugs, feature requests, improvements, etc.
-- **Priority management**: Set processing priority by category
-- **Team distribution**: Assign responsible teams by category
 - **Analysis ease**: Analyze issue occurrence patterns by category
 
 ### Default Category Examples
