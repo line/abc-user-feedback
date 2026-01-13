@@ -8,6 +8,8 @@ description: 'This document explains how to set up webhooks for automatic integr
 
 Webhooks are a feature that **automatically sends notifications to external systems when specific events occur** in ABC User Feedback. You can deliver events such as feedback creation and issue status changes in real-time to external services (Slack, Discord, your own server, etc.). For detailed integration guide, refer to the [Webhook Integration](/en/developer-guide/webhook-integration) document.
 
+![webhook-setting](/img/webhook/webhook-setting.png)
+
 ---
 
 ## Access Method
@@ -19,21 +21,25 @@ Webhooks are a feature that **automatically sends notifications to external syst
 
 ## Webhook Integration Screen Overview
 
+![webhook-list.png](/img/webhook/webhook-list.png)
+
 The webhook integration screen is structured as follows:
 
 ### Webhook List Table Structure
 
-| Column              | Description                             |
-| ------------------- | --------------------------------------- |
-| **On/Off**          | Webhook activation/deactivation toggle switch |
-| **Name**            | Webhook name                            |
-| **URL**             | External endpoint to receive notifications |
-| **Event Trigger**   | Subscribed event triggers               |
-| **Created**         | Webhook creation date/time               |
+| Column            | Description                                   |
+| ----------------- | --------------------------------------------- |
+| **On/Off**        | Webhook activation/deactivation toggle switch |
+| **Name**          | Webhook name                                  |
+| **URL**           | External endpoint to receive notifications    |
+| **Event Trigger** | Subscribed event triggers                     |
+| **Created**       | Webhook creation date/time                    |
 
 ---
 
 ## Creating New Webhooks
+
+![webhook-create](/img/webhook/webhook-create.png)
 
 ### 1. Start Webhook Registration
 
@@ -43,10 +49,10 @@ Click the **Register Webhook** button at the top right to open the webhook regis
 
 #### Required Input Items
 
-| Item     | Description                             |
-| -------- | --------------------------------------- |
-| **Name** | Name for webhook identification          |
-| **URL**  | Endpoint to receive HTTP POST requests  |
+| Item     | Description                            |
+| -------- | -------------------------------------- |
+| **Name** | Name for webhook identification        |
+| **URL**  | Endpoint to receive HTTP POST requests |
 
 ### 3. Token Setting (Optional)
 
@@ -63,12 +69,12 @@ You can select events to subscribe to per channel:
 
 For each channel (VOC, Review, Survey, VOC Test), you can select the following events:
 
-| Event Type             | Description                          |
-| ----------------------- | ------------------------------------ |
-| **Feedback Creation**   | When new feedback is registered       |
-| **Issue Registration**  | When new issue is created            |
-| **Issue Status Change** | When issue status is changed         |
-| **Issue Creation**      | When issue is linked to feedback     |
+| Event Type              | Description                      |
+| ----------------------- | -------------------------------- |
+| **Feedback Creation**   | When new feedback is registered  |
+| **Issue Registration**  | When new issue is created        |
+| **Issue Status Change** | When issue status is changed     |
+| **Issue Creation**      | When issue is linked to feedback |
 
 ### 5. Save Webhook
 
@@ -164,4 +170,3 @@ Events: All events (all channels)
 
 - [Webhook Developer Guide](/en/developer-guide/webhook-integration) - How to implement webhook receiving server
 - [API Key Management](./02-api-key-management.md) - API key-based authentication settings
-

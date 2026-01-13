@@ -8,6 +8,8 @@ description: '피드백에 첨부된 이미지 저장 방식과 보안 정책을
 
 ABC User Feedback에서는 사용자가 피드백을 제출할 때 **이미지와 함께 업로드**할 수 있도록 지원합니다. 이미지 저장 방식과 보안 정책을 적절히 설정하여 안전하고 효율적인 피드백 수집 환경을 구축할 수 있습니다.
 
+![image-setting.png](/img/image/image-setting.png)
+
 ---
 
 ## 접근 방법

@@ -46,7 +46,7 @@ const config: Config = {
           routeBasePath: '/',
           sidebarPath: './sidebars.ts',
           editUrl:
-            'https://github.com/line/abc-user-feedback/tree/feat/docs/apps/docs',
+            'https://github.com/line/abc-user-feedback/tree/dev/apps/docs',
         },
         ...(process.env.GOOGLE_ANALYTICS_TRACKING_ID && {
           gtag: {

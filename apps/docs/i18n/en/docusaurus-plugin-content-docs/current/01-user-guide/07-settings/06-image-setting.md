@@ -8,6 +8,8 @@ description: 'This guide explains how to set up image storage methods and securi
 
 ABC User Feedback supports **uploading images along with feedback** when users submit feedback. You can build a safe and efficient feedback collection environment by appropriately setting image storage methods and security policies.
 
+![image-setting.png](/img/image/image-setting.png)
+
 ---
 
 ## Access Method
@@ -24,12 +26,12 @@ S3 or S3-compatible storage integration is required to upload images directly to
 
 ### Required Setting Items
 
-| Item                  | Description                      | Example                                      |
-| --------------------- | -------------------------------- | -------------------------------------------- |
-| **Access Key ID**     | Key ID for S3 access             | `AKIAIOSFODNN7EXAMPLE`                       |
-| **Secret Access Key** | Secret for the key               | `wJalrXUtnFEMI/K7MDENG/...`                  |
-| **End Point**         | S3 API endpoint URL              | `https://s3.ap-northeast-1.amazonaws.com`   |
-| **Region**            | Region where bucket is located   | `ap-northeast-1`                             |
+| Item                  | Description                           | Example                                   |
+| --------------------- | ------------------------------------- | ----------------------------------------- |
+| **Access Key ID**     | Key ID for S3 access                  | `AKIAIOSFODNN7EXAMPLE`                    |
+| **Secret Access Key** | Secret for the key                    | `wJalrXUtnFEMI/K7MDENG/...`               |
+| **End Point**         | S3 API endpoint URL                   | `https://s3.ap-northeast-1.amazonaws.com` |
+| **Region**            | Region where bucket is located        | `ap-northeast-1`                          |
 | **Bucket Name**       | Target bucket where images are stored | `consumer-ufb-images`                     |
 
 ### Presigned URL Download Settings
@@ -98,4 +100,3 @@ After saving:
 - [Field Settings](/en/user-guide/feedback-management) - How to add image fields to feedback forms
 - [Feedback Checking and Filtering](/en/user-guide/feedback-management) - How to check uploaded images in feedback
 - [API Key Management](./02-api-key-management.md) - API key security management methods
-

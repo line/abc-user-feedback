@@ -34,6 +34,8 @@ sidebar_position: 3
 
 ### Step 1: 채널 기본 정보
 
+![channel-create-1](/img/channel/1.png)
+
 | 항목                               | 설명                                                 | 예시                               |
 | ---------------------------------- | ---------------------------------------------------- | ---------------------------------- |
 | **Name**                           | 채널명 (필수)                                        | `웹 피드백`, `앱 리뷰`, `고객센터` |
@@ -50,6 +52,8 @@ sidebar_position: 3
 **완료 후**: 정보를 입력한 후 **Next** 버튼을 클릭합니다.
 
 ### Step 2: 필드 설정
+
+![channel-create-2](/img/channel/2.png)
 
 채널에서 수집할 데이터 구조를 정의합니다. 이는 API 요청 구조와 피드백 테이블 구성에 직접적으로 영향을 줍니다.
 
@@ -130,9 +134,20 @@ sidebar_position: 3
 
 **완료 후**: **Next** 버튼으로 다음 단계로 진행합니다.
 
+### Step3. 채널 생성 완료
+
+![create-channel-3](/img/channel/3.png)
+
+모든 단계를 완료하면 **요약 화면**이 나타납니다:
+
+- 채널 정보: 이름, 설명, 시간대
+- 필드 정보
+
 ---
 
 ## 필드 관리
+
+![field-management.png](/img/channel/field-management.png)
 
 ### 필드 수정
 
@@ -175,6 +190,8 @@ sidebar_position: 3
 ---
 
 ## 채널 정보 관리
+
+![channel-setting](/img/channel/channel-setting.png)
 
 ### 채널 기본 정보 수정
 

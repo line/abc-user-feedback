@@ -8,6 +8,8 @@ description: 'フィードバックに添付された画像の保存方式とセ
 
 ABC User Feedbackでは、ユーザーがフィードバックを提出する際に**画像と一緒にアップロード**できるようにサポートしています。画像の保存方式とセキュリティポリシーを適切に設定することで、安全で効率的なフィードバック収集環境を構築できます。
 
+![image-setting.png](/img/image/image-setting.png)
+
 ---
 
 ## アクセス方法
@@ -24,12 +26,12 @@ ABC User Feedbackでは、ユーザーがフィードバックを提出する際
 
 ### 必須設定項目
 
-| 項目                  | 説明                      | 例                                      |
-| --------------------- | ------------------------- | ----------------------------------------- |
-| **Access Key ID**     | S3アクセスのためのキーID      | `AKIAIOSFODNN7EXAMPLE`                    |
-| **Secret Access Key** | キーに対するシークレット          | `wJalrXUtnFEMI/K7MDENG/...`               |
-| **End Point**         | S3 APIエンドポイントURL     | `https://s3.ap-northeast-1.amazonaws.com` |
-| **Region**            | バケットが位置する地域        | `ap-northeast-1`                          |
+| 項目                  | 説明                         | 例                                        |
+| --------------------- | ---------------------------- | ----------------------------------------- |
+| **Access Key ID**     | S3アクセスのためのキーID     | `AKIAIOSFODNN7EXAMPLE`                    |
+| **Secret Access Key** | キーに対するシークレット     | `wJalrXUtnFEMI/K7MDENG/...`               |
+| **End Point**         | S3 APIエンドポイントURL      | `https://s3.ap-northeast-1.amazonaws.com` |
+| **Region**            | バケットが位置する地域       | `ap-northeast-1`                          |
 | **Bucket Name**       | 画像が保存される対象バケット | `consumer-ufb-images`                     |
 
 ### Presigned URL Download設定
@@ -98,4 +100,3 @@ ABC User Feedbackでは、ユーザーがフィードバックを提出する際
 - [フィールド設定](/ja/user-guide/feedback-management) - 画像フィールドをフィードバックフォームに追加する方法
 - [フィードバック確認とフィルタリング](/ja/user-guide/feedback-management) - アップロードされた画像をフィードバックで確認する方法
 - [APIキー管理](./02-api-key-management.md) - APIキーセキュリティ管理方法
-
