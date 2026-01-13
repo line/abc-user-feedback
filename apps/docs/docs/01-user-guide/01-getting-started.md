@@ -38,7 +38,8 @@ http://localhost:3000
 ---
 
 ## 테넌트 및 관리자 계정 생성
-<img width="4000" height="2800" alt="tenant" src="https://github.com/user-attachments/assets/d36cb3b5-7d28-48f7-9a1f-9b2d6c5fa0f8" />
+
+![member-register.png](/img/tenant.png)
 
 처음 접속하면 **테넌트 생성 및 관리자 계정 등록** 화면이 표시됩니다.
 
@@ -103,8 +104,8 @@ ABC User Feedback은 다음과 같은 계층 구조를 가집니다:
 
 | 항목            | 설명                                | 예시                       |
 | --------------- | ----------------------------------- | -------------------------- |
-| **Name**        | 프로젝트 이름                       | `앱 이름(ex:ABC)`, `서비스 이름(ex:ABC)`   |
-| **Description** | 프로젝트 설명 (선택)                | `ABC 고객 피드백 수집 및 분석을 위한 용도` |
+| **Name**        | 프로젝트 이름                       | `모바일 앱`, `웹 서비스`   |
+| **Description** | 프로젝트 설명 (선택)                | `고객 피드백 수집 및 분석` |
 | **Time Zone**   | 시간 기준 (대시보드 및 통계에 영향) | `Asia/Seoul`               |
 
 **완료 후**: 정보를 입력한 후 **Next** 버튼을 클릭합니다.

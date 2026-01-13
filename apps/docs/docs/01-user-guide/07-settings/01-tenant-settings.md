@@ -8,8 +8,6 @@ sidebar_position: 1
 
 테넌트 설정은 ABC User Feedback의 최상위 관리 기능으로, 조직 전체에 영향을 주는 중요한 설정들을 다룹니다. 이 문서에서는 테넌트 정보 관리, 로그인 방식 설정, 전체 사용자 관리 방법을 설명합니다.
 
-<img width="4000" height="2800" alt="tenant" src="https://github.com/user-attachments/assets/8feead8d-d6f8-4814-ab3d-c6d9611c8385" />
-
 **주의**: 이 설정들은 **Super Admin 권한**을 가진 사용자만 접근할 수 있습니다.
 
 ---

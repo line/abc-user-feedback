@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
-title: "Key Features"
-description: "Introducing key features."
+title: 'Key Features'
+description: 'Introducing key features.'
 ---
 
 # Key Features
@@ -20,7 +20,6 @@ The feedback tagging system is a core feature for systematically classifying and
 - **Custom Issue Creation**: Create and manage customized issues tailored to project characteristics
 - **Issue-Based Filtering**: Filter feedback by issue to focus on specific topics
 - **Issue Statistics**: Derive insights through analysis of issue usage frequency and trends
-- **Issue Color Coding**: Assign colors to issues for visual distinction
 
 ### How to Use
 
@@ -59,18 +58,15 @@ Issue tracker integration is a feature for systematically managing problems or i
 ### Key Features
 
 - **Status Indicators**: Visually display the current status of issues (New, In Progress, Resolved, etc.)
-- **Priority Setting**: Set priorities based on issue importance
-- **External System Integration**: Connect with existing issue tracker systems (JIRA, GitHub Issues, etc.)
-- **Assignee Assignment**: Assign responsible parties for issue resolution
-- **Timeline Tracking**: Manage issue status changes and comment history
+- **External System Integration**: Connect with issue tracker systems (JIRA)
 
 ### How to Use
 
-1. Create issues from feedback or register issues directly
-2. Set issue details, priority, and assignees
-3. Connect with external issue trackers (optional)
+1. Create issues from feedback or in the issue menu
+2. Configure external issue tracker connection (optional)
+3. Set issue details and issue tracking ticket
 4. Monitor and update issue progress
-5. Close issues after resolution and notify feedback providers (optional)
+5. Close issue after resolution
 
 ## Single Sign-On (SSO)
 
@@ -112,14 +108,6 @@ Role-Based Access Control is a feature for effectively managing user permissions
 - **Role Assignment Management**: Assign and change roles per user
 - **Permission Inheritance**: Support hierarchical permission structures
 
-### Default Roles
-
-1. **System Administrator**: Full access to all features and settings
-2. **Project Manager**: Management permissions for all features within a specific project
-3. **Analyst**: Permissions to view, analyze, and assign issues to feedback
-4. **Issue Manager**: Permissions to create, modify, and change status of issues
-5. **Viewer**: Limited permissions to only view feedback and dashboards
-
 ### How to Use
 
 1. Access role management menu in admin panel
@@ -135,28 +123,22 @@ The dashboard is a feature that visualizes feedback data to understand important
 
 ### Key Features
 
-- **Real-Time Statistics**: Display key metrics in real-time such as feedback count, issue status, resolution rate
+- **Real-time Statistics**: Real-time display of key metrics such as feedback count, issue count, resolution rate
 - **Trend Analysis**: Graphs showing feedback and issue trends over time
-- **Issue Distribution**: Visualize feedback distribution by issue
-- **Sentiment Analysis**: Analyze positive/negative/neutral sentiment of feedback (optional feature)
-- **Custom Dashboard**: Configure personalized dashboards per user
+- **Issue Distribution**: Visualization of feedback distribution by issue
 
-### Charts and Widgets Provided
+### Provided Charts and Widgets
 
-1. **Feedback Summary Card**: Key metrics such as total feedback count, new feedback, processed feedback
-2. **Time Series Graph**: Daily/weekly/monthly feedback trends
-3. **Issue Cloud**: Visualization of frequently used issues
-4. **Issue Status Donut Chart**: Distribution by issue status
-5. **Recent Feedback List**: Quick view of latest feedback
-6. **Performance Metrics**: Performance measurement indicators such as response time and resolution time
+1. **Feedback Summary Cards**: Key metrics such as total feedback count, new feedback, processed feedback
+2. **Time Series Graphs**: Daily/weekly/monthly feedback trends
+3. **Issue Status Donut Chart**: Distribution by issue status
 
 ### How to Use
 
-1. Access dashboard page
+1. Access the dashboard page
 2. Adjust data range through period and filter settings
 3. Analyze key metrics and trends
-4. Make data-driven decisions and derive action items
-5. Export detailed reports when needed
+4. Derive insights-based decisions and action items
 
 ## Additional Features
 
@@ -180,7 +162,6 @@ In addition to the key features described above, ABC User Feedback provides the 
 ### Data Export
 
 - Export feedback data in CSV, Excel formats
-- Generate customized reports
 
 ### Multi-Language Support
 
@@ -190,4 +171,3 @@ In addition to the key features described above, ABC User Feedback provides the 
 ---
 
 This document provides an overview of ABC User Feedback's key features. For more detailed usage of each feature, refer to the [User Guide](/en/user-guide/getting-started) section.
-

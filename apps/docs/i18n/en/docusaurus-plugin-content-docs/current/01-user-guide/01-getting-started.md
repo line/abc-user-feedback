@@ -39,9 +39,9 @@ http://localhost:3000
 
 ## Creating Tenant and Administrator Account
 
-When you first access the system, the **Tenant Creation and Administrator Account Registration** screen will be displayed.
+![member-register.png](/img/tenant.png)
 
-🎥 **Video**: `Video of tenant and administrator account creation process`
+When you first access the system, the **Tenant Creation and Administrator Account Registration** screen will be displayed.
 
 ### Step 1: Enter Tenant Information
 
@@ -103,11 +103,11 @@ Tenant (Organization)
 
 ### Step 1: Project Basic Information
 
-| Item            | Description                                    | Example                    |
-| --------------- | ---------------------------------------------- | -------------------------- |
-| **Name**        | Project name                                   | `Mobile App`, `Web Service` |
-| **Description** | Project description (optional)                 | `Customer feedback collection and analysis` |
-| **Time Zone**   | Time reference (affects dashboard and statistics) | `Asia/Seoul`               |
+| Item            | Description                                       | Example                                     |
+| --------------- | ------------------------------------------------- | ------------------------------------------- |
+| **Name**        | Project name                                      | `Mobile App`, `Web Service`                 |
+| **Description** | Project description (optional)                    | `Customer feedback collection and analysis` |
+| **Time Zone**   | Time reference (affects dashboard and statistics) | `Asia/Seoul`                                |
 
 **After completion**: After entering the information, click the **Next** button.
 
@@ -145,11 +145,11 @@ A channel represents a **feedback collection path**:
 
 ### Step 1: Channel Basic Information
 
-| Item                               | Description                                          | Example                   |
-| ---------------------------------- | ---------------------------------------------------- | ------------------------- |
-| **Name**                           | Channel name                                         | `Web Feedback`, `App Review` |
-| **Description**                    | Channel description (optional)                       | `Website user opinions`   |
-| **Maximum Feedback Search Period** | Searchable period for feedback (30/90/180/365 days, all) | `90 days`                 |
+| Item                               | Description                                              | Example                      |
+| ---------------------------------- | -------------------------------------------------------- | ---------------------------- |
+| **Name**                           | Channel name                                             | `Web Feedback`, `App Review` |
+| **Description**                    | Channel description (optional)                           | `Website user opinions`      |
+| **Maximum Feedback Search Period** | Searchable period for feedback (30/90/180/365 days, all) | `90 days`                    |
 
 **After completion**: After entering the information, click the **Next** button.
 
@@ -161,12 +161,12 @@ Define the data structure to collect in the channel.
 
 Fields automatically created by the system:
 
-| Field Name  | Format       | Property   | Description            |
-| ----------- | ------------ | ---------- | ---------------------- |
-| `id`        | number       | Read Only  | Unique feedback ID     |
-| `createdAt` | date         | Read Only  | Creation time          |
-| `updatedAt` | date         | Read Only  | Modification time      |
-| `issues`   | multiSelect  | Editable   | List of linked issues  |
+| Field Name  | Format      | Property  | Description           |
+| ----------- | ----------- | --------- | --------------------- |
+| `id`        | number      | Read Only | Unique feedback ID    |
+| `createdAt` | date        | Read Only | Creation time         |
+| `updatedAt` | date        | Read Only | Modification time     |
+| `issues`    | multiSelect | Editable  | List of linked issues |
 
 #### Adding Custom Fields
 
@@ -175,23 +175,23 @@ Add custom fields for actual feedback collection:
 1. Click the **Add Field** button
 2. Enter field information:
 
-| Item             | Description                                                      | Example                                                                       |
-| ---------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **Key**          | Unique identifier (uppercase/lowercase letters, numbers, `_`)     | `message`, `rating`                                                           |
-| **Display Name** | Name displayed in UI                                             | `Feedback Content`                                                             |
-| **Format**       | Data format                                                       | `text`,`keyword`,`number`,`date`,`select`,`multiSelect`,`images`,`aiField` |
-| **Property**     | `Editable` (modifiable in UI) / `Read Only` (not modifiable)     | `Editable`                                                                     |
-| **Status**       | `Active` / `Inactive`                                            | `Active`                                                                       |
+| Item             | Description                                                   | Example                                                                    |
+| ---------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| **Key**          | Unique identifier (uppercase/lowercase letters, numbers, `_`) | `message`, `rating`                                                        |
+| **Display Name** | Name displayed in UI                                          | `Feedback Content`                                                         |
+| **Format**       | Data format                                                   | `text`,`keyword`,`number`,`date`,`select`,`multiSelect`,`images`,`aiField` |
+| **Property**     | `Editable` (modifiable in UI) / `Read Only` (not modifiable)  | `Editable`                                                                 |
+| **Status**       | `Active` / `Inactive`                                         | `Active`                                                                   |
 
 #### Recommended Default Field Configuration
 
 For the first channel, it is recommended to add the following fields:
 
-| Key         | Display Name      | Format  | Description          |
-| ----------- | ----------------- | ------- | -------------------- |
-| `message`   | Feedback Content  | text    | User feedback       |
-| `userEmail` | User Email        | keyword | Contact (optional)   |
-| `rating`    | Satisfaction      | number  | 1-5 point rating    |
+| Key         | Display Name     | Format  | Description        |
+| ----------- | ---------------- | ------- | ------------------ |
+| `message`   | Feedback Content | text    | User feedback      |
+| `userEmail` | User Email       | keyword | Contact (optional) |
+| `rating`    | Satisfaction     | number  | 1-5 point rating   |
 
 ### Field Preview
 
@@ -261,4 +261,3 @@ Basic setup and first feedback collection are complete!
 ## Related Documents
 
 - [API Integration](/en/developer-guide/api-integration) - Detailed API usage guide
-
