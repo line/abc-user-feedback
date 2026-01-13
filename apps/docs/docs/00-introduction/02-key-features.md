@@ -1,7 +1,7 @@
 ---
 sidebar_position: 3
-title: "주요 기능"
-description: "주요 기능을 소개합니다."
+title: '주요 기능'
+description: '주요 기능을 소개합니다.'
 ---
 
 # 주요 기능
@@ -66,7 +66,7 @@ ABC User Feedback은 사용자 피드백을 효과적으로 수집, 관리 및 �
 2. 외부 이슈 트래커 연결 설정 (선택 사항)
 3. 이슈 세부 정보, 이슈 트랙킹 티켓 설정
 4. 이슈 진행 상황 모니터링 및 업데이트
-5. 해결 후 이슈 종료 
+5. 해결 후 이슈 종료
 
 ## 싱글 사인온(SSO)
 
@@ -170,4 +170,4 @@ ABC User Feedback은 위에서 설명한 주요 기능 외에도 다음과 같�
 
 ---
 
-이 문서는 ABC User Feedback의 주요 기능을 개괄적으로 설명합니다. 각 기능에 대한 더 자세한 사용법은 [사용자 가이드](/docs/01-user-guide/01-getting-started.md) 섹션을 참조하세요.
+이 문서는 ABC User Feedback의 주요 기능을 개괄적으로 설명합니다. 각 기능에 대한 더 자세한 사용법은 [사용자 가이드](/user-guide/getting-started) 섹션을 참조하세요.
