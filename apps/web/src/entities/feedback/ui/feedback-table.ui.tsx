@@ -119,15 +119,13 @@ const FeedbackTable = (props: Props) => {
     updateTableFilters,
     updateDateRange,
     defaultQueries,
-    resetDateRange,
   } = useFeedbackQueryConverter({
     projectId,
     filterFields,
     feedbackSearchMaxDays: currentChannel.feedbackSearchMaxDays,
   });
 
-  const onChangeCurrentChannelId = async (channelId: number) => {
-    await resetDateRange();
+  const onChangeCurrentChannelId = (channelId: number) => {
     setCurrentChannelId(channelId);
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
     table.resetRowSelection();

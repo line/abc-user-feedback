@@ -19,7 +19,7 @@ import i18nConfig from 'next-i18next.config';
 
 import { Path } from '@/shared/constants';
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   if (Path.isErrorPage(req.nextUrl.pathname)) return NextResponse.next();
 
   const jwt = req.cookies.get('jwt')?.value;

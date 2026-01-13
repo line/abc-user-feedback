@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import dayjs from 'dayjs';
 import { createParser, parseAsStringLiteral, useQueryState } from 'nuqs';
 
@@ -192,6 +192,21 @@ const useFeedbackQueryConverter = (input: {
     filterFields.some((vv) => vv.key === v.key),
   );
 
+  useEffect(() => {
+    const diff = dayjs(dateRange?.endDate).diff(
+      dayjs(dateRange?.startDate),
+      'day',
+    );
+    if (diff >= feedbackSearchMaxDays) {
+      void onChangeDateRange({
+        startDate: dayjs()
+          .subtract(feedbackSearchMaxDays - 1, 'day')
+          .toDate(),
+        endDate: dayjs().toDate(),
+      });
+    }
+  }, [feedbackSearchMaxDays]);
+
   return {
     queries: filteredQueries,
     defaultQueries,
@@ -200,8 +215,6 @@ const useFeedbackQueryConverter = (input: {
     dateRange,
     updateTableFilters: onChangeTableFilters,
     updateDateRange: onChangeDateRange,
-    resetDateRange: () =>
-      setDefaultQueries(defaultDateRange ? [defaultDateRange] : []),
   };
 };
 
