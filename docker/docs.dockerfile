@@ -1,5 +1,5 @@
 
-FROM node:24.12.0-alpine AS base
+FROM node:24-alpine AS base
 
 # ---- Builder Stage ----
 FROM base AS builder
