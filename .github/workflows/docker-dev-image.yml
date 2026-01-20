@@ -24,9 +24,8 @@ jobs:
           images: line/abc-user-feedback-api
           tags: |
             type=ref,event=branch
-            type=ref,event=pr
+            type=ref,event=tag
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
 
       - name: Docker meta for Web
         id: web-meta
@@ -35,9 +34,8 @@ jobs:
           images: line/abc-user-feedback-web
           tags: |
             type=ref,event=branch
-            type=ref,event=pr
+            type=ref,event=tag
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
 
       - name: Login to DockerHub
         if: github.event_name != 'pull_request'
