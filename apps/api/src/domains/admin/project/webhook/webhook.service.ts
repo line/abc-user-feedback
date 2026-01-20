@@ -23,7 +23,10 @@ import { ChannelEntity } from '../../channel/channel/channel.entity';
 import type { EventDto } from './dtos';
 import { CreateWebhookDto, UpdateWebhookDto } from './dtos';
 import { EventEntity } from './event.entity';
-import { WebhookAlreadyExistsException } from './exceptions';
+import {
+  WebhookAlreadyExistsException,
+  WebhookNotFoundException,
+} from './exceptions';
 import { WebhookEntity } from './webhook.entity';
 
 @Injectable()
@@ -37,7 +40,7 @@ export class WebhookService {
     private readonly channelRepo: Repository<ChannelEntity>,
   ) {}
 
-  private async validateEvent(event: EventDto): Promise<boolean> {
+  async validateEvent(event: EventDto): Promise<boolean> {
     const eventRequiresChannelIds = [
       EventTypeEnum.FEEDBACK_CREATION,
       EventTypeEnum.ISSUE_ADDITION,
@@ -116,11 +119,12 @@ export class WebhookService {
 
   @Transactional()
   async update(dto: UpdateWebhookDto): Promise<WebhookEntity> {
-    const webhook =
-      (await this.repository.findOne({
-        where: { id: dto.id },
-        relations: ['events'],
-      })) ?? new WebhookEntity();
+    const webhook = await this.repository.findOne({
+      where: { id: dto.id },
+      relations: ['events'],
+    });
+
+    if (!webhook) throw new WebhookNotFoundException();
 
     if (
       await this.repository.findOne({
@@ -159,10 +163,10 @@ export class WebhookService {
 
   @Transactional()
   async delete(webhookId: number) {
-    const webhook =
-      (await this.repository.findOne({
-        where: { id: webhookId },
-      })) ?? new WebhookEntity();
+    const webhook = await this.repository.findOne({
+      where: { id: webhookId },
+    });
+    if (!webhook) throw new WebhookNotFoundException();
 
     await this.repository.remove(webhook);
   }

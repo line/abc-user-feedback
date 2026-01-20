@@ -18,15 +18,22 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { DateTime } from 'luxon';
+import { Between, In } from 'typeorm';
 import type { Repository, SelectQueryBuilder } from 'typeorm';
 
 import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
 import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
 import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
+import { ProjectNotFoundException } from '@/domains/admin/project/project/exceptions';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
+import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
 import { FeedbackStatisticsServiceProviders } from '@/test-utils/providers/feedback-statistics.service.providers';
 import { createQueryBuilder, TestConfig } from '@/test-utils/util-functions';
-import { GetCountByDateByChannelDto, GetCountDto } from './dtos';
+import {
+  GetCountByDateByChannelDto,
+  GetCountDto,
+  GetIssuedRateDto,
+} from './dtos';
 import { FeedbackStatisticsEntity } from './feedback-statistics.entity';
 import { FeedbackStatisticsService } from './feedback-statistics.service';
 
@@ -77,6 +84,7 @@ describe('FeedbackStatisticsService suite', () => {
   let channelRepo: Repository<ChannelEntity>;
   let projectRepo: Repository<ProjectEntity>;
   let schedulerRegistry: SchedulerRegistry;
+  let schedulerLockService: SchedulerLockService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -95,6 +103,7 @@ describe('FeedbackStatisticsService suite', () => {
     channelRepo = module.get(getRepositoryToken(ChannelEntity));
     projectRepo = module.get(getRepositoryToken(ProjectEntity));
     schedulerRegistry = module.get(SchedulerRegistry);
+    schedulerLockService = module.get(SchedulerLockService);
   });
 
   describe('getCountByDateByChannel', () => {
@@ -112,10 +121,17 @@ describe('FeedbackStatisticsService suite', () => {
         .spyOn(feedbackStatsRepo, 'find')
         .mockResolvedValue(feedbackStatsFixture);
 
-      const countByDateByChannel =
-        await feedbackStatsService.getCountByDateByChannel(dto);
+      const result = await feedbackStatsService.getCountByDateByChannel(dto);
 
-      expect(countByDateByChannel).toEqual({
+      expect(feedbackStatsRepo.find).toHaveBeenCalledWith({
+        where: {
+          channel: In(channelIds),
+          date: Between(new Date(startDate), new Date(endDate)),
+        },
+        relations: { channel: true },
+        order: { channel: { id: 'ASC' }, date: 'ASC' },
+      });
+      expect(result).toEqual({
         channels: [
           {
             id: 1,
@@ -242,10 +258,16 @@ describe('FeedbackStatisticsService suite', () => {
         .spyOn(feedbackRepo, 'count')
         .mockResolvedValue(feedbackStatsFixture.length);
 
-      const countByDateByChannel = await feedbackStatsService.getCount(dto);
+      const result = await feedbackStatsService.getCount(dto);
 
-      expect(countByDateByChannel).toEqual({
+      expect(result).toEqual({
         count: feedbackStatsFixture.length,
+      });
+      expect(feedbackRepo.count).toHaveBeenCalledWith({
+        where: {
+          createdAt: Between(dto.from, dto.to),
+          channel: { project: { id: dto.projectId } },
+        },
       });
     });
   });
@@ -255,7 +277,7 @@ describe('FeedbackStatisticsService suite', () => {
       const from = new Date('2023-01-01');
       const to = faker.date.future();
       const projectId = faker.number.int();
-      const dto = new GetCountDto();
+      const dto = new GetIssuedRateDto();
       dto.from = from;
       dto.to = to;
       dto.projectId = projectId;
@@ -272,11 +294,17 @@ describe('FeedbackStatisticsService suite', () => {
         .spyOn(feedbackRepo, 'count')
         .mockResolvedValue(feedbackStatsFixture.length);
 
-      const countByDateByChannel =
-        await feedbackStatsService.getIssuedRatio(dto);
+      const result = await feedbackStatsService.getIssuedRatio(dto);
 
-      expect(countByDateByChannel).toEqual({
+      expect(result).toEqual({
         ratio: 1,
+      });
+      expect(issueRepo.createQueryBuilder).toHaveBeenCalledWith('issue');
+      expect(feedbackRepo.count).toHaveBeenCalledWith({
+        where: {
+          createdAt: Between(dto.from, dto.to),
+          channel: { project: { id: dto.projectId } },
+        },
       });
     });
   });
@@ -292,6 +320,11 @@ describe('FeedbackStatisticsService suite', () => {
         },
       } as ProjectEntity);
       jest.spyOn(schedulerRegistry, 'addCronJob');
+      jest.spyOn(schedulerRegistry, 'getCronJobs').mockReturnValue(new Map());
+      jest.spyOn(schedulerLockService, 'acquireLock').mockResolvedValue(true);
+      jest
+        .spyOn(schedulerLockService, 'releaseLock')
+        .mockResolvedValue(undefined);
 
       await feedbackStatsService.addCronJobByProjectId(projectId);
 
@@ -300,6 +333,15 @@ describe('FeedbackStatisticsService suite', () => {
         `feedback-statistics-${projectId}`,
         expect.anything(),
       );
+    });
+
+    it('adding a cron job fails when project is not found', async () => {
+      const projectId = faker.number.int();
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue(null);
+
+      await expect(
+        feedbackStatsService.addCronJobByProjectId(projectId),
+      ).rejects.toThrow(ProjectNotFoundException);
     });
   });
 
@@ -323,7 +365,24 @@ describe('FeedbackStatisticsService suite', () => {
         .mockResolvedValue(channels as ChannelEntity[]);
       jest.spyOn(feedbackRepo, 'count').mockResolvedValueOnce(0);
       jest.spyOn(feedbackRepo, 'count').mockResolvedValue(1);
-      jest.spyOn(feedbackStatsRepo.manager, 'transaction');
+      jest
+        .spyOn(feedbackStatsRepo.manager, 'transaction')
+        .mockImplementation(async (callback: any) => {
+          const mockManager = {
+            createQueryBuilder: jest.fn().mockReturnValue({
+              insert: jest.fn().mockReturnThis(),
+              into: jest.fn().mockReturnThis(),
+              values: jest.fn().mockReturnThis(),
+              orUpdate: jest.fn().mockReturnThis(),
+              updateEntity: jest.fn().mockReturnThis(),
+              execute: jest.fn().mockResolvedValue({}),
+            }),
+          };
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+          return await (callback as (manager: any) => Promise<any>)(
+            mockManager,
+          );
+        });
 
       await feedbackStatsService.createFeedbackStatistics(
         projectId,
@@ -333,6 +392,16 @@ describe('FeedbackStatisticsService suite', () => {
       expect(feedbackStatsRepo.manager.transaction).toHaveBeenCalledTimes(
         dayToCreate * channelCount,
       );
+    });
+
+    it('creating feedback statistics fails when project is not found', async () => {
+      const projectId = faker.number.int();
+      const dayToCreate = faker.number.int({ min: 1, max: 5 });
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue(null);
+
+      await expect(
+        feedbackStatsService.createFeedbackStatistics(projectId, dayToCreate),
+      ).rejects.toThrow(ProjectNotFoundException);
     });
   });
 
@@ -349,6 +418,9 @@ describe('FeedbackStatisticsService suite', () => {
       } as ProjectEntity);
       jest.spyOn(feedbackStatsRepo, 'findOne').mockResolvedValue({
         count: 1,
+      } as FeedbackStatisticsEntity);
+      jest.spyOn(feedbackStatsRepo, 'save').mockResolvedValue({
+        count: 1 + count,
       } as FeedbackStatisticsEntity);
 
       await feedbackStatsService.updateCount({
@@ -380,7 +452,12 @@ describe('FeedbackStatisticsService suite', () => {
           () =>
             createQueryBuilder as unknown as SelectQueryBuilder<FeedbackStatisticsEntity>,
         );
-      jest.spyOn(createQueryBuilder, 'values' as never);
+      jest.spyOn(createQueryBuilder, 'values' as never).mockReturnThis();
+      jest.spyOn(createQueryBuilder, 'orUpdate' as never).mockReturnThis();
+      jest.spyOn(createQueryBuilder, 'updateEntity' as never).mockReturnThis();
+      jest
+        .spyOn(createQueryBuilder, 'execute' as never)
+        .mockResolvedValue({} as never);
 
       await feedbackStatsService.updateCount({
         channelId,
@@ -399,6 +476,39 @@ describe('FeedbackStatisticsService suite', () => {
         count,
         channel: { id: channelId },
       });
+    });
+
+    it('updating count fails when project is not found', async () => {
+      const channelId = faker.number.int();
+      const date = faker.date.past();
+      const count = faker.number.int({ min: 1, max: 10 });
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue(null);
+
+      await expect(
+        feedbackStatsService.updateCount({
+          channelId,
+          date,
+          count,
+        }),
+      ).rejects.toThrow(ProjectNotFoundException);
+    });
+
+    it('updating count with zero count does nothing', async () => {
+      const channelId = faker.number.int();
+      const date = faker.date.past();
+      const count = 0;
+
+      const projectRepoSpy = jest.spyOn(projectRepo, 'findOne');
+      const feedbackStatsRepoSpy = jest.spyOn(feedbackStatsRepo, 'findOne');
+
+      await feedbackStatsService.updateCount({
+        channelId,
+        date,
+        count,
+      });
+
+      expect(projectRepoSpy).not.toHaveBeenCalled();
+      expect(feedbackStatsRepoSpy).not.toHaveBeenCalled();
     });
   });
 });

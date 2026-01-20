@@ -14,3 +14,4 @@
  * under the License.
  */
 export { WebhookAlreadyExistsException } from './webhook-already-exists.exception';
+export { WebhookNotFoundException } from './webhook-not-found.exception';

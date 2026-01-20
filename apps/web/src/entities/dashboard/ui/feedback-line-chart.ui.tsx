@@ -26,7 +26,13 @@ import {
   Icon,
 } from '@ufb/react';
 
-import { SimpleLineChart, useAllChannels, useOAIQuery } from '@/shared';
+import {
+  ChartCard,
+  Legend,
+  LineChart,
+  useAllChannels,
+  useOAIQuery,
+} from '@/shared';
 import type { Channel } from '@/entities/channel';
 
 import { useLineChartData } from '../lib';
@@ -73,47 +79,65 @@ const FeedbackLineChartWrapper: React.FC<IProps> = (props) => {
   );
 
   return (
-    <SimpleLineChart
+    <ChartCard
       title={t('chart.feedback-trend.title')}
       description={`${t('chart.feedback-trend.description')} (${dayjs(
         from,
       ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
-      height={400}
-      dataKeys={dataKeys}
-      data={chartData}
-      filterContent={
-        <Combobox>
-          <ComboboxTrigger>
-            <Icon name="RiFilter3Line" />
-            Filter
-          </ComboboxTrigger>
-          <ComboboxContent>
-            <ComboboxList maxHeight="200px">
-              {channels?.items.map((channel) => (
-                <ComboboxSelectItem
-                  key={channel.id}
-                  value={String(channel.id)}
-                  checked={currentChannels.some(({ id }) => id === channel.id)}
-                  onSelect={() => {
-                    const isChecked = currentChannels.some(
-                      ({ id }) => id === channel.id,
-                    );
-                    setCurrentChannels((prev) =>
-                      isChecked ? prev.filter(({ id }) => id !== channel.id)
-                      : prev.length === 5 ? [...prev.slice(1), channel]
-                      : [...prev, channel],
-                    );
-                  }}
-                >
-                  {channel.name}
-                </ComboboxSelectItem>
-              ))}
-            </ComboboxList>
-          </ComboboxContent>
-        </Combobox>
+      extra={
+        <div className="flex gap-3">
+          <Legend dataKeys={dataKeys} />
+          <ChannelSelectCombobox
+            currentChannels={currentChannels}
+            setCurrentChannels={setCurrentChannels}
+            channels={channels}
+          />
+        </div>
       }
-      showLegend
-    />
+    >
+      <LineChart height={400} dataKeys={dataKeys} data={chartData} />
+    </ChartCard>
+  );
+};
+
+interface ChannelSelectComboboxProps {
+  channels?: { items: Channel[] };
+  currentChannels: Channel[];
+  setCurrentChannels: React.Dispatch<React.SetStateAction<Channel[]>>;
+}
+
+const ChannelSelectCombobox = (props: ChannelSelectComboboxProps) => {
+  const { channels, currentChannels, setCurrentChannels } = props;
+  return (
+    <Combobox>
+      <ComboboxTrigger>
+        <Icon name="RiFilter3Line" />
+        Filter
+      </ComboboxTrigger>
+      <ComboboxContent>
+        <ComboboxList maxHeight="200px">
+          {channels?.items.map((channel) => (
+            <ComboboxSelectItem
+              key={channel.id}
+              value={String(channel.id)}
+              checked={currentChannels.some(({ id }) => id === channel.id)}
+              onSelect={() => {
+                const isChecked = currentChannels.some(
+                  ({ id }) => id === channel.id,
+                );
+                setCurrentChannels((prev) =>
+                  isChecked ? prev.filter(({ id }) => id !== channel.id)
+                  : prev.length === 5 ? [...prev.slice(1), channel]
+                  : [...prev, channel],
+                );
+              }}
+            >
+              {channel.name}
+            </ComboboxSelectItem>
+          ))}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
   );
 };
 

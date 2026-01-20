@@ -1,29 +1,46 @@
 {
   "name": "auf-cli",
   "version": "1.0.10",
+  "description": "Command line interface for ABC User Feedback",
+  "repository": "https://github.com/line/abc-user-feedback/tree/main/apps/cli",
   "bin": {
-    "auf-cli": "./dist/auf-cli.js"
+    "auf-cli": "./dist/index.js"
   },
+  "author": "ABC User Feedback",
+  "keywords": [
+    "auf",
+    "cli",
+    "command-line",
+    "tool",
+    "abc-user-feedback",
+    "VOC"
+  ],
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf dist .turbo node_modules .cache",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "format:fix": "prettier --write --list-different .",
     "lint": "eslint",
-    "start": "node dist/auf-cli.js",
-    "start:dev": "ts-node bin/auf-cli.ts"
+    "start": "node dist/index.js",
+    "start:dev": "ts-node bin/index.ts",
+    "dev": "ts-node bin/index.ts"
   },
   "dependencies": {
     "@types/prompts": "^2.4.9",
     "child_process": "^1.0.2",
-    "commander": "^14.0.0",
-    "js-toml": "^1.0.2"
+    "commander": "^14.0.2",
+    "js-toml": "^1.0.2",
+    "toml": "^3.0.0",
+    "yaml": "^2.8.2",
+    "zod": "^4.3.5"
   },
   "devDependencies": {
+    "@types/node": "24.10.8",
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript": "catalog:"
   },
   "prettier": "@ufb/prettier-config"
 }

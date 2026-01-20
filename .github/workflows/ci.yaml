@@ -2,28 +2,24 @@ name: CI
 
 on:
   pull_request:
-    branches: ["*"]
+    branches: ['*']
   push:
-    branches: ["main"]
+    branches: ['main']
   merge_group:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
-# You can leverage Vercel Remote Caching with Turbo to speed up your builds
-# @link https://turborepo.org/docs/core-concepts/remote-caching#remote-caching-on-vercel-builds
 env:
   FORCE_COLOR: 3
-  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   CI: true
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Setup
         uses: ./tooling/github/setup
@@ -34,7 +30,7 @@ jobs:
   format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Setup
         uses: ./tooling/github/setup
@@ -45,7 +41,7 @@ jobs:
   typecheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Setup
         uses: ./tooling/github/setup
@@ -56,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Setup
         uses: ./tooling/github/setup
@@ -66,12 +62,9 @@ jobs:
           echo "JWT_SECRET=${{ vars.TEST_JWT_SECRET }}" >> ./apps/api/.env.test
           echo "OPENSEARCH_USE=true" >> ./apps/api/.env.test
           echo "OPENSEARCH_NODE=http://localhost:9200" >> ./apps/api/.env.test
-          echo "OPENSEARCH_USERNAME=''" >> ./apps/api/.env.test
-          echo "OPENSEARCH_PASSWORD=''" >> ./apps/api/.env.test
           echo "SMTP_HOST='localhost'" >> ./apps/api/.env.test
           echo "SMTP_PORT=25" >> ./apps/api/.env.test
           echo "SMTP_SENDER='user@feedback.com'" >> ./apps/api/.env.test
-          echo "SMTP_BASE_URL='http://localhost:3000'" >> ./apps/api/.env.test
 
       - name: Run Tests
         run: pnpm test
@@ -84,7 +77,6 @@ jobs:
           echo "SMTP_HOST='localhost'" >> ./apps/api/.env.test
           echo "SMTP_PORT=25" >> ./apps/api/.env.test
           echo "SMTP_SENDER='user@feedback.com'" >> ./apps/api/.env.test
-          echo "SMTP_BASE_URL='http://localhost:3000'" >> ./apps/api/.env.test
 
       - name: Run Tests
         run: pnpm test

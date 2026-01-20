@@ -1,0 +1,14 @@
+{
+  "copyright": {
+    "message": "Copyright © {year} ABC User Feedback.",
+    "description": "The footer copyright"
+  },
+  "link.title.Docs": {
+    "message": "ドキュメント",
+    "description": "The title of the footer links column with title=Docs in the footer"
+  },
+  "link.title.More": {
+    "message": "その他",
+    "description": "The title of the footer links column with title=More in the footer"
+  }
+}

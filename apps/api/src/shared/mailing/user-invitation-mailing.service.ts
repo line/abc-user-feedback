@@ -28,8 +28,7 @@ export class UserInvitationMailingService {
     private readonly configService: ConfigService<ConfigServiceType>,
   ) {
     this.baseUrl =
-      (this.configService.get('smtp', { infer: true }) ?? { baseUrl: '' })
-        .baseUrl ?? '';
+      this.configService.get('app.adminWebUrl', { infer: true }) ?? '';
   }
 
   async send({ code, email }: SendMailDto) {

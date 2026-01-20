@@ -6,13 +6,18 @@ on:
       - '**-dev'
 
 jobs:
-  api-build:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
-      - name: Docker meta
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+
+      - name: Docker meta for API
         id: api-meta
         uses: docker/metadata-action@v5
         with:
@@ -23,29 +28,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
 
-      - name: Login to DockerHub
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push API
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./docker/api.dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.api-meta.outputs.tags }}
-          labels: ${{ steps.api-meta.outputs.labels }}
-
-  web-build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v5
-
-      - name: Docker meta
+      - name: Docker meta for Web
         id: web-meta
         uses: docker/metadata-action@v5
         with:
@@ -63,11 +46,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Web
-        uses: docker/build-push-action@v6
+      - name: Bake and push multi-platform Docker images
+        uses: docker/bake-action@v6
         with:
-          context: .
-          file: ./docker/web.dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.web-meta.outputs.tags }}
-          labels: ${{ steps.web-meta.outputs.labels }}
+          files: |
+            ./docker/docker-bake.hcl
+          push: true
+          set: |
+            api.tags=${{ steps.api-meta.outputs.tags }}
+            web.tags=${{ steps.web-meta.outputs.tags }}

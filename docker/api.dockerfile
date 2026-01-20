@@ -1,6 +1,6 @@
 # The web Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
 # Make sure you update this Dockerfile, the Dockerfile in the web workspace and copy that over to Dockerfile in the docs.
-FROM node:22.19.0-alpine AS base
+FROM node:24-alpine AS base
 
 FROM base AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -33,12 +33,6 @@ COPY --from=builder /app/out/full/ .
 COPY turbo.json ./
 COPY .turbo/ ./.turbo/
 
-ARG TURBO_TOKEN
-ENV TURBO_TOKEN=${TURBO_TOKEN}
-
-ARG TURBO_TEAM
-ENV TURBO_TEAM=${TURBO_TEAM}
-
 RUN pnpm dlx turbo run build --filter=api...
 
 FROM base AS runner
@@ -51,4 +45,4 @@ USER nestjs
 
 COPY --from=installer --chown=nestjs:nodejs /app .
 
-CMD node -r source-map-support/register apps/api/dist/main.js
+CMD ["node", "-r", "source-map-support/register", "apps/api/dist/main.js"]

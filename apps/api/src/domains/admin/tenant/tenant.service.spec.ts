@@ -24,6 +24,7 @@ import { TestConfig } from '@/test-utils/util-functions';
 import { TenantServiceProviders } from '../../../test-utils/providers/tenant.service.providers';
 import { FeedbackEntity } from '../feedback/feedback.entity';
 import { UserEntity } from '../user/entities/user.entity';
+import { UserPasswordService } from '../user/user-password.service';
 import {
   FeedbackCountByTenantIdDto,
   SetupTenantDto,
@@ -42,6 +43,7 @@ describe('TenantService', () => {
   let tenantRepo: Repository<TenantEntity>;
   let userRepo: Repository<UserEntity>;
   let feedbackRepo: Repository<FeedbackEntity>;
+  let userPasswordService: UserPasswordService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -52,50 +54,107 @@ describe('TenantService', () => {
     tenantRepo = module.get(getRepositoryToken(TenantEntity));
     userRepo = module.get(getRepositoryToken(UserEntity));
     feedbackRepo = module.get(getRepositoryToken(FeedbackEntity));
+    userPasswordService = module.get(UserPasswordService);
   });
 
   describe('create', () => {
     it('creation succeeds with valid data', async () => {
       const dto = new SetupTenantDto();
       dto.siteName = faker.string.sample();
+      dto.email = faker.internet.email();
       dto.password = '12345678';
+
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);
-      jest.spyOn(userRepo, 'save');
+      jest.spyOn(tenantRepo, 'save').mockResolvedValue({
+        ...tenantFixture,
+        siteName: dto.siteName,
+      } as TenantEntity);
+      jest.spyOn(userRepo, 'save').mockResolvedValue({} as UserEntity);
+      jest
+        .spyOn(userPasswordService, 'createHashPassword')
+        .mockResolvedValue('hashedPassword');
 
       const tenant = await tenantService.create(dto);
+
       expect(tenant.id).toBeDefined();
       expect(tenant.siteName).toEqual(dto.siteName);
+      expect(tenantRepo.save).toHaveBeenCalledTimes(1);
       expect(userRepo.save).toHaveBeenCalledTimes(1);
+      expect(userPasswordService.createHashPassword).toHaveBeenCalledWith(
+        dto.password,
+      );
     });
+
     it('creation fails with the duplicate site name', async () => {
       const dto = new SetupTenantDto();
       dto.siteName = faker.string.sample();
+      dto.email = faker.internet.email();
+      dto.password = '12345678';
+
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([tenantFixture]);
 
       await expect(tenantService.create(dto)).rejects.toThrow(
         TenantAlreadyExistsException,
       );
     });
+
+    it('should create super user with correct properties', async () => {
+      const dto = new SetupTenantDto();
+      dto.siteName = faker.string.sample();
+      dto.email = faker.internet.email();
+      dto.password = '12345678';
+
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);
+      jest.spyOn(tenantRepo, 'save').mockResolvedValue({
+        ...tenantFixture,
+        siteName: dto.siteName,
+      } as TenantEntity);
+      jest.spyOn(userRepo, 'save').mockResolvedValue({} as UserEntity);
+      jest
+        .spyOn(userPasswordService, 'createHashPassword')
+        .mockResolvedValue('hashedPassword');
+
+      await tenantService.create(dto);
+
+      expect(userRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          email: dto.email,
+          hashPassword: 'hashedPassword',
+          type: 'SUPER',
+        }),
+      );
+    });
   });
   describe('update', () => {
-    const dto = new UpdateTenantDto();
-    dto.siteName = faker.string.sample();
-    dto.useEmail = faker.datatype.boolean();
-    dto.allowDomains = [faker.string.sample()];
-    dto.useOAuth = faker.datatype.boolean();
-    dto.oauthConfig = {
-      clientId: faker.string.sample(),
-      clientSecret: faker.string.sample(),
-      authCodeRequestURL: faker.string.sample(),
-      scopeString: faker.string.sample(),
-      accessTokenRequestURL: faker.string.sample(),
-      userProfileRequestURL: faker.string.sample(),
-      emailKey: faker.string.sample(),
-      defatulLoginEnable: faker.datatype.boolean(),
-      loginButtonType: LoginButtonTypeEnum.CUSTOM,
-      loginButtonName: faker.string.sample(),
-    };
+    let dto: UpdateTenantDto;
+
+    beforeEach(() => {
+      dto = new UpdateTenantDto();
+      dto.siteName = faker.string.sample();
+      dto.useEmail = faker.datatype.boolean();
+      dto.allowDomains = [faker.string.sample()];
+      dto.useOAuth = faker.datatype.boolean();
+      dto.oauthConfig = {
+        clientId: faker.string.sample(),
+        clientSecret: faker.string.sample(),
+        authCodeRequestURL: faker.string.sample(),
+        scopeString: faker.string.sample(),
+        accessTokenRequestURL: faker.string.sample(),
+        userProfileRequestURL: faker.string.sample(),
+        emailKey: faker.string.sample(),
+        defatulLoginEnable: faker.datatype.boolean(),
+        loginButtonType: LoginButtonTypeEnum.CUSTOM,
+        loginButtonName: faker.string.sample(),
+      };
+    });
 
     it('update succeeds with valid data', async () => {
+      const updatedTenant = { ...tenantFixture, ...dto };
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([tenantFixture]);
+      jest
+        .spyOn(tenantRepo, 'save')
+        .mockResolvedValue(updatedTenant as TenantEntity);
+
       const tenant = await tenantService.update(dto);
 
       expect(tenant.id).toBeDefined();
@@ -104,13 +163,43 @@ describe('TenantService', () => {
       expect(tenant.allowDomains).toEqual(dto.allowDomains);
       expect(tenant.useOAuth).toEqual(dto.useOAuth);
       expect(tenant.oauthConfig).toEqual(dto.oauthConfig);
+      expect(tenantRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining(dto),
+      );
     });
+
     it('update fails when there is no tenant', async () => {
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);
 
       await expect(tenantService.update(dto)).rejects.toThrow(
         TenantNotFoundException,
       );
+    });
+
+    it('should handle null allowDomains', async () => {
+      dto.allowDomains = null;
+      const updatedTenant = { ...tenantFixture, ...dto };
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([tenantFixture]);
+      jest
+        .spyOn(tenantRepo, 'save')
+        .mockResolvedValue(updatedTenant as TenantEntity);
+
+      const tenant = await tenantService.update(dto);
+
+      expect(tenant.allowDomains).toBeNull();
+    });
+
+    it('should handle null oauthConfig', async () => {
+      dto.oauthConfig = null;
+      const updatedTenant = { ...tenantFixture, ...dto };
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([tenantFixture]);
+      jest
+        .spyOn(tenantRepo, 'save')
+        .mockResolvedValue(updatedTenant as TenantEntity);
+
+      const tenant = await tenantService.update(dto);
+
+      expect(tenant.oauthConfig).toBeNull();
     });
   });
   describe('findOne', () => {
@@ -138,6 +227,36 @@ describe('TenantService', () => {
       const feedbackCounts = await tenantService.countByTenantId(dto);
 
       expect(feedbackCounts.total).toEqual(count);
+      expect(feedbackRepo.count).toHaveBeenCalledWith({
+        where: { channel: { project: { tenant: { id: tenantId } } } },
+      });
+    });
+
+    it('should return zero when no feedbacks exist', async () => {
+      const tenantId = faker.number.int();
+      const dto = new FeedbackCountByTenantIdDto();
+      dto.tenantId = tenantId;
+      jest.spyOn(feedbackRepo, 'count').mockResolvedValue(0);
+
+      const feedbackCounts = await tenantService.countByTenantId(dto);
+
+      expect(feedbackCounts.total).toEqual(0);
+    });
+  });
+
+  describe('deleteOldFeedbacks', () => {
+    it('should call deleteOldFeedbacks method', async () => {
+      // This test verifies that the method exists and can be called
+      // The actual implementation details are tested through integration tests
+      await expect(tenantService.deleteOldFeedbacks()).resolves.not.toThrow();
+    });
+  });
+
+  describe('addCronJob', () => {
+    it('should call addCronJob method', async () => {
+      // This test verifies that the method exists and can be called
+      // The actual implementation details are tested through integration tests
+      await expect(tenantService.addCronJob()).resolves.not.toThrow();
     });
   });
 });

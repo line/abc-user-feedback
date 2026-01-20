@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import dayjs from 'dayjs';
 import { createParser, parseAsStringLiteral, useQueryState } from 'nuqs';
 
@@ -161,7 +161,7 @@ const useFeedbackQueryConverter = (input: {
       .filter((v) => !!v) as TableFilter[];
   }, [queries, filterFields]);
 
-  const onChageTableFilters = useCallback(
+  const onChangeTableFilters = useCallback(
     async (tableFilters: TableFilter[], operator: TableFilterOperator) => {
       const result = await Promise.all(
         tableFilters.map(async ({ condition, format, key, value }) => ({
@@ -184,20 +184,37 @@ const useFeedbackQueryConverter = (input: {
     [dateRange],
   );
 
+  const filteredQueries = queries.filter((query) =>
+    filterFields.some((field) => field.key === query.key),
+  );
+
+  const filteredTableFilters = tableFilters.filter((v) =>
+    filterFields.some((vv) => vv.key === v.key),
+  );
+
+  useEffect(() => {
+    const diff = dayjs(dateRange?.endDate).diff(
+      dayjs(dateRange?.startDate),
+      'day',
+    );
+    if (diff >= feedbackSearchMaxDays) {
+      void onChangeDateRange({
+        startDate: dayjs()
+          .subtract(feedbackSearchMaxDays - 1, 'day')
+          .toDate(),
+        endDate: dayjs().toDate(),
+      });
+    }
+  }, [feedbackSearchMaxDays]);
+
   return {
-    queries: queries
-      .filter((query) => filterFields.some((field) => field.key === query.key))
-      .filter((v) => !!v.value),
+    queries: filteredQueries,
     defaultQueries,
-    tableFilters: tableFilters.filter((v) =>
-      filterFields.some((vv) => vv.key === v.key),
-    ),
+    tableFilters: filteredTableFilters,
     operator,
     dateRange,
-    updateTableFilters: onChageTableFilters,
-    updateDateRage: onChangeDateRange,
-    resetDateRange: () =>
-      setDefaultQueries(defaultDateRange ? [defaultDateRange] : []),
+    updateTableFilters: onChangeTableFilters,
+    updateDateRange: onChangeDateRange,
   };
 };
 

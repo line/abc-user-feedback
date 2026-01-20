@@ -23,3 +23,4 @@ export * from './form-overlay-props.type';
 export * from './entity-table.type';
 export * from './search-query.type';
 export * from './common-form-item.type';
+export * from './chart-payload.type';

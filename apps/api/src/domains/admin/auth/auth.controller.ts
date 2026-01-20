@@ -101,7 +101,9 @@ export class AuthController {
   @ApiOkResponse({ type: OAuthLoginUrlResponseDto })
   @Get('signIn/oauth/loginURL')
   async redirectToLoginURL(@Query('callback_url') callbackUrl: string) {
-    return { url: await this.authService.getOAuthLoginURL(callbackUrl) };
+    return {
+      url: await this.authService.getOAuthLoginURL(callbackUrl),
+    };
   }
 
   @UseGuards(UseOAuthGuard)

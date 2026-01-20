@@ -26,7 +26,7 @@ process.env.MYSQL_SECONDARY_URLS = JSON.stringify([
   'mysql://root:userfeedback@localhost:13307/integration',
 ]);
 process.env.MASTER_API_KEY = 'master-api-key';
-process.env.ENABLE_AUTO_FEEDBACK_DELETION = 'true';
+process.env.AUTO_FEEDBACK_DELETION_ENABLED = 'true';
 process.env.AUTO_FEEDBACK_DELETION_PERIOD_DAYS = '30';
 
 async function createTestDatabase() {

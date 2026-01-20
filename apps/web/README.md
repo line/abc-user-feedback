@@ -61,11 +61,9 @@ pnpm build
 
 ## Environment Variables
 
-### Required Environment Variables
-
-| Environment              | Description                                             | Default Value |
-| ------------------------ | ------------------------------------------------------- | ------------- |
-| NEXT_PUBLIC_API_BASE_URL | api base url in client side (ex. http://localhost:4000) |               |
+| Environment              | Description                                             | Default Value         |
+| ------------------------ | ------------------------------------------------------- | --------------------- |
+| NEXT_PUBLIC_API_BASE_URL | api base url in client side (ex. http://localhost:4000) | http://localhost:4000 |
 
 ## Learn More
 

@@ -1,6 +1,6 @@
 # This Dockerfile is copy-pasted into our main docs at /docs/handbook/deploying-with-docker.
 # Make sure you update both files!
-FROM node:22.19.0-alpine AS base
+FROM node:24-alpine AS base
 
 FROM base AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -33,11 +33,6 @@ COPY --from=builder /app/out/full/ .
 COPY turbo.json ./
 COPY .turbo/ ./.turbo/
 
-ARG TURBO_TOKEN
-ENV TURBO_TOKEN=${TURBO_TOKEN}
-
-ARG TURBO_TEAM
-ENV TURBO_TEAM=${TURBO_TEAM}
 
 COPY --from=builder /app/apps/web/.env.build /app/apps/web/.env.production
 RUN SKIP_ENV_VALIDATION=true pnpm dlx turbo run build --filter=web...
@@ -70,4 +65,4 @@ COPY --from=installer --chown=nextjs:nodejs /app/apps/web/entrypoint.sh ./apps/w
 
 ENTRYPOINT ["apps/web/entrypoint.sh"]
 
-CMD node apps/web/server.js
+CMD ["node", "apps/web/server.js"]

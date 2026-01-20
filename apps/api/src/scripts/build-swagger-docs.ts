@@ -14,6 +14,7 @@
  * under the License.
  */
 import { writeFileSync } from 'fs';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
@@ -22,6 +23,7 @@ import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from '../app.module';
 import { APIModule } from '../domains/api/api.module';
+import type { ConfigServiceType } from '../types/config-service.type';
 
 async function generateSwaggerDoc() {
   initializeTransactionalContext();
@@ -31,15 +33,24 @@ async function generateSwaggerDoc() {
     { bufferLogs: true },
   );
 
-  const documentConfig = new DocumentBuilder()
+  const configService = app.get(ConfigService<ConfigServiceType>);
+  const appConfig = configService.get('app', { infer: true }) ?? {
+    baseUrl: undefined,
+  };
+  const baseUrl = appConfig.baseUrl;
+
+  const documentConfigBuilder = new DocumentBuilder()
     .setTitle('User Feedback API Document')
     .setDescription(
       `You can use this API to integrate with your own service or system. This API is protected by a simple API key authentication, so please do not expose this API to the public. You can make an API key in the admin setting page. You should put the API key in the header with the key name 'x-api-key'.
       `,
     )
     .setVersion('1.0.0')
-    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' }, 'apiKey')
-    .build();
+    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' }, 'apiKey');
+  if (baseUrl) {
+    documentConfigBuilder.addServer(baseUrl);
+  }
+  const documentConfig = documentConfigBuilder.build();
   const document = SwaggerModule.createDocument(app, documentConfig, {
     include: [APIModule],
   });

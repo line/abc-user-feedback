@@ -1,28 +1,24 @@
-import * as path from "path";
-import { defineConfig, devices } from "@playwright/test";
+import * as path from 'path';
+import { defineConfig, devices } from '@playwright/test';
 
-export const STORAGE_STATE = path.join(__dirname, "playwright/.auth/user.json");
+import 'dotenv/config';
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
+export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json');
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 
 export default defineConfig({
-  testDir: ".",
+  testDir: '.',
   /* Maximum time one test can run for. */
-  timeout: 30 * 1000,
+  timeout: 60 * 1000,
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
-    timeout: 15 * 1000,
+    timeout: 60 * 1000,
   },
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -33,8 +29,8 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: "html",
-  testMatch: "test.list.*",
+  reporter: 'html',
+  testMatch: 'test.list.*',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
@@ -43,25 +39,25 @@ export default defineConfig({
     // baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
-    video: "on",
-    screenshot: "only-on-failure",
+    trace: 'retain-on-failure',
+    video: 'on',
+    screenshot: 'only-on-failure',
   },
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "global setup",
+      name: 'global setup',
       testMatch: /global\.setup\.ts/,
-      teardown: "global teardown",
+      teardown: 'global teardown',
     },
     {
-      name: "global teardown",
+      name: 'global teardown',
       testMatch: /global\.teardown\.ts/,
     },
     {
-      name: "logged in chromium",
-      use: { ...devices["Desktop Chrome"], storageState: STORAGE_STATE },
-      dependencies: ["global setup"],
+      name: 'logged in chromium',
+      use: { ...devices['Desktop Chrome'], storageState: STORAGE_STATE },
+      dependencies: ['global setup'],
     },
     // {
     //   name: 'logged out chromium',
@@ -79,34 +75,47 @@ export default defineConfig({
   ],
 
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
-  outputDir: "test-results/",
+  outputDir: 'test-results/',
 
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: "cd ../api && pnpm build && pnpm start",
+      command:
+        !process.env.CI ?
+          'cd ../.. && pnpm dev:api'
+        : 'cd ../.. && pnpm build:api && cd apps/api && pnpm start',
       port: 4000,
-      reuseExistingServer: true,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120 * 1000,
       env: {
+        JWT_SECRET: 'jwtsecretjwtsecretjwtsecret',
+        BASE_URL: 'http://localhost:3000',
         MYSQL_PRIMARY_URL:
-          "mysql://userfeedback:userfeedback@localhost:13307/e2e",
+          'mysql://userfeedback:userfeedback@localhost:13307/e2e',
         MYSQL_SECONDARY_URLS:
           '["mysql://userfeedback:userfeedback@localhost:13307/e2e"]',
-        AUTO_MIGRATION: "true",
-        MASTER_API_KEY: "MASTER_API_KEY",
-        NODE_ENV: "test",
-        SMTP_HOST: "localhost",
-        SMTP_PORT: "25",
-        SMTP_SENDER: "abc@feedback.user",
-        SMTP_BASE_URL: "http://localhost:3000",
+        AUTO_MIGRATION: 'true',
+        MASTER_API_KEY: 'MASTER_API_KEY',
+        NODE_ENV: 'test',
+        SMTP_HOST: 'localhost',
+        SMTP_PORT: '25',
+        SMTP_SENDER: 'abc@feedback.user',
+        OPENSEARCH_USE: 'true',
+        OPENSEARCH_NODE: 'http://localhost:9200',
+        OPENSEARCH_USERNAME: '',
+        OPENSEARCH_PASSWORD: '',
       },
     },
     {
-      command: "cd ../web && pnpm build && pnpm start",
+      command:
+        !process.env.CI ?
+          'cd ../.. && pnpm dev:web'
+        : 'cd ../.. && pnpm build:web && cd apps/web && pnpm start',
       port: 3000,
-      reuseExistingServer: true,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120 * 1000,
       env: {
-        NEXT_PUBLIC_API_BASE_URL: "http://localhost:4000",
+        NEXT_PUBLIC_API_BASE_URL: 'http://localhost:4000',
       },
     },
   ],

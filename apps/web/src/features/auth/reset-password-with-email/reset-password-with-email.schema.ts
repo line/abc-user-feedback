@@ -20,7 +20,7 @@ export const resetPasswordWithEmailSchema = z
     password: z.string().min(8),
     confirmPassword: z.string().min(8),
     code: z.string(),
-    email: z.string().email(),
+    email: z.email(),
   })
   .refine(({ password, confirmPassword }) => password === confirmPassword, {
     message: 'must equal Password',

@@ -30,6 +30,9 @@ import {
   PopoverContent,
   PopoverTrigger,
   toast,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
 } from '@ufb/react';
 
 import type { DateRangeType } from '../types/date-range.type';
@@ -58,6 +61,7 @@ interface IProps {
   }[];
   children?: React.ReactNode;
   numberOfMonths?: number;
+  tooltipContent?: string;
 }
 
 const DateRangePicker: React.FC<IProps> = (props) => {
@@ -71,6 +75,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
     children,
     numberOfMonths = 2,
     allowEntirePeriod = true,
+    tooltipContent,
   } = props;
 
   const { t, i18n } = useTranslation();
@@ -205,15 +210,11 @@ const DateRangePicker: React.FC<IProps> = (props) => {
       toast.error(t('text.date.date-range-over-max-days', { maxDays }));
       return;
     }
-    onChange(
-      (
-        currentValue &&
-          currentValue.startDate === null &&
-          currentValue.endDate === null
-      ) ?
-        null
-      : currentValue,
-    );
+    const shouldSetNull =
+      currentValue !== null &&
+      currentValue.startDate === null &&
+      currentValue.endDate === null;
+    onChange(shouldSetNull ? null : currentValue);
     setIsOpen(false);
   };
 
@@ -318,20 +319,25 @@ const DateRangePicker: React.FC<IProps> = (props) => {
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        {children ?
-          <button className="w-full">{children}</button>
-        : <Button variant="outline" className="gap-2">
-            <Icon name="RiCalendar2Fill" />
-            Date{' '}
-            {value && (
-              <Badge variant="subtle">
-                {`${dayjs(value.startDate).format('YYYY-MM-DD')} ~ ${dayjs(value.endDate).format('YYYY-MM-DD')}`}
-              </Badge>
-            )}
-          </Button>
-        }
-      </PopoverTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <PopoverTrigger asChild>
+            {children ?
+              <button className="w-full">{children}</button>
+            : <Button variant="outline" className="gap-2">
+                <Icon name="RiCalendar2Fill" />
+                Date{' '}
+                {value && (
+                  <Badge variant="subtle">
+                    {`${dayjs(value.startDate).format('YYYY-MM-DD')} ~ ${dayjs(value.endDate).format('YYYY-MM-DD')}`}
+                  </Badge>
+                )}
+              </Button>
+            }
+          </PopoverTrigger>
+        </TooltipTrigger>
+        {tooltipContent && <TooltipContent>{tooltipContent}</TooltipContent>}
+      </Tooltip>
       <PopoverContent className="p-2">
         <div className="flex">
           {numberOfMonths === 2 && (

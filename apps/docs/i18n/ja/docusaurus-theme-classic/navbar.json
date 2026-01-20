@@ -1,0 +1,18 @@
+{
+  "title": {
+    "message": "ABC User Feedback",
+    "description": "The title in the navbar"
+  },
+  "item.label.Docs": {
+    "message": "ドキュメント",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  },
+  "logo.alt": {
+    "message": "ロゴ",
+    "description": "The alt text of navbar logo"
+  }
+}

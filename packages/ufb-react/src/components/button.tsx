@@ -116,7 +116,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           ((node as HTMLElement).nodeType === Node.ELEMENT_NODE &&
             (node as HTMLElement).tagName.toLowerCase() === 'svg') ||
           ((node as HTMLElement).nodeType === Node.TEXT_NODE &&
-            !(node as HTMLElement).textContent?.trim()),
+            !((node as HTMLElement).textContent || '').trim()),
       );
 
       if (isSvgOnly) {
