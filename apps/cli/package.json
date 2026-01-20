@@ -1,6 +1,6 @@
 {
   "name": "auf-cli",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Command line interface for ABC User Feedback",
   "repository": "https://github.com/line/abc-user-feedback/tree/main/apps/cli",
   "bin": {
