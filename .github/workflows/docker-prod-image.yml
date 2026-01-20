@@ -51,7 +51,6 @@ jobs:
         with:
           files: |
             ./docker/docker-bake.hcl
+            cwd://${{ steps.api-meta.outputs.bake-file }}
+            cwd://${{ steps.web-meta.outputs.bake-file }}
           push: true
-          set: |
-            api.tags=${{ join(fromJson(steps.api-meta.outputs.json).tags, ',') }}
-            web.tags=${{ join(fromJson(steps.web-meta.outputs.json).tags, ',') }}
