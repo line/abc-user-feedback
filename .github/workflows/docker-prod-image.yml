@@ -24,6 +24,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: line/abc-user-feedback-api
+          bake-target: api
           tags: |
             type=ref,event=branch
             type=ref,event=tag
@@ -34,6 +35,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: line/abc-user-feedback-web
+          bake-target: web
           tags: |
             type=ref,event=branch
             type=ref,event=tag
@@ -51,7 +53,6 @@ jobs:
         with:
           files: |
             ./docker/docker-bake.hcl
+            ${{ steps.api-meta.outputs.bake-file }}
+            ${{ steps.web-meta.outputs.bake-file }}
           push: true
-          set: |
-            api.tags=${{ steps.api-meta.outputs.tags }}
-            web.tags=${{ steps.web-meta.outputs.tags }}
