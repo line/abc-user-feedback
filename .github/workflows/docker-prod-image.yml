@@ -24,22 +24,22 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: line/abc-user-feedback-api
+          bake-target: api
           tags: |
             type=ref,event=branch
-            type=ref,event=pr
+            type=ref,event=tag
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
 
       - name: Docker meta for Web
         id: web-meta
         uses: docker/metadata-action@v5
         with:
           images: line/abc-user-feedback-web
+          bake-target: web
           tags: |
             type=ref,event=branch
-            type=ref,event=pr
+            type=ref,event=tag
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
 
       - name: Login to DockerHub
         if: github.event_name != 'pull_request'
@@ -53,7 +53,6 @@ jobs:
         with:
           files: |
             ./docker/docker-bake.hcl
+            ${{ steps.api-meta.outputs.bake-file }}
+            ${{ steps.web-meta.outputs.bake-file }}
           push: true
-          set: |
-            api.tags=${{ steps.api-meta.outputs.tags }}
-            web.tags=${{ steps.web-meta.outputs.tags }}
