@@ -23,8 +23,9 @@ import type { Client } from '@opensearch-project/opensearch';
 import type { TextProperty } from '@opensearch-project/opensearch/api/_types/_common.mapping';
 
 import { getMockProvider } from '@/test-utils/util-functions';
-import { CreateDataDto, PutMappingsDto } from './dtos';
+import {CreateDataDto, PutMappingsDto} from './dtos';
 import { OpensearchRepository } from './opensearch.repository';
+import {SpaceType} from "@/common/repositories/dtos/create-knn-index.dto";
 
 const MockClient = {
   indices: {
@@ -694,4 +695,56 @@ describe('Opensearch Repository Test suite', () => {
       );
     });
   });
+
+  describe('createKNNIndex', () => {
+    it('positive case', async () => {
+      const index = faker.number.int().toString();
+      const spaceType = SpaceType.CosineSimil;
+      const dimension = 3072;
+      const indexName = 'si_' + index.toLowerCase() + '_' + spaceType.toString().toLowerCase();
+      jest.spyOn(osClient.indices, 'create');
+      jest.spyOn(osClient.indices, 'putAlias');
+
+      await osRepo.createKNNIndex({ index, dimension, spaceType });
+
+      expect(osClient.indices.create).toBeCalledTimes(1);
+      expect(osClient.indices.create).toBeCalledWith({
+        index: indexName,
+        body: {
+          settings: {
+            index: {
+              knn: true,
+              'knn.algo_param.ef_search': 100,
+            },
+          },
+          mappings: {
+            properties: {
+              embedding: {
+                type: 'knn_vector',
+                dimension: 3072,
+                method: {
+                  name: 'hnsw',
+                  space_type: spaceType,
+                  engine: 'nmslib',
+                  parameters: {
+                    ef_construction: 100,
+                    m: 16,
+                  },
+                },
+              },
+            },
+          }
+        },
+      });
+      expect(osClient.indices.putAlias).toBeCalledTimes(1);
+      expect(osClient.indices.putAlias).toBeCalledWith({
+        index: indexName,
+        name: index,
+      });
+    });
+  })
+
+  describe('getSimilarData', () => {
+    return;
+  })
 });

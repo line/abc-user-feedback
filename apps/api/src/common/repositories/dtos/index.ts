@@ -14,9 +14,11 @@
  * under the License.
  */
 export { CreateIndexDto } from './create-index.dto';
+export { CreateKnnIndexDto } from './create-knn-index.dto';
 export { PutMappingsDto } from './put-mappings.dto';
 export { CreateDataDto } from './create-data.dto';
 export { GetDataDto } from './get-data.dto';
+export { GetSimilarDataDto  } from './get-similar-data.dto';
 export { UpdateDataDto } from './update-data.dto';
 export { DeleteBulkDataDto } from './delete-bulk-data.dto';
 export { ScrollDto } from './scroll.dto';
