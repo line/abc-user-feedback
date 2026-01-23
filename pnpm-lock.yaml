@@ -516,8 +516,8 @@ importers:
         specifier: ^19.2.3
         version: 19.2.3
       react-content-loader:
-        specifier: ^7.1.1
-        version: 7.1.1(react@19.2.3)
+        specifier: ^7.1.2
+        version: 7.1.2(react@19.2.3)
       react-dom:
         specifier: ^19.2.3
         version: 19.2.3(react@19.2.3)
@@ -11187,11 +11187,11 @@ packages:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
 
-  react-content-loader@7.1.1:
-    resolution: {integrity: sha512-yNkqtd+15wXRLfDKZb5nTqDV2fPTG2kpUgeGRb+WBz43bU0j4DSGXETF0bnFr44fAoTPpm0Dya0WGdhpHSvtYA==}
+  react-content-loader@7.1.2:
+    resolution: {integrity: sha512-naFG7OERUQNPKQt1QWHyBF0/y6Zmr7dOzqjs1U5yOnu4OZmcE3+b/blp40dEKa9lvYAzOuj5dvfTK1cg5YWJkA==}
     engines: {node: '>=10'}
     peerDependencies:
-      react: '>=16.0.0'
+      react: '>=18.0.0'
 
   react-day-picker@8.10.1:
     resolution: {integrity: sha512-TMx7fNbhLk15eqcMt+7Z7S2KF7mfTId/XJDjKE8f+IUcFn0l08/kI4FiYTL/0yuOLmEcbR4Fwe3GJf/NiiMnPA==}
@@ -26439,7 +26439,7 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  react-content-loader@7.1.1(react@19.2.3):
+  react-content-loader@7.1.2(react@19.2.3):
     dependencies:
       react: 19.2.3
 
