@@ -27,6 +27,7 @@ import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule, domainModules } from './app.module';
 import { HttpExceptionFilter } from './common/filters';
+import { createOtelLogTransport } from './configs/otel-log.config';
 import { APIModule } from './domains/api/api.module';
 import { HealthModule } from './domains/operation/health/health.module';
 import { MigrationModule } from './domains/operation/migration/migration.module';
@@ -45,8 +46,28 @@ async function bootstrap() {
 
   await app.register(multiPart);
 
+  const configService = app.get(ConfigService<ConfigServiceType>);
+  const appConfig = configService.get('app', { infer: true }) ?? {
+    port: 4000,
+    address: 'localhost',
+    baseUrl: undefined,
+    otelLogExportEnabled: false,
+  };
+
+  let transport: any = { target: 'pino-pretty', options: { singleLine: true } };
+
+  if (appConfig.otelLogExportEnabled) {
+    const otelTransport = createOtelLogTransport();
+    transport = {
+      targets: [
+        { target: 'pino-pretty', options: { singleLine: true } },
+        otelTransport,
+      ],
+    };
+  }
+
   const pino = pinoHttp({
-    transport: { target: 'pino-pretty', options: { singleLine: true } },
+    transport,
     serializers: {
       req: (req: Request) => {
         const rawReqRefSymbol = Object.getOwnPropertySymbols(req).find(
@@ -124,12 +145,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.useLogger(app.get(Logger));
 
-  const configService = app.get(ConfigService<ConfigServiceType>);
-  const appConfig = configService.get('app', { infer: true }) ?? {
-    port: 4000,
-    address: 'localhost',
-    baseUrl: undefined,
-  };
   const baseUrl = appConfig.baseUrl;
 
   const adminDocumentConfigBuilder = new DocumentBuilder()

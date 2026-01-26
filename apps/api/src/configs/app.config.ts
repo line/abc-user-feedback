@@ -32,6 +32,7 @@ export const appConfigSchema = Joi.object({
       otherwise: Joi.optional(),
     },
   ),
+  OTEL_LOG_EXPORT_ENABLED: Joi.boolean().default(false),
 });
 
 export const appConfig = registerAs('app', () => ({
@@ -43,5 +44,6 @@ export const appConfig = registerAs('app', () => ({
     process.env.AUTO_FEEDBACK_DELETION_ENABLED === 'true',
   autoFeedbackDeletionPeriodDays:
     process.env.AUTO_FEEDBACK_DELETION_PERIOD_DAYS,
+  otelLogExportEnabled: process.env.OTEL_LOG_EXPORT_ENABLED === 'true',
   serverId: uuidv4(),
 }));

@@ -72,7 +72,9 @@
     "REFESH_TOKEN_EXPIRED_TIME",
     "ENABLE_AUTO_FEEDBACK_DELETION",
     "BASE_URL",
-    "SMTP_BASE_URL"
+    "SMTP_BASE_URL",
+    "OTEL_LOG_EXPORT_ENABLED",
+    "OTEL_EXPORTER_OTLP_LOGS_ENDPOINT"
   ],
   "globalPassThroughEnv": ["NODE_ENV", "CI", "npm_lifecycle_event"]
 }
