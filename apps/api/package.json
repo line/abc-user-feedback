@@ -57,7 +57,7 @@
     "dotenv": "^17.2.3",
     "exceljs": "^4.4.0",
     "fast-csv": "^5.0.5",
-    "fastify": "^5.7.1",
+    "fastify": "^5.7.2",
     "joi": "^18.0.2",
     "luxon": "^3.7.2",
     "magic-bytes.js": "^1.13.0",
