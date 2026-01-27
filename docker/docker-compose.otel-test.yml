@@ -1,0 +1,54 @@
+version: '3.9'
+
+name: abc-user-feedback-otel-test
+
+services:
+  opensearch-node:
+    image: opensearchproject/opensearch:2.19.4
+    restart: unless-stopped
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
+      - plugins.security.disabled=true
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=UserFeedback123!@#
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    ports:
+      - '9200:9200'
+      - '9600:9600'
+
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.19.4
+    restart: unless-stopped
+    ports:
+      - '5601:5601'
+    environment:
+      - 'OPENSEARCH_HOSTS=["http://opensearch-node:9200"]'
+      - 'DISABLE_SECURITY_DASHBOARDS_PLUGIN=true'
+    depends_on:
+      - opensearch-node
+
+  vector:
+    image: timberio/vector:latest-alpine
+    command: ['--config', '/etc/vector/vector.toml']
+    volumes:
+      - ./vector.toml:/etc/vector/vector.toml:ro
+    ports:
+      - '4319:4319' # OTLP HTTP
+      - '4317:4317' # OTLP gRPC
+    depends_on:
+      - opensearch-node
+    restart: unless-stopped
+
+volumes:
+  opensearch-data:
