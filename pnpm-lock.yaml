@@ -39,11 +39,11 @@ importers:
   apps/api:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: ^3.980.0
-        version: 3.980.0
+        specifier: ^3.981.0
+        version: 3.981.0
       '@aws-sdk/s3-request-presigner':
-        specifier: ^3.980.0
-        version: 3.980.0
+        specifier: ^3.981.0
+        version: 3.981.0
       '@fastify/multipart':
         specifier: ^9.4.0
         version: 9.4.0
@@ -1049,8 +1049,8 @@ packages:
   '@aws-crypto/util@5.2.0':
     resolution: {integrity: sha512-4RkU9EsI6ZpBve5fseQlGNUWKMa1RLPQ1dnjnQoe07ldfIzcsGb5hC5W0Dm7u423KWzawlrpbjXBrXCEv9zazQ==}
 
-  '@aws-sdk/client-s3@3.980.0':
-    resolution: {integrity: sha512-ch8QqKehyn1WOYbd8LyDbWjv84Z9OEj9qUxz8q3IOCU3ftAVkVR0wAuN96a1xCHnpOJcQZo3rOB08RlyKdkGxQ==}
+  '@aws-sdk/client-s3@3.981.0':
+    resolution: {integrity: sha512-zX3Xqm7V30J1D2II7WBL23SyqIIMD0wMzpiE+VosBxH6fAeXgrjIwSudCypNgnE1EK9OZoZMT3mJtkbUqUDdaA==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/client-sso@3.980.0':
@@ -1145,12 +1145,12 @@ packages:
     resolution: {integrity: sha512-v4J8qYAWfOMcZ4MJUyatntOicTzEMaU7j3OpkRCGGFSL2NgXQ5VbxauIyORA+pxdKZ0qQG2tCQjQjZDlXEC3Ow==}
     engines: {node: '>=20.0.0'}
 
-  '@aws-sdk/s3-request-presigner@3.980.0':
-    resolution: {integrity: sha512-qX1Ptvja9Le0Wt1VadgsJ7Kw8Xf57pTIVmIcvYD5HrdAot71qgXdfBtcbuvNKZPeD+HfcUITwxxHpDiXfSoTsA==}
+  '@aws-sdk/s3-request-presigner@3.981.0':
+    resolution: {integrity: sha512-p4XPExNNDCDus+65YgjBUvQPQek9zZfxullsIBre22cVa7yq3VBDtXsyVTTfTjKnIWW2K89gVEd7e7S7Xkm6jQ==}
     engines: {node: '>=20.0.0'}
 
-  '@aws-sdk/signature-v4-multi-region@3.980.0':
-    resolution: {integrity: sha512-tO2jBj+ZIVM0nEgi1SyxWtaYGpuAJdsrugmWcI3/U2MPWCYsrvKasUo0026NvJJao38wyUq9B8XTG8Xu53j/VA==}
+  '@aws-sdk/signature-v4-multi-region@3.981.0':
+    resolution: {integrity: sha512-T/+h9df0DALAXXP+YfZ8bgmH6cEN7HAg6BqHe3t38GhHgQ1HULXwK5XMhiLWiHpytDdhLqiVH41SRgW8ynBl6Q==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/token-providers@3.980.0':
@@ -1167,6 +1167,10 @@ packages:
 
   '@aws-sdk/util-endpoints@3.980.0':
     resolution: {integrity: sha512-AjKBNEc+rjOZQE1HwcD9aCELqg1GmUj1rtICKuY8cgwB73xJ4U/kNyqKKpN2k9emGqlfDY2D8itIp/vDc6OKpw==}
+    engines: {node: '>=20.0.0'}
+
+  '@aws-sdk/util-endpoints@3.981.0':
+    resolution: {integrity: sha512-a8nXh/H3/4j+sxhZk+N3acSDlgwTVSZbX9i55dx41gI1H+geuonuRG+Shv3GZsCb46vzc08RK2qC78ypO8uRlg==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/util-format-url@3.972.3':
@@ -13367,7 +13371,7 @@ snapshots:
       '@smithy/util-utf8': 2.3.0
       tslib: 2.8.1
 
-  '@aws-sdk/client-s3@3.980.0':
+  '@aws-sdk/client-s3@3.981.0':
     dependencies:
       '@aws-crypto/sha1-browser': 5.2.0
       '@aws-crypto/sha256-browser': 5.2.0
@@ -13385,9 +13389,9 @@ snapshots:
       '@aws-sdk/middleware-ssec': 3.972.3
       '@aws-sdk/middleware-user-agent': 3.972.5
       '@aws-sdk/region-config-resolver': 3.972.3
-      '@aws-sdk/signature-v4-multi-region': 3.980.0
+      '@aws-sdk/signature-v4-multi-region': 3.981.0
       '@aws-sdk/types': 3.973.1
-      '@aws-sdk/util-endpoints': 3.980.0
+      '@aws-sdk/util-endpoints': 3.981.0
       '@aws-sdk/util-user-agent-browser': 3.972.3
       '@aws-sdk/util-user-agent-node': 3.972.3
       '@smithy/config-resolver': 4.4.6
@@ -13740,9 +13744,9 @@ snapshots:
       '@smithy/types': 4.12.0
       tslib: 2.8.1
 
-  '@aws-sdk/s3-request-presigner@3.980.0':
+  '@aws-sdk/s3-request-presigner@3.981.0':
     dependencies:
-      '@aws-sdk/signature-v4-multi-region': 3.980.0
+      '@aws-sdk/signature-v4-multi-region': 3.981.0
       '@aws-sdk/types': 3.973.1
       '@aws-sdk/util-format-url': 3.972.3
       '@smithy/middleware-endpoint': 4.4.12
@@ -13751,7 +13755,7 @@ snapshots:
       '@smithy/types': 4.12.0
       tslib: 2.8.1
 
-  '@aws-sdk/signature-v4-multi-region@3.980.0':
+  '@aws-sdk/signature-v4-multi-region@3.981.0':
     dependencies:
       '@aws-sdk/middleware-sdk-s3': 3.972.5
       '@aws-sdk/types': 3.973.1
@@ -13782,6 +13786,14 @@ snapshots:
       tslib: 2.8.1
 
   '@aws-sdk/util-endpoints@3.980.0':
+    dependencies:
+      '@aws-sdk/types': 3.973.1
+      '@smithy/types': 4.12.0
+      '@smithy/url-parser': 4.2.8
+      '@smithy/util-endpoints': 3.2.8
+      tslib: 2.8.1
+
+  '@aws-sdk/util-endpoints@3.981.0':
     dependencies:
       '@aws-sdk/types': 3.973.1
       '@smithy/types': 4.12.0
