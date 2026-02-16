@@ -426,8 +426,8 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.71.1(react@19.2.4))
       '@number-flow/react':
-        specifier: ^0.5.11
-        version: 0.5.11(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: ^0.5.12
+        version: 0.5.12(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@radix-ui/react-slider':
         specifier: ^1.3.6
         version: 1.3.6(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -3866,8 +3866,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@number-flow/react@0.5.11':
-    resolution: {integrity: sha512-xo7QFAfQlKiIRbLjoIjZNXsNQmY+QxkyxkNWy+BCP9u1/SkqyqQ/1pYWa7d175V2r4OdmvCvlAnACSYOP1pTaw==}
+  '@number-flow/react@0.5.12':
+    resolution: {integrity: sha512-34Kt3kd7kC5V3BqrDmxCJsqZlF43NFuOAUd8XZVjR75IJ1JPsgDMYArywqOHJm4gy/ZGzWQGFPxfYSSbscvppA==}
     peerDependencies:
       react: ^18 || ^19
       react-dom: ^18 || ^19
@@ -10075,8 +10075,8 @@ packages:
     peerDependencies:
       webpack: ^4.0.0 || ^5.0.0
 
-  number-flow@0.5.9:
-    resolution: {integrity: sha512-o3102c/4qRd6eV4n+rw6B/UP8+FosbhIxj4uA6GsjhryrGZRVtCtKIKEeBiOwUV52cUGJneeu0treELcV7U/lw==}
+  number-flow@0.5.10:
+    resolution: {integrity: sha512-Ss6fU7zZgfAlhT4KFcUVOafStQVHs22xTx7/Fm6nj9j9WUREYlQpBgFX+vzdnB2PpGPTrtdGZPJou6Yyu/uDeA==}
 
   nuqs@2.4.3:
     resolution: {integrity: sha512-BgtlYpvRwLYiJuWzxt34q2bXu/AIS66sLU1QePIMr2LWkb+XH0vKXdbLSgn9t6p7QKzwI7f38rX3Wl9llTXQ8Q==}
@@ -17196,10 +17196,10 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
 
-  '@number-flow/react@0.5.11(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@number-flow/react@0.5.12(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       esm-env: 1.2.2
-      number-flow: 0.5.9
+      number-flow: 0.5.10
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
 
@@ -24792,7 +24792,7 @@ snapshots:
       schema-utils: 3.3.0
       webpack: 5.104.1
 
-  number-flow@0.5.9:
+  number-flow@0.5.10:
     dependencies:
       esm-env: 1.2.2
 
