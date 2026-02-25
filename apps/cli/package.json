@@ -29,7 +29,7 @@
     "@types/prompts": "^2.4.9",
     "child_process": "^1.0.2",
     "commander": "^14.0.3",
-    "js-toml": "^1.0.2",
+    "js-toml": "^1.0.3",
     "toml": "^3.0.0",
     "yaml": "^2.8.2",
     "zod": "^4.3.6"
