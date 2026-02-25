@@ -19,7 +19,7 @@
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:^",
-    "autoprefixer": "^10.4.24",
+    "autoprefixer": "^10.4.27",
     "eslint": "catalog:",
     "glob": "^13.0.6",
     "postcss": "^8.5.6",
