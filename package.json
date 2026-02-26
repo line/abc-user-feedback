@@ -1,10 +1,10 @@
 {
   "name": "abc-user-feedback",
   "private": true,
-  "packageManager": "pnpm@10.30.2",
+  "packageManager": "pnpm@10.30.3",
   "engines": {
     "node": ">=24.14.0",
-    "pnpm": "^10.30.2"
+    "pnpm": "^10.30.3"
   },
   "scripts": {
     "build": "turbo run build",
