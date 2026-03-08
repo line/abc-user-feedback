@@ -459,8 +459,8 @@ importers:
         specifier: ^1.13.6
         version: 1.13.6
       axios-auth-refresh:
-        specifier: ^3.3.6
-        version: 3.3.6(axios@1.13.6)
+        specifier: ^5.0.1
+        version: 5.0.1(axios@1.13.6)
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -6183,10 +6183,10 @@ packages:
     resolution: {integrity: sha512-ilYanEU8vxxBexpJd8cWM4ElSQq4QctCLKih0TSfjIfCQTeyH/6zVrmIJfLPrKTKJRbiG+cfnZbQIjAlJmF1jQ==}
     engines: {node: '>=4'}
 
-  axios-auth-refresh@3.3.6:
-    resolution: {integrity: sha512-2CeBUce/SxIfFxow5/n8vApJ97yYF6qoV4gh1UrswT7aEOnlOdBLxxyhOI4IaxGs6BY0l8YujU2jlc4aCmK17Q==}
+  axios-auth-refresh@5.0.1:
+    resolution: {integrity: sha512-5sCHF2XIAVDfx+MSLcrUewF99o8M+mbXBM2zD8wcqi3X+VNHtn8pbqeBHkABNtw5uQZO6rxxzYW0Cp7tftoFAg==}
     peerDependencies:
-      axios: '>= 0.18 < 0.19.0 || >= 0.19.1'
+      axios: '>= 1.0.0'
 
   axios@1.13.6:
     resolution: {integrity: sha512-ChTCHMouEe2kn713WHbQGcuYrr6fXTBiu460OTwWrWob16g1bXn4vtz07Ope7ewMozJAnEquLk5lWQWtBig9DQ==}
@@ -19730,7 +19730,7 @@ snapshots:
 
   axe-core@4.11.0: {}
 
-  axios-auth-refresh@3.3.6(axios@1.13.6):
+  axios-auth-refresh@5.0.1(axios@1.13.6):
     dependencies:
       axios: 1.13.6
 
