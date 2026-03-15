@@ -42,7 +42,7 @@
     "cookies-next": "^6.1.1",
     "countries-and-timezones": "^3.8.0",
     "date-fns": "^4.1.0",
-    "dayjs": "^1.11.19",
+    "dayjs": "^1.11.20",
     "framer-motion": "^12.35.2",
     "i18next": "^25.8.17",
     "immer": "^11.1.4",
