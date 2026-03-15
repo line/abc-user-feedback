@@ -36,7 +36,7 @@
     "@ufb/shared": "workspace:*",
     "@ufb/tailwindcss": "workspace:*",
     "axios": "^1.13.6",
-    "axios-auth-refresh": "^5.0.1",
+    "axios-auth-refresh": "^5.0.2",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "cookies-next": "^6.1.1",
