@@ -10,6 +10,6 @@
     "@opensearch-project/opensearch": "^3.5.1",
     "@playwright/test": "^1.58.2",
     "axios": "^1.13.6",
-    "mysql2": "^3.19.1"
+    "mysql2": "^3.20.0"
   }
 }
