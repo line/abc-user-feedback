@@ -21,6 +21,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { Request } from 'express';
 import { ClsModule } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
+import pino from 'pino';
 
 import { appConfig, appConfigSchema } from './configs/app.config';
 import { jwtConfig, jwtConfigSchema } from './configs/jwt.config';
@@ -109,9 +110,8 @@ export const domainModules = [
         const otelLogExportEnabled =
           process.env.OTEL_LOG_EXPORT_ENABLED === 'true';
 
-        let transport: any = {
-          target: 'pino-pretty',
-          options: { singleLine: true },
+        let transport: pino.TransportMultiOptions = {
+          targets: [{ target: 'pino-pretty', options: { singleLine: true } }],
         };
 
         if (otelLogExportEnabled) {

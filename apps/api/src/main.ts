@@ -22,7 +22,8 @@ import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import type { Request } from 'express';
 import { Logger } from 'nestjs-pino';
-import pinoHttp from 'pino-http';
+import type pino from 'pino';
+import PinoHttp from 'pino-http';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule, domainModules } from './app.module';
@@ -54,7 +55,9 @@ async function bootstrap() {
     otelLogExportEnabled: false,
   };
 
-  let transport: any = { target: 'pino-pretty', options: { singleLine: true } };
+  let transport: pino.TransportMultiOptions = {
+    targets: [{ target: 'pino-pretty', options: { singleLine: true } }],
+  };
 
   if (appConfig.otelLogExportEnabled) {
     const otelTransport = createOtelLogTransport();
@@ -66,7 +69,7 @@ async function bootstrap() {
     };
   }
 
-  const pino = pinoHttp({
+  const pinoHttp = PinoHttp({
     transport,
     serializers: {
       req: (req: Request) => {
@@ -96,7 +99,7 @@ async function bootstrap() {
   app
     .getHttpAdapter()
     .getInstance()
-    .addHook('onSend', (request, reply, payload, done) => {
+    .addHook('onSend', (request, reply, _, done) => {
       if (request.body) {
         interface RequestBody {
           password?: string;
@@ -113,7 +116,7 @@ async function bootstrap() {
           sanitizedHeaders.authorization = '****';
         }
 
-        pino.logger.info({
+        pinoHttp.logger.info({
           req: {
             id: request.id,
             method: request.method,

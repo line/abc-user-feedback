@@ -28,6 +28,14 @@
     "@testing-library/react",
     "react-i18next"
   ],
+  "markdownlint.config": {
+    "MD024": {
+      "siblings_only": true
+    },
+    "MD025": {
+      "front_matter_title": ""
+    }
+  },
   "[ignore]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   }
