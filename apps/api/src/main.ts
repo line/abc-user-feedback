@@ -52,13 +52,12 @@ async function bootstrap() {
     port: 4000,
     address: 'localhost',
     baseUrl: undefined,
-    version: '1.0.0',
   };
 
   const transport: pino.TransportMultiOptions = {
     targets: [
       { target: 'pino-pretty', options: { singleLine: true } },
-      createOtelLogTransport(appConfig.version),
+      createOtelLogTransport(),
     ],
   };
 

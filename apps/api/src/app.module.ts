@@ -110,10 +110,9 @@ export const domainModules = [
         const transport: pino.TransportMultiOptions = {
           targets: [
             { target: 'pino-pretty', options: { singleLine: true } },
-            createOtelLogTransport(process.env.APP_VERSION),
+            createOtelLogTransport(),
           ],
         };
-
         return {
           pinoHttp: {
             transport,

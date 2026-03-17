@@ -21,14 +21,11 @@ import type { TransportTargetOptions } from 'pino';
  * The endpoint URL should be set via OTEL_EXPORTER_OTLP_LOGS_ENDPOINT environment variable.
  * @returns pino transport configuration
  */
-export function createOtelLogTransport(
-  version?: string,
-): TransportTargetOptions {
+export function createOtelLogTransport(): TransportTargetOptions {
   return {
     target: 'pino-opentelemetry-transport',
     options: {
       loggerName: 'abc-user-feedback-api',
-      serviceVersion: version,
       resourceAttributes: {
         'service.name': 'abc-user-feedback-api',
         'service.type': 'api',
