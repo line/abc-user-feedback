@@ -38,9 +38,9 @@ services:
 
   vector:
     image: timberio/vector:latest-alpine
-    command: ['--config', '/etc/vector/vector.yaml']
+    command: ['--config', '/etc/vector/vector.yml']
     volumes:
-      - ./vector.yaml:/etc/vector/vector.yaml:ro
+      - ./vector.yml:/etc/vector/vector.yml:ro
     ports:
       - '4319:4319' # OTLP HTTP
       - '4317:4317' # OTLP gRPC

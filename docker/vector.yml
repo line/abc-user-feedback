@@ -68,10 +68,10 @@ transforms:
       if exists(.attributes) { del(.attributes) }
 
       if exists(.resources."service.name") {
-        .service = .resources."service.name"
+        .service.name = .resources."service.name"
       }
       if exists(.resources."service.version") {
-        .version = .resources."service.version"
+        .service.version = .resources."service.version"
       }
       if exists(.resources) { del(.resources) }
 
