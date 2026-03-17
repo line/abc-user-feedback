@@ -82,6 +82,8 @@ The following is a list of environment variables used by the application, along 
 
 ### Optional Environment Variables
 
+<!-- markdownlint-disable MD060 -->
+
 | Environment                          | Description                                                    | Default Value                                  |
 | ------------------------------------ | -------------------------------------------------------------- | ---------------------------------------------- |
 | `ADMIN_WEB_URL`                      | Admin Web URL                                                  | `http://localhost:3000`                        |
@@ -103,12 +105,15 @@ The following is a list of environment variables used by the application, along 
 | `AUTO_FEEDBACK_DELETION_ENABLED`     | Enable auto old feedback deletion cron on application start    | `false`                                        |
 | `AUTO_FEEDBACK_DELETION_PERIOD_DAYS` | Auto old feedback deletion period (in days)                    | _required if `AUTO_FEEDBACK_DELETION_ENABLED`_ |
 | `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`   | OTLP HTTP logs endpoint that enables API log export when set   | _optional_                                     |
+| `OTEL_RESOURCE_ATTRIBUTES`           | OpenTelemetry resource attributes for exported logs            | _optional_                                     |
 | `ACCESS_TOKEN_EXPIRED_TIME`          | Duration until the access token expires                        | `10m`                                          |
 | `REFRESH_TOKEN_EXPIRED_TIME`         | Duration until the refresh token expires                       | `1h`                                           |
 
+<!-- markdownlint-enable MD060 -->
+
 Please ensure that you set the required environment variables before starting the application. Optional variables can be set as needed based on your specific configuration and requirements.
 
-If you want to export API logs through OpenTelemetry locally, set `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://localhost:4319/v1/logs`. When this endpoint is configured, the API keeps writing pretty console logs and also sends the same logs to the OTLP HTTP endpoint. For the full setup and verification flow, refer to the [developer guide configuration document](../docs/i18n/en/docusaurus-plugin-content-docs/current/02-developer-guide/01-installation/05-configuration.md).
+If you want to export API logs through OpenTelemetry locally, set `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://localhost:4319/v1/logs`. You can also set `OTEL_RESOURCE_ATTRIBUTES=service.name=abc-user-feedback-api,service.version=1.1.1` to attach standard OpenTelemetry resource metadata to the exported logs. When this endpoint is configured, the API keeps writing pretty console logs and also sends the same logs to the OTLP HTTP endpoint. The `pino-opentelemetry-transport` package reads these standard OTEL environment variables directly, so no additional application configuration is required. For the full setup and verification flow, refer to the [developer guide configuration document](../docs/i18n/en/docusaurus-plugin-content-docs/current/02-developer-guide/01-installation/05-configuration.md).
 
 ## Swagger
 

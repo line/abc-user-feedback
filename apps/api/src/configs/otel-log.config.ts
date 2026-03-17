@@ -26,10 +26,6 @@ export function createOtelLogTransport(): TransportTargetOptions {
     target: 'pino-opentelemetry-transport',
     options: {
       loggerName: 'abc-user-feedback-api',
-      resourceAttributes: {
-        'service.name': 'abc-user-feedback-api',
-        'service.type': 'api',
-      },
     },
   };
 }

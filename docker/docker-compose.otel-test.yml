@@ -1,4 +1,4 @@
-name: abc-user-feedback-otel-test
+name: abc-user-feedback-vector
 
 services:
   opensearch-node:
@@ -38,9 +38,9 @@ services:
 
   vector:
     image: timberio/vector:latest-alpine
-    command: ['--config', '/etc/vector/vector.toml']
+    command: ['--config', '/etc/vector/vector.yaml']
     volumes:
-      - ./vector.toml:/etc/vector/vector.toml:ro
+      - ./vector.yaml:/etc/vector/vector.yaml:ro
     ports:
       - '4319:4319' # OTLP HTTP
       - '4317:4317' # OTLP gRPC

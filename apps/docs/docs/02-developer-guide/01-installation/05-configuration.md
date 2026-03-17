@@ -94,13 +94,15 @@ API는 기본 콘솔 로그와 함께 OpenTelemetry를 통해 애플리케이션
 
 <!-- markdownlint-disable MD060 -->
 
-| 환경 변수                          | 설명                                                            | 기본값 | 예시                            |
-| ---------------------------------- | --------------------------------------------------------------- | ------ | ------------------------------- |
-| `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` | pino OpenTelemetry transport가 사용할 OTLP HTTP 로그 엔드포인트 | 없음   | `http://localhost:4319/v1/logs` |
+| 환경 변수                          | 설명                                                            | 기본값 | 예시                                                       |
+| ---------------------------------- | --------------------------------------------------------------- | ------ | ---------------------------------------------------------- |
+| `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` | pino OpenTelemetry transport가 사용할 OTLP HTTP 로그 엔드포인트 | 없음   | `http://localhost:4319/v1/logs`                            |
+| `OTEL_RESOURCE_ATTRIBUTES`         | export된 로그에 추가할 OpenTelemetry resource attributes        | 없음   | `service.name=abc-user-feedback-api,service.version=1.1.1` |
 
 <!-- markdownlint-enable MD060 -->
 
 > `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`가 설정되면 API는 기존 pretty console 로그를 계속 남기면서, 같은 로그를 설정된 OTLP HTTP 엔드포인트로도 전송합니다.
+> `OTEL_RESOURCE_ATTRIBUTES`를 함께 설정하면 `service.name`, `service.version` 같은 표준 OpenTelemetry 리소스 메타데이터를 쉼표로 구분된 `key=value` 형식으로 로그에 추가할 수 있습니다.
 > 로컬 개발 환경에서는 `apps/api/.env.example`의 예시 값을 기준으로 설정하세요.
 
 ### 로컬 검증 절차
@@ -115,7 +117,10 @@ docker compose -f docker/docker-compose.otel-test.yml up -d
 
 ```env
 OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://localhost:4319/v1/logs
+OTEL_RESOURCE_ATTRIBUTES=service.name=abc-user-feedback-api,service.version=1.1.1
 ```
+
+> API 애플리케이션이 이 값을 별도로 파싱하는 것은 아니며, `pino-opentelemetry-transport`와 OpenTelemetry SDK가 표준 환경 변수로 처리합니다.
 
 - API 서버를 실행하고 로그가 발생하는 요청을 보냅니다.
 

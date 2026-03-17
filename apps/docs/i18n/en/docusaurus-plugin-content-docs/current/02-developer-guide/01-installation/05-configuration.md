@@ -92,11 +92,17 @@ This document explains the main environment variables used by ABC User Feedback'
 
 The API can export application logs through OpenTelemetry in addition to the standard console logs.
 
-| Environment Variable               | Description                                                      | Default | Example                         |
-| ---------------------------------- | ---------------------------------------------------------------- | ------- | ------------------------------- |
-| `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` | OTLP HTTP logs endpoint used by the pino OpenTelemetry transport | None    | `http://localhost:4319/v1/logs` |
+<!-- markdownlint-disable MD060 -->
+
+| Environment Variable               | Description                                                      | Default | Example                                                    |
+| ---------------------------------- | ---------------------------------------------------------------- | ------- | ---------------------------------------------------------- |
+| `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` | OTLP HTTP logs endpoint used by the pino OpenTelemetry transport | None    | `http://localhost:4319/v1/logs`                            |
+| `OTEL_RESOURCE_ATTRIBUTES`         | OpenTelemetry resource attributes for exported logs              | None    | `service.name=abc-user-feedback-api,service.version=1.1.1` |
+
+<!-- markdownlint-enable MD060 -->
 
 > When `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` is set, the API keeps writing pretty console logs and also sends the same logs to the configured OTLP HTTP endpoint.
+> If you also set `OTEL_RESOURCE_ATTRIBUTES`, you can attach standard OpenTelemetry resource metadata such as `service.name` and `service.version` using comma-separated `key=value` pairs.
 > Use the example values from `apps/api/.env.example` as the baseline when configuring local development environments.
 
 ### Local Verification Flow
@@ -111,7 +117,10 @@ docker compose -f docker/docker-compose.otel-test.yml up -d
 
 ```env
 OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://localhost:4319/v1/logs
+OTEL_RESOURCE_ATTRIBUTES=service.name=abc-user-feedback-api,service.version=1.1.1
 ```
+
+> The API does not parse this value itself. `pino-opentelemetry-transport` and the OpenTelemetry SDK consume these standard OTEL environment variables directly.
 
 - Start the API server and trigger requests that generate logs.
   - Vector should receive OTLP logs on port `4319` and print transformed log records to its console output.
