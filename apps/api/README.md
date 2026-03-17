@@ -102,14 +102,13 @@ The following is a list of environment variables used by the application, along 
 | `MASTER_API_KEY`                     | Master API key for privileged operations                       | _none_                                         |
 | `AUTO_FEEDBACK_DELETION_ENABLED`     | Enable auto old feedback deletion cron on application start    | `false`                                        |
 | `AUTO_FEEDBACK_DELETION_PERIOD_DAYS` | Auto old feedback deletion period (in days)                    | _required if `AUTO_FEEDBACK_DELETION_ENABLED`_ |
-| `OTEL_LOG_EXPORT_ENABLED`            | Enable exporting API logs to an OTLP HTTP endpoint             | `false`                                        |
-| `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`   | OTLP HTTP logs endpoint used when OTEL log export is enabled   | _required if `OTEL_LOG_EXPORT_ENABLED=true`_   |
+| `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`   | OTLP HTTP logs endpoint that enables API log export when set   | _optional_                                     |
 | `ACCESS_TOKEN_EXPIRED_TIME`          | Duration until the access token expires                        | `10m`                                          |
 | `REFRESH_TOKEN_EXPIRED_TIME`         | Duration until the refresh token expires                       | `1h`                                           |
 
 Please ensure that you set the required environment variables before starting the application. Optional variables can be set as needed based on your specific configuration and requirements.
 
-If you want to export API logs through OpenTelemetry locally, use `OTEL_LOG_EXPORT_ENABLED=true` together with `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://localhost:4319/v1/logs`. For the full setup and verification flow, refer to the [developer guide configuration document](../docs/i18n/en/docusaurus-plugin-content-docs/current/02-developer-guide/01-installation/05-configuration.md).
+If you want to export API logs through OpenTelemetry locally, set `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://localhost:4319/v1/logs`. When this endpoint is configured, the API keeps writing pretty console logs and also sends the same logs to the OTLP HTTP endpoint. For the full setup and verification flow, refer to the [developer guide configuration document](../docs/i18n/en/docusaurus-plugin-content-docs/current/02-developer-guide/01-installation/05-configuration.md).
 
 ## Swagger
 

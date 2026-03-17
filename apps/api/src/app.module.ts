@@ -108,7 +108,7 @@ export const domainModules = [
     LoggerModule.forRootAsync({
       useFactory: () => {
         const otelLogExportEnabled =
-          process.env.OTEL_LOG_EXPORT_ENABLED === 'true';
+          !!process.env.OTEL_EXPORTER_OTLP_LOGS_ENDPOINT;
 
         let transport: pino.TransportMultiOptions = {
           targets: [{ target: 'pino-pretty', options: { singleLine: true } }],

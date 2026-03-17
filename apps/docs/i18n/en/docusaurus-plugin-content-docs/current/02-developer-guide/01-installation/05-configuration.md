@@ -94,10 +94,9 @@ The API can export application logs through OpenTelemetry in addition to the sta
 
 | Environment Variable               | Description                                                      | Default | Example                         |
 | ---------------------------------- | ---------------------------------------------------------------- | ------- | ------------------------------- |
-| `OTEL_LOG_EXPORT_ENABLED`          | Enable OTLP log export for the API server                        | `false` | `true`                          |
 | `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` | OTLP HTTP logs endpoint used by the pino OpenTelemetry transport | None    | `http://localhost:4319/v1/logs` |
 
-> When `OTEL_LOG_EXPORT_ENABLED=true`, the API keeps writing pretty console logs and also sends the same logs to the configured OTLP HTTP endpoint.
+> When `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` is set, the API keeps writing pretty console logs and also sends the same logs to the configured OTLP HTTP endpoint.
 > Use the example values from `apps/api/.env.example` as the baseline when configuring local development environments.
 
 ### Local Verification Flow
@@ -111,7 +110,6 @@ docker compose -f docker/docker-compose.otel-test.yml up -d
 - Set the following variables in `apps/api/.env` based on the example in `apps/api/.env.example`:
 
 ```env
-OTEL_LOG_EXPORT_ENABLED=true
 OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://localhost:4319/v1/logs
 ```
 
@@ -178,16 +176,16 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 
 <!-- markdownlint-disable MD060 -->
 
-| Problem                                 | Cause and Solution                                                                   |
-| --------------------------------------- | ------------------------------------------------------------------------------------ |
-| Environment variables not recognized    | Check `.env` location or restart container                                           |
-| DB connection failure                   | Check `MYSQL_PRIMARY_URL` format or connection info                                  |
-| SMTP error                              | Recheck port/TLS settings or authentication info                                     |
-| OpenSearch error                        | Check node URL or user authentication                                                |
-| OTEL log export not working             | Check `OTEL_LOG_EXPORT_ENABLED`, endpoint URL, and whether the OTEL stack is running |
-| JWT token error                         | Check `JWT_SECRET` length and complexity                                             |
-| Environment variable validation failure | Check for missing required variables or type errors                                  |
-| Port conflict                           | Check `APP_PORT`, `PORT` settings                                                    |
+| Problem                                 | Cause and Solution                                                                                                      |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Environment variables not recognized    | Check `.env` location or restart container                                                                              |
+| DB connection failure                   | Check `MYSQL_PRIMARY_URL` format or connection info                                                                     |
+| SMTP error                              | Recheck port/TLS settings or authentication info                                                                        |
+| OpenSearch error                        | Check node URL or user authentication                                                                                   |
+| OTEL log export not working             | Check whether `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` is set, verify the endpoint URL, and confirm the OTEL stack is running |
+| JWT token error                         | Check `JWT_SECRET` length and complexity                                                                                |
+| Environment variable validation failure | Check for missing required variables or type errors                                                                     |
+| Port conflict                           | Check `APP_PORT`, `PORT` settings                                                                                       |
 
 <!-- markdownlint-enable MD060 -->
 

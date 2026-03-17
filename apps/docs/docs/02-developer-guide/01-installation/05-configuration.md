@@ -94,14 +94,13 @@ API는 기본 콘솔 로그와 함께 OpenTelemetry를 통해 애플리케이션
 
 <!-- markdownlint-disable MD060 -->
 
-| 환경 변수                          | 설명                                                            | 기본값  | 예시                            |
-| ---------------------------------- | --------------------------------------------------------------- | ------- | ------------------------------- |
-| `OTEL_LOG_EXPORT_ENABLED`          | API 서버의 OTLP 로그 export 활성화 여부                         | `false` | `true`                          |
-| `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` | pino OpenTelemetry transport가 사용할 OTLP HTTP 로그 엔드포인트 | 없음    | `http://localhost:4319/v1/logs` |
+| 환경 변수                          | 설명                                                            | 기본값 | 예시                            |
+| ---------------------------------- | --------------------------------------------------------------- | ------ | ------------------------------- |
+| `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` | pino OpenTelemetry transport가 사용할 OTLP HTTP 로그 엔드포인트 | 없음   | `http://localhost:4319/v1/logs` |
 
 <!-- markdownlint-enable MD060 -->
 
-> `OTEL_LOG_EXPORT_ENABLED=true`이면 API는 기존 pretty console 로그를 계속 남기면서, 같은 로그를 설정된 OTLP HTTP 엔드포인트로도 전송합니다.
+> `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`가 설정되면 API는 기존 pretty console 로그를 계속 남기면서, 같은 로그를 설정된 OTLP HTTP 엔드포인트로도 전송합니다.
 > 로컬 개발 환경에서는 `apps/api/.env.example`의 예시 값을 기준으로 설정하세요.
 
 ### 로컬 검증 절차
@@ -115,7 +114,6 @@ docker compose -f docker/docker-compose.otel-test.yml up -d
 - `apps/api/.env.example`를 참고하여 `apps/api/.env`에 아래 값을 설정합니다.
 
 ```env
-OTEL_LOG_EXPORT_ENABLED=true
 OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://localhost:4319/v1/logs
 ```
 
@@ -184,16 +182,16 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 
 <!-- markdownlint-disable MD060 -->
 
-| 문제                      | 원인 및 해결책                                                            |
-| ------------------------- | ------------------------------------------------------------------------- |
-| 환경 변수가 인식되지 않음 | `.env` 위치 확인 또는 컨테이너 재시작                                     |
-| DB 연결 실패              | `MYSQL_PRIMARY_URL` 형식 또는 연결 정보 확인                              |
-| SMTP 오류                 | 포트/TLS 설정 또는 인증 정보 재확인                                       |
-| OpenSearch 오류           | 노드 URL 또는 사용자 인증 확인                                            |
-| OTEL 로그 export 실패     | `OTEL_LOG_EXPORT_ENABLED`, endpoint URL, OTEL 스택 실행 여부를 확인하세요 |
-| JWT 토큰 오류             | `JWT_SECRET` 길이 및 복잡성 확인                                          |
-| 환경 변수 검증 실패       | 필수 환경 변수 누락 또는 타입 오류 확인                                   |
-| 포트 충돌                 | `APP_PORT`, `PORT` 설정 확인                                              |
+| 문제                      | 원인 및 해결책                                                                               |
+| ------------------------- | -------------------------------------------------------------------------------------------- |
+| 환경 변수가 인식되지 않음 | `.env` 위치 확인 또는 컨테이너 재시작                                                        |
+| DB 연결 실패              | `MYSQL_PRIMARY_URL` 형식 또는 연결 정보 확인                                                 |
+| SMTP 오류                 | 포트/TLS 설정 또는 인증 정보 재확인                                                          |
+| OpenSearch 오류           | 노드 URL 또는 사용자 인증 확인                                                               |
+| OTEL 로그 export 실패     | `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` 설정 여부, endpoint URL, OTEL 스택 실행 여부를 확인하세요 |
+| JWT 토큰 오류             | `JWT_SECRET` 길이 및 복잡성 확인                                                             |
+| 환경 변수 검증 실패       | 필수 환경 변수 누락 또는 타입 오류 확인                                                      |
+| 포트 충돌                 | `APP_PORT`, `PORT` 설정 확인                                                                 |
 
 <!-- markdownlint-enable MD060 -->
 
