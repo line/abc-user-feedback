@@ -52,22 +52,15 @@ async function bootstrap() {
     port: 4000,
     address: 'localhost',
     baseUrl: undefined,
-    otelLogExportEnabled: false,
+    version: '1.0.0',
   };
 
-  let transport: pino.TransportMultiOptions = {
-    targets: [{ target: 'pino-pretty', options: { singleLine: true } }],
+  const transport: pino.TransportMultiOptions = {
+    targets: [
+      { target: 'pino-pretty', options: { singleLine: true } },
+      createOtelLogTransport(appConfig.version),
+    ],
   };
-
-  if (appConfig.otelLogExportEnabled) {
-    const otelTransport = createOtelLogTransport();
-    transport = {
-      targets: [
-        { target: 'pino-pretty', options: { singleLine: true } },
-        otelTransport,
-      ],
-    };
-  }
 
   const pinoHttp = PinoHttp({
     transport,
@@ -76,9 +69,8 @@ async function bootstrap() {
         const rawReqRefSymbol = Object.getOwnPropertySymbols(req).find(
           (symbol) => symbol.toString() === 'Symbol(pino-raw-req-ref)',
         );
-        type RawRequest = {
-          body?: object;
-        };
+        type RawRequest = { body?: object };
+
         let body: object | undefined = undefined;
         if (rawReqRefSymbol) {
           body = (req[rawReqRefSymbol] as RawRequest).body;

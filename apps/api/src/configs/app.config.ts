@@ -19,6 +19,7 @@ import Joi from 'joi';
 import { v4 as uuidv4 } from 'uuid';
 
 export const appConfigSchema = Joi.object({
+  APP_VERSION: Joi.string().default('1.0.0'),
   APP_PORT: Joi.number().default(4000),
   APP_ADDRESS: Joi.string().default('0.0.0.0'),
   ADMIN_WEB_URL: Joi.string().default('http://localhost:3000'),
@@ -36,6 +37,7 @@ export const appConfigSchema = Joi.object({
 });
 
 export const appConfig = registerAs('app', () => ({
+  version: process.env.APP_VERSION,
   port: process.env.APP_PORT,
   address: process.env.APP_ADDRESS,
   adminWebUrl: process.env.ADMIN_WEB_URL,
@@ -44,6 +46,5 @@ export const appConfig = registerAs('app', () => ({
     process.env.AUTO_FEEDBACK_DELETION_ENABLED === 'true',
   autoFeedbackDeletionPeriodDays:
     process.env.AUTO_FEEDBACK_DELETION_PERIOD_DAYS,
-  otelLogExportEnabled: !!process.env.OTEL_EXPORTER_OTLP_LOGS_ENDPOINT,
   serverId: uuidv4(),
 }));

@@ -14,7 +14,7 @@ You can find a full list of targets in the [package.json](./package.json) file.
 
 Runs the app in development mode.
 
-```
+```sh
 pnpm dev
 ```
 
@@ -22,7 +22,7 @@ pnpm dev
 
 Executes tests. This command applies to the environment variables in `.env.test` file.
 
-```
+```sh
 pnpm test
 ```
 
@@ -30,7 +30,7 @@ pnpm test
 
 Executes e2e tests. This command applies to the environment variables in `.env.test` file.
 
-```
+```sh
 pnpm test:e2e
 ```
 
@@ -38,15 +38,15 @@ pnpm test:e2e
 
 Performs a linting check using ESLint.
 
-```
+```sh
 pnpm lint
 ```
 
 ### `build`
 
-Builds the app for production. The distributable is expored to the `dist` folder in the repository's root folder.<br />
+Builds the app for production. The distributable is expored to the `dist` folder in the repository's root folder.
 
-```
+```sh
 pnpm build
 ```
 
@@ -54,7 +54,7 @@ pnpm build
 
 Generate the migration file using typeorm. The file is generated in `src/configs/modules/typeorm-config/migrations`
 
-```
+```sh
 npm run migration:generate --name={NAME}
 ```
 
@@ -62,7 +62,7 @@ npm run migration:generate --name={NAME}
 
 Run the migration files for database migrations
 
-```
+```sh
 npm run migration:run
 ```
 

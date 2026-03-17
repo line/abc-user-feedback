@@ -107,22 +107,12 @@ export const domainModules = [
     }),
     LoggerModule.forRootAsync({
       useFactory: () => {
-        const otelLogExportEnabled =
-          !!process.env.OTEL_EXPORTER_OTLP_LOGS_ENDPOINT;
-
-        let transport: pino.TransportMultiOptions = {
-          targets: [{ target: 'pino-pretty', options: { singleLine: true } }],
+        const transport: pino.TransportMultiOptions = {
+          targets: [
+            { target: 'pino-pretty', options: { singleLine: true } },
+            createOtelLogTransport(process.env.APP_VERSION),
+          ],
         };
-
-        if (otelLogExportEnabled) {
-          const otelTransport = createOtelLogTransport();
-          transport = {
-            targets: [
-              { target: 'pino-pretty', options: { singleLine: true } },
-              otelTransport,
-            ],
-          };
-        }
 
         return {
           pinoHttp: {
