@@ -32,7 +32,6 @@ export const appConfigSchema = Joi.object({
       otherwise: Joi.optional(),
     },
   ),
-  OTEL_EXPORTER_OTLP_LOGS_ENDPOINT: Joi.string().optional(),
 });
 
 export const appConfig = registerAs('app', () => ({
