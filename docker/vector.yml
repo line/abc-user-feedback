@@ -1,0 +1,121 @@
+# ────────────────────────────────────────────────
+# Vector Pipeline: OTLP Logs → OpenSearch
+# ────────────────────────────────────────────────
+
+api:
+  enabled: true
+  address: '0.0.0.0:8686'
+
+sources:
+  otlp_logs:
+    type: opentelemetry
+    grpc:
+      address: '0.0.0.0:4317'
+    http:
+      address: '0.0.0.0:4319'
+
+transforms:
+  build_message:
+    type: remap
+    inputs:
+      - otlp_logs.logs
+    source: |
+      # time
+      if exists(.timestamp) && .timestamp != null {
+        ._time_str = format_timestamp!(.timestamp, "%H:%M:%S%.3f")
+      } else { ._time_str = "" }
+
+      # level
+      if exists(.severity_text) && .severity_text != null {
+        ._level = upcase(string!(.severity_text))
+      } else { ._level = "INFO" }
+
+      # pid
+      if exists(.resources."process.pid") && .resources."process.pid" != null {
+        ._pid_str = to_string!(.resources."process.pid")
+      } else { ._pid_str = "" }
+
+      # message
+      ._orig_msg = ""
+      if exists(.message) && .message != null {
+        ._orig_msg = string!(.message)
+      }
+
+      # attrs json
+      ._json_str = ""
+      if exists(.attributes) && .attributes != null {
+        ._json_str = encode_json(.attributes)
+      }
+
+      # build
+      if ._pid_str != "" {
+        .message = "[" + ._time_str + "] " + ._level + " (" + ._pid_str + "): " + ._orig_msg
+      } else {
+        .message = "[" + ._time_str + "] " + ._level + ": " + ._orig_msg
+      }
+
+      if ._json_str != "" && ._json_str != "{}" {
+        .message = .message + " " + ._json_str
+      }
+
+      # cleanup
+      del(._time_str)
+      del(._level)
+      del(._pid_str)
+      del(._orig_msg)
+      del(._json_str)
+
+      if exists(.attributes) { del(.attributes) }
+
+      if exists(.resources."service.name") {
+        .service.name = .resources."service.name"
+      }
+      if exists(.resources."service.version") {
+        .service.version = .resources."service.version"
+      }
+      if exists(.resources) { del(.resources) }
+
+sinks:
+  opensearch:
+    type: elasticsearch
+    inputs:
+      - build_message
+    endpoints:
+      - '${OPENSEARCH_ENDPOINT:-http://opensearch-node:9200}'
+    auth:
+      strategy: basic
+      user: '${OPENSEARCH_USERNAME:-}'
+      password: '${OPENSEARCH_PASSWORD:-}'
+    tls:
+      verify_certificate: ${OPENSEARCH_TLS_VERIFY:-false}
+    api_version: v8
+    opensearch_service_type: managed
+    bulk:
+      index: '${OPENSEARCH_INDEX_PREFIX:-logs}-%Y.%m.%d'
+      action: index
+    batch:
+      max_bytes: 10485760 # 10MB
+      timeout_secs: 5
+    buffer:
+      type: memory
+      max_events: 10000
+      when_full: block
+
+  console_out:
+    type: console
+    inputs:
+      - build_message
+    encoding:
+      codec: json
+
+  drop_metrics:
+    type: blackhole
+    inputs:
+      - otlp_logs.metrics
+    print_interval_secs: 0
+
+  drop_traces:
+    type: blackhole
+    inputs:
+      - otlp_logs.traces
+    print_interval_secs: 0

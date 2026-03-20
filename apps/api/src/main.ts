@@ -22,11 +22,13 @@ import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import type { Request } from 'express';
 import { Logger } from 'nestjs-pino';
-import pinoHttp from 'pino-http';
+import type pino from 'pino';
+import PinoHttp from 'pino-http';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule, domainModules } from './app.module';
 import { HttpExceptionFilter } from './common/filters';
+import { createOtelLogTransport } from './configs/otel-log.config';
 import { APIModule } from './domains/api/api.module';
 import { HealthModule } from './domains/operation/health/health.module';
 import { MigrationModule } from './domains/operation/migration/migration.module';
@@ -45,16 +47,29 @@ async function bootstrap() {
 
   await app.register(multiPart);
 
-  const pino = pinoHttp({
-    transport: { target: 'pino-pretty', options: { singleLine: true } },
+  const configService = app.get(ConfigService<ConfigServiceType>);
+  const appConfig = configService.get('app', { infer: true }) ?? {
+    port: 4000,
+    address: 'localhost',
+    baseUrl: undefined,
+  };
+
+  const transport: pino.TransportMultiOptions = {
+    targets: [
+      { target: 'pino-pretty', options: { singleLine: true } },
+      createOtelLogTransport(),
+    ],
+  };
+
+  const pinoHttp = PinoHttp({
+    transport,
     serializers: {
       req: (req: Request) => {
         const rawReqRefSymbol = Object.getOwnPropertySymbols(req).find(
           (symbol) => symbol.toString() === 'Symbol(pino-raw-req-ref)',
         );
-        type RawRequest = {
-          body?: object;
-        };
+        type RawRequest = { body?: object };
+
         let body: object | undefined = undefined;
         if (rawReqRefSymbol) {
           body = (req[rawReqRefSymbol] as RawRequest).body;
@@ -75,7 +90,7 @@ async function bootstrap() {
   app
     .getHttpAdapter()
     .getInstance()
-    .addHook('onSend', (request, reply, payload, done) => {
+    .addHook('onSend', (request, reply, _, done) => {
       if (request.body) {
         interface RequestBody {
           password?: string;
@@ -92,7 +107,7 @@ async function bootstrap() {
           sanitizedHeaders.authorization = '****';
         }
 
-        pino.logger.info({
+        pinoHttp.logger.info({
           req: {
             id: request.id,
             method: request.method,
@@ -124,12 +139,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.useLogger(app.get(Logger));
 
-  const configService = app.get(ConfigService<ConfigServiceType>);
-  const appConfig = configService.get('app', { infer: true }) ?? {
-    port: 4000,
-    address: 'localhost',
-    baseUrl: undefined,
-  };
   const baseUrl = appConfig.baseUrl;
 
   const adminDocumentConfigBuilder = new DocumentBuilder()

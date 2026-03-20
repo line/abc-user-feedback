@@ -88,7 +88,50 @@ This document explains the main environment variables used by ABC User Feedback'
 
 ---
 
-## 4. Web Server Environment Variables
+## 4. API Log Export Settings (Optional)
+
+The API can export application logs through OpenTelemetry in addition to the standard console logs.
+
+<!-- markdownlint-disable MD060 -->
+
+| Environment Variable               | Description                                                      | Default | Example                                                    |
+| ---------------------------------- | ---------------------------------------------------------------- | ------- | ---------------------------------------------------------- |
+| `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` | OTLP HTTP logs endpoint used by the pino OpenTelemetry transport | None    | `http://localhost:4319/v1/logs`                            |
+| `OTEL_RESOURCE_ATTRIBUTES`         | OpenTelemetry resource attributes for exported logs              | None    | `service.name=abc-user-feedback-api,service.version=1.1.1` |
+
+<!-- markdownlint-enable MD060 -->
+
+> When `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` is set, the API keeps writing pretty console logs and also sends the same logs to the configured OTLP HTTP endpoint.
+> If you also set `OTEL_RESOURCE_ATTRIBUTES`, you can attach standard OpenTelemetry resource metadata such as `service.name` and `service.version` using comma-separated `key=value` pairs.
+> Use the example values from `apps/api/.env.example` as the baseline when configuring local development environments.
+
+### Local Verification Flow
+
+- Start the local OTEL test stack from the repository root:
+
+```bash
+docker compose -f docker/docker-compose.otel-test.yml up -d
+```
+
+- Set the following variables in `apps/api/.env` based on the example in `apps/api/.env.example`:
+
+```env
+OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://localhost:4319/v1/logs
+OTEL_RESOURCE_ATTRIBUTES=service.name=abc-user-feedback-api,service.version=1.1.1
+```
+
+> The API does not parse this value itself. `pino-opentelemetry-transport` and the OpenTelemetry SDK consume these standard OTEL environment variables directly.
+
+- Start the API server and trigger requests that generate logs.
+  - Vector should receive OTLP logs on port `4319` and print transformed log records to its console output.
+  - OpenSearch should be reachable on host port `9201`.
+  - OpenSearch Dashboards should be reachable on [http://localhost:5602](http://localhost:5602), where you can inspect the `logs-*` indices created by the local stack.
+
+> The local test stack uses OTLP HTTP on `4319`, OpenSearch on `9201`, and OpenSearch Dashboards on `5602` as defined in `docker/docker-compose.otel-test.yml`.
+
+---
+
+## 5. Web Server Environment Variables
 
 ### Required Environment Variables
 
@@ -104,7 +147,7 @@ This document explains the main environment variables used by ABC User Feedback'
 
 ---
 
-## 5. Configuration Methods
+## 6. Configuration Methods
 
 ### Docker Compose Example
 
@@ -122,7 +165,7 @@ services:
 
 ### .env File Example
 
-```
+```env
 # apps/api/.env
 JWT_SECRET=changemechangemechangeme
 MYSQL_PRIMARY_URL=mysql://root:pass@localhost:3306/db
@@ -140,15 +183,20 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 
 ## 7. Troubleshooting Guide
 
-| Problem                                 | Cause and Solution                                  |
-| --------------------------------------- | --------------------------------------------------- |
-| Environment variables not recognized    | Check `.env` location or restart container          |
-| DB connection failure                   | Check `MYSQL_PRIMARY_URL` format or connection info |
-| SMTP error                              | Recheck port/TLS settings or authentication info    |
-| OpenSearch error                        | Check node URL or user authentication               |
-| JWT token error                         | Check `JWT_SECRET` length and complexity            |
-| Environment variable validation failure | Check for missing required variables or type errors |
-| Port conflict                           | Check `APP_PORT`, `PORT` settings                   |
+<!-- markdownlint-disable MD060 -->
+
+| Problem                                 | Cause and Solution                                                                                                      |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Environment variables not recognized    | Check `.env` location or restart container                                                                              |
+| DB connection failure                   | Check `MYSQL_PRIMARY_URL` format or connection info                                                                     |
+| SMTP error                              | Recheck port/TLS settings or authentication info                                                                        |
+| OpenSearch error                        | Check node URL or user authentication                                                                                   |
+| OTEL log export not working             | Check whether `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` is set, verify the endpoint URL, and confirm the OTEL stack is running |
+| JWT token error                         | Check `JWT_SECRET` length and complexity                                                                                |
+| Environment variable validation failure | Check for missing required variables or type errors                                                                     |
+| Port conflict                           | Check `APP_PORT`, `PORT` settings                                                                                       |
+
+<!-- markdownlint-enable MD060 -->
 
 ---
 
