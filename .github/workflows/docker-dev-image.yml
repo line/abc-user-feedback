@@ -22,6 +22,7 @@ jobs:
         uses: docker/metadata-action@v6
         with:
           images: line/abc-user-feedback-api
+          bake-target: api
           tags: |
             type=ref,event=branch
             type=ref,event=tag
@@ -32,6 +33,7 @@ jobs:
         uses: docker/metadata-action@v6
         with:
           images: line/abc-user-feedback-web
+          bake-target: web
           tags: |
             type=ref,event=branch
             type=ref,event=tag
