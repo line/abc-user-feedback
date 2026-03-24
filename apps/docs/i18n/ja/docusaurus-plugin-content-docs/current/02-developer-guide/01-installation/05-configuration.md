@@ -88,7 +88,56 @@ sidebar_position: 5
 
 ---
 
-## 4. ウェブサーバー環境変数
+## 4. APIログExport設定（オプション）
+
+APIは標準のコンソールログに加えて、OpenTelemetry経由でアプリケーションログをexportできます。
+
+<!-- markdownlint-disable MD060 -->
+
+| 環境変数                           | 説明                                                              | デフォルト | 例                                                         |
+| ---------------------------------- | ----------------------------------------------------------------- | ---------- | ---------------------------------------------------------- |
+| `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` | pino OpenTelemetry transportが使用するOTLP HTTPログエンドポイント | なし       | `http://localhost:4319/v1/logs`                            |
+| `OTEL_RESOURCE_ATTRIBUTES`         | exportされたログに付与するOpenTelemetry resource attributes       | なし       | `service.name=abc-user-feedback-api,service.version=1.1.1` |
+
+<!-- markdownlint-enable MD060 -->
+
+> `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` が設定されている場合、APIはpretty consoleログを継続して出力しつつ、同じログを設定されたOTLP HTTPエンドポイントにも送信します。
+> `OTEL_RESOURCE_ATTRIBUTES` も設定すると、`service.name` や `service.version` などの標準OpenTelemetryリソースメタデータを、カンマ区切りの `key=value` 形式でログに付与できます。
+> ローカル開発環境では `apps/api/.env.example` の例を基準に設定してください。
+
+### ローカル検証手順
+
+- リポジトリルートでローカルOTELテストスタックを起動します。
+
+```bash
+docker compose -f docker/docker-compose.otel-test.yml up -d
+```
+
+- `apps/api/.env.example` を参考にして、`apps/api/.env` に次の値を設定します。
+
+```env
+OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://localhost:4319/v1/logs
+OTEL_RESOURCE_ATTRIBUTES=service.name=abc-user-feedback-api,service.version=1.1.1
+```
+
+> APIアプリケーション自体がこの値を個別にパースするわけではなく、`pino-opentelemetry-transport` と OpenTelemetry SDK が標準環境変数として処理します。
+
+- APIサーバーを起動し、ログが発生するリクエストを送信します。
+
+```bash
+pnpm --dir apps/api dev
+```
+
+- OpenTelemetryパイプラインがログを受信していることを確認します。
+  - Vectorはポート `4319` でOTLPログを受信し、変換済みログレコードをコンソールへ出力します。
+  - OpenSearchにはホストポート `9201` でアクセスできる必要があります。
+  - OpenSearch Dashboardsには [http://localhost:5602](http://localhost:5602) でアクセスでき、ローカルスタックが作成した `logs-*` インデックスを確認できます。
+
+> ローカルテストスタックは `docker/docker-compose.otel-test.yml` の定義に従い、OTLP HTTP `4319`、OpenSearch `9201`、OpenSearch Dashboards `5602` を使用します。
+
+---
+
+## 5. ウェブサーバー環境変数
 
 ### 必須環境変数
 
@@ -104,7 +153,7 @@ sidebar_position: 5
 
 ---
 
-## 5. 設定方法
+## 6. 設定方法
 
 ### Docker Compose例
 
@@ -122,7 +171,7 @@ services:
 
 ### .envファイル例
 
-```
+```env
 # apps/api/.env
 JWT_SECRET=changemechangemechangeme
 MYSQL_PRIMARY_URL=mysql://root:pass@localhost:3306/db
@@ -140,15 +189,20 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
 
 ## 7. トラブルシューティングガイド
 
-| 問題                   | 原因と解決策                              |
-| ---------------------- | ----------------------------------------- |
-| 環境変数が認識されない | `.env`位置確認またはコンテナ再起動        |
-| DB接続失敗             | `MYSQL_PRIMARY_URL`形式または接続情報確認 |
-| SMTPエラー             | ポート/TLS設定または認証情報再確認        |
-| OpenSearchエラー       | ノードURLまたはユーザー認証確認           |
-| JWTトークンエラー      | `JWT_SECRET`長さおよび複雑性確認          |
-| 環境変数検証失敗       | 必須環境変数欠落またはタイプエラー確認    |
-| ポート競合             | `APP_PORT`、`PORT`設定確認                |
+<!-- markdownlint-disable MD060 -->
+
+| 問題                   | 原因と解決策                                                                                        |
+| ---------------------- | --------------------------------------------------------------------------------------------------- |
+| 環境変数が認識されない | `.env`位置確認またはコンテナ再起動                                                                  |
+| DB接続失敗             | `MYSQL_PRIMARY_URL`形式または接続情報確認                                                           |
+| SMTPエラー             | ポート/TLS設定または認証情報再確認                                                                  |
+| OpenSearchエラー       | ノードURLまたはユーザー認証確認                                                                     |
+| OTELログexport失敗     | `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT` の設定有無、endpoint URL、OTELスタック起動有無を確認してください |
+| JWTトークンエラー      | `JWT_SECRET`長さおよび複雑性確認                                                                    |
+| 環境変数検証失敗       | 必須環境変数欠落またはタイプエラー確認                                                              |
+| ポート競合             | `APP_PORT`、`PORT`設定確認                                                                          |
+
+<!-- markdownlint-enable MD060 -->
 
 ---
 

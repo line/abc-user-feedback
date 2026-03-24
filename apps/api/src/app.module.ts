@@ -21,6 +21,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { Request } from 'express';
 import { ClsModule } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
+import pino from 'pino';
 
 import { appConfig, appConfigSchema } from './configs/app.config';
 import { jwtConfig, jwtConfigSchema } from './configs/jwt.config';
@@ -34,6 +35,7 @@ import {
   opensearchConfig,
   opensearchConfigSchema,
 } from './configs/opensearch.config';
+import { createOtelLogTransport } from './configs/otel-log.config';
 import { smtpConfig, smtpConfigSchema } from './configs/smtp.config';
 import { AuthModule } from './domains/admin/auth/auth.module';
 import { ChannelModule } from './domains/admin/channel/channel/channel.module';
@@ -103,29 +105,39 @@ export const domainModules = [
         .concat(opensearchConfigSchema),
       validationOptions: { abortEarly: true },
     }),
-    LoggerModule.forRoot({
-      pinoHttp: {
-        transport: { target: 'pino-pretty', options: { singleLine: true } },
-        autoLogging: {
-          ignore: (req: Request) => req.originalUrl === '/api/health',
-        },
-        customLogLevel: (req, res, err) => {
-          if (process.env.NODE_ENV === 'test') {
-            return 'silent';
-          }
+    LoggerModule.forRootAsync({
+      useFactory: () => {
+        const transport: pino.TransportMultiOptions = {
+          targets: [
+            { target: 'pino-pretty', options: { singleLine: true } },
+            createOtelLogTransport(),
+          ],
+        };
+        return {
+          pinoHttp: {
+            transport,
+            autoLogging: {
+              ignore: (req: Request) => req.originalUrl === '/api/health',
+            },
+            customLogLevel: (req, res, err) => {
+              if (process.env.NODE_ENV === 'test') {
+                return 'silent';
+              }
 
-          if (res.statusCode === 401) {
-            return 'silent';
-          }
-          if (res.statusCode >= 400 && res.statusCode < 500) {
-            return 'warn';
-          } else if (res.statusCode >= 500) {
-            return 'error';
-          } else if (err != null) {
-            return 'error';
-          }
-          return 'info';
-        },
+              if (res.statusCode === 401) {
+                return 'silent';
+              }
+              if (res.statusCode >= 400 && res.statusCode < 500) {
+                return 'warn';
+              } else if (res.statusCode >= 500) {
+                return 'error';
+              } else if (err != null) {
+                return 'error';
+              }
+              return 'info';
+            },
+          },
+        };
       },
     }),
     ClsModule.forRoot({
