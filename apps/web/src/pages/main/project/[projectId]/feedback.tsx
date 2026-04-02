@@ -48,9 +48,9 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   useCheckAIUsageLimit(projectId);
 
   useEffect(() => {
-    if (!channels) return;
+    if (!channels || currentChannelId !== -1) return;
     void setCurrentChannelId(channels.items[0]?.id ?? null);
-  }, [channels]);
+  }, [channels, currentChannelId]);
 
   if (isLoading) {
     return (
