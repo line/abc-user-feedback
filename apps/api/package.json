@@ -26,8 +26,8 @@
   },
   "prettier": "@ufb/prettier-config",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1014.0",
-    "@aws-sdk/s3-request-presigner": "^3.1014.0",
+    "@aws-sdk/client-s3": "^3.1015.0",
+    "@aws-sdk/s3-request-presigner": "^3.1015.0",
     "@fastify/multipart": "^9.4.0",
     "@fastify/static": "^9.0.0",
     "@nestjs-modules/mailer": "^2.0.2",
@@ -62,7 +62,7 @@
     "exceljs": "^4.4.0",
     "fast-csv": "^5.0.5",
     "fastify": "^5.8.4",
-    "joi": "^18.0.2",
+    "joi": "^18.1.1",
     "luxon": "^3.7.2",
     "magic-bytes.js": "^1.13.0",
     "mysql2": "^3.20.0",
@@ -87,7 +87,7 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^10.3.0",
+    "@faker-js/faker": "^10.4.0",
     "@nestjs/cli": "^11.0.16",
     "@nestjs/schematics": "^11.0.9",
     "@nestjs/testing": "^11.1.17",
