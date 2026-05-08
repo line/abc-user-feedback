@@ -21,6 +21,10 @@
     {
       "matchPackageNames": ["next"],
       "allowedVersions": "<16.0.0"
+    },
+    {
+      "matchDatasources": ["npm"],
+      "minimumReleaseAge": "3 days"
     }
   ],
   "updateInternalDeps": true,
