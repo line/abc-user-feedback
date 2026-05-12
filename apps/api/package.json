@@ -30,7 +30,7 @@
     "@aws-sdk/s3-request-presigner": "^3.1015.0",
     "@fastify/multipart": "^9.4.0",
     "@fastify/static": "^9.0.0",
-    "@nestjs-modules/mailer": "^2.0.2",
+    "@nestjs-modules/mailer": "^2.3.4",
     "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.1.17",
     "@nestjs/config": "^4.0.3",
