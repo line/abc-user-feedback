@@ -45,7 +45,7 @@
     "dayjs": "^1.11.23",
     "framer-motion": "^12.38.0",
     "i18next": "^25.10.10",
-    "immer": "^11.1.4",
+    "immer": "^11.1.21",
     "jwt-decode": "^4.0.0",
     "linkify": "^0.2.1",
     "linkify-react": "^4.3.2",
