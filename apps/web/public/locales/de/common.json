@@ -12,8 +12,18 @@
       "profile-info": "Profil-Informationen",
       "change-password": "Passwort ändern",
       "button": {
-        "delete-account": "Konto löschen"
-      }
+        "delete-account": "Konto löschen",
+        "sign-out-everywhere": "Überall abmelden"
+      },
+      "signed-out-everywhere": "Von allen Sitzungen abgemeldet.",
+      "password-changed": "Passwort geändert. Bitte melden Sie sich erneut an."
+    },
+    "api-key": {
+      "created-title": "API-Schlüssel erstellt",
+      "created-description": "Kopieren Sie diesen Schlüssel jetzt. Aus Sicherheitsgründen wird er nicht erneut angezeigt.",
+      "expiry": "Gültigkeit",
+      "never": "Nie",
+      "days": "{{count}} Tage"
     },
     "feedback": {
       "issue-cell": {

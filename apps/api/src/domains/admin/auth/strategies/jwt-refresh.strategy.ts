@@ -18,12 +18,15 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, JwtFromRequestFunction, Strategy } from 'passport-jwt';
 
+import { UserService } from '@/domains/admin/user/user.service';
 import type { ConfigServiceType } from '@/types/config-service.type';
+import { findCurrentTokenUser } from './token-version';
 
 interface IPayload {
   sub: string;
   email: string;
   tokenType?: 'access' | 'refresh';
+  tokenVersion?: number;
   iat: number;
   exp: number;
 }
@@ -39,7 +42,10 @@ export class JwtRefreshStrategy extends PassportStrategy(
   Strategy,
   'jwt-refresh',
 ) {
-  constructor(configService: ConfigService<ConfigServiceType>) {
+  constructor(
+    configService: ConfigService<ConfigServiceType>,
+    private readonly userService: UserService,
+  ) {
     const { secret } = configService.get('jwt', { infer: true }) ?? {};
 
     super({
@@ -49,11 +55,11 @@ export class JwtRefreshStrategy extends PassportStrategy(
     } as StrategyOptions);
   }
 
-  validate(payload: IPayload) {
+  async validate(payload: IPayload) {
     if (payload.tokenType !== 'refresh') {
       throw new UnauthorizedException('Invalid token type');
     }
-    const { email, sub } = payload;
-    return { id: sub, email };
+    const { email } = await findCurrentTokenUser(this.userService, payload);
+    return { id: payload.sub, email };
   }
 }

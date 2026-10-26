@@ -33,6 +33,7 @@ import { TenantEntity } from '../../tenant/tenant.entity';
 import { UserDto } from '../../user/dtos';
 import { UserTypeEnum } from '../../user/entities/enums';
 import { ApiKeyEntity } from '../api-key/api-key.entity';
+import { hashApiKey } from '../api-key/api-key.util';
 import { MemberEntity } from '../member/member.entity';
 import { PermissionEnum } from '../role/permission.enum';
 import { RoleEntity } from '../role/role.entity';
@@ -233,7 +234,13 @@ describe('ProjectService Test suite', () => {
       expect(project.roles[0].members[0].user.id).toEqual(
         dto.members[0].userId,
       );
-      expect(project.apiKeys).toMatchObject(dto.apiKeys);
+      // Imported keys are stored hashed; the raw value is not kept.
+      expect(project.apiKeys).toMatchObject(
+        dto.apiKeys.map(({ value }) => ({
+          hash: hashApiKey(value),
+          prefix: value.slice(0, 4),
+        })),
+      );
     });
     it('creating a project succeeds with project data and role data and member data and api key data and issue tracker data', async () => {
       dto.roles = [
@@ -276,7 +283,13 @@ describe('ProjectService Test suite', () => {
       expect(project.roles[0].members[0].user.id).toEqual(
         dto.members[0].userId,
       );
-      expect(project.apiKeys).toMatchObject(dto.apiKeys);
+      // Imported keys are stored hashed; the raw value is not kept.
+      expect(project.apiKeys).toMatchObject(
+        dto.apiKeys.map(({ value }) => ({
+          hash: hashApiKey(value),
+          prefix: value.slice(0, 4),
+        })),
+      );
       expect(project.issueTracker).toMatchObject(dto.issueTracker);
     });
 

@@ -48,7 +48,7 @@ import {
   SendEmailCodeResponseDto,
   SignInResponseDto,
 } from './dtos/responses';
-import { JwtRefreshAuthGuard } from './guards';
+import { JwtAuthGuard, JwtRefreshAuthGuard } from './guards';
 import { UseEmailGuard } from './guards/use-email.guard';
 import { UseOAuthGuard } from './guards/use-oauth.guard';
 
@@ -112,6 +112,14 @@ export class AuthController {
   @Get('signIn/oauth')
   async handleCallback(@Query() query: { code: string }) {
     return await this.authService.signInByOAuth(query.code);
+  }
+
+  @ApiBearerAuth()
+  @HttpCode(204)
+  @UseGuards(JwtAuthGuard)
+  @Post('signOut/all')
+  async signOutEverywhere(@CurrentUser() user: UserDto) {
+    await this.authService.signOutEverywhere(user.id);
   }
 
   @ApiBearerAuth()

@@ -14,7 +14,8 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, Length } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDate, IsOptional, IsString, Length } from 'class-validator';
 
 export class CreateApiKeyRequestDto {
   @ApiProperty({ required: false })
@@ -22,4 +23,15 @@ export class CreateApiKeyRequestDto {
   @IsOptional()
   @Length(20)
   value?: string;
+
+  @ApiProperty({
+    required: false,
+    nullable: true,
+    type: Date,
+    description: 'When the key stops working. Omit or null for no expiry.',
+  })
+  @Type(() => Date)
+  @IsDate()
+  @IsOptional()
+  expiresAt?: Date | null;
 }

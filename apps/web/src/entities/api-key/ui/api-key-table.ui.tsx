@@ -26,6 +26,7 @@ import { BasicTable } from '@/shared';
 
 import { getApiKeyColumns } from '../api-key-columns';
 import type { ApiKey, ApiKeyUpdateType } from '../api-key.type';
+import { maskApiKey } from '../api-key.util';
 import ApiKeyFormDialog from './api-key-form-dialog.ui';
 
 interface IProps extends Omit<EntityTable<ApiKey>, 'onClickRow'> {
@@ -62,7 +63,7 @@ const ApiKeyTable: React.FC<IProps> = (props) => {
         isOpen={isOpen}
         data={{
           status: apiKey.deletedAt === null ? 'active' : 'inactive',
-          value: apiKey.value,
+          value: apiKey.value ?? maskApiKey(apiKey),
         }}
         onSubmit={async (input) => {
           await onClickUpdate?.(

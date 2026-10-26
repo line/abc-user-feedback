@@ -24,7 +24,11 @@ class ApiKeyResponseDto {
 
   @Expose()
   @ApiProperty()
-  value: string;
+  prefix: string;
+
+  @Expose()
+  @ApiProperty({ nullable: true, type: Date })
+  expiresAt: Date | null;
 
   @Expose()
   @ApiProperty()

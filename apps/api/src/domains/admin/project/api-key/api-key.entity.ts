@@ -17,11 +17,19 @@ import { Column, Entity, ManyToOne, Relation } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
 import { ProjectEntity } from '../project/project.entity';
+import { getApiKeyPrefix, hashApiKey } from './api-key.util';
 
 @Entity('api_keys')
 export class ApiKeyEntity extends CommonEntity {
-  @Column('varchar', { length: 255, unique: true })
-  value: string;
+  // SHA-256 hex digest of the raw key; the raw key itself is never stored.
+  @Column('varchar', { length: 64, unique: true })
+  hash: string;
+
+  @Column('varchar', { length: 8 })
+  prefix: string;
+
+  @Column('datetime', { nullable: true })
+  expiresAt: Date | null;
 
   @ManyToOne(() => ProjectEntity, (project) => project.apiKeys, {
     onDelete: 'CASCADE',
@@ -31,18 +39,22 @@ export class ApiKeyEntity extends CommonEntity {
   static from({
     projectId,
     value,
+    expiresAt,
     createdAt,
     deletedAt,
   }: {
     projectId: number;
     value: string;
+    expiresAt?: Date | null;
     createdAt?: Date;
     deletedAt?: Date;
   }) {
     const apiKey = new ApiKeyEntity();
     apiKey.project = new ProjectEntity();
     apiKey.project.id = projectId;
-    apiKey.value = value;
+    apiKey.hash = hashApiKey(value);
+    apiKey.prefix = getApiKeyPrefix(value);
+    apiKey.expiresAt = expiresAt ?? null;
     if (createdAt) apiKey.createdAt = createdAt;
     if (deletedAt) apiKey.deletedAt = deletedAt;
 

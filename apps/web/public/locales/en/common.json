@@ -12,8 +12,18 @@
       "profile-info": "Profile Information",
       "change-password": "Change Password",
       "button": {
-        "delete-account": "Delete Account"
-      }
+        "delete-account": "Delete Account",
+        "sign-out-everywhere": "Sign Out Everywhere"
+      },
+      "signed-out-everywhere": "Signed out of all sessions.",
+      "password-changed": "Password changed. Please sign in again."
+    },
+    "api-key": {
+      "created-title": "API Key Created",
+      "created-description": "Copy this key now. For security reasons, it will not be shown again.",
+      "expiry": "Expiry",
+      "never": "Never",
+      "days": "{{count}} days"
     },
     "feedback": {
       "issue-cell": {

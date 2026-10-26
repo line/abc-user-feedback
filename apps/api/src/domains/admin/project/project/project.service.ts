@@ -148,6 +148,7 @@ export class ProjectService {
       const savedApiKeys = await this.apiKeyService.createMany(
         dto.apiKeys.map((apiKey) => ({
           value: apiKey.value,
+          expiresAt: apiKey.expiresAt,
           projectId: savedProject.id,
           createdAt: apiKey.createdAt,
           deletedAt: apiKey.deletedAt,

@@ -22,8 +22,18 @@ export class CreateApiKeyResponseDto {
   id: number;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'The raw API key. It is returned only once, at creation.',
+  })
   value: string;
+
+  @Expose()
+  @ApiProperty()
+  prefix: string;
+
+  @Expose()
+  @ApiProperty({ nullable: true, type: Date })
+  expiresAt: Date | null;
 
   @Expose()
   @ApiProperty()

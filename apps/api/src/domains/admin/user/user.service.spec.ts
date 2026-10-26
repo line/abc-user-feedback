@@ -428,6 +428,53 @@ describe('UserService', () => {
       );
     });
 
+    it('updating a user type revokes the user tokens', async () => {
+      const userId = faker.number.int();
+      const existingUser = {
+        id: userId,
+        type: UserTypeEnum.SUPER,
+        tokenVersion: 5,
+      } as UserEntity;
+      jest.spyOn(userService, 'findById').mockResolvedValue(existingUser);
+      jest.spyOn(userRepo, 'save').mockResolvedValue({} as UserEntity);
+
+      await userService.updateUser({
+        userId,
+        name: null,
+        department: null,
+        type: UserTypeEnum.GENERAL,
+      });
+
+      expect(userRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: UserTypeEnum.GENERAL,
+          tokenVersion: 6,
+        }),
+      );
+    });
+
+    it('updating a user without a type change keeps the user tokens', async () => {
+      const userId = faker.number.int();
+      const existingUser = {
+        id: userId,
+        type: UserTypeEnum.GENERAL,
+        tokenVersion: 5,
+      } as UserEntity;
+      jest.spyOn(userService, 'findById').mockResolvedValue(existingUser);
+      jest.spyOn(userRepo, 'save').mockResolvedValue({} as UserEntity);
+
+      await userService.updateUser({
+        userId,
+        name: faker.person.fullName(),
+        department: null,
+        type: UserTypeEnum.GENERAL,
+      });
+
+      expect(userRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({ tokenVersion: 5 }),
+      );
+    });
+
     it('updating a user fails with non-existent user id', async () => {
       const userId = faker.number.int();
       const updateDto: UpdateUserDto = {

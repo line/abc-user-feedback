@@ -16,7 +16,12 @@
 import { UnauthorizedException } from '@nestjs/common';
 import type { ConfigService } from '@nestjs/config';
 
-import { UserTypeEnum } from '@/domains/admin/user/entities/enums';
+import {
+  UserStateEnum,
+  UserTypeEnum,
+} from '@/domains/admin/user/entities/enums';
+import type { UserEntity } from '@/domains/admin/user/entities/user.entity';
+import type { UserService } from '@/domains/admin/user/user.service';
 import type { ConfigServiceType } from '@/types/config-service.type';
 import { JwtRefreshStrategy } from './jwt-refresh.strategy';
 import { JwtStrategy } from './jwt.strategy';
@@ -29,33 +34,123 @@ const basePayload = {
   sub: '1',
   email: 'user@example.com',
   type: UserTypeEnum.GENERAL,
+  tokenVersion: 3,
   iat: 0,
   exp: 0,
 };
 
-describe('JWT token type', () => {
-  it('access strategy accepts only access tokens', () => {
-    const strategy = new JwtStrategy(configService);
+const activeUser = {
+  id: 1,
+  email: 'user@example.com',
+  type: UserTypeEnum.GENERAL,
+  state: UserStateEnum.Active,
+  tokenVersion: 3,
+} as UserEntity;
 
-    expect(strategy.validate({ ...basePayload, tokenType: 'access' })).toEqual({
+const mockUserService = (user: UserEntity | null) =>
+  ({
+    findTokenOwnerById: jest.fn().mockResolvedValue(user),
+  }) as unknown as UserService;
+
+describe('JWT token type', () => {
+  it('access strategy accepts only access tokens', async () => {
+    const strategy = new JwtStrategy(
+      configService,
+      mockUserService(activeUser),
+    );
+
+    await expect(
+      strategy.validate({ ...basePayload, tokenType: 'access' }),
+    ).resolves.toEqual({
       id: '1',
       email: 'user@example.com',
       type: UserTypeEnum.GENERAL,
     });
-    expect(() =>
+    await expect(
       strategy.validate({ ...basePayload, tokenType: 'refresh' }),
-    ).toThrow(UnauthorizedException);
-    expect(() => strategy.validate(basePayload)).toThrow(UnauthorizedException);
+    ).rejects.toThrow(UnauthorizedException);
+    await expect(strategy.validate(basePayload)).rejects.toThrow(
+      UnauthorizedException,
+    );
   });
 
-  it('refresh strategy accepts only refresh tokens', () => {
-    const strategy = new JwtRefreshStrategy(configService);
-
-    expect(strategy.validate({ ...basePayload, tokenType: 'refresh' })).toEqual(
-      { id: '1', email: 'user@example.com' },
+  it('refresh strategy accepts only refresh tokens', async () => {
+    const strategy = new JwtRefreshStrategy(
+      configService,
+      mockUserService(activeUser),
     );
-    expect(() =>
+
+    await expect(
+      strategy.validate({ ...basePayload, tokenType: 'refresh' }),
+    ).resolves.toEqual({ id: '1', email: 'user@example.com' });
+    await expect(
       strategy.validate({ ...basePayload, tokenType: 'access' }),
-    ).toThrow(UnauthorizedException);
+    ).rejects.toThrow(UnauthorizedException);
+  });
+});
+
+describe('JWT token version', () => {
+  const strategies = (user: UserEntity | null) => [
+    {
+      strategy: new JwtStrategy(configService, mockUserService(user)),
+      tokenType: 'access' as const,
+    },
+    {
+      strategy: new JwtRefreshStrategy(configService, mockUserService(user)),
+      tokenType: 'refresh' as const,
+    },
+  ];
+
+  it('rejects tokens issued before the token version was bumped', async () => {
+    for (const { strategy, tokenType } of strategies({
+      ...activeUser,
+      tokenVersion: 4,
+    } as UserEntity)) {
+      await expect(
+        strategy.validate({ ...basePayload, tokenType }),
+      ).rejects.toThrow(new UnauthorizedException('Token revoked'));
+    }
+  });
+
+  it('rejects tokens without a token version', async () => {
+    const { tokenVersion: _, ...legacyPayload } = basePayload;
+    for (const { strategy, tokenType } of strategies(activeUser)) {
+      await expect(
+        strategy.validate({ ...legacyPayload, tokenType }),
+      ).rejects.toThrow(new UnauthorizedException('Token revoked'));
+    }
+  });
+
+  it('rejects tokens of a deleted user', async () => {
+    for (const { strategy, tokenType } of strategies(null)) {
+      await expect(
+        strategy.validate({ ...basePayload, tokenType }),
+      ).rejects.toThrow(new UnauthorizedException('Token revoked'));
+    }
+  });
+
+  it('rejects tokens of a blocked user', async () => {
+    for (const { strategy, tokenType } of strategies({
+      ...activeUser,
+      state: UserStateEnum.Blocked,
+    } as UserEntity)) {
+      await expect(
+        strategy.validate({ ...basePayload, tokenType }),
+      ).rejects.toThrow(new UnauthorizedException('User blocked'));
+    }
+  });
+
+  it('uses the current user type rather than the one in the token', async () => {
+    const strategy = new JwtStrategy(
+      configService,
+      mockUserService({
+        ...activeUser,
+        type: UserTypeEnum.SUPER,
+      } as UserEntity),
+    );
+
+    await expect(
+      strategy.validate({ ...basePayload, tokenType: 'access' }),
+    ).resolves.toMatchObject({ type: UserTypeEnum.SUPER });
   });
 });

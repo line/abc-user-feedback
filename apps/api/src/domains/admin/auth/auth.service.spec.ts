@@ -386,6 +386,33 @@ describe('auth service ', () => {
       expect(jwt).toHaveProperty('accessToken');
       expect(jwt).toHaveProperty('refreshToken');
     });
+    it('signing in embeds the user token version in both tokens', async () => {
+      const activeUser = new UserEntity();
+      activeUser.state = UserStateEnum.Active;
+      activeUser.tokenVersion = faker.number.int({ max: 100 });
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue(activeUser);
+      MockJwtService.sign.mockClear();
+      const dto = new UserDto();
+      dto.email = faker.internet.email();
+      dto.id = faker.number.int();
+
+      await authService.signIn(dto);
+
+      expect(MockJwtService.sign).toHaveBeenCalledWith(
+        expect.objectContaining({
+          tokenType: 'access',
+          tokenVersion: activeUser.tokenVersion,
+        }),
+        expect.anything(),
+      );
+      expect(MockJwtService.sign).toHaveBeenCalledWith(
+        expect.objectContaining({
+          tokenType: 'refresh',
+          tokenVersion: activeUser.tokenVersion,
+        }),
+        expect.anything(),
+      );
+    });
     it('signing in fails with a blocked user', async () => {
       const blockedUser = new UserEntity();
       blockedUser.state = UserStateEnum.Blocked;
@@ -450,14 +477,39 @@ describe('auth service ', () => {
 
       expect(result).toEqual(true);
     });
-    it('validating an api key succeeds with an invalid api key', async () => {
+    it('validating an api key fails with an invalid api key', async () => {
       const apiKey = faker.string.uuid();
       const projectId = faker.number.int();
-      jest.spyOn(apiKeyRepo, 'find').mockResolvedValue([] as ApiKeyEntity[]);
+      jest.spyOn(apiKeyRepo, 'findOne').mockResolvedValue(null);
 
       const result = await authService.validateApiKey(apiKey, projectId);
 
       expect(result).toEqual(false);
+    });
+    it('validating an api key fails with an expired api key', async () => {
+      const apiKey = faker.string.uuid();
+      const projectId = faker.number.int();
+      jest.spyOn(apiKeyRepo, 'findOne').mockResolvedValue({
+        id: faker.number.int(),
+        expiresAt: faker.date.past(),
+      } as ApiKeyEntity);
+
+      const result = await authService.validateApiKey(apiKey, projectId);
+
+      expect(result).toEqual(false);
+    });
+  });
+
+  describe('signOutEverywhere', () => {
+    it('bumps the user token version', async () => {
+      const userId = faker.number.int();
+      const increment = jest
+        .spyOn(userRepo, 'increment')
+        .mockResolvedValue({} as any);
+
+      await authService.signOutEverywhere(userId);
+
+      expect(increment).toHaveBeenCalledWith({ id: userId }, 'tokenVersion', 1);
     });
   });
 

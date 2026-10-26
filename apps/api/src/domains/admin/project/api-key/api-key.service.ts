@@ -23,6 +23,7 @@ import { Transactional } from 'typeorm-transactional';
 import { ProjectNotFoundException } from '../project/exceptions';
 import { ProjectEntity } from '../project/project.entity';
 import { ApiKeyEntity } from './api-key.entity';
+import { hashApiKey } from './api-key.util';
 import { CreateApiKeyDto } from './dtos';
 
 @Injectable()
@@ -45,18 +46,26 @@ export class ApiKeyService {
     const project = await this.projectRepo.findOneBy({ id: projectId });
     if (!project) throw new ProjectNotFoundException();
 
-    const apiKey = await this.repository.findOneBy({ value });
+    const apiKey = await this.repository.findOneBy({ hash: hashApiKey(value) });
     if (apiKey) throw new BadRequestException('Api Key already exists');
   }
 
+  /**
+   * Returns the raw key alongside the saved entity. This is the only time the
+   * raw key is available; only its hash is persisted.
+   */
   @Transactional()
   async create(dto: CreateApiKeyDto) {
+    if (dto.expiresAt && dto.expiresAt.getTime() <= Date.now()) {
+      throw new BadRequestException('expiresAt must be in the future');
+    }
     await this.validateBeforeCreation(dto);
-    const { projectId, value } = dto;
+    const { projectId, value, expiresAt } = dto;
 
-    const newApiKey = ApiKeyEntity.from({ projectId, value });
+    const newApiKey = ApiKeyEntity.from({ projectId, value, expiresAt });
+    const savedApiKey = await this.repository.save(newApiKey);
 
-    return await this.repository.save(newApiKey);
+    return { ...savedApiKey, value };
   }
 
   @Transactional()
@@ -65,8 +74,15 @@ export class ApiKeyService {
       await this.validateBeforeCreation(dto);
     }
 
-    const apiKeys = dtos.map(({ projectId, value, createdAt, deletedAt }) =>
-      ApiKeyEntity.from({ projectId, value, createdAt, deletedAt }),
+    const apiKeys = dtos.map(
+      ({ projectId, value, expiresAt, createdAt, deletedAt }) =>
+        ApiKeyEntity.from({
+          projectId,
+          value,
+          expiresAt,
+          createdAt,
+          deletedAt,
+        }),
     );
 
     return await this.repository.save(apiKeys);
@@ -81,12 +97,20 @@ export class ApiKeyService {
     return apiKeys;
   }
 
-  async findByProjectIdAndValue(projectId: number, value: string) {
-    const apiKeys = await this.repository.find({
-      where: { project: { id: projectId }, value },
+  /**
+   * Finds a key of the project by its raw value. Soft-deleted keys are excluded
+   * by TypeORM, and expired keys are filtered out here.
+   */
+  async findUsableByProjectIdAndValue(projectId: number, value: string) {
+    const apiKey = await this.repository.findOne({
+      where: { project: { id: projectId }, hash: hashApiKey(value) },
     });
+    if (!apiKey) return null;
+    if (apiKey.expiresAt && apiKey.expiresAt.getTime() <= Date.now()) {
+      return null;
+    }
 
-    return apiKeys;
+    return apiKey;
   }
 
   @Transactional()

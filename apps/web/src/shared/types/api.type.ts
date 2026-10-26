@@ -132,6 +132,22 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/admin/auth/signOut/all': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['AuthController_signOutEverywhere'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/admin/auth/refresh': {
     parameters: {
       query?: never;
@@ -1606,20 +1622,32 @@ export interface components {
     };
     CreateApiKeyRequestDto: {
       value?: string;
+      /**
+       * Format: date-time
+       * @description When the key stops working. Omit or null for no expiry.
+       */
+      expiresAt?: string | null;
     };
     CreateApiKeyResponseDto: {
       id: number;
+      /** @description The raw API key. It is returned only once, at creation. */
       value: string;
+      prefix: string;
+      /** Format: date-time */
+      expiresAt: string | null;
       /** Format: date-time */
       createdAt: string;
     };
     ApiKeyResponseDto: {
       id: number;
-      value: string;
+      /** @description The first characters of the key */
+      prefix: string;
+      /** Format: date-time */
+      expiresAt: string | null;
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
-      deletedAt: string;
+      deletedAt: string | null;
     };
     FindApiKeysResponseDto: {
       items: components['schemas']['ApiKeyResponseDto'][];
@@ -1690,6 +1718,8 @@ export interface components {
       createdAt: string;
       /** Format: date-time */
       deletedAt?: string | null;
+      /** Format: date-time */
+      expiresAt?: string | null;
     };
     IssueTrackerDataDto: {
       ticketDomain: string | null;
@@ -2572,6 +2602,23 @@ export interface operations {
         content: {
           'application/json': components['schemas']['SignInResponseDto'];
         };
+      };
+    };
+  };
+  AuthController_signOutEverywhere: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
     };
   };

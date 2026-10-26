@@ -27,6 +27,7 @@ import { initializeTransactionalContext } from 'typeorm-transactional';
 import { AppModule } from '@/app.module';
 import { OpensearchRepository } from '@/common/repositories';
 import { AuthService } from '@/domains/admin/auth/auth.service';
+import { ApiKeyEntity } from '@/domains/admin/project/api-key/api-key.entity';
 import { ApiKeyService } from '@/domains/admin/project/api-key/api-key.service';
 import { CreateApiKeyRequestDto } from '@/domains/admin/project/api-key/dtos/requests';
 import type { FindApiKeysResponseDto } from '@/domains/admin/project/api-key/dtos/responses';
@@ -187,9 +188,13 @@ describe('ApiKeyController (integration)', () => {
           const responseBody = body;
           expect(responseBody.items.length).toBeGreaterThan(0);
           expect(responseBody.items[0]).toHaveProperty('id');
-          expect(responseBody.items[0]).toHaveProperty('value');
+          expect(responseBody.items[0]).toHaveProperty('prefix');
           expect(responseBody.items[0]).toHaveProperty('createdAt');
           expect(responseBody.items[0]).toHaveProperty('deletedAt');
+          expect(responseBody.items[0]).toHaveProperty('expiresAt');
+          // Only the creation response carries the raw key.
+          expect(responseBody.items[0]).not.toHaveProperty('value');
+          expect(responseBody.items[0]).not.toHaveProperty('hash');
         });
     });
 
@@ -197,6 +202,61 @@ describe('ApiKeyController (integration)', () => {
       return request(app.getHttpServer() as Server)
         .get(`/admin/projects/${project.id}/api-keys`)
         .expect(401);
+    });
+  });
+
+  describe('authenticating with an API key', () => {
+    const createApiKey = async (body: object) => {
+      const response = await request(app.getHttpServer() as Server)
+        .post(`/admin/projects/${project.id}/api-keys`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(body)
+        .expect(201);
+      return response.body as { id: number; value: string };
+    };
+
+    it('accepts a newly created key', async () => {
+      const { value } = await createApiKey({});
+
+      await request(app.getHttpServer() as Server)
+        .get(`/projects/${project.id}`)
+        .set('x-api-key', value)
+        .expect(200);
+    });
+
+    it('rejects a deactivated key', async () => {
+      const { id, value } = await createApiKey({});
+      await request(app.getHttpServer() as Server)
+        .delete(`/admin/projects/${project.id}/api-keys/${id}/soft`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      await request(app.getHttpServer() as Server)
+        .get(`/projects/${project.id}`)
+        .set('x-api-key', value)
+        .expect(403);
+    });
+
+    it('rejects an expired key', async () => {
+      const { id, value } = await createApiKey({
+        expiresAt: new Date(Date.now() + 60_000).toISOString(),
+      });
+      await dataSource
+        .getRepository(ApiKeyEntity)
+        .update(id, { expiresAt: new Date(Date.now() - 1000) });
+
+      await request(app.getHttpServer() as Server)
+        .get(`/projects/${project.id}`)
+        .set('x-api-key', value)
+        .expect(403);
+    });
+
+    it('rejects an expiry in the past at creation', async () => {
+      await request(app.getHttpServer() as Server)
+        .post(`/admin/projects/${project.id}/api-keys`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ expiresAt: new Date(Date.now() - 1000).toISOString() })
+        .expect(400);
     });
   });
 
