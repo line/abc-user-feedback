@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
 import {
   closestCenter,
   DndContext,
@@ -94,9 +93,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
       );
     }
   }
-  const dataIds = useMemo(() => {
-    return rows.map((row) => row.id);
-  }, [rows]);
+  const dataIds = rows.map((row) => row.id);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {}),

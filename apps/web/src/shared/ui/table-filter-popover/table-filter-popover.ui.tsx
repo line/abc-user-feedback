@@ -57,6 +57,17 @@ const TableFilterPopover = (props: Props) => {
   const [currentOperator, setCurrentOperator] =
     useState<TableFilterOperator>(operator);
 
+  const resetFilters = () => {
+    if (!filterFields[0]) return;
+    const { format, key, name, matchType } = filterFields[0];
+
+    if (!matchType[0]) return;
+    setFilters([
+      { key, condition: matchType[0], format, name, value: undefined },
+    ]);
+    setCurrentOperator('AND');
+  };
+
   useEffect(() => {
     setCurrentOperator(operator);
     if (tableFilters.length === 0) {
@@ -98,17 +109,6 @@ const TableFilterPopover = (props: Props) => {
 
   const deleteFilter = (index: number) => {
     setFilters(filters.filter((_, i) => i !== index));
-  };
-
-  const resetFilters = () => {
-    if (!filterFields[0]) return;
-    const { format, key, name, matchType } = filterFields[0];
-
-    if (!matchType[0]) return;
-    setFilters([
-      { key, condition: matchType[0], format, name, value: undefined },
-    ]);
-    setCurrentOperator('AND');
   };
 
   const onChangeValue = (index: number, value?: unknown) => {
