@@ -15,9 +15,7 @@
  */
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class FeedbackIssueStatistics1701234953280
-  implements MigrationInterface
-{
+export class FeedbackIssueStatistics1701234953280 implements MigrationInterface {
   name = 'FeedbackIssueStatistics1701234953280';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

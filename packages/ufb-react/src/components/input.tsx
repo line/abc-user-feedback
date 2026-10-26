@@ -27,12 +27,7 @@ import { Icon } from './icon';
 import useTheme from './use-theme';
 
 type TextInputType = (
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'search'
-  | 'tel'
-  | 'number'
+  'text' | 'email' | 'password' | 'search' | 'tel' | 'number'
 ) &
   HTMLInputTypeAttribute;
 
@@ -88,8 +83,10 @@ const InputBox = React.forwardRef<HTMLInputElement, InputBoxProps>(
 );
 InputBox.displayName = 'InputBox';
 
-interface TextInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+interface TextInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'size'
+> {
   size?: Size;
   type?: TextInputType;
   radius?: Radius;

@@ -38,8 +38,9 @@ function useSelectContext() {
   if (!ctx) throw new Error('Select components must be used within <Select>');
   return ctx;
 }
-interface SelectProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> {
+interface SelectProps extends React.ComponentPropsWithoutRef<
+  typeof SelectPrimitive.Root
+> {
   className?: string;
   size?: Size;
   radius?: Radius;
@@ -91,8 +92,9 @@ const selectTriggerVariants = cva('select-trigger', {
   defaultVariants: { size: undefined, radius: undefined },
 });
 
-interface SelectTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {}
+interface SelectTriggerProps extends React.ComponentPropsWithoutRef<
+  typeof SelectPrimitive.Trigger
+> {}
 
 const SelectTrigger = React.forwardRef<
   React.ComponentRef<typeof SelectPrimitive.Trigger>,
@@ -115,8 +117,9 @@ const SelectTrigger = React.forwardRef<
 });
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
-interface SelectContentProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> {
+interface SelectContentProps extends React.ComponentPropsWithoutRef<
+  typeof SelectPrimitive.Content
+> {
   maxHeight?: string;
 }
 

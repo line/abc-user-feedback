@@ -53,7 +53,8 @@ const AlertContext = React.createContext<VariantProps<typeof alertVariants>>({
 });
 
 interface AlertProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof alertVariants> {}
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
@@ -120,8 +121,10 @@ const AlertDescription = React.forwardRef<
 ));
 AlertDescription.displayName = 'AlertDescription';
 
-interface AlertIconButtonProps
-  extends Omit<React.ComponentPropsWithoutRef<typeof Button>, 'icon'> {
+interface AlertIconButtonProps extends Omit<
+  React.ComponentPropsWithoutRef<typeof Button>,
+  'icon'
+> {
   icon?: IconNameType;
 }
 
@@ -179,8 +182,10 @@ const alertIconVariants = cva('alert-icon', {
   },
 });
 
-interface AlertIconProps
-  extends Omit<React.ComponentPropsWithoutRef<typeof Icon>, 'name'> {
+interface AlertIconProps extends Omit<
+  React.ComponentPropsWithoutRef<typeof Icon>,
+  'name'
+> {
   name?: IconNameType;
 }
 const AlertIcon = ({

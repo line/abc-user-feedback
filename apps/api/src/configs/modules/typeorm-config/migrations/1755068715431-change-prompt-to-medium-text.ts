@@ -15,9 +15,7 @@
  */
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class ChangePromptToMediumText1755068715431
-  implements MigrationInterface
-{
+export class ChangePromptToMediumText1755068715431 implements MigrationInterface {
   name = 'ChangePromptToMediumText1755068715431';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

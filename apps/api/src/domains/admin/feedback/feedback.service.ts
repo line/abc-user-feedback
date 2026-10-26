@@ -560,9 +560,7 @@ export class FeedbackService {
       }
 
       const value: number | string | string[] = data[fieldKey] as
-        | number
-        | string
-        | string[];
+        number | string | string[];
       const field = fields.find((v) => v.key === fieldKey);
 
       if (!field) {

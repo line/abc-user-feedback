@@ -22,8 +22,7 @@ const CardContext = React.createContext<{ size: Size }>({
   size: 'md',
 });
 interface Props
-  extends React.PropsWithChildren,
-    React.HTMLAttributes<HTMLDivElement> {
+  extends React.PropsWithChildren, React.HTMLAttributes<HTMLDivElement> {
   size?: Size;
   className?: string;
 }

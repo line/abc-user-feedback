@@ -438,8 +438,7 @@ const AISheetDetailCell = ({
   showButton,
 }: {
   value:
-    | { status: 'loading' | 'success' | 'error'; message: string }
-    | undefined;
+    { status: 'loading' | 'success' | 'error'; message: string } | undefined;
   feedbackId: number;
   fieldId: number;
   refetch?: () => Promise<void>;
