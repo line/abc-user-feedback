@@ -15,3 +15,4 @@
  */
 export { JwtAuthGuard } from './jwt-auth.guard';
 export { ApiKeyAuthGuard } from './api-key.guard';
+export { JwtRefreshAuthGuard } from './jwt-refresh-auth.guard';

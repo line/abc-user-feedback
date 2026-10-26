@@ -15,9 +15,7 @@
  */
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class ProjectTimezoneOffsetDefault1702536442621
-  implements MigrationInterface
-{
+export class ProjectTimezoneOffsetDefault1702536442621 implements MigrationInterface {
   name = 'ProjectTimezoneOffsetDefault1702536442621';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

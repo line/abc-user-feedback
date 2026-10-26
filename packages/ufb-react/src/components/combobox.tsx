@@ -105,8 +105,9 @@ const ComboboxContent = React.forwardRef<
 );
 ComboboxContent.displayName = CommandPrimitive.displayName;
 
-interface ComboboxInputProps
-  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input> {
+interface ComboboxInputProps extends React.ComponentPropsWithoutRef<
+  typeof CommandPrimitive.Input
+> {
   icon?: React.ReactNode;
 }
 

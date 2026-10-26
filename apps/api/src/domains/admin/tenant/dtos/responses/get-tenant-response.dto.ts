@@ -29,10 +29,6 @@ export class OAuthConfigResponseDto {
 
   @Expose()
   @ApiProperty()
-  clientSecret: string;
-
-  @Expose()
-  @ApiProperty()
   authCodeRequestURL: string;
 
   @Expose()

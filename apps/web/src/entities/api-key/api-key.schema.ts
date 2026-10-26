@@ -17,9 +17,12 @@ import { z } from 'zod';
 
 export const apiKeySchema = z.object({
   id: z.number(),
-  value: z.string(),
+  prefix: z.string(),
+  // The raw key is only known right after it is created; the server never returns it again.
+  value: z.string().optional(),
   createdAt: z.string(),
   deletedAt: z.string().nullable(),
+  expiresAt: z.string().nullable(),
 });
 
 export const apiKeyFormSchema = z.object({

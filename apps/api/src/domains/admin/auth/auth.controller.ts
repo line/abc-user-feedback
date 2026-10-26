@@ -48,7 +48,7 @@ import {
   SendEmailCodeResponseDto,
   SignInResponseDto,
 } from './dtos/responses';
-import { JwtAuthGuard } from './guards';
+import { JwtAuthGuard, JwtRefreshAuthGuard } from './guards';
 import { UseEmailGuard } from './guards/use-email.guard';
 import { UseOAuthGuard } from './guards/use-oauth.guard';
 
@@ -115,8 +115,16 @@ export class AuthController {
   }
 
   @ApiBearerAuth()
-  @ApiOkResponse({ type: SignInResponseDto })
+  @HttpCode(204)
   @UseGuards(JwtAuthGuard)
+  @Post('signOut/all')
+  async signOutEverywhere(@CurrentUser() user: UserDto) {
+    await this.authService.signOutEverywhere(user.id);
+  }
+
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: SignInResponseDto })
+  @UseGuards(JwtRefreshAuthGuard)
   @Get('refresh')
   refreshToken(@CurrentUser() user: UserDto) {
     return this.authService.refreshToken(user);

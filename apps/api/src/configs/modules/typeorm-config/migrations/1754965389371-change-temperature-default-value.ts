@@ -15,9 +15,7 @@
  */
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class ChangeTemperatureDefaultValue1754965389371
-  implements MigrationInterface
-{
+export class ChangeTemperatureDefaultValue1754965389371 implements MigrationInterface {
   name = 'ChangeTemperatureDefaultValue1754965389371';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

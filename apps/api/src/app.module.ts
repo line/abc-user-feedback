@@ -61,6 +61,7 @@ import { APIModule } from './domains/api/api.module';
 import { HealthModule } from './domains/operation/health/health.module';
 import { MigrationModule } from './domains/operation/migration/migration.module';
 import { SchedulerLockModule } from './domains/operation/scheduler-lock/scheduler-lock.module';
+import { SENSITIVE_HEADER_KEYS } from './utils/mask-sensitive';
 
 export const domainModules = [
   AuthModule,
@@ -116,6 +117,12 @@ export const domainModules = [
         return {
           pinoHttp: {
             transport,
+            redact: {
+              paths: SENSITIVE_HEADER_KEYS.map(
+                (key) => `req.headers["${key}"]`,
+              ),
+              censor: '****',
+            },
             autoLogging: {
               ignore: (req: Request) => req.originalUrl === '/api/health',
             },

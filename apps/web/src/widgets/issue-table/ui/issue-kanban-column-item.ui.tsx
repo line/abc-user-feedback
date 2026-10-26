@@ -14,7 +14,7 @@
  * under the License.
  */
 import { useSortable } from '@dnd-kit/sortable';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 import { Badge, Icon } from '@ufb/react';
 

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose, plainToInstance } from 'class-transformer';
+import { Expose, plainToInstance, Type } from 'class-transformer';
 import { IsOptional } from 'class-validator';
 
 import { ApiKeyEntity } from '../api-key.entity';
@@ -24,6 +24,11 @@ export class CreateApiKeyDto {
 
   @Expose()
   value: string;
+
+  @Expose()
+  @Type(() => Date)
+  @IsOptional()
+  expiresAt?: Date | null;
 
   @Expose()
   @IsOptional()
@@ -43,6 +48,7 @@ export class CreateApiKeyDto {
     return ApiKeyEntity.from({
       projectId: params.projectId,
       value: params.value,
+      expiresAt: params.expiresAt,
       createdAt: params.createdAt,
       deletedAt: params.deletedAt,
     });

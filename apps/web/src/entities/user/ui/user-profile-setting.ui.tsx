@@ -76,6 +76,19 @@ const UserProfileSetting = () => {
     },
   });
 
+  const { mutate: signOutEverywhere, isPending: isPendingSignOutEverywhere } =
+    useOAIMutation({
+      method: 'post',
+      path: '/api/admin/auth/signOut/all',
+      queryOptions: {
+        async onSuccess() {
+          // The current tokens are revoked too, so sign out locally.
+          await signOut();
+          toast.success(t('main.profile.signed-out-everywhere'));
+        },
+      },
+    });
+
   useEffect(() => {
     methods.reset(data);
   }, [data]);
@@ -107,6 +120,14 @@ const UserProfileSetting = () => {
           >
             <Icon name="RiDeleteBinFill" />
             {t('main.profile.button.delete-account')}
+          </Button>
+          <Button
+            variant="outline"
+            loading={isPendingSignOutEverywhere}
+            onClick={() => signOutEverywhere(undefined)}
+          >
+            <Icon name="RiLogoutBoxRLine" />
+            {t('main.profile.button.sign-out-everywhere')}
           </Button>
           <Button
             form="profileInfo"

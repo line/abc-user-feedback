@@ -138,6 +138,25 @@ export class UserService {
     return user;
   }
 
+  /** Returns null instead of throwing, for token validation. */
+  async findTokenOwnerById(id: number) {
+    return await this.userRepo.findOne({
+      where: { id },
+      select: {
+        id: true,
+        email: true,
+        type: true,
+        state: true,
+        tokenVersion: true,
+      },
+    });
+  }
+
+  /** Revokes every access and refresh token issued to the user so far. */
+  async revokeTokens(id: number) {
+    await this.userRepo.increment({ id }, 'tokenVersion', 1);
+  }
+
   @Transactional()
   async deleteById(id: number) {
     const user = new UserEntity();
@@ -149,7 +168,12 @@ export class UserService {
   async updateUser(dto: UpdateUserDto) {
     const { userId } = dto;
     const user = await this.findById(userId);
-    await this.userRepo.save(Object.assign(user, dto));
+    // Tokens carry the user type, so a type change must not leave old tokens valid.
+    const tokenVersion =
+      dto.type && dto.type !== user.type ?
+        user.tokenVersion + 1
+      : user.tokenVersion;
+    await this.userRepo.save(Object.assign(user, dto, { tokenVersion }));
   }
 
   @Transactional()

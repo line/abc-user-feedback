@@ -18,9 +18,7 @@ import { Trans } from 'next-i18next';
 import { env } from '@/env';
 
 type I18nKey =
-  | 'help-card.image-config'
-  | 'help-card.webhook'
-  | 'help-card.api-key';
+  'help-card.image-config' | 'help-card.webhook' | 'help-card.api-key';
 
 const urlMap: Record<I18nKey, string> = {
   'help-card.api-key': `${env.NEXT_PUBLIC_API_BASE_URL}/docs/redoc`,

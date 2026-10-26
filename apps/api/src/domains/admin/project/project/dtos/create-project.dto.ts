@@ -29,6 +29,7 @@ export class CreateProjectDto {
   }[];
   apiKeys?: {
     value: string;
+    expiresAt?: Date | null;
     createdAt?: Date;
     deletedAt?: Date;
   }[];

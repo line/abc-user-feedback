@@ -156,7 +156,7 @@ export class AIClient {
     this.apiKey = config.apiKey;
     this.baseUrl = config.baseUrl;
 
-    let baseURL = '';
+    let baseURL: string;
     let headers = {};
 
     if (this.provider === AIProvidersEnum.OPEN_AI) {
@@ -192,7 +192,9 @@ export class AIClient {
         throw new Error(`Invalid API key for ${this.provider}`);
       }
     } catch (error) {
-      throw new Error(`Invalid API key for ${this.provider}: ${error}`);
+      throw new Error(`Invalid API key for ${this.provider}: ${error}`, {
+        cause: error,
+      });
     }
   }
 
@@ -205,7 +207,7 @@ export class AIClient {
         response = await this.axiosInstance.get(endpoint);
         return response.data.data.map((model: Model) => ({
           id: model.id,
-        })) as { id: string }[];
+        }));
       } else {
         response = await this.axiosInstance.get(endpoint, {
           params: { key: this.apiKey },
@@ -215,7 +217,7 @@ export class AIClient {
         }));
       }
     } catch (error) {
-      throw new Error(`Error fetching model list: ${error}`);
+      throw new Error(`Error fetching model list: ${error}`, { cause: error });
     }
   }
 
@@ -244,7 +246,7 @@ export class AIClient {
   }
 
   async executePromptInternal(params: PromptParameters): Promise<PromptResult> {
-    let response: ExecutePromptResponse = {} as ExecutePromptResponse;
+    let response: ExecutePromptResponse;
     try {
       const systemPrompt = getRefinedSystemPrompt(
         params.systemPrompt,
@@ -343,7 +345,7 @@ export class AIClient {
   }
 
   async executeIssueRecommend(params: IssueRecommendParameters) {
-    let response: ExecutePromptResponse = {} as ExecutePromptResponse;
+    let response: ExecutePromptResponse;
     try {
       const systemPrompt = getRefinedSystemPrompt(
         params.systemPrompt,

@@ -15,6 +15,7 @@
  */
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
 
 import { Button, toast } from '@ufb/react';
@@ -29,7 +30,11 @@ import {
   usePermissions,
 } from '@/shared';
 import type { ApiKeyUpdateType } from '@/entities/api-key';
-import { ApiKeyTable } from '@/entities/api-key';
+import {
+  ApiKeyCreatedDialog,
+  ApiKeyTable,
+  CreateApiKeyDialog,
+} from '@/entities/api-key';
 
 interface IProps {
   projectId: number;
@@ -39,6 +44,7 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const perms = usePermissions(projectId);
+  const overlay = useOverlay();
 
   const { data, refetch, status } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/api-keys',
@@ -100,12 +106,31 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
     path: '/api/admin/projects/{projectId}/api-keys',
     pathParams: { projectId },
     queryOptions: {
-      onSuccess: async () => {
+      onSuccess: async (data) => {
         await refetch();
-        toast.success(t('v2.toast.success'));
+        if (!data) return;
+        // The raw key is returned only by this response, so show it now.
+        overlay.open(({ close, isOpen }) => (
+          <ApiKeyCreatedDialog
+            close={close}
+            isOpen={isOpen}
+            value={data.value}
+          />
+        ));
       },
     },
   });
+
+  const openCreateDialog = () =>
+    overlay.open(({ close, isOpen }) => (
+      <CreateApiKeyDialog
+        close={close}
+        isOpen={isOpen}
+        onSubmit={async ({ expiresAt }) => {
+          await createApiKey({ value: undefined, expiresAt });
+        }}
+      />
+    ));
 
   const UpdateMutation: Record<
     ApiKeyUpdateType,
@@ -123,7 +148,7 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
           className="min-w-[120px]"
           disabled={!perms.includes('project_apikey_create')}
           loading={isPending}
-          onClick={() => createApiKey({ value: undefined })}
+          onClick={openCreateDialog}
         >
           {t('v2.button.name.create', { name: 'API Key' })}
         </Button>
@@ -141,7 +166,7 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
           <Button
             disabled={!perms.includes('project_apikey_create')}
             loading={isPending}
-            onClick={() => createApiKey({ value: undefined })}
+            onClick={openCreateDialog}
           >
             {t('v2.button.create')}
           </Button>

@@ -15,9 +15,7 @@
  */
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class ChangeAiFieldTemplateForeignKey1753082397344
-  implements MigrationInterface
-{
+export class ChangeAiFieldTemplateForeignKey1753082397344 implements MigrationInterface {
   name = 'ChangeAiFieldTemplateForeignKey1753082397344';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

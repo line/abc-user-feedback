@@ -291,9 +291,7 @@ describe('AuthController', () => {
   describe('signUpOAuthUser', () => {
     it('should sign up OAuth user successfully', async () => {
       const dto = new OAuthUserSignUpRequestDto();
-      dto.email = faker.internet.email();
-      dto.projectName = faker.company.name();
-      dto.roleName = faker.person.jobTitle();
+      dto.code = faker.string.alphanumeric(20);
 
       authService.signUpOAuthUser.mockResolvedValue(undefined);
 
@@ -306,9 +304,7 @@ describe('AuthController', () => {
 
     it('should handle OAuth provider error', async () => {
       const dto = new OAuthUserSignUpRequestDto();
-      dto.email = faker.internet.email();
-      dto.projectName = faker.company.name();
-      dto.roleName = faker.person.jobTitle();
+      dto.code = faker.string.alphanumeric(20);
       const error = new InternalServerErrorException('OAuth provider error');
 
       authService.signUpOAuthUser.mockRejectedValue(error);

@@ -32,13 +32,17 @@ const InputApiKeyStep: React.FC<IProps> = () => {
   const { t } = useTranslation();
 
   const createApiKey = () => {
+    const value = randomBytes(10).toString('hex').toUpperCase();
     onChangeInput(
       'apiKeys',
       input.apiKeys.concat({
         id: (input.apiKeys[input.apiKeys.length - 1]?.id ?? 0) + 1,
-        value: randomBytes(10).toString('hex').toUpperCase(),
+        prefix: value.slice(0, 4),
+        // Shown until the project is created; afterwards only the prefix is.
+        value,
         createdAt: new Date().toISOString(),
         deletedAt: null,
+        expiresAt: null,
       }),
     );
   };

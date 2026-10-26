@@ -49,9 +49,9 @@ const LineChart: React.FC<IProps> = (props) => {
           vertical={false}
           stroke="var(--border-neutral-tertiary)"
         />
-        <Tooltip<number, string>
+        <Tooltip
           content={(props) => <CustomTooltip {...props} />}
-          formatter={(value) => value.toLocaleString()}
+          formatter={(value) => value?.toLocaleString()}
         />
         <XAxis
           dataKey="date"
@@ -97,7 +97,7 @@ const LineChart: React.FC<IProps> = (props) => {
   );
 };
 
-interface ICustomTooltipProps extends TooltipContentProps<number, string> {}
+type ICustomTooltipProps = TooltipContentProps;
 
 const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
   const { active, payload, label } = props;

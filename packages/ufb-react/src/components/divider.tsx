@@ -75,8 +75,9 @@ const dividerVariants = cva('divider', {
   },
 });
 
-interface DividerProps
-  extends React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root> {
+interface DividerProps extends React.ComponentPropsWithoutRef<
+  typeof SeparatorPrimitive.Root
+> {
   variant?: 'bold' | 'subtle';
   indent?: 0 | 8 | 16 | 24;
 }

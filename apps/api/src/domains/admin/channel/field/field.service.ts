@@ -71,7 +71,7 @@ export class FieldService {
               search_analyzer: 'ngram_analyzer',
             },
           },
-        } as Property;
+        };
       } else if (field.format === FieldFormatEnum.date) {
         property = {
           type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],

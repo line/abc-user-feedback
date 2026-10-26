@@ -65,6 +65,7 @@ export class UserPasswordService {
     return await this.userRepo.save(
       Object.assign(user, {
         hashPassword: await this.createHashPassword(password),
+        tokenVersion: user.tokenVersion + 1,
       }),
     );
   }
@@ -85,6 +86,7 @@ export class UserPasswordService {
     return await this.userRepo.save(
       Object.assign(user, {
         hashPassword: await this.createHashPassword(newPassword),
+        tokenVersion: user.tokenVersion + 1,
       }),
     );
   }

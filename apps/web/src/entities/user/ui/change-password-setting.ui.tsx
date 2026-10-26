@@ -27,10 +27,15 @@ import {
   useWarnIfUnsavedChanges,
 } from '@/shared';
 import type { ChangePassword } from '@/entities/user';
-import { ChangePasswordForm, changePasswordSchema } from '@/entities/user';
+import {
+  ChangePasswordForm,
+  changePasswordSchema,
+  useUserStore,
+} from '@/entities/user';
 
 const ChangePasswordSetting = () => {
   const { t } = useTranslation();
+  const { signOut } = useUserStore();
 
   const methods = useForm<ChangePassword>({
     resolver: zodResolver(changePasswordSchema),
@@ -42,9 +47,11 @@ const ChangePasswordSetting = () => {
     method: 'post',
     path: '/api/admin/users/password/change',
     queryOptions: {
-      onSuccess() {
-        toast.success(t('v2.toast.success'));
+      async onSuccess() {
         methods.reset();
+        // Changing the password revokes every issued token, including this session's.
+        toast.success(t('main.profile.password-changed'));
+        await signOut();
       },
       onError(error) {
         if (error.code === ErrorCode.User.InvalidPassword) {

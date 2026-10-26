@@ -15,9 +15,7 @@
  */
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class DeleteUnusedTenantColumns1732588643312
-  implements MigrationInterface
-{
+export class DeleteUnusedTenantColumns1732588643312 implements MigrationInterface {
   name = 'DeleteUnusedTenantColumns1732588643312';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

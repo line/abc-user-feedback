@@ -13,18 +13,22 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, JwtFromRequestFunction, Strategy } from 'passport-jwt';
 
 import type { UserTypeEnum } from '@/domains/admin/user/entities/enums';
+import { UserService } from '@/domains/admin/user/user.service';
 import type { ConfigServiceType } from '@/types/config-service.type';
+import { findCurrentTokenUser } from './token-version';
 
 interface IPayload {
   sub: string;
   email: string;
   type: UserTypeEnum;
+  tokenType?: 'access' | 'refresh';
+  tokenVersion?: number;
   iat: number;
   exp: number;
 }
@@ -37,7 +41,10 @@ interface StrategyOptions {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(configService: ConfigService<ConfigServiceType>) {
+  constructor(
+    configService: ConfigService<ConfigServiceType>,
+    private readonly userService: UserService,
+  ) {
     const { secret } = configService.get('jwt', { infer: true }) ?? {};
 
     super({
@@ -47,8 +54,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     } as StrategyOptions);
   }
 
-  validate(payload: IPayload) {
-    const { email, sub, type } = payload;
-    return { id: sub, email, type };
+  async validate(payload: IPayload) {
+    // Refresh tokens are signed with the same secret; they must not work as access tokens.
+    if (payload.tokenType !== 'access') {
+      throw new UnauthorizedException('Invalid token type');
+    }
+    const { email, type } = await findCurrentTokenUser(
+      this.userService,
+      payload,
+    );
+    return { id: payload.sub, email, type };
   }
 }

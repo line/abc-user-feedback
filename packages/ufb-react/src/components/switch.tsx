@@ -36,8 +36,9 @@ const switchVariants = cva('switch', {
   },
 });
 
-interface SwitchProps
-  extends React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> {
+interface SwitchProps extends React.ComponentPropsWithoutRef<
+  typeof SwitchPrimitives.Root
+> {
   color?: Color;
 }
 

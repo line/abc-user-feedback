@@ -35,13 +35,13 @@ import {
 } from '@/domains/admin/auth/dtos/requests';
 import { SetupTenantRequestDto } from '@/domains/admin/tenant/dtos/requests';
 import { TenantService } from '@/domains/admin/tenant/tenant.service';
-import { clearAllEntities } from '@/test-utils/util-functions';
+import { clearAllEntities, signInTestUser } from '@/test-utils/util-functions';
 
 describe('AuthController (integration)', () => {
   let app: INestApplication;
 
-  let _dataSource: DataSource;
-  let _authService: AuthService;
+  let dataSource: DataSource;
+  let authService: AuthService;
   let tenantService: TenantService;
   let configService: ConfigService;
   let opensearchRepository: OpensearchRepository;
@@ -55,8 +55,8 @@ describe('AuthController (integration)', () => {
     app = module.createNestApplication();
     await app.init();
 
-    _dataSource = module.get(getDataSourceToken());
-    _authService = module.get(AuthService);
+    dataSource = module.get(getDataSourceToken());
+    authService = module.get(AuthService);
     tenantService = module.get(TenantService);
     configService = module.get(ConfigService);
     opensearchRepository = module.get(OpensearchRepository);
@@ -220,6 +220,45 @@ describe('AuthController (integration)', () => {
         .post('/admin/auth/signUp/invitation')
         .send(dto)
         .expect(404);
+    });
+  });
+
+  describe('/admin/auth/signOut/all (POST)', () => {
+    it('revokes the access and refresh tokens issued so far', async () => {
+      const { jwt, user } = await signInTestUser(dataSource, authService);
+      const server = app.getHttpServer() as Server;
+
+      await request(server)
+        .get(`/admin/users/${user.id}`)
+        .set('Authorization', `Bearer ${jwt.accessToken}`)
+        .expect(200);
+
+      await request(server)
+        .post('/admin/auth/signOut/all')
+        .set('Authorization', `Bearer ${jwt.accessToken}`)
+        .expect(204);
+
+      await request(server)
+        .get(`/admin/users/${user.id}`)
+        .set('Authorization', `Bearer ${jwt.accessToken}`)
+        .expect(401);
+      await request(server)
+        .get('/admin/auth/refresh')
+        .set('Authorization', `Bearer ${jwt.refreshToken}`)
+        .expect(401);
+
+      // Signing in again issues tokens with the new version.
+      const newJwt = await authService.signIn(user);
+      await request(server)
+        .get(`/admin/users/${user.id}`)
+        .set('Authorization', `Bearer ${newJwt.accessToken}`)
+        .expect(200);
+    });
+
+    it('returns 401 without a token', async () => {
+      await request(app.getHttpServer() as Server)
+        .post('/admin/auth/signOut/all')
+        .expect(401);
     });
   });
 

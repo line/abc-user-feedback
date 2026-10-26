@@ -12,8 +12,18 @@
       "profile-info": "个人信息",
       "change-password": "更改密码",
       "button": {
-        "delete-account": "删除账户"
-      }
+        "delete-account": "删除账户",
+        "sign-out-everywhere": "在所有设备上退出"
+      },
+      "signed-out-everywhere": "已退出所有会话。",
+      "password-changed": "密码已更改，请重新登录。"
+    },
+    "api-key": {
+      "created-title": "API Key 已创建",
+      "created-description": "请立即复制此密钥。出于安全考虑，它将不会再次显示。",
+      "expiry": "有效期",
+      "never": "永不过期",
+      "days": "{{count}} 天"
     },
     "feedback": {
       "issue-cell": {
