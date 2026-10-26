@@ -17,7 +17,8 @@ import { z } from 'zod';
 
 const oauthInputConfigSchema = z.object({
   clientId: z.string().trim(),
-  clientSecret: z.string().trim(),
+  // Never returned by the API; leave empty to keep the stored secret.
+  clientSecret: z.string().trim().optional(),
   authCodeRequestURL: z.string().trim(),
   scopeString: z.string().trim(),
   accessTokenRequestURL: z.string().trim(),
@@ -27,7 +28,6 @@ const oauthInputConfigSchema = z.object({
 
 const oauthInputRequiredConfigSchema = oauthInputConfigSchema.extend({
   clientId: z.string().trim().min(1),
-  clientSecret: z.string().trim().min(1),
   authCodeRequestURL: z.string().trim().min(1),
   scopeString: z.string().trim().min(1),
   accessTokenRequestURL: z.string().trim().min(1),

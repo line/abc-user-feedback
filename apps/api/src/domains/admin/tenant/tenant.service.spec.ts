@@ -14,6 +14,7 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
+import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ClsModule } from 'nestjs-cls';
@@ -165,6 +166,40 @@ describe('TenantService', () => {
       expect(tenant.oauthConfig).toEqual(dto.oauthConfig);
       expect(tenantRepo.save).toHaveBeenCalledWith(
         expect.objectContaining(dto),
+      );
+    });
+
+    it('update keeps the stored client secret when none is provided', async () => {
+      const storedSecret = faker.string.alphanumeric(30);
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
+        {
+          ...tenantFixture,
+          oauthConfig: { ...dto.oauthConfig, clientSecret: storedSecret },
+        } as TenantEntity,
+      ]);
+      jest
+        .spyOn(tenantRepo, 'save')
+        .mockImplementation((tenant) =>
+          Promise.resolve(tenant as TenantEntity),
+        );
+      Object.assign(dto.oauthConfig ?? {}, { clientSecret: '' });
+
+      const tenant = await tenantService.update(dto);
+
+      expect(tenant.oauthConfig?.clientSecret).toEqual(storedSecret);
+    });
+
+    it('update fails when OAuth is enabled without any client secret', async () => {
+      jest
+        .spyOn(tenantRepo, 'find')
+        .mockResolvedValue([
+          { ...tenantFixture, oauthConfig: null } as TenantEntity,
+        ]);
+      dto.useOAuth = true;
+      Object.assign(dto.oauthConfig ?? {}, { clientSecret: undefined });
+
+      await expect(tenantService.update(dto)).rejects.toThrow(
+        BadRequestException,
       );
     });
 

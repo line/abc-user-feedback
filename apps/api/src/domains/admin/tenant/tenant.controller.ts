@@ -22,11 +22,10 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@/domains/admin/auth/guards';
+import { SuperUser } from '@/domains/admin/user/super-user.decorator';
 import { SetupTenantRequestDto, UpdateTenantRequestDto } from './dtos/requests';
 import {
   CountFeedbacksByTenantIdResponseDto,
@@ -44,7 +43,7 @@ export class TenantController {
     await this.tenantService.create(body);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @SuperUser()
   @Put()
   @HttpCode(204)
   async update(@Body() body: UpdateTenantRequestDto) {

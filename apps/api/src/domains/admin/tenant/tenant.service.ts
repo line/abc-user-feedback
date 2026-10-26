@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -38,6 +38,7 @@ import {
   TenantAlreadyExistsException,
   TenantNotFoundException,
 } from './exceptions';
+import type { OAuthConfig } from './tenant.entity';
 import { TenantEntity } from './tenant.entity';
 
 @Injectable()
@@ -84,7 +85,25 @@ export class TenantService {
   @Transactional()
   async update(dto: UpdateTenantDto) {
     const tenant = await this.findOne();
-    return await this.tenantRepo.save(Object.assign(tenant, dto));
+    const { oauthConfig, ...rest } = dto;
+
+    let nextOAuthConfig: OAuthConfig | null = null;
+    if (oauthConfig) {
+      // The secret is never sent to clients, so an empty value keeps the stored one.
+      const { clientSecret: providedSecret = '' } = oauthConfig;
+      const clientSecret =
+        providedSecret.length > 0 ?
+          providedSecret
+        : (tenant.oauthConfig?.clientSecret ?? '');
+      if (dto.useOAuth && !clientSecret) {
+        throw new BadRequestException('OAuth client secret is required.');
+      }
+      nextOAuthConfig = { ...oauthConfig, clientSecret };
+    }
+
+    return await this.tenantRepo.save(
+      Object.assign(tenant, { ...rest, oauthConfig: nextOAuthConfig }),
+    );
   }
 
   async findOne() {

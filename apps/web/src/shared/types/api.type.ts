@@ -1446,7 +1446,7 @@ export interface components {
     LoginButtonTypeEnum: 'CUSTOM' | 'GOOGLE';
     OAuthConfigRequestDto: {
       clientId: string;
-      clientSecret: string;
+      clientSecret?: string;
       authCodeRequestURL: string;
       scopeString: string;
       accessTokenRequestURL: string;
@@ -1466,7 +1466,6 @@ export interface components {
     OAuthConfigResponseDto: {
       oauthUse: boolean;
       clientId: string;
-      clientSecret: string;
       authCodeRequestURL: string;
       scopeString: string;
       accessTokenRequestURL: string;
