@@ -108,6 +108,7 @@
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
     "eslint": "catalog:",
+    "globals": "^16.5.0",
     "jest": "^30.3.0",
     "mockdate": "^3.0.5",
     "prettier": "catalog:",
