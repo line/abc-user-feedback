@@ -18,13 +18,17 @@
 
 import { faker } from '@faker-js/faker';
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { AxiosResponse } from 'axios';
 import { AxiosError } from 'axios';
 import { ClsModule } from 'nestjs-cls';
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import type { Repository } from 'typeorm';
 
 import { CodeEntity } from '@/shared/code/code.entity';
@@ -268,18 +272,31 @@ describe('auth service ', () => {
   });
 
   describe('signUpOAuthUser', () => {
-    const mockIdP = (email: string | undefined) => {
+    const mockIdP = (email: string) => {
       const getAccessToken = jest
         .spyOn(authService as any, 'getAccessToken')
         .mockResolvedValue('access-token');
       jest
         .spyOn(authService as any, 'getEmailByAccessToken')
-        .mockImplementation(() =>
-          email ?
-            Promise.resolve(email)
-          : Promise.reject(new BadRequestException()),
-        );
+        .mockResolvedValue(email);
       return { getAccessToken };
+    };
+
+    const mockTokenEndpointError = (data: { error: string }) => {
+      tenantRepo.setUseOAuth(true, {
+        clientId: 'id',
+        clientSecret: 'secret',
+        accessTokenRequestURL: 'https://idp.example.com/token',
+      });
+      jest.spyOn(httpService, 'post').mockReturnValue(
+        throwError(
+          () =>
+            new AxiosError(data.error, '400', undefined, undefined, {
+              status: 400,
+              data,
+            } as AxiosResponse),
+        ),
+      );
     };
 
     it('signing up by OAuth creates a user with the email from the IdP', async () => {
@@ -309,7 +326,21 @@ describe('auth service ', () => {
     });
 
     it('signing up by OAuth fails when the IdP does not return an email', async () => {
-      mockIdP(undefined);
+      tenantRepo.setUseOAuth(true, {
+        clientId: 'id',
+        clientSecret: 'secret',
+        accessTokenRequestURL: 'https://idp.example.com/token',
+        userProfileRequestURL: 'https://idp.example.com/me',
+        emailKey: 'email',
+      });
+      jest
+        .spyOn(httpService, 'post')
+        .mockReturnValue(
+          of({ data: { access_token: 'access-token' } } as AxiosResponse),
+        );
+      jest
+        .spyOn(httpService, 'get')
+        .mockReturnValue(of({ data: { name: 'no email' } } as AxiosResponse));
       const dto = new SignUpOauthUserDto();
       dto.code = faker.string.alphanumeric(20);
       jest.spyOn(userRepo, 'save');
@@ -321,25 +352,22 @@ describe('auth service ', () => {
     });
 
     it('signing up by OAuth returns 400 when the IdP rejects the code', async () => {
-      tenantRepo.setUseOAuth(true, {
-        clientId: 'id',
-        clientSecret: 'secret',
-        accessTokenRequestURL: 'https://idp.example.com/token',
-      });
-      jest.spyOn(httpService, 'post').mockReturnValue(
-        throwError(
-          () =>
-            new AxiosError('invalid_grant', '400', undefined, undefined, {
-              status: 400,
-              data: { error: 'invalid_grant' },
-            } as AxiosResponse),
-        ),
-      );
+      mockTokenEndpointError({ error: 'invalid_grant' });
       const dto = new SignUpOauthUserDto();
       dto.code = faker.string.alphanumeric(20);
 
       await expect(authService.signUpOAuthUser(dto)).rejects.toThrow(
         BadRequestException,
+      );
+    });
+
+    it('signing up by OAuth keeps other token endpoint 400s as server errors', async () => {
+      mockTokenEndpointError({ error: 'unsupported_grant_type' });
+      const dto = new SignUpOauthUserDto();
+      dto.code = faker.string.alphanumeric(20);
+
+      await expect(authService.signUpOAuthUser(dto)).rejects.toThrow(
+        InternalServerErrorException,
       );
     });
   });

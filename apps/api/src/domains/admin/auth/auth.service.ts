@@ -291,8 +291,18 @@ export class AuthService {
         .pipe(
           catchError((error: Error) => {
             // RFC 6749 §5.2: an expired, reused or forged code is a 400
-            // (invalid_grant), which is the caller's fault, not ours.
-            if (error instanceof AxiosError && error.response?.status === 400) {
+            // invalid_grant, which is the caller's fault. Other 400 errors
+            // (invalid_request, unsupported_grant_type, ...) point at our
+            // token request or IdP config, so they stay server errors.
+            const idpError = (
+              error instanceof AxiosError ?
+                error.response?.data
+              : undefined) as { error?: string } | undefined;
+            if (
+              error instanceof AxiosError &&
+              error.response?.status === 400 &&
+              idpError?.error === 'invalid_grant'
+            ) {
               throw new BadRequestException(
                 'Invalid or expired authorization code.',
               );
