@@ -262,40 +262,56 @@ describe('auth service ', () => {
   });
 
   describe('signUpOAuthUser', () => {
-    it('signing up by OAuth succeeds with valid inputs', async () => {
+    const mockIdP = (email: string | undefined) => {
+      const getAccessToken = jest
+        .spyOn(authService as any, 'getAccessToken')
+        .mockResolvedValue('access-token');
+      jest
+        .spyOn(authService as any, 'getEmailByAccessToken')
+        .mockImplementation(() =>
+          email ?
+            Promise.resolve(email)
+          : Promise.reject(new BadRequestException()),
+        );
+      return { getAccessToken };
+    };
+
+    it('signing up by OAuth creates a user with the email from the IdP', async () => {
+      const email = faker.internet.email();
+      const { getAccessToken } = mockIdP(email);
       const dto = new SignUpOauthUserDto();
-      dto.email = faker.internet.email();
-      dto.projectName = faker.company.name();
-      dto.roleName = faker.person.jobTitle();
+      dto.code = faker.string.alphanumeric(20);
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
       jest.spyOn(userRepo, 'save').mockResolvedValue(new UserEntity());
 
       await authService.signUpOAuthUser(dto);
 
-      expect(userRepo.save).toHaveBeenCalled();
+      expect(getAccessToken).toHaveBeenCalledWith(dto.code);
+      expect(userRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({ email }),
+      );
     });
 
     it('signing up by OAuth fails with existing user', async () => {
+      mockIdP(emailFixture);
       const dto = new SignUpOauthUserDto();
-      dto.email = emailFixture;
-      dto.projectName = faker.company.name();
-      dto.roleName = faker.person.jobTitle();
+      dto.code = faker.string.alphanumeric(20);
 
       await expect(authService.signUpOAuthUser(dto)).rejects.toThrow(
         UserAlreadyExistsException,
       );
     });
 
-    it('signing up by OAuth succeeds with empty project and role', async () => {
+    it('signing up by OAuth fails when the IdP does not return an email', async () => {
+      mockIdP(undefined);
       const dto = new SignUpOauthUserDto();
-      dto.email = faker.internet.email();
-      dto.projectName = '';
-      dto.roleName = '';
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+      dto.code = faker.string.alphanumeric(20);
+      jest.spyOn(userRepo, 'save');
 
-      const result = await authService.signUpOAuthUser(dto);
-
-      expect(result).toBeUndefined();
+      await expect(authService.signUpOAuthUser(dto)).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(userRepo.save).not.toHaveBeenCalled();
     });
   });
 

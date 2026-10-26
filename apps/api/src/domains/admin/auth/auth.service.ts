@@ -38,7 +38,6 @@ import { CodeTypeEnum } from '../../../shared/code/code-type.enum';
 import { CodeService } from '../../../shared/code/code.service';
 import { ApiKeyService } from '../project/api-key/api-key.service';
 import { MemberService } from '../project/member/member.service';
-import { RoleService } from '../project/role/role.service';
 import { TenantService } from '../tenant/tenant.service';
 import { CreateUserService } from '../user/create-user.service';
 import { UserDto } from '../user/dtos';
@@ -80,7 +79,6 @@ export class AuthService {
     private readonly codeService: CodeService,
     private readonly apiKeyService: ApiKeyService,
     private readonly tenantService: TenantService,
-    private readonly roleService: RoleService,
     private readonly memberService: MemberService,
     private readonly configService: ConfigService<ConfigServiceType>,
     private readonly httpService: HttpService,
@@ -175,17 +173,13 @@ export class AuthService {
   }
 
   @Transactional()
-  async signUpOAuthUser(dto: SignUpOauthUserDto) {
-    const { email, projectName, roleName } = dto;
+  async signUpOAuthUser({ code }: SignUpOauthUserDto) {
+    // The email must come from the IdP, never from the request body. Project
+    // roles are not granted here; admins assign them through member management.
+    const accessToken = await this.getAccessToken(code);
+    const email = await this.getEmailByAccessToken(accessToken);
 
-    const user = await this.createUserService.createOAuthUser({ email });
-    if (!projectName || !roleName) return;
-    const role = await this.roleService.findByProjectNameAndRoleName(
-      projectName,
-      roleName,
-    );
-
-    await this.memberService.create({ roleId: role.id, userId: user.id });
+    await this.createUserService.createOAuthUser({ email });
   }
 
   async signIn(user: UserDto): Promise<JwtDto> {
@@ -315,7 +309,7 @@ export class AuthService {
     if (!oauthConfig) {
       throw new BadRequestException('OAuth Config is required.');
     }
-    return await lastValueFrom<string>(
+    const email = await lastValueFrom<string | undefined>(
       this.httpService
         .get<UserProfileResponse>(oauthConfig.userProfileRequestURL, {
           headers: { Authorization: `Bearer ${accessToken}` },
@@ -335,6 +329,10 @@ export class AuthService {
           }),
         ),
     );
+    if (!email) {
+      throw new BadRequestException('Email not found in the OAuth profile.');
+    }
+    return email;
   }
 
   async signInByOAuth(code: string) {

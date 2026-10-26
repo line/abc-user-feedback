@@ -14,20 +14,14 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class OAuthUserSignUpRequestDto {
-  @ApiProperty()
-  @IsEmail()
-  email: string;
-
-  @ApiProperty()
+  @ApiProperty({
+    description:
+      'Authorization code issued by the IdP. The email is taken from the IdP profile.',
+  })
   @IsString()
-  @IsOptional()
-  projectName: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  roleName: string;
+  @IsNotEmpty()
+  code: string;
 }

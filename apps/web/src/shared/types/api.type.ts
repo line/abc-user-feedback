@@ -1260,9 +1260,8 @@ export interface components {
       email: string;
     };
     OAuthUserSignUpRequestDto: {
-      email: string;
-      projectName: string;
-      roleName: string;
+      /** @description Authorization code issued by the IdP. The email is taken from the IdP profile. */
+      code: string;
     };
     EmailUserSignInRequestDto: {
       email: string | null;
