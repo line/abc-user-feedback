@@ -89,8 +89,9 @@ const dialogContentVariants = cva('dialog-content', {
   },
 });
 
-interface DialogContentProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
+interface DialogContentProps extends React.ComponentPropsWithoutRef<
+  typeof DialogPrimitive.Content
+> {
   radius?: Radius;
 }
 

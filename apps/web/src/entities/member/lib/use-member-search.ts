@@ -24,11 +24,10 @@ type TData = OAIMutationResponse<
   'post'
 >;
 
-interface IBody
-  extends OAIRequestBody<
-    '/api/admin/projects/{projectId}/members/search',
-    'post'
-  > {}
+interface IBody extends OAIRequestBody<
+  '/api/admin/projects/{projectId}/members/search',
+  'post'
+> {}
 
 const useMembmerSearch = (
   projectId: number,

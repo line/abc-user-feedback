@@ -185,8 +185,7 @@ const MultiSelect = React.forwardRef<HTMLDivElement, MultiSelectProps>(
   },
 );
 
-interface MultiSelectTriggerProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface MultiSelectTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }
 
@@ -219,8 +218,7 @@ const MultiSelectTrigger = React.forwardRef<
   );
 });
 
-interface MultiSelectTriggerButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface MultiSelectTriggerButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   children?: React.ReactNode;
 }

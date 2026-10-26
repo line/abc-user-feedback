@@ -54,8 +54,9 @@ const checkVariants = cva('check', {
   defaultVariants,
 });
 
-interface CheckboxProps
-  extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
+interface CheckboxProps extends React.ComponentPropsWithoutRef<
+  typeof CheckboxPrimitive.Root
+> {
   size?: Size;
 }
 

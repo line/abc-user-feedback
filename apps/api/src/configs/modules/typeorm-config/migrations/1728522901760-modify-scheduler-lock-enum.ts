@@ -15,9 +15,7 @@
  */
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class ModifySchedulerLockEnum1728522901760
-  implements MigrationInterface
-{
+export class ModifySchedulerLockEnum1728522901760 implements MigrationInterface {
   name = 'ModifySchedulerLockEnum1728522901760';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

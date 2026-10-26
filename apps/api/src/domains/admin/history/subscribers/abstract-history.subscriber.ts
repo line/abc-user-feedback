@@ -31,9 +31,9 @@ import { HistoryActionEnum } from '../history-action.enum';
 import { EntityNameEnum } from '../history-entity.enum';
 import { HistoryService } from '../history.service';
 
-export abstract class AbstractHistorySubscriber<T extends CommonEntity>
-  implements EntitySubscriberInterface<T>
-{
+export abstract class AbstractHistorySubscriber<
+  T extends CommonEntity,
+> implements EntitySubscriberInterface<T> {
   constructor(
     @InjectDataSource() dataSource: DataSource,
     readonly cls: ClsService,

@@ -80,8 +80,7 @@ const useIssueQueryConverter = (input: {
     const dateQuery = defaultQueries.find((v) => v.key === 'createdAt');
 
     const createdAt = dateQuery?.value as
-      | { gte: string; lt: string }
-      | undefined;
+      { gte: string; lt: string } | undefined;
 
     return createdAt ?
         {
