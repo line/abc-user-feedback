@@ -172,10 +172,11 @@ export class AuthService {
     });
   }
 
-  @Transactional()
   async signUpOAuthUser({ code }: SignUpOauthUserDto) {
     // The email must come from the IdP, never from the request body. Project
     // roles are not granted here; admins assign them through member management.
+    // No @Transactional() here: it would hold a DB connection during the IdP
+    // calls. createUser() runs in its own transaction.
     const accessToken = await this.getAccessToken(code);
     const email = await this.getEmailByAccessToken(accessToken);
 
@@ -289,6 +290,13 @@ export class AuthService {
         )
         .pipe(
           catchError((error: Error) => {
+            // RFC 6749 §5.2: an expired, reused or forged code is a 400
+            // (invalid_grant), which is the caller's fault, not ours.
+            if (error instanceof AxiosError && error.response?.status === 400) {
+              throw new BadRequestException(
+                'Invalid or expired authorization code.',
+              );
+            }
             if (error instanceof AxiosError) {
               throw new InternalServerErrorException({
                 axiosError: {

@@ -17,10 +17,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 import { faker } from '@faker-js/faker';
+import { HttpService } from '@nestjs/axios';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import type { AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { ClsModule } from 'nestjs-cls';
+import { throwError } from 'rxjs';
 import type { Repository } from 'typeorm';
 
 import { CodeEntity } from '@/shared/code/code.entity';
@@ -71,12 +75,14 @@ describe('auth service ', () => {
   let tenantRepo: TenantRepositoryStub;
   let codeRepo: CodeRepositoryStub;
   let apiKeyRepo: Repository<ApiKeyEntity>;
+  let httpService: HttpService;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig, ClsModule.forRoot()],
       providers: AuthServiceProviders,
     }).compile();
     authService = module.get(AuthService);
+    httpService = module.get(HttpService);
     userRepo = module.get(getRepositoryToken(UserEntity));
     tenantRepo = module.get(getRepositoryToken(TenantEntity));
     codeRepo = module.get(getRepositoryToken(CodeEntity));
@@ -312,6 +318,29 @@ describe('auth service ', () => {
         BadRequestException,
       );
       expect(userRepo.save).not.toHaveBeenCalled();
+    });
+
+    it('signing up by OAuth returns 400 when the IdP rejects the code', async () => {
+      tenantRepo.setUseOAuth(true, {
+        clientId: 'id',
+        clientSecret: 'secret',
+        accessTokenRequestURL: 'https://idp.example.com/token',
+      });
+      jest.spyOn(httpService, 'post').mockReturnValue(
+        throwError(
+          () =>
+            new AxiosError('invalid_grant', '400', undefined, undefined, {
+              status: 400,
+              data: { error: 'invalid_grant' },
+            } as AxiosResponse),
+        ),
+      );
+      const dto = new SignUpOauthUserDto();
+      dto.code = faker.string.alphanumeric(20);
+
+      await expect(authService.signUpOAuthUser(dto)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
