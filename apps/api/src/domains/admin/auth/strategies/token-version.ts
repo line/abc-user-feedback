@@ -32,7 +32,7 @@ export async function findCurrentTokenUser(
     throw new UnauthorizedException('Token revoked');
   }
   const user = await userService.findTokenOwnerById(Number(payload.sub));
-  if (!user || user.tokenVersion !== payload.tokenVersion) {
+  if (user?.tokenVersion !== payload.tokenVersion) {
     throw new UnauthorizedException('Token revoked');
   }
   if (user.state === UserStateEnum.Blocked) {
