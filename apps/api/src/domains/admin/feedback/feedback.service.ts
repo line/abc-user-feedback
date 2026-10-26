@@ -366,7 +366,7 @@ export class FeedbackService {
     worksheet.columns = headers;
 
     const pageSize = 1000;
-    let feedbacks: Feedback[] = [];
+    let feedbacks: Feedback[];
     let currentScrollId: string | null = null;
     let page = 1;
     const feedbackIds: number[] = [];
@@ -385,6 +385,7 @@ export class FeedbackService {
           scrollId: currentScrollId,
         });
         feedbacks = data;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- scrollId is any here
         currentScrollId = scrollId as unknown as string;
       } else {
         const { items } = await this.feedbackMySQLService.findByChannelIdV2({
@@ -468,7 +469,7 @@ export class FeedbackService {
     const timezone = project.timezone.name;
 
     const pageSize = 1000;
-    let feedbacks: Record<string, any>[] = [];
+    let feedbacks: Record<string, any>[];
     let currentScrollId: number | null = null;
     let page = 1;
     const feedbackIds: number[] = [];
@@ -560,9 +561,7 @@ export class FeedbackService {
       }
 
       const value: number | string | string[] = data[fieldKey] as
-        | number
-        | string
-        | string[];
+        number | string | string[];
       const field = fields.find((v) => v.key === fieldKey);
 
       if (!field) {
@@ -1013,7 +1012,7 @@ export class FeedbackService {
           return {
             ...file,
             url: `${channel.imageConfig?.endpoint}/${channel.imageConfig?.bucket}/${key}`,
-          } as ImageUrl;
+          };
         }),
       );
       const imageUrlsByKeys: ImageUrlsByKeys = imageUrls.reduce(

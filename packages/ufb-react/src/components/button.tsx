@@ -78,7 +78,8 @@ const buttonLoadingVariants = cva('button-loading', {
 });
 
 interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   variant?: ButtonVariant;
   size?: Size;

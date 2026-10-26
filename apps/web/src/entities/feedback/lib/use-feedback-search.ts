@@ -29,14 +29,13 @@ type TData = OAIMutationResponse<
   'post'
 >;
 
-interface IBody
-  extends Omit<
-    OAIRequestBody<
-      '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
-      'post'
-    >,
-    'queries'
-  > {
+interface IBody extends Omit<
+  OAIRequestBody<
+    '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
+    'post'
+  >,
+  'queries'
+> {
   queries: SearchQuery[];
 }
 

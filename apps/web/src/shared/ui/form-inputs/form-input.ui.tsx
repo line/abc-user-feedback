@@ -28,7 +28,8 @@ import {
 import type { CommonFormItemType } from '@/shared/types';
 
 interface Props
-  extends CommonFormItemType<string | number>,
+  extends
+    CommonFormItemType<string | number>,
     Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'value'> {
   type?: 'text' | 'number';
 }

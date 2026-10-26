@@ -27,12 +27,7 @@ export class FindFeedbacksByChannelIdDto extends PaginationDto {
     updatedAt?: TimeRange;
     ids?: number[];
     [key: string]:
-      | string
-      | string[]
-      | TimeRange
-      | number
-      | number[]
-      | undefined;
+      string | string[] | TimeRange | number | number[] | undefined;
   };
   sort?: Record<string, SortMethodEnum>;
   fields?: FieldEntity[];

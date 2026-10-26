@@ -31,12 +31,7 @@ export class FindIssuesByProjectIdRequestDto extends PaginationRequestDto {
   query?: {
     searchText?: string;
     [key: string]:
-      | string
-      | string[]
-      | TimeRange
-      | number
-      | number[]
-      | undefined;
+      string | string[] | TimeRange | number | number[] | undefined;
   };
 
   @ApiProperty({
