@@ -202,13 +202,13 @@ export class AuthService {
 
     return {
       accessToken: this.jwtService.sign(
-        { sub: id, email, department, name, type },
+        { sub: id, email, department, name, type, tokenType: 'access' },
         {
           expiresIn: (accessTokenExpiredTime ?? '10m') as StringValue | number,
         },
       ),
       refreshToken: this.jwtService.sign(
-        { sub: id, email },
+        { sub: id, email, tokenType: 'refresh' },
         {
           expiresIn: (refreshTokenExpiredTime ?? '1h') as StringValue | number,
         },

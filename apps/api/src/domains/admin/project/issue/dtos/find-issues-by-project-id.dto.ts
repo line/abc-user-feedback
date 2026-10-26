@@ -22,12 +22,7 @@ export class FindIssuesByProjectIdDto extends PaginationDto {
   query?: {
     searchText?: string;
     [key: string]:
-      | string
-      | string[]
-      | TimeRange
-      | number
-      | number[]
-      | undefined;
+      string | string[] | TimeRange | number | number[] | undefined;
   };
   sort?: Record<string, SortMethodEnum>;
 }

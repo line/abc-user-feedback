@@ -30,7 +30,7 @@ interface Props {
 
 const IssueSelectBox = ({ onChange, value }: Props) => {
   const router = useRouter();
-  const projectId = Number(router.query.projectId as string);
+  const projectId = Number(router.query.projectId);
   const [selectedIssues, setSelectedIssues] = useState<
     { label: string; value: string }[]
   >([]);

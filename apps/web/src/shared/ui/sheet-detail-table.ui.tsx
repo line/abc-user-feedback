@@ -438,8 +438,7 @@ const AISheetDetailCell = ({
   showButton,
 }: {
   value:
-    | { status: 'loading' | 'success' | 'error'; message: string }
-    | undefined;
+    { status: 'loading' | 'success' | 'error'; message: string } | undefined;
   feedbackId: number;
   fieldId: number;
   refetch?: () => Promise<void>;
@@ -484,14 +483,7 @@ const AISheetDetailCell = ({
         </Tag>
       )}
       <div className="py-2">
-        <AICell
-          value={
-            value as
-              | { status: 'loading' | 'success' | 'error'; message: string }
-              | undefined
-          }
-          isLoading={isPending}
-        />
+        <AICell value={value} isLoading={isPending} />
       </div>
     </div>
   );

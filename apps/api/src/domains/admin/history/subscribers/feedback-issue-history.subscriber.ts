@@ -24,9 +24,7 @@ import { EntityNameEnum } from '../history-entity.enum';
 import { HistoryService } from '../history.service';
 
 @EventSubscriber()
-export class FeedbackIssueHistorySubscriber
-  implements EntitySubscriberInterface
-{
+export class FeedbackIssueHistorySubscriber implements EntitySubscriberInterface {
   constructor(
     @InjectDataSource() dataSource: DataSource,
     readonly cls: ClsService<ClsServiceType>,

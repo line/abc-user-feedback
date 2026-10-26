@@ -55,7 +55,7 @@ function excludeShebangs(comments) {
 function getLeadingComments(context, node) {
   var all = excludeShebangs(
     context
-      .getSourceCode()
+      .sourceCode
       .getAllComments(node.body.length ? node.body[0] : node)
   );
   if (all[0].type.toLowerCase() === "block") {
@@ -63,7 +63,7 @@ function getLeadingComments(context, node) {
   }
   for (var i = 1; i < all.length; ++i) {
     var txt = context
-      .getSourceCode()
+      .sourceCode
       .getText()
       .slice(all[i - 1].range[1], all[i].range[0]);
     if (!txt.match(/^(\r\n|\r|\n)$/)) {
@@ -87,7 +87,7 @@ function genCommentBody(commentType, textArray, eol, numNewlines) {
 function genCommentsRange(context, comments, eol) {
   var start = comments[0].range[0];
   var end = comments.slice(-1)[0].range[1];
-  if (context.getSourceCode().text[end] === eol) {
+  if (context.sourceCode.text[end] === eol) {
     end += eol.length;
   }
   return [start, end];
@@ -319,7 +319,7 @@ export default {
     return {
       // @ts-ignore
       Program: function (node) {
-        if (!hasHeader(context.getSourceCode().getText())) {
+        if (!hasHeader(context.sourceCode.getText())) {
           context.report({
             loc: node.loc,
             message: "missing header",
@@ -400,7 +400,7 @@ export default {
               }
 
               var postLineHeader = context
-                .getSourceCode()
+                .sourceCode
                 .text.substr(
                   leadingComments[headerLines.length - 1].range[1],
                   numNewlines * 2
@@ -462,7 +462,7 @@ export default {
                 });
               } else {
                 var postBlockHeader = context
-                  .getSourceCode()
+                  .sourceCode
                   .text.substr(leadingComments[0].range[1], numNewlines * 2);
                 if (!matchesLineEndings(postBlockHeader, numNewlines)) {
                   context.report({

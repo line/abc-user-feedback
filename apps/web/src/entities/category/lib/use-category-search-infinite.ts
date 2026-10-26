@@ -23,11 +23,10 @@ type TData = OAIMutationResponse<
   'post'
 >;
 
-interface IBody
-  extends OAIRequestBody<
-    '/api/admin/projects/{projectId}/categories/search',
-    'post'
-  > {}
+interface IBody extends OAIRequestBody<
+  '/api/admin/projects/{projectId}/categories/search',
+  'post'
+> {}
 
 const useCategorySearchInfinite = (
   projectId: number,

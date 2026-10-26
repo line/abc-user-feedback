@@ -15,21 +15,32 @@
  */
 import type { CanActivate, ExecutionContext } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { Request } from 'express';
+import { DataSource } from 'typeorm';
 
 import { AuthService } from '../auth.service';
+import { isWithinProjectScope } from './project-scope';
 
 @Injectable()
 export class ApiKeyAuthGuard implements CanActivate {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    @InjectDataSource()
+    private readonly dataSource: DataSource,
+  ) {}
 
-  canActivate(context: ExecutionContext) {
+  async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest<Request>();
     const apiKey = request.headers['x-api-key'] as string | undefined;
     if (!apiKey) return false;
-    if (apiKey === process.env.MASTER_API_KEY) return true;
-    const projectId = parseInt(request.params.projectId);
 
-    return this.authService.validateApiKey(apiKey, projectId);
+    const projectId = parseInt(request.params.projectId);
+    const isValidKey =
+      (!!process.env.MASTER_API_KEY && apiKey === process.env.MASTER_API_KEY) ||
+      (await this.authService.validateApiKey(apiKey, projectId));
+    if (!isValidKey) return false;
+
+    return isWithinProjectScope(this.dataSource, request.params);
   }
 }

@@ -48,7 +48,7 @@ import {
   SendEmailCodeResponseDto,
   SignInResponseDto,
 } from './dtos/responses';
-import { JwtAuthGuard } from './guards';
+import { JwtRefreshAuthGuard } from './guards';
 import { UseEmailGuard } from './guards/use-email.guard';
 import { UseOAuthGuard } from './guards/use-oauth.guard';
 
@@ -116,7 +116,7 @@ export class AuthController {
 
   @ApiBearerAuth()
   @ApiOkResponse({ type: SignInResponseDto })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtRefreshAuthGuard)
   @Get('refresh')
   refreshToken(@CurrentUser() user: UserDto) {
     return this.authService.refreshToken(user);

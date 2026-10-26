@@ -22,8 +22,7 @@ import { LoadingBars } from '@/features/update-ai-setting/ui/playground-output-c
 
 interface Props {
   value:
-    | { status: 'loading' | 'success' | 'error'; message: string }
-    | undefined;
+    { status: 'loading' | 'success' | 'error'; message: string } | undefined;
   isLoading?: boolean;
 }
 const AICell = memo((props: Props) => {

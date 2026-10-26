@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, JwtFromRequestFunction, Strategy } from 'passport-jwt';
@@ -25,6 +25,7 @@ interface IPayload {
   sub: string;
   email: string;
   type: UserTypeEnum;
+  tokenType?: 'access' | 'refresh';
   iat: number;
   exp: number;
 }
@@ -48,6 +49,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: IPayload) {
+    // Refresh tokens are signed with the same secret; they must not work as access tokens.
+    if (payload.tokenType !== 'access') {
+      throw new UnauthorizedException('Invalid token type');
+    }
     const { email, sub, type } = payload;
     return { id: sub, email, type };
   }

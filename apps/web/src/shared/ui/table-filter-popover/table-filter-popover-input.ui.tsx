@@ -19,7 +19,6 @@ import { useTranslation } from 'next-i18next';
 
 import { Button, Icon, InputBox, InputField, TextInput } from '@ufb/react';
 
-import type { DateRangeType } from '@/shared/types';
 import { cn } from '@/shared/utils';
 import { IssueSelectBox } from '@/entities/issue';
 
@@ -93,7 +92,7 @@ const TableFilterPopoverInput = (props: Props) => {
                 )
               }
               value={
-                (value ?
+                value ?
                   {
                     startDate: dayjs(
                       (value as { gte: string; lt: string }).gte,
@@ -102,7 +101,7 @@ const TableFilterPopoverInput = (props: Props) => {
                       (value as { gte: string; lt: string }).lt,
                     ).toDate(),
                   }
-                : null) as DateRangeType
+                : null
               }
             >
               <InputField className="w-full">
