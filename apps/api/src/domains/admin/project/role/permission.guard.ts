@@ -19,6 +19,7 @@ import { Reflector } from '@nestjs/core';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
+import { isWithinProjectScope } from '@/domains/admin/auth/guards/project-scope';
 import { UserTypeEnum } from '@/domains/admin/user/entities/enums';
 import { UserEntity } from '../../user/entities/user.entity';
 import type { PermissionEnum } from './permission.enum';
@@ -42,9 +43,10 @@ export class PermissionGuard implements CanActivate {
     const {
       user,
       params,
-    }: { user: UserEntity; params: { projectId: number } } = context
-      .switchToHttp()
-      .getRequest();
+    }: {
+      user: UserEntity;
+      params: Record<string, string | undefined>;
+    } = context.switchToHttp().getRequest();
 
     if (user.type === UserTypeEnum.SUPER) return true;
 
@@ -55,11 +57,13 @@ export class PermissionGuard implements CanActivate {
     const role = await roleRepo.findOne({
       where: {
         members: { user: { id: user.id } },
-        project: { id: params.projectId },
+        project: { id: Number(params.projectId) },
       },
     });
 
     if (!role) return false;
-    return role.permissions.includes(requiredPermission);
+    if (!role.permissions.includes(requiredPermission)) return false;
+
+    return isWithinProjectScope(this.dataSource, params);
   }
 }
