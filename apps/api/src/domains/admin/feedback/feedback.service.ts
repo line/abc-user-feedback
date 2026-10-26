@@ -366,7 +366,7 @@ export class FeedbackService {
     worksheet.columns = headers;
 
     const pageSize = 1000;
-    let feedbacks: Feedback[] = [];
+    let feedbacks: Feedback[];
     let currentScrollId: string | null = null;
     let page = 1;
     const feedbackIds: number[] = [];
@@ -469,7 +469,7 @@ export class FeedbackService {
     const timezone = project.timezone.name;
 
     const pageSize = 1000;
-    let feedbacks: Record<string, any>[] = [];
+    let feedbacks: Record<string, any>[];
     let currentScrollId: number | null = null;
     let page = 1;
     const feedbackIds: number[] = [];
