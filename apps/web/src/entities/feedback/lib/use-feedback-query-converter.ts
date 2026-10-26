@@ -157,7 +157,7 @@ const useFeedbackQueryConverter = (input: {
         const { format, name } = field;
         return { key, name, value, format, condition };
       })
-      .filter((v) => !!v) as TableFilter[];
+      .filter((v) => !!v);
   }, [queries, filterFields]);
 
   const onChangeTableFilters = useCallback(

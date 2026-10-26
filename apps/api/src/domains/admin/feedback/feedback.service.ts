@@ -385,6 +385,7 @@ export class FeedbackService {
           scrollId: currentScrollId,
         });
         feedbacks = data;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- scrollId is any here
         currentScrollId = scrollId as unknown as string;
       } else {
         const { items } = await this.feedbackMySQLService.findByChannelIdV2({
@@ -1011,7 +1012,7 @@ export class FeedbackService {
           return {
             ...file,
             url: `${channel.imageConfig?.endpoint}/${channel.imageConfig?.bucket}/${key}`,
-          } as ImageUrl;
+          };
         }),
       );
       const imageUrlsByKeys: ImageUrlsByKeys = imageUrls.reduce(

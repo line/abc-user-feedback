@@ -97,6 +97,7 @@ const AiIssueComboboxGroup = ({
         operator: 'OR',
         queries: issueNames.map((name) => ({
           key: 'name',
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- keeps the literal type
           condition: 'IS' as TableFilterCondition,
           value: name,
         })),
