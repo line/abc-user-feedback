@@ -25,6 +25,7 @@ import { ProjectNotFoundException } from '../project/exceptions';
 import { ProjectEntity } from '../project/project.entity';
 import { ApiKeyEntity } from './api-key.entity';
 import { ApiKeyService } from './api-key.service';
+import { hashApiKey } from './api-key.util';
 import { CreateApiKeyDto } from './dtos';
 
 describe('ApiKeyService', () => {
@@ -83,8 +84,50 @@ describe('ApiKeyService', () => {
 
       const apiKey = await apiKeyService.create({ projectId, value });
 
-      expect(apiKey.value).toHaveLength(20);
+      expect(apiKey.value).toBe(value);
       expect(projectRepo.findOneBy).toHaveBeenCalledWith({ id: projectId });
+      expect(apiKeyRepo.findOneBy).toHaveBeenCalledWith({
+        hash: hashApiKey(value),
+      });
+      const saved = jest.mocked(apiKeyRepo.save).mock.calls[0][0];
+      expect(saved).toMatchObject({
+        hash: hashApiKey(value),
+        prefix: value.slice(0, 4),
+        expiresAt: null,
+      });
+      expect(saved).not.toHaveProperty('value');
+    });
+
+    it('creating an api key stores the given expiry', async () => {
+      const projectId = faker.number.int();
+      const expiresAt = faker.date.future();
+      jest
+        .spyOn(projectRepo, 'findOneBy')
+        .mockResolvedValueOnce({ id: projectId } as ProjectEntity);
+      jest.spyOn(apiKeyRepo, 'findOneBy').mockResolvedValueOnce(null);
+      jest
+        .spyOn(apiKeyRepo, 'save')
+        .mockImplementationOnce((entity) => Promise.resolve(entity as any));
+
+      const apiKey = await apiKeyService.create(
+        CreateApiKeyDto.from({ projectId, expiresAt }),
+      );
+
+      expect(apiKey.expiresAt).toEqual(expiresAt);
+      expect(apiKey.value).toHaveLength(20);
+      expect(apiKey.hash).toBe(hashApiKey(apiKey.value));
+    });
+
+    it('creating an api key fails with an expiry in the past', async () => {
+      const projectId = faker.number.int();
+
+      await expect(
+        apiKeyService.create(
+          CreateApiKeyDto.from({ projectId, expiresAt: faker.date.past() }),
+        ),
+      ).rejects.toThrow(
+        new BadRequestException('expiresAt must be in the future'),
+      );
     });
 
     it('creating an api key fails with an invalid project id', async () => {
@@ -164,8 +207,8 @@ describe('ApiKeyService', () => {
       const apiKeys = await apiKeyService.createMany(dtos);
 
       expect(apiKeys).toHaveLength(apiKeyCount);
-      for (const apiKey of apiKeys) {
-        expect(apiKey.value).toHaveLength(20);
+      for (const dto of dtos) {
+        expect(dto.value).toHaveLength(20);
       }
       expect(projectRepo.findOneBy).toHaveBeenCalledTimes(apiKeyCount);
     });
@@ -189,9 +232,15 @@ describe('ApiKeyService', () => {
       const apiKeys = await apiKeyService.createMany(dtos);
 
       expect(apiKeys).toHaveLength(apiKeyCount);
-      for (const apiKey of apiKeys) {
-        expect(apiKey.value).toHaveLength(20);
-      }
+      // Imported raw keys must be stored hashed, never as-is.
+      expect(apiKeyRepo.save).toHaveBeenCalledWith(
+        dtos.map((dto): unknown =>
+          expect.objectContaining({
+            hash: hashApiKey(dto.value),
+            prefix: dto.value.slice(0, 4),
+          }),
+        ),
+      );
     });
 
     it('creating api keys fails with an invalid project id', async () => {
@@ -263,35 +312,63 @@ describe('ApiKeyService', () => {
     });
   });
 
-  describe('findByProjectIdAndValue', () => {
-    it('returns api keys matching project id and value', async () => {
-      const projectId = faker.number.int();
-      const value = faker.string.alphanumeric(20);
-      const mockApiKeys = [{ id: 1, value, projectId }];
-      jest.spyOn(apiKeyRepo, 'find').mockResolvedValueOnce(mockApiKeys as any);
+  describe('findUsableByProjectIdAndValue', () => {
+    const projectId = faker.number.int();
+    const value = faker.string.alphanumeric(20);
 
-      const result = await apiKeyService.findByProjectIdAndValue(
+    it('looks up the key by its hash within the project', async () => {
+      const mockApiKey = { id: 1, hash: hashApiKey(value), expiresAt: null };
+      jest
+        .spyOn(apiKeyRepo, 'findOne')
+        .mockResolvedValueOnce(mockApiKey as any);
+
+      const result = await apiKeyService.findUsableByProjectIdAndValue(
         projectId,
         value,
       );
 
-      expect(result).toEqual(mockApiKeys);
-      expect(apiKeyRepo.find).toHaveBeenCalledWith({
-        where: { project: { id: projectId }, value },
+      expect(result).toEqual(mockApiKey);
+      expect(apiKeyRepo.findOne).toHaveBeenCalledWith({
+        where: { project: { id: projectId }, hash: hashApiKey(value) },
       });
     });
 
-    it('returns empty array when no matching api keys found', async () => {
-      const projectId = faker.number.int();
-      const value = faker.string.alphanumeric(20);
-      jest.spyOn(apiKeyRepo, 'find').mockResolvedValueOnce([]);
+    it('returns null when no matching api key is found', async () => {
+      jest.spyOn(apiKeyRepo, 'findOne').mockResolvedValueOnce(null);
 
-      const result = await apiKeyService.findByProjectIdAndValue(
+      const result = await apiKeyService.findUsableByProjectIdAndValue(
         projectId,
         value,
       );
 
-      expect(result).toEqual([]);
+      expect(result).toBeNull();
+    });
+
+    it('returns null for an expired api key', async () => {
+      jest
+        .spyOn(apiKeyRepo, 'findOne')
+        .mockResolvedValueOnce({ id: 1, expiresAt: faker.date.past() } as any);
+
+      const result = await apiKeyService.findUsableByProjectIdAndValue(
+        projectId,
+        value,
+      );
+
+      expect(result).toBeNull();
+    });
+
+    it('returns an api key that has not expired yet', async () => {
+      const mockApiKey = { id: 1, expiresAt: faker.date.future() };
+      jest
+        .spyOn(apiKeyRepo, 'findOne')
+        .mockResolvedValueOnce(mockApiKey as any);
+
+      const result = await apiKeyService.findUsableByProjectIdAndValue(
+        projectId,
+        value,
+      );
+
+      expect(result).toEqual(mockApiKey);
     });
   });
 

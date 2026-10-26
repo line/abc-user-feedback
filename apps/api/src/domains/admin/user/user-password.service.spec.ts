@@ -105,6 +105,7 @@ describe('UserPasswordService', () => {
       const mockUser = {
         id: faker.number.int(),
         email: dto.email,
+        tokenVersion: 2,
       } as UserEntity;
 
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(mockUser);
@@ -121,6 +122,8 @@ describe('UserPasswordService', () => {
       });
       expect(userRepo.save).toHaveBeenCalled();
       expect(bcrypt.compareSync(dto.password, result.hashPassword)).toBe(true);
+      // Resetting the password revokes previously issued tokens.
+      expect(result.tokenVersion).toBe(3);
     });
 
     it('resetting a password fails with an invalid email', async () => {
@@ -187,6 +190,7 @@ describe('UserPasswordService', () => {
         hashPassword: await userPasswordService.createHashPassword(
           dto.password,
         ),
+        tokenVersion: 0,
       } as UserEntity;
 
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(mockUser);
@@ -199,6 +203,8 @@ describe('UserPasswordService', () => {
       expect(bcrypt.compareSync(dto.newPassword, result.hashPassword)).toBe(
         true,
       );
+      // Changing the password revokes previously issued tokens.
+      expect(result.tokenVersion).toBe(1);
     });
 
     it('changing the password fails with the invalid original password', async () => {

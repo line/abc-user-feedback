@@ -200,7 +200,7 @@ export class AuthService {
       }
     }
 
-    const { state } = await this.userService.findById(id);
+    const { state, tokenVersion } = await this.userService.findById(id);
 
     if (state === UserStateEnum.Blocked) throw new UserBlockedException();
     const { accessTokenExpiredTime, refreshTokenExpiredTime } =
@@ -208,13 +208,21 @@ export class AuthService {
 
     return {
       accessToken: this.jwtService.sign(
-        { sub: id, email, department, name, type, tokenType: 'access' },
+        {
+          sub: id,
+          email,
+          department,
+          name,
+          type,
+          tokenType: 'access',
+          tokenVersion,
+        },
         {
           expiresIn: (accessTokenExpiredTime ?? '10m') as StringValue | number,
         },
       ),
       refreshToken: this.jwtService.sign(
-        { sub: id, email, tokenType: 'refresh' },
+        { sub: id, email, tokenType: 'refresh', tokenVersion },
         {
           expiresIn: (refreshTokenExpiredTime ?? '1h') as StringValue | number,
         },
@@ -227,14 +235,17 @@ export class AuthService {
     return this.signIn(UserDto.transform(user));
   }
 
+  async signOutEverywhere(userId: number) {
+    await this.userService.revokeTokens(userId);
+  }
+
   async validateApiKey(value: string, projectId: number) {
-    const apiKeys = await this.apiKeyService.findByProjectIdAndValue(
+    const apiKey = await this.apiKeyService.findUsableByProjectIdAndValue(
       projectId,
       value,
     );
 
-    if (apiKeys.length === 1) return true;
-    return false;
+    return apiKey !== null;
   }
 
   async getOAuthLoginURL(callback_url?: string) {

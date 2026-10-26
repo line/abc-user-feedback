@@ -27,7 +27,7 @@ import { FindApiKeysResponseDto } from './dtos/responses/find-api-keys-response.
 const MockApiKeyService = {
   create: jest.fn(),
   findAllByProjectId: jest.fn(),
-  findByProjectIdAndValue: jest.fn(),
+  findUsableByProjectIdAndValue: jest.fn(),
   deleteById: jest.fn(),
   softDeleteById: jest.fn(),
   recoverById: jest.fn(),
@@ -58,6 +58,9 @@ describe('ApiKeyController', () => {
       const mockApiKey = {
         id: faker.number.int(),
         value: faker.string.alphanumeric(20),
+        hash: faker.string.hexadecimal({ length: 64, prefix: '' }),
+        prefix: faker.string.alphanumeric(4),
+        expiresAt: null,
         createdAt: faker.date.recent(),
       };
 
@@ -75,7 +78,26 @@ describe('ApiKeyController', () => {
       expect(result).toBeInstanceOf(CreateApiKeyResponseDto);
       expect(result.id).toBe(mockApiKey.id);
       expect(result.value).toBe(mockApiKey.value);
+      expect(result.prefix).toBe(mockApiKey.prefix);
       expect(result.createdAt).toStrictEqual(mockApiKey.createdAt);
+      expect(result).not.toHaveProperty('hash');
+    });
+
+    it('should pass the expiry to the service', async () => {
+      const projectId = faker.number.int();
+      const expiresAt = faker.date.future();
+      MockApiKeyService.create.mockResolvedValue({
+        id: faker.number.int(),
+        value: faker.string.alphanumeric(20),
+        expiresAt,
+      });
+
+      const result = await apiKeyController.create(projectId, { expiresAt });
+
+      expect(MockApiKeyService.create).toHaveBeenCalledWith(
+        expect.objectContaining({ projectId, expiresAt }),
+      );
+      expect(result.expiresAt).toEqual(expiresAt);
     });
 
     it('should create API key successfully with provided value', async () => {
@@ -170,15 +192,19 @@ describe('ApiKeyController', () => {
       const mockApiKeys = [
         {
           id: faker.number.int(),
-          value: faker.string.alphanumeric(20),
+          hash: faker.string.hexadecimal({ length: 64, prefix: '' }),
+          prefix: faker.string.alphanumeric(4),
           createdAt: faker.date.recent(),
           deletedAt: null,
+          expiresAt: null,
         },
         {
           id: faker.number.int(),
-          value: faker.string.alphanumeric(20),
+          hash: faker.string.hexadecimal({ length: 64, prefix: '' }),
+          prefix: faker.string.alphanumeric(4),
           createdAt: faker.date.recent(),
           deletedAt: faker.date.recent(),
+          expiresAt: faker.date.future(),
         },
       ];
 
@@ -193,9 +219,14 @@ describe('ApiKeyController', () => {
       expect(result).toBeInstanceOf(FindApiKeysResponseDto);
       expect(result.items).toHaveLength(2);
       expect(result.items[0].id).toBe(mockApiKeys[0].id);
-      expect(result.items[0].value).toBe(mockApiKeys[0].value);
+      expect(result.items[0].prefix).toBe(mockApiKeys[0].prefix);
       expect(result.items[1].id).toBe(mockApiKeys[1].id);
-      expect(result.items[1].value).toBe(mockApiKeys[1].value);
+      expect(result.items[1].prefix).toBe(mockApiKeys[1].prefix);
+      expect(result.items[1].expiresAt).toEqual(mockApiKeys[1].expiresAt);
+      for (const item of result.items) {
+        expect(item).not.toHaveProperty('hash');
+        expect(item).not.toHaveProperty('value');
+      }
     });
 
     it('should return empty array when no API keys exist for project', async () => {

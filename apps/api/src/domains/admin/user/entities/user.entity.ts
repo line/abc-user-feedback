@@ -44,6 +44,10 @@ export class UserEntity extends CommonEntity {
   @Column('enum', { enum: SignUpMethodEnum, default: SignUpMethodEnum.EMAIL })
   signUpMethod: SignUpMethodEnum;
 
+  // Embedded in issued JWTs; bumping it revokes every token issued before.
+  @Column('int', { default: 0 })
+  tokenVersion: number;
+
   @OneToMany(() => MemberEntity, (member) => member.user, { cascade: true })
   members: Relation<MemberEntity>[];
 }

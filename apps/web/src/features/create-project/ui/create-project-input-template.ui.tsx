@@ -155,7 +155,14 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
     mutate({
       ...input.projectInfo,
       roles: input.roles,
-      apiKeys: input.apiKeys,
+      apiKeys: input.apiKeys.map(
+        ({ value, createdAt, deletedAt, expiresAt }) => ({
+          value: value ?? '',
+          createdAt,
+          deletedAt,
+          expiresAt,
+        }),
+      ),
       issueTracker: { data: input.issueTracker },
       members: input.members.map(({ role, user }) => ({
         roleName: role.name,

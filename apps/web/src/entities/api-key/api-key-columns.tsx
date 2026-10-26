@@ -21,28 +21,53 @@ import { Badge } from '@ufb/react';
 
 import { CopyIconButton, DATE_TIME_FORMAT } from '@/shared';
 
-import type { ApiKey } from './api-key.type';
+import type { ApiKey, ApiKeyStatus } from './api-key.type';
+import { getApiKeyStatus, maskApiKey } from './api-key.util';
 
 const columnHelper = createColumnHelper<ApiKey>();
 
+const STATUS_BADGE: Record<
+  ApiKeyStatus,
+  { color: 'green' | 'red' | 'orange'; label: string }
+> = {
+  active: { color: 'green', label: 'Active' },
+  inactive: { color: 'red', label: 'Inactive' },
+  expired: { color: 'orange', label: 'Expired' },
+};
+
 export const getApiKeyColumns = () => [
-  columnHelper.accessor('value', {
+  columnHelper.accessor('prefix', {
     header: 'API KEY',
-    cell: ({ getValue }) => (
-      <div className="text-base-strong flex items-center">
-        {getValue()}
-        <CopyIconButton data={getValue()} />
-      </div>
-    ),
+    cell: ({ row }) =>
+      // The raw value exists only for keys that have not been saved yet.
+      row.original.value ?
+        <div className="text-base-strong flex items-center">
+          {row.original.value}
+          <CopyIconButton data={row.original.value} />
+        </div>
+      : <div className="text-base-strong font-mono">
+          {maskApiKey(row.original)}
+        </div>,
     enableSorting: false,
   }),
-  columnHelper.accessor('deletedAt', {
+  columnHelper.display({
+    id: 'status',
     header: 'Status',
-    cell: ({ getValue }) => (
-      <Badge color={getValue() === null ? 'green' : 'red'} radius="large">
-        {getValue() === null ? 'Active' : 'Inactive'}
-      </Badge>
-    ),
+    cell: ({ row }) => {
+      const { color, label } = STATUS_BADGE[getApiKeyStatus(row.original)];
+      return (
+        <Badge color={color} radius="large">
+          {label}
+        </Badge>
+      );
+    },
+  }),
+  columnHelper.accessor('expiresAt', {
+    header: 'Expires',
+    cell: ({ getValue }) => {
+      const expiresAt = getValue();
+      return expiresAt ? dayjs(expiresAt).format(DATE_TIME_FORMAT) : 'Never';
+    },
     enableSorting: false,
   }),
   columnHelper.accessor('createdAt', {

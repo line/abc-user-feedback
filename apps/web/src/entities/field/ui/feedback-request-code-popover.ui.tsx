@@ -52,7 +52,11 @@ const FeedbackRequestCodePopover: React.FC<IProps> = (props) => {
   });
 
   const apiKey = useMemo(
-    () => apiKeysData?.items.find((v) => !v.deletedAt) ?? null,
+    () =>
+      apiKeysData?.items.find(
+        (v) =>
+          !v.deletedAt && (!v.expiresAt || new Date(v.expiresAt) > new Date()),
+      ) ?? null,
     [apiKeysData],
   );
 
@@ -115,9 +119,7 @@ const FeedbackRequestCodePopover: React.FC<IProps> = (props) => {
         <pre className="bg-neutral-tertiary text-small-normal whitespace-pre-wrap rounded p-4">
           {`curl --request POST ${
             env.NEXT_PUBLIC_API_BASE_URL
-          }/api/projects/${projectId}/channels/${channelId}/feedbacks \\\n--header 'Content-Type: application/json' \\\n--header 'x-api-key: ${
-            apiKey?.value ?? 'API_KEY'
-          }' \\\n--data-raw '${
+          }/api/projects/${projectId}/channels/${channelId}/feedbacks \\\n--header 'Content-Type: application/json' \\\n--header 'x-api-key: API_KEY' \\\n--data-raw '${
             snippetBody ?
               JSON.stringify(snippetBody, null, 4)
                 .replace(/\"/g, '')

@@ -12,8 +12,18 @@
       "profile-info": "Profile 정보",
       "change-password": "Password 변경",
       "button": {
-        "delete-account": "회원 탈퇴"
-      }
+        "delete-account": "회원 탈퇴",
+        "sign-out-everywhere": "모든 기기에서 로그아웃"
+      },
+      "signed-out-everywhere": "모든 세션에서 로그아웃되었습니다.",
+      "password-changed": "비밀번호가 변경되었습니다. 다시 로그인해 주세요."
+    },
+    "api-key": {
+      "created-title": "API Key 생성 완료",
+      "created-description": "지금 이 키를 복사해 두세요. 보안상 다시 표시되지 않습니다.",
+      "expiry": "만료 기간",
+      "never": "만료 없음",
+      "days": "{{count}}일"
     },
     "feedback": {
       "issue-cell": {

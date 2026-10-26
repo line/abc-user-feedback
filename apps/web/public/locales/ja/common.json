@@ -12,8 +12,18 @@
       "profile-info": "Profile情報",
       "change-password": "Password変更",
       "button": {
-        "delete-account": "アカウント削除"
-      }
+        "delete-account": "アカウント削除",
+        "sign-out-everywhere": "すべての端末からログアウト"
+      },
+      "signed-out-everywhere": "すべてのセッションからログアウトしました。",
+      "password-changed": "パスワードが変更されました。再度ログインしてください。"
+    },
+    "api-key": {
+      "created-title": "API Keyを作成しました",
+      "created-description": "今すぐこのキーをコピーしてください。セキュリティのため、再度表示されません。",
+      "expiry": "有効期限",
+      "never": "なし",
+      "days": "{{count}}日"
     },
     "feedback": {
       "issue-cell": {

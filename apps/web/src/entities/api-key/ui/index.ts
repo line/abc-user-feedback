@@ -14,3 +14,5 @@
  * under the License.
  */
 export { default as ApiKeyTable } from './api-key-table.ui';
+export { default as CreateApiKeyDialog } from './create-api-key-dialog.ui';
+export { default as ApiKeyCreatedDialog } from './api-key-created-dialog.ui';

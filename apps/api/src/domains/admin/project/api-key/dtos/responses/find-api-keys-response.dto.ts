@@ -22,16 +22,20 @@ class ApiKeyResponseDto {
   id: number;
 
   @Expose()
-  @ApiProperty()
-  value: string;
+  @ApiProperty({ description: 'The first characters of the key' })
+  prefix: string;
+
+  @Expose()
+  @ApiProperty({ nullable: true, type: Date })
+  expiresAt: Date | null;
 
   @Expose()
   @ApiProperty()
   createdAt: Date;
 
   @Expose()
-  @ApiProperty()
-  deletedAt: Date;
+  @ApiProperty({ nullable: true, type: Date })
+  deletedAt: Date | null;
 }
 
 export class FindApiKeysResponseDto {

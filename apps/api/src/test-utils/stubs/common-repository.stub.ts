@@ -75,6 +75,10 @@ export class CommonRepositoryStub<T> {
     return { ...this.entities?.[0], ...entityToSave };
   }
 
+  increment() {
+    return { affected: 1 };
+  }
+
   count() {
     return this.entities?.length ?? 0;
   }

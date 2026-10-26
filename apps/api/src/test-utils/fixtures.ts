@@ -224,6 +224,7 @@ export const userFixture = {
   hashPassword: bcrypt.hashSync(passwordFixture, 0),
   type: getRandomEnumValue(UserTypeEnum),
   signUpMethod: getRandomEnumValue(SignUpMethodEnum),
+  tokenVersion: 0,
 } as UserEntity;
 
 const roleName = faker.string.sample();
@@ -262,7 +263,9 @@ export const memberFixture = {
 
 export const apiKeyFixture = {
   id: faker.number.int(),
-  value: faker.string.sample(),
+  hash: faker.string.hexadecimal({ length: 64, casing: 'lower', prefix: '' }),
+  prefix: faker.string.alphanumeric(4),
+  expiresAt: null,
   project: projectFixture,
 } as ApiKeyEntity;
 
