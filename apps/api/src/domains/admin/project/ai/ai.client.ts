@@ -205,7 +205,7 @@ export class AIClient {
         response = await this.axiosInstance.get(endpoint);
         return response.data.data.map((model: Model) => ({
           id: model.id,
-        })) as { id: string }[];
+        }));
       } else {
         response = await this.axiosInstance.get(endpoint, {
           params: { key: this.apiKey },

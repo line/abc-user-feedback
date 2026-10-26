@@ -140,7 +140,7 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
         ) {
           return {
             ...event,
-            status: 'INACTIVE' as WebhookStatus,
+            status: 'INACTIVE',
             channelIds: ids,
           };
         }
