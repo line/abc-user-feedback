@@ -14,7 +14,5 @@
  * under the License.
  */
 export class SignUpOauthUserDto {
-  email: string;
-  projectName: string;
-  roleName: string;
+  code: string;
 }

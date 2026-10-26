@@ -17,10 +17,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 import { faker } from '@faker-js/faker';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import type { AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { ClsModule } from 'nestjs-cls';
+import { of, throwError } from 'rxjs';
 import type { Repository } from 'typeorm';
 
 import { CodeEntity } from '@/shared/code/code.entity';
@@ -71,12 +79,14 @@ describe('auth service ', () => {
   let tenantRepo: TenantRepositoryStub;
   let codeRepo: CodeRepositoryStub;
   let apiKeyRepo: Repository<ApiKeyEntity>;
+  let httpService: HttpService;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig, ClsModule.forRoot()],
       providers: AuthServiceProviders,
     }).compile();
     authService = module.get(AuthService);
+    httpService = module.get(HttpService);
     userRepo = module.get(getRepositoryToken(UserEntity));
     tenantRepo = module.get(getRepositoryToken(TenantEntity));
     codeRepo = module.get(getRepositoryToken(CodeEntity));
@@ -262,40 +272,103 @@ describe('auth service ', () => {
   });
 
   describe('signUpOAuthUser', () => {
-    it('signing up by OAuth succeeds with valid inputs', async () => {
+    const mockIdP = (email: string) => {
+      const getAccessToken = jest
+        .spyOn(authService as any, 'getAccessToken')
+        .mockResolvedValue('access-token');
+      jest
+        .spyOn(authService as any, 'getEmailByAccessToken')
+        .mockResolvedValue(email);
+      return { getAccessToken };
+    };
+
+    const mockTokenEndpointError = (data: { error: string }) => {
+      tenantRepo.setUseOAuth(true, {
+        clientId: 'id',
+        clientSecret: 'secret',
+        accessTokenRequestURL: 'https://idp.example.com/token',
+      });
+      jest.spyOn(httpService, 'post').mockReturnValue(
+        throwError(
+          () =>
+            new AxiosError(data.error, '400', undefined, undefined, {
+              status: 400,
+              data,
+            } as AxiosResponse),
+        ),
+      );
+    };
+
+    it('signing up by OAuth creates a user with the email from the IdP', async () => {
+      const email = faker.internet.email();
+      const { getAccessToken } = mockIdP(email);
       const dto = new SignUpOauthUserDto();
-      dto.email = faker.internet.email();
-      dto.projectName = faker.company.name();
-      dto.roleName = faker.person.jobTitle();
+      dto.code = faker.string.alphanumeric(20);
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
       jest.spyOn(userRepo, 'save').mockResolvedValue(new UserEntity());
 
       await authService.signUpOAuthUser(dto);
 
-      expect(userRepo.save).toHaveBeenCalled();
+      expect(getAccessToken).toHaveBeenCalledWith(dto.code);
+      expect(userRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({ email }),
+      );
     });
 
     it('signing up by OAuth fails with existing user', async () => {
+      mockIdP(emailFixture);
       const dto = new SignUpOauthUserDto();
-      dto.email = emailFixture;
-      dto.projectName = faker.company.name();
-      dto.roleName = faker.person.jobTitle();
+      dto.code = faker.string.alphanumeric(20);
 
       await expect(authService.signUpOAuthUser(dto)).rejects.toThrow(
         UserAlreadyExistsException,
       );
     });
 
-    it('signing up by OAuth succeeds with empty project and role', async () => {
+    it('signing up by OAuth fails when the IdP does not return an email', async () => {
+      tenantRepo.setUseOAuth(true, {
+        clientId: 'id',
+        clientSecret: 'secret',
+        accessTokenRequestURL: 'https://idp.example.com/token',
+        userProfileRequestURL: 'https://idp.example.com/me',
+        emailKey: 'email',
+      });
+      jest
+        .spyOn(httpService, 'post')
+        .mockReturnValue(
+          of({ data: { access_token: 'access-token' } } as AxiosResponse),
+        );
+      jest
+        .spyOn(httpService, 'get')
+        .mockReturnValue(of({ data: { name: 'no email' } } as AxiosResponse));
       const dto = new SignUpOauthUserDto();
-      dto.email = faker.internet.email();
-      dto.projectName = '';
-      dto.roleName = '';
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+      dto.code = faker.string.alphanumeric(20);
+      jest.spyOn(userRepo, 'save');
 
-      const result = await authService.signUpOAuthUser(dto);
+      await expect(authService.signUpOAuthUser(dto)).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(userRepo.save).not.toHaveBeenCalled();
+    });
 
-      expect(result).toBeUndefined();
+    it('signing up by OAuth returns 400 when the IdP rejects the code', async () => {
+      mockTokenEndpointError({ error: 'invalid_grant' });
+      const dto = new SignUpOauthUserDto();
+      dto.code = faker.string.alphanumeric(20);
+
+      await expect(authService.signUpOAuthUser(dto)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('signing up by OAuth keeps other token endpoint 400s as server errors', async () => {
+      mockTokenEndpointError({ error: 'unsupported_grant_type' });
+      const dto = new SignUpOauthUserDto();
+      dto.code = faker.string.alphanumeric(20);
+
+      await expect(authService.signUpOAuthUser(dto)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
   });
 
