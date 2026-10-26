@@ -76,7 +76,8 @@ const ToggleGroup = React.forwardRef<
 ToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName;
 
 interface ToggleGroupItemProps
-  extends React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root>,
+  extends
+    React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root>,
     Omit<VariantProps<typeof toggleVariants>, 'disabled'> {
   size?: Size;
   radius?: Radius;

@@ -36,6 +36,7 @@ function Calendar({
 }: CalendarProps) {
   return (
     <DayPicker
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- needed to pick the DayPicker overload
       mode={mode as DayPickerDefaultProps['mode']}
       showOutsideDays={showOutsideDays}
       className={cn('calendar', className)}

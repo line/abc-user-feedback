@@ -15,9 +15,7 @@
  */
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CodeVerificationTryCount1707979877289
-  implements MigrationInterface
-{
+export class CodeVerificationTryCount1707979877289 implements MigrationInterface {
   name = 'CodeVerificationTryCount1707979877289';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

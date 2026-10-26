@@ -15,9 +15,7 @@
  */
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddSearchMaxDaysOnChannel1746153314386
-  implements MigrationInterface
-{
+export class AddSearchMaxDaysOnChannel1746153314386 implements MigrationInterface {
   name = 'AddSearchMaxDaysOnChannel1746153314386';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
