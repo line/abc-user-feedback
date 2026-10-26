@@ -20,5 +20,6 @@ export class UpdateTenantDto {
   useEmail: boolean;
   allowDomains: string[] | null;
   useOAuth: boolean;
-  oauthConfig: OAuthConfig | null;
+  oauthConfig:
+    (Omit<OAuthConfig, 'clientSecret'> & { clientSecret?: string }) | null;
 }

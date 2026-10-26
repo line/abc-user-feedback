@@ -33,6 +33,7 @@ import { APIModule } from './domains/api/api.module';
 import { HealthModule } from './domains/operation/health/health.module';
 import { MigrationModule } from './domains/operation/migration/migration.module';
 import type { ConfigServiceType } from './types/config-service.type';
+import { maskBody, maskHeaders } from './utils/mask-sensitive';
 
 const globalPrefix = 'api';
 
@@ -78,8 +79,8 @@ async function bootstrap() {
           id: req.id,
           method: req.method,
           url: req.url,
-          headers: req.headers,
-          body,
+          headers: maskHeaders(req.headers),
+          body: maskBody(body),
           params: req.params,
           query: req.query,
         };
@@ -92,28 +93,13 @@ async function bootstrap() {
     .getInstance()
     .addHook('onSend', (request, reply, _, done) => {
       if (request.body) {
-        interface RequestBody {
-          password?: string;
-          [key: string]: any;
-        }
-
-        const sanitizedBody: RequestBody = { ...request.body };
-        if (sanitizedBody.password) {
-          sanitizedBody.password = '****';
-        }
-
-        const sanitizedHeaders = { ...request.headers };
-        if (sanitizedHeaders.authorization) {
-          sanitizedHeaders.authorization = '****';
-        }
-
         pinoHttp.logger.info({
           req: {
             id: request.id,
             method: request.method,
             url: request.url,
-            headers: sanitizedHeaders,
-            body: sanitizedBody,
+            headers: maskHeaders(request.headers),
+            body: maskBody(request.body),
             params: request.params,
             query: request.query,
           },

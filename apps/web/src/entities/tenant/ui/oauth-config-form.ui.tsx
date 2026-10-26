@@ -63,10 +63,11 @@ const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
         <TextInput
           {...register('oauthConfig.clientSecret')}
           label="Client Secret"
-          placeholder={t('v2.placeholder.text')}
+          type="password"
+          autoComplete="new-password"
+          placeholder="Leave empty to keep the current secret"
           error={formState.errors.oauthConfig?.clientSecret?.message}
           disabled={disabled}
-          required
         />
         <TextInput
           {...register('oauthConfig.authCodeRequestURL')}

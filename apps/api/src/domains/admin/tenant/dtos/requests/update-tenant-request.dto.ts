@@ -19,6 +19,7 @@ import {
   IsBoolean,
   IsEnum,
   IsObject,
+  IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
@@ -31,9 +32,14 @@ export class OAuthConfigRequestDto {
   @IsString()
   clientId: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    required: false,
+    description:
+      'Leave empty to keep the stored secret. It is never returned by the API.',
+  })
   @IsString()
-  clientSecret: string;
+  @IsOptional()
+  clientSecret?: string;
 
   @ApiProperty()
   @IsString()
