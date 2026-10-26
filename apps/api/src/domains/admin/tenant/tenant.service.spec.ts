@@ -203,6 +203,38 @@ describe('TenantService', () => {
       );
     });
 
+    it('update treats a null client secret as keeping the stored one', async () => {
+      const storedSecret = faker.string.alphanumeric(30);
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
+        {
+          ...tenantFixture,
+          oauthConfig: { ...dto.oauthConfig, clientSecret: storedSecret },
+        } as TenantEntity,
+      ]);
+      jest
+        .spyOn(tenantRepo, 'save')
+        .mockImplementation((tenant) =>
+          Promise.resolve(tenant as TenantEntity),
+        );
+      Object.assign(dto.oauthConfig ?? {}, { clientSecret: null });
+
+      const tenant = await tenantService.update(dto);
+
+      expect(tenant.oauthConfig?.clientSecret).toEqual(storedSecret);
+    });
+
+    it('update fails when OAuth is enabled without an OAuth configuration', async () => {
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([tenantFixture]);
+      jest.spyOn(tenantRepo, 'save');
+      dto.useOAuth = true;
+      dto.oauthConfig = null;
+
+      await expect(tenantService.update(dto)).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(tenantRepo.save).not.toHaveBeenCalled();
+    });
+
     it('update fails when there is no tenant', async () => {
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);
 
@@ -225,6 +257,7 @@ describe('TenantService', () => {
     });
 
     it('should handle null oauthConfig', async () => {
+      dto.useOAuth = false;
       dto.oauthConfig = null;
       const updatedTenant = { ...tenantFixture, ...dto };
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([tenantFixture]);

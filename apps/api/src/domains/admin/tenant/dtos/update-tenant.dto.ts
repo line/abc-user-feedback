@@ -21,6 +21,5 @@ export class UpdateTenantDto {
   allowDomains: string[] | null;
   useOAuth: boolean;
   oauthConfig:
-    | (Omit<OAuthConfig, 'clientSecret'> & { clientSecret?: string })
-    | null;
+    (Omit<OAuthConfig, 'clientSecret'> & { clientSecret?: string }) | null;
 }

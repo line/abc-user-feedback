@@ -45,4 +45,10 @@ describe('mask-sensitive', () => {
       list: [{ password: '****' }],
     });
   });
+
+  it('masks API credentials and authorization codes in the body', () => {
+    expect(
+      maskBody({ apiKey: 'k', accessToken: 't', code: 'c', name: 'n' }),
+    ).toEqual({ apiKey: '****', accessToken: '****', code: '****', name: 'n' });
+  });
 });

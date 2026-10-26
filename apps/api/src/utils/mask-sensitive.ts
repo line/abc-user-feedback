@@ -16,7 +16,14 @@
 const MASK = '****';
 
 export const SENSITIVE_HEADER_KEYS = ['authorization', 'x-api-key', 'cookie'];
-const SENSITIVE_BODY_KEYS = ['password', 'clientsecret', 'refreshtoken'];
+const SENSITIVE_BODY_KEYS = [
+  'password',
+  'clientsecret',
+  'refreshtoken',
+  'accesstoken',
+  'apikey',
+  'code',
+];
 
 export function maskHeaders<T extends Record<string, unknown>>(headers: T): T {
   const masked: Record<string, unknown> = { ...headers };

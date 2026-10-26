@@ -87,10 +87,15 @@ export class TenantService {
     const tenant = await this.findOne();
     const { oauthConfig, ...rest } = dto;
 
+    if (dto.useOAuth && !oauthConfig) {
+      throw new BadRequestException('OAuth configuration is required.');
+    }
+
     let nextOAuthConfig: OAuthConfig | null = null;
     if (oauthConfig) {
       // The secret is never sent to clients, so an empty value keeps the stored one.
-      const { clientSecret: providedSecret = '' } = oauthConfig;
+      // Direct API clients may also send null, which bypasses @IsOptional().
+      const providedSecret: string = oauthConfig.clientSecret ?? '';
       const clientSecret =
         providedSecret.length > 0 ?
           providedSecret
