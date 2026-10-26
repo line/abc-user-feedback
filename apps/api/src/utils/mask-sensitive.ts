@@ -15,7 +15,12 @@
  */
 const MASK = '****';
 
-export const SENSITIVE_HEADER_KEYS = ['authorization', 'x-api-key', 'cookie'];
+export const SENSITIVE_HEADER_KEYS = [
+  'authorization',
+  'proxy-authorization',
+  'x-api-key',
+  'cookie',
+];
 const SENSITIVE_BODY_KEYS = [
   'password',
   'clientsecret',

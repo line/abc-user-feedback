@@ -20,12 +20,14 @@ describe('mask-sensitive', () => {
     expect(
       maskHeaders({
         Authorization: 'Bearer a',
+        'Proxy-Authorization': 'Basic b',
         'x-api-key': 'key',
         cookie: 'c',
         host: 'localhost',
       }),
     ).toEqual({
       Authorization: '****',
+      'Proxy-Authorization': '****',
       'x-api-key': '****',
       cookie: '****',
       host: 'localhost',
