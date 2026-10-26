@@ -19,6 +19,9 @@ export default [
       'react-hooks/exhaustive-deps': 'off',
       'react/display-name': 'off',
       'react-hooks/rules-of-hooks': 'off',
+      // New in v7. Existing components sync props into state inside effects;
+      // keep it visible as a warning until they are refactored.
+      'react-hooks/set-state-in-effect': 'warn',
       'react-compiler/react-compiler': 'error',
     },
     languageOptions: {
