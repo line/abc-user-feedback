@@ -87,25 +87,27 @@ const PieChart: React.FC<IProps> = (props) => {
           cursor={{ fill: 'var(--bg-neutral-tertiary)' }}
           content={({ payload }) => (
             <div className="bg-neutral-primary border-neutral-tertiary max-w-[240px] rounded border px-4 py-3 shadow-lg">
-              {payload.map(({ payload, value }: PayloadItem, i) => (
-                <div
-                  key={i}
-                  className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"
-                >
-                  <div className="flex items-center gap-2">
-                    <div
-                      style={{
-                        backgroundColor: payload.fill,
-                      }}
-                      className="h-2 w-2 flex-shrink-0 rounded-full"
-                    />
-                    <p className="text-small-normal break-all">
-                      {payload.name}
-                    </p>
+              {(payload as unknown as PayloadItem[]).map(
+                ({ payload, value }, i) => (
+                  <div
+                    key={i}
+                    className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div
+                        style={{
+                          backgroundColor: payload.fill,
+                        }}
+                        className="h-2 w-2 flex-shrink-0 rounded-full"
+                      />
+                      <p className="text-small-normal break-all">
+                        {payload.name}
+                      </p>
+                    </div>
+                    <p>{value.toLocaleString()}</p>
                   </div>
-                  <p>{value.toLocaleString()}</p>
-                </div>
-              ))}
+                ),
+              )}
             </div>
           )}
         />

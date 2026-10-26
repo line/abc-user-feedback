@@ -48,7 +48,7 @@ const BarChart: React.FC<IProps> = (props) => {
         data={data}
         margin={{ left: -20, right: 10, top: 10, bottom: 10 }}
         barSize={80}
-        onClick={(nextState) => onClick?.(nextState.activeLabel)}
+        onClick={(nextState) => onClick?.(nextState.activeLabel?.toString())}
       >
         <CartesianGrid
           vertical={false}
@@ -58,8 +58,8 @@ const BarChart: React.FC<IProps> = (props) => {
           cursor={{ fill: 'var(--bg-neutral-tertiary)' }}
           content={({ payload }) => (
             <div className="bg-neutral-primary border-neutral-tertiary max-w-[240px] rounded border px-4 py-3 shadow-lg">
-              {payload.map(
-                ({ value, payload: itemPayload }: PayloadItem, i) => (
+              {(payload as unknown as PayloadItem[]).map(
+                ({ value, payload: itemPayload }, i) => (
                   <div
                     key={i}
                     className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"

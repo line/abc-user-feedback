@@ -149,7 +149,7 @@ export const useAIIssueForm = (projectId: number) => {
       methods.reset({
         ...AI_ISSUE_DEFAULT_VALUES,
         ...original,
-      } as AIIssue);
+      });
       if (!modelData?.models.some((model) => model.id === original.model)) {
         methods.setError('model', {
           type: 'manual',
