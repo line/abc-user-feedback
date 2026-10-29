@@ -619,7 +619,7 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/typescript
       autoprefixer:
-        specifier: ^10.6.1
+        specifier: ^10.6.2
         version: 10.6.2(postcss@8.5.31)
       eslint:
         specifier: 'catalog:'
@@ -818,7 +818,7 @@ importers:
         specifier: workspace:^
         version: link:../../tooling/typescript
       autoprefixer:
-        specifier: ^10.6.1
+        specifier: ^10.6.2
         version: 10.6.2(postcss@8.5.31)
       eslint:
         specifier: 'catalog:'
