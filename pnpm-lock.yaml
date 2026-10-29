@@ -259,8 +259,8 @@ importers:
         specifier: ^7.0.12
         version: 7.0.12
       '@types/supertest':
-        specifier: ^7.2.0
-        version: 7.2.0
+        specifier: ^7.2.1
+        version: 7.2.1
       '@typescript-eslint/parser':
         specifier: ^8.72.0
         version: 8.72.0(eslint@10.13.0(jiti@1.21.7))(typescript@5.9.3)
@@ -289,8 +289,8 @@ importers:
         specifier: 'catalog:'
         version: 3.9.10
       supertest:
-        specifier: ^7.2.2
-        version: 7.2.2
+        specifier: ^7.3.1
+        version: 7.3.1
       ts-jest:
         specifier: ^29.4.15
         version: 29.4.15(@babel/core@7.29.7)(@jest/transform@30.3.0)(@jest/types@30.3.0)(babel-jest@30.3.0(@babel/core@7.29.7))(jest-util@30.3.0)(jest@30.3.0(@types/node@24.12.0)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.5(@swc/helpers@0.5.19))(@types/node@24.12.0)(typescript@5.9.3)))(typescript@5.9.3)
@@ -6103,8 +6103,8 @@ packages:
   '@types/superagent@8.1.9':
     resolution: {integrity: sha512-pTVjI73witn+9ILmoJdajHGW2jkSaOzhiFYF1Rd3EQ94kymLqB9PjD9ISg7WaALC7+dCHT0FGe9T2LktLq/3GQ==}
 
-  '@types/supertest@7.2.0':
-    resolution: {integrity: sha512-uh2Lv57xvggst6lCqNdFAmDSvoMG7M/HDtX4iUCquxQ5EGPtaPM5PL5Hmi7LCvOG8db7YaCPNJEeoI8s/WzIQw==}
+  '@types/supertest@7.2.1':
+    resolution: {integrity: sha512-4CbBvoYVLHL7+yhbYrZET0vsvuyXTC05aRe7dNQkwMzm56auceoy6Yu3K50uZmwfHna1os3CMSgM/3QVkUtPTw==}
 
   '@types/tough-cookie@4.0.5':
     resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}
@@ -12927,8 +12927,8 @@ packages:
     resolution: {integrity: sha512-B+4Ik7ROgVKrQsXTV0Jwp2u+PXYLSlqtDAhYnkkD+zn3yg8s/zjA2MeGayPoY/KICrbitwneDHrjSotxKL+0XQ==}
     engines: {node: '>=14.18.0'}
 
-  supertest@7.2.2:
-    resolution: {integrity: sha512-oK8WG9diS3DlhdUkcFn4tkNIiIbBx9lI2ClF8K+b2/m8Eyv47LSawxUzZQSNKUrVb2KsqeTDCcjAAVPYaSLVTA==}
+  supertest@7.3.1:
+    resolution: {integrity: sha512-vNaNCFoCR/edDbErQZp5KLNT8R4dSPHX7rlDLoE8hWLAm/878j6ShMbe8HK/E6RwwuhlSXVelXAIg9AxR5WWPw==}
     engines: {node: '>=14.18.0'}
 
   supports-color@10.2.2:
@@ -20343,7 +20343,7 @@ snapshots:
       '@types/node': 24.12.0
       form-data: 4.0.6
 
-  '@types/supertest@7.2.0':
+  '@types/supertest@7.2.1':
     dependencies:
       '@types/methods': 1.1.4
       '@types/superagent': 8.1.9
@@ -29085,7 +29085,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  supertest@7.2.2:
+  supertest@7.3.1:
     dependencies:
       cookie-signature: 1.2.2
       methods: 1.1.2
