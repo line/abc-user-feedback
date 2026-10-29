@@ -103,7 +103,7 @@
     "@types/nodemailer": "^7.0.12",
     "@types/passport-jwt": "*",
     "@types/supertest": "^7.2.1",
-    "@typescript-eslint/parser": "^8.72.0",
+    "@typescript-eslint/parser": "^8.72.1",
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
