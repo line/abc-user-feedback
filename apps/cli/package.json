@@ -35,7 +35,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@types/node": "24.12.0",
+    "@types/node": "24.19.2",
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
