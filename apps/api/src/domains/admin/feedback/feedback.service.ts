@@ -161,7 +161,10 @@ export class FeedbackService {
           }
           break;
         case FieldFormatEnum.multiSelect:
-          if (!Array.isArray(query[fieldKey]))
+          if (
+            !Array.isArray(query[fieldKey]) ||
+            !(query[fieldKey] as unknown[]).every((v) => typeof v === 'string')
+          )
             throw new BadRequestException(
               `${fieldKey} must be array of string`,
             );
@@ -248,7 +251,10 @@ export class FeedbackService {
           }
           break;
         case FieldFormatEnum.multiSelect:
-          if (!Array.isArray(fieldValue))
+          if (
+            !Array.isArray(fieldValue) ||
+            !(fieldValue as unknown[]).every((v) => typeof v === 'string')
+          )
             throw new BadRequestException(
               `${fieldKey} must be array of string`,
             );
