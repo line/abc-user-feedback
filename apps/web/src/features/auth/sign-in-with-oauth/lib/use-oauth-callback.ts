@@ -22,6 +22,10 @@ import { toast } from '@ufb/react';
 import type { IFetchError } from '@/shared';
 import { useUserStore } from '@/entities/user';
 
+import { clearOAuthState, matchesOAuthState } from './oauth-state';
+
+class OAuthStateMismatchError extends Error {}
+
 export const useOAuthCallback = () => {
   const router = useRouter();
 
@@ -29,12 +33,22 @@ export const useOAuthCallback = () => {
   const [status, setStatus] = useState<'loading' | 'error'>('loading');
 
   const code = router.query.code as string | undefined;
+  const state = router.query.state as string | undefined;
 
   useEffect(() => {
     if (!code) return;
 
-    signInWithOAuth({ code }).catch((error) => {
-      if (error instanceof AxiosError && error.response) {
+    const signIn =
+      state && matchesOAuthState(state) ?
+        signInWithOAuth({ code, state })
+      : Promise.reject(new OAuthStateMismatchError());
+
+    signIn.finally(clearOAuthState).catch((error) => {
+      if (error instanceof OAuthStateMismatchError) {
+        toast.error(
+          'This sign-in was not started from this browser. Please try again.',
+        );
+      } else if (error instanceof AxiosError && error.response) {
         const message = error.response.data as IFetchError;
         toast.error(
           message.message ??

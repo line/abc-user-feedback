@@ -23,6 +23,8 @@ import { Button } from '@ufb/react';
 import { useOAIQuery } from '@/shared';
 import { useTenantStore } from '@/entities/tenant';
 
+import { saveOAuthState } from '../lib/oauth-state';
+
 interface IProps {}
 
 const SignInWithOAuthButton: React.FC<IProps> = () => {
@@ -38,13 +40,19 @@ const SignInWithOAuthButton: React.FC<IProps> = () => {
     variables: { callback_url },
   });
 
+  const startLogin = () => {
+    if (!data?.url) return;
+    saveOAuthState(data.url);
+    void router.push(data.url);
+  };
+
   if (tenant?.oauthConfig?.loginButtonType === 'GOOGLE') {
     return (
       <Button
         variant="outline"
         size="medium"
         disabled={!data?.url}
-        onClick={() => router.push(data?.url ?? '')}
+        onClick={startLogin}
       >
         <Image
           src="/assets/images/google.svg"
@@ -62,7 +70,7 @@ const SignInWithOAuthButton: React.FC<IProps> = () => {
       variant="outline"
       size="medium"
       disabled={!data?.url}
-      onClick={() => router.push(data?.url ?? '')}
+      onClick={startLogin}
     >
       {tenant?.oauthConfig?.loginButtonName ??
         `OAuth 2.0 ${t('button.sign-in')}`}
