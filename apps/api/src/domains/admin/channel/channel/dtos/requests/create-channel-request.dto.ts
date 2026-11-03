@@ -32,7 +32,7 @@ import {
   FieldStatusEnum,
 } from '@/common/enums';
 import { IsNullable } from '@/domains/admin/user/decorators';
-import { ImageConfigRequestDto } from './image-config-request.dto';
+import { CreateImageConfigRequestDto } from './image-config-request.dto';
 
 class CreateChannelRequestFieldSelectOptionDto {
   @ApiProperty({ required: false })
@@ -118,11 +118,17 @@ export class CreateChannelRequestDto {
   @MaxLength(50)
   description: string | null;
 
-  @ApiProperty({ required: false, nullable: true, type: ImageConfigRequestDto })
+  @ApiProperty({
+    required: false,
+    nullable: true,
+    type: CreateImageConfigRequestDto,
+  })
   @IsOptional()
   @IsNullable()
   @IsObject()
-  imageConfig: ImageConfigRequestDto | null;
+  @ValidateNested()
+  @Type(() => CreateImageConfigRequestDto)
+  imageConfig: CreateImageConfigRequestDto | null;
 
   @ApiProperty()
   @IsNumber()

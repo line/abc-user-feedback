@@ -14,21 +14,12 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString, MinLength } from 'class-validator';
 
-export class ImageConfigRequestDto {
+class ImageConfigBaseRequestDto {
   @ApiProperty()
   @IsString()
   accessKeyId: string;
-
-  @ApiProperty({
-    required: false,
-    description:
-      'Omit or leave empty to keep the secret already stored for the channel',
-  })
-  @IsOptional()
-  @IsString()
-  secretAccessKey?: string;
 
   @ApiProperty()
   @IsString()
@@ -47,6 +38,27 @@ export class ImageConfigRequestDto {
   domainWhiteList: string[];
 
   @ApiProperty({ required: false })
+  @IsOptional()
   @IsBoolean()
   enablePresignedUrlDownload: boolean;
+}
+
+/** Used on update, where the stored secret is kept when none is sent. */
+export class ImageConfigRequestDto extends ImageConfigBaseRequestDto {
+  @ApiProperty({
+    required: false,
+    description:
+      'Omit or leave empty to keep the secret already stored for the channel',
+  })
+  @IsOptional()
+  @IsString()
+  secretAccessKey?: string;
+}
+
+/** Used on create, where there is no stored secret to fall back to. */
+export class CreateImageConfigRequestDto extends ImageConfigBaseRequestDto {
+  @ApiProperty()
+  @IsString()
+  @MinLength(1)
+  secretAccessKey: string;
 }

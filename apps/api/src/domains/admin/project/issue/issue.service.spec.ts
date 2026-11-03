@@ -838,12 +838,12 @@ describe('IssueService test suite', () => {
         {
           ...issueFixture,
           id: issueIds[0],
-          project: { id: faker.number.int() },
+          project: { id: projectId },
         },
         {
           ...issueFixture,
           id: issueIds[1],
-          project: { id: faker.number.int() },
+          project: { id: projectId },
         },
       ];
       jest
@@ -860,6 +860,11 @@ describe('IssueService test suite', () => {
 
       expect(issueStatisticsService.updateCount).toHaveBeenCalledTimes(2);
       expect(issueRepo.remove).toHaveBeenCalledWith(mockIssues);
+      expect(issueRepo.find).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: expect.anything(), project: { id: projectId } },
+        }),
+      );
     });
 
     it('deleting issues by ids succeeds with empty array', async () => {
