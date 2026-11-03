@@ -78,6 +78,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
     if (data?.imageConfig) {
       methods.reset({
         ...data.imageConfig,
+        secretAccessKey: '',
         domainWhiteList: data.imageConfig.domainWhiteList,
       });
     } else {
@@ -120,7 +121,11 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
         description={<HelpCardDocs i18nKey="help-card.image-config" />}
       />
       <FormProvider {...methods}>
-        <ImageConfigForm />
+        <ImageConfigForm
+          projectId={projectId}
+          channelId={channelId}
+          hasStoredSecret={!!data?.imageConfig}
+        />
       </FormProvider>
     </SettingTemplate>
   );

@@ -389,6 +389,7 @@
       "select": "Please select.",
       "text": "Please enter.",
       "text-or-generate": "Please enter or generate.",
+      "keep-secret": "Saved. Leave blank to keep the current value.",
       "ai-endpoint-url": "Please enter only if a separate Endpoint URL configuration is required.",
       "system-prompt": "If there is additional information that the Generative AI should refer to, please enter it.",
       "ai-field-template-prompt": "Please enter instructions on how the Generative AI should process.",

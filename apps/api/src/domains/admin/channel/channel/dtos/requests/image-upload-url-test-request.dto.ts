@@ -14,16 +14,21 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 
 export class ImageUploadUrlTestRequestDto {
   @ApiProperty()
   @IsString()
   accessKeyId: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    required: false,
+    description:
+      'Omit to test with the secret stored for channelId, since saved secrets are not returned to clients',
+  })
+  @IsOptional()
   @IsString()
-  secretAccessKey: string;
+  secretAccessKey?: string;
 
   @ApiProperty()
   @IsString()
@@ -36,4 +41,9 @@ export class ImageUploadUrlTestRequestDto {
   @ApiProperty()
   @IsString()
   bucket: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsInt()
+  channelId?: number;
 }

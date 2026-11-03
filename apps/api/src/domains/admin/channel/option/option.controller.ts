@@ -25,6 +25,7 @@ import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 import { PermissionEnum } from '@/domains/admin/project/role/permission.enum';
 import { RequirePermission } from '@/domains/admin/project/role/require-permission.decorator';
+import { SuperUser } from '@/domains/admin/user/super-user.decorator';
 import { CreateOptionRequestDto } from './dtos/requests';
 import {
   CreateOptionResponseDto,
@@ -36,6 +37,9 @@ import { OptionService } from './option.service';
 export class OptionController {
   constructor(private readonly optionService: OptionService) {}
 
+  // The route has no project to check membership against, so like the
+  // sibling create route (which needs a projectId param), it is SUPER-only.
+  @SuperUser()
   @ApiOkResponse({ type: [FindOptionByFieldIdResponseDto] })
   @Get()
   async getOptions(@Param('fieldId', ParseIntPipe) fieldId: number) {

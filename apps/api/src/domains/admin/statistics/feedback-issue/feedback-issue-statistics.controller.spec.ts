@@ -14,14 +14,17 @@
  * under the License.
  */
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
-import { getMockProvider } from '@/test-utils/util-functions';
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { FeedbackIssueStatisticsController } from './feedback-issue-statistics.controller';
 import { FeedbackIssueStatisticsService } from './feedback-issue-statistics.service';
 
 const MockFeedbackIssueStatisticsService = {
   getCountByDateByIssue: jest.fn(),
 };
+
+const projectId = 1;
 
 describe('FeedbackIssueStatisticsController', () => {
   let feedbackIssueStatisticsController: FeedbackIssueStatisticsController;
@@ -34,6 +37,7 @@ describe('FeedbackIssueStatisticsController', () => {
           FeedbackIssueStatisticsService,
           MockFeedbackIssueStatisticsService,
         ),
+        getMockProvider(DataSource, MockDataSource),
       ],
     }).compile();
 
@@ -79,6 +83,7 @@ describe('FeedbackIssueStatisticsController', () => {
           endDate,
           interval,
           issueIds,
+          projectId,
         );
 
       expect(
@@ -91,6 +96,7 @@ describe('FeedbackIssueStatisticsController', () => {
         endDate,
         interval,
         issueIds: [1, 2, 3],
+        projectId,
       });
       expect(result).toEqual(mockServiceResponse);
     });
@@ -112,6 +118,7 @@ describe('FeedbackIssueStatisticsController', () => {
           endDate,
           interval,
           issueIds,
+          projectId,
         );
 
       expect(
@@ -121,6 +128,7 @@ describe('FeedbackIssueStatisticsController', () => {
         endDate,
         interval,
         issueIds: [],
+        projectId,
       });
       expect(result).toEqual(mockServiceResponse);
     });
@@ -142,6 +150,7 @@ describe('FeedbackIssueStatisticsController', () => {
           endDate,
           interval,
           issueIds,
+          projectId,
         );
 
       expect(
@@ -151,6 +160,7 @@ describe('FeedbackIssueStatisticsController', () => {
         endDate,
         interval,
         issueIds: [1, 2, 3, 4],
+        projectId,
       });
       expect(result).toEqual(mockServiceResponse);
     });
@@ -186,6 +196,7 @@ describe('FeedbackIssueStatisticsController', () => {
           endDate,
           interval,
           issueIds,
+          projectId,
         );
 
       expect(
@@ -195,6 +206,7 @@ describe('FeedbackIssueStatisticsController', () => {
         endDate,
         interval,
         issueIds: [42],
+        projectId,
       });
       expect(result).toEqual(mockServiceResponse);
     });
@@ -217,6 +229,7 @@ describe('FeedbackIssueStatisticsController', () => {
           endDate,
           interval,
           issueIds,
+          projectId,
         );
 
         expect(
@@ -226,6 +239,7 @@ describe('FeedbackIssueStatisticsController', () => {
           endDate,
           interval,
           issueIds: [1, 2],
+          projectId,
         });
       }
 
@@ -251,6 +265,7 @@ describe('FeedbackIssueStatisticsController', () => {
           endDate,
           interval,
           issueIds,
+          projectId,
         ),
       ).rejects.toThrow('Database connection failed');
 
@@ -276,6 +291,7 @@ describe('FeedbackIssueStatisticsController', () => {
           endDate,
           interval,
           issueIds,
+          projectId,
         );
 
       expect(
@@ -285,6 +301,7 @@ describe('FeedbackIssueStatisticsController', () => {
         endDate,
         interval,
         issueIds: [1, 2, 3],
+        projectId,
       });
       expect(result).toEqual(mockServiceResponse);
     });
@@ -306,6 +323,7 @@ describe('FeedbackIssueStatisticsController', () => {
           endDate,
           interval,
           issueIds,
+          projectId,
         );
 
       expect(
@@ -315,6 +333,7 @@ describe('FeedbackIssueStatisticsController', () => {
         endDate,
         interval,
         issueIds: [1, -2, 3],
+        projectId,
       });
       expect(result).toEqual(mockServiceResponse);
     });
@@ -336,6 +355,7 @@ describe('FeedbackIssueStatisticsController', () => {
           endDate,
           interval,
           issueIds,
+          projectId,
         );
 
       expect(
@@ -345,6 +365,7 @@ describe('FeedbackIssueStatisticsController', () => {
         endDate,
         interval,
         issueIds: [0],
+        projectId,
       });
       expect(result).toEqual(mockServiceResponse);
     });
@@ -366,6 +387,7 @@ describe('FeedbackIssueStatisticsController', () => {
           endDate,
           interval,
           issueIds,
+          projectId,
         );
 
       expect(
@@ -375,6 +397,7 @@ describe('FeedbackIssueStatisticsController', () => {
         endDate,
         interval,
         issueIds: [999999999, 1000000000],
+        projectId,
       });
       expect(result).toEqual(mockServiceResponse);
     });

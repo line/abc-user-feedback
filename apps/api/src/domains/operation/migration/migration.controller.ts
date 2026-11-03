@@ -14,13 +14,34 @@
  * under the License.
  */
 import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Type } from 'class-transformer';
+import { IsInt, Max, Min } from 'class-validator';
 
 import { FeedbackIssueStatisticsService } from '../../admin/statistics/feedback-issue/feedback-issue-statistics.service';
 import { FeedbackStatisticsService } from '../../admin/statistics/feedback/feedback-statistics.service';
 import { IssueStatisticsService } from '../../admin/statistics/issue/issue-statistics.service';
+import { SuperUser } from '../../admin/user/super-user.decorator';
 import { MigrationService } from './migration.service';
 
+// Bounds the per-day, per-channel recomputation a single request can trigger.
+const MAX_STATISTICS_DAYS = 365;
+
+class MigrateStatisticsRequestDto {
+  @Type(() => Number)
+  @IsInt()
+  projectId: number;
+
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(MAX_STATISTICS_DAYS)
+  day: number;
+}
+
+// Maintenance operations: rebuilding indexes and statistics is reserved for
+// SUPER users.
 @Controller('/migration')
+@SuperUser()
 export class MigrationController {
   constructor(
     private readonly migrationService: MigrationService,
@@ -35,9 +56,7 @@ export class MigrationController {
   }
 
   @Post('/statistics/feedback')
-  async migrateFeedbackStatistics(
-    @Body() body: { projectId: number; day: number },
-  ) {
+  async migrateFeedbackStatistics(@Body() body: MigrateStatisticsRequestDto) {
     await this.feedbackStatisticsService.createFeedbackStatistics(
       body.projectId,
       body.day,
@@ -45,9 +64,7 @@ export class MigrationController {
   }
 
   @Post('/statistics/issue')
-  async migrateIssueStatistics(
-    @Body() body: { projectId: number; day: number },
-  ) {
+  async migrateIssueStatistics(@Body() body: MigrateStatisticsRequestDto) {
     await this.issueStatisticsService.createIssueStatistics(
       body.projectId,
       body.day,
@@ -56,7 +73,7 @@ export class MigrationController {
 
   @Post('/statistics/feedback-issue')
   async migrateFeedbackIssueStatistics(
-    @Body() body: { projectId: number; day: number },
+    @Body() body: MigrateStatisticsRequestDto,
   ) {
     await this.feedbackIssueStatisticsService.createFeedbackIssueStatistics(
       body.projectId,

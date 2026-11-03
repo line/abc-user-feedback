@@ -14,12 +14,15 @@
  * under the License.
  */
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 
+import { RequireProjectMember } from '@/domains/admin/project/role/require-permission.decorator';
 import { FindCountByDateByIssueResponseDto } from './dtos/responses';
 import { FeedbackIssueStatisticsService } from './feedback-issue-statistics.service';
 
 @Controller('/admin/statistics/feedback-issue')
+@ApiBearerAuth()
+@RequireProjectMember()
 export class FeedbackIssueStatisticsController {
   constructor(
     private readonly feedbackIssueStatisticsService: FeedbackIssueStatisticsService,
@@ -32,6 +35,7 @@ export class FeedbackIssueStatisticsController {
     @Query('endDate') endDate: string,
     @Query('interval') interval: 'day' | 'week' | 'month',
     @Query('issueIds') issueIds: string,
+    @Query('projectId') projectId: number,
   ) {
     const issueIdsArray = issueIds
       .split(',')
@@ -44,6 +48,7 @@ export class FeedbackIssueStatisticsController {
         endDate,
         interval,
         issueIds: issueIdsArray,
+        projectId,
       }),
     );
   }

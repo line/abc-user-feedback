@@ -23,10 +23,6 @@ export class ImageConfigResponseDto {
 
   @Expose()
   @ApiProperty()
-  secretAccessKey: string;
-
-  @Expose()
-  @ApiProperty()
   endpoint: string;
 
   @Expose()

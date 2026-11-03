@@ -14,16 +14,21 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class ImageConfigRequestDto {
   @ApiProperty()
   @IsString()
   accessKeyId: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    required: false,
+    description:
+      'Omit or leave empty to keep the secret already stored for the channel',
+  })
+  @IsOptional()
   @IsString()
-  secretAccessKey: string;
+  secretAccessKey?: string;
 
   @ApiProperty()
   @IsString()

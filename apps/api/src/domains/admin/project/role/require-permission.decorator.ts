@@ -27,3 +27,13 @@ export function RequirePermission(permission: PermissionEnum) {
     UseGuards(JwtAuthGuard, PermissionGuard),
   );
 }
+
+/**
+ * Allows any member of the project (any role) and SUPER users. Use for project
+ * reads that have no dedicated permission. The project id is taken from the
+ * `:projectId` route param, or from the `projectId` query when the route has
+ * no such param.
+ */
+export function RequireProjectMember() {
+  return applyDecorators(UseGuards(JwtAuthGuard, PermissionGuard));
+}

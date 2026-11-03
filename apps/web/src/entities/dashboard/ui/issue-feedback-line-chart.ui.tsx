@@ -65,6 +65,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
       startDate: dayjs(from).startOf('day').format('YYYY-MM-DD'),
       endDate: dayjs(to).endOf('day').format('YYYY-MM-DD'),
       issueIds: currentIssues.map((issue) => issue.id).join(','),
+      projectId,
       interval: getDayCount(from, to) > 50 ? 'week' : 'day',
     },
     queryOptions: {

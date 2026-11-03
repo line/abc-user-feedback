@@ -380,7 +380,7 @@ describe('FeedbackIssueStatisticsService suite', () => {
       expect(result).toEqual({ issues: [] });
       expect(feedbackIssueStatsRepo.find).toHaveBeenCalledWith({
         where: {
-          issue: { id: expect.any(Object) },
+          issue: { id: expect.any(Object), project: expect.any(Object) },
           date: expect.any(Object),
         },
         relations: { issue: true },

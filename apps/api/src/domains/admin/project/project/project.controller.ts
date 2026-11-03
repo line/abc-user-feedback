@@ -39,7 +39,10 @@ import { UserDto } from '@/domains/admin/user/dtos';
 import { SuperUser } from '@/domains/admin/user/super-user.decorator';
 import { IssueService } from '../issue/issue.service';
 import { PermissionEnum } from '../role/permission.enum';
-import { RequirePermission } from '../role/require-permission.decorator';
+import {
+  RequirePermission,
+  RequireProjectMember,
+} from '../role/require-permission.decorator';
 import {
   CreateProjectRequestDto,
   FindProjectsRequestDto,
@@ -99,7 +102,7 @@ export class ProjectController {
     return this.projectService.checkName(name);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @RequireProjectMember()
   @ApiBearerAuth()
   @ApiOkResponse({ type: FindProjectByIdResponseDto })
   @Get('/:projectId')
@@ -109,6 +112,8 @@ export class ProjectController {
     );
   }
 
+  @RequireProjectMember()
+  @ApiBearerAuth()
   @ApiOkResponse({ type: CountFeedbacksByIdResponseDto })
   @Get('/:projectId/feedback-count')
   async countFeedbacks(@Param('projectId', ParseIntPipe) projectId: number) {
@@ -117,6 +122,8 @@ export class ProjectController {
     );
   }
 
+  @RequireProjectMember()
+  @ApiBearerAuth()
   @ApiOkResponse({ type: CountIssuesByIdResponseDto })
   @Get(':projectId/issue-count')
   async countIssues(@Param('projectId', ParseIntPipe) projectId: number) {

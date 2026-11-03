@@ -162,7 +162,10 @@ describe('IssueController', () => {
       await issueController.deleteMany(projectId, dto);
 
       expect(MockIssueService.deleteByIds).toHaveBeenCalledTimes(1);
-      expect(MockIssueService.deleteByIds).toHaveBeenCalledWith(dto.issueIds);
+      expect(MockIssueService.deleteByIds).toHaveBeenCalledWith(
+        dto.issueIds,
+        projectId,
+      );
     });
   });
 

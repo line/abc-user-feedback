@@ -326,6 +326,8 @@ describe('ChannelController', () => {
   });
 
   describe('getImageUploadUrlTest', () => {
+    const projectId = faker.number.int();
+
     it('should test image upload URL successfully', async () => {
       const dto = new ImageUploadUrlTestRequestDto();
       dto.accessKeyId = faker.string.sample();
@@ -335,7 +337,10 @@ describe('ChannelController', () => {
       dto.bucket = faker.string.sample();
       MockChannelService.isValidImageConfig.mockResolvedValue(true);
 
-      const result = await channelController.getImageUploadUrlTest(dto);
+      const result = await channelController.getImageUploadUrlTest(
+        projectId,
+        dto,
+      );
 
       expect(MockChannelService.isValidImageConfig).toHaveBeenCalledTimes(1);
       expect(MockChannelService.isValidImageConfig).toHaveBeenCalledWith({
@@ -350,11 +355,55 @@ describe('ChannelController', () => {
 
     it('should return false when image config is invalid', async () => {
       const dto = new ImageUploadUrlTestRequestDto();
+      dto.secretAccessKey = faker.string.sample();
       MockChannelService.isValidImageConfig.mockResolvedValue(false);
 
-      const result = await channelController.getImageUploadUrlTest(dto);
+      const result = await channelController.getImageUploadUrlTest(
+        projectId,
+        dto,
+      );
 
       expect(result).toEqual({ success: false });
+    });
+
+    it('should test with the stored secret when only channelId is given', async () => {
+      const storedSecret = faker.string.sample();
+      const dto = new ImageUploadUrlTestRequestDto();
+      dto.accessKeyId = faker.string.sample();
+      dto.channelId = faker.number.int();
+      MockChannelService.findById.mockResolvedValue({
+        project: { id: projectId },
+        imageConfig: { secretAccessKey: storedSecret },
+      });
+      MockChannelService.isValidImageConfig.mockResolvedValue(true);
+
+      await channelController.getImageUploadUrlTest(projectId, dto);
+
+      expect(MockChannelService.isValidImageConfig).toHaveBeenCalledWith(
+        expect.objectContaining({ secretAccessKey: storedSecret }),
+      );
+    });
+
+    it('should reject a channel from another project', async () => {
+      const dto = new ImageUploadUrlTestRequestDto();
+      dto.channelId = faker.number.int();
+      MockChannelService.findById.mockResolvedValue({
+        project: { id: projectId + 1 },
+        imageConfig: { secretAccessKey: faker.string.sample() },
+      });
+
+      await expect(
+        channelController.getImageUploadUrlTest(projectId, dto),
+      ).rejects.toThrow(BadRequestException);
+      expect(MockChannelService.isValidImageConfig).not.toHaveBeenCalled();
+    });
+
+    it('should reject a request without any secret', async () => {
+      const dto = new ImageUploadUrlTestRequestDto();
+
+      await expect(
+        channelController.getImageUploadUrlTest(projectId, dto),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 

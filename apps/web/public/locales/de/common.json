@@ -389,6 +389,7 @@
       "select": "Bitte auswählen.",
       "text": "Bitte eingeben.",
       "text-or-generate": "Bitte eingeben oder generieren.",
+      "keep-secret": "Gespeichert. Leer lassen, um den aktuellen Wert beizubehalten.",
       "ai-endpoint-url": "Bitte geben Sie die Endpoint-URL ein, falls eine separate Konfiguration erforderlich ist.",
       "system-prompt": "Bitte geben Sie zusätzliche Informationen ein, die das generative KI-Modell berücksichtigen soll.",
       "ai-field-template-prompt": "Bitte geben Sie Anweisungen ein, wie das generative KI-Modell die Eingabe verarbeiten soll.",

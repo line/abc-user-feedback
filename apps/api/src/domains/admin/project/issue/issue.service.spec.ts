@@ -831,6 +831,7 @@ describe('IssueService test suite', () => {
 
   describe('deleteByIds', () => {
     const issueIds = [faker.number.int(), faker.number.int()];
+    const projectId = faker.number.int();
 
     it('deleting issues by ids succeeds', async () => {
       const mockIssues = [
@@ -855,7 +856,7 @@ describe('IssueService test suite', () => {
         .spyOn(issueRepo, 'remove')
         .mockResolvedValue(mockIssues[0] as IssueEntity);
 
-      await issueService.deleteByIds(issueIds);
+      await issueService.deleteByIds(issueIds, projectId);
 
       expect(issueStatisticsService.updateCount).toHaveBeenCalledTimes(2);
       expect(issueRepo.remove).toHaveBeenCalledWith(mockIssues);
@@ -865,7 +866,7 @@ describe('IssueService test suite', () => {
       jest.spyOn(issueRepo, 'find').mockResolvedValue([]);
       jest.spyOn(issueRepo, 'remove').mockResolvedValue([] as any);
 
-      await issueService.deleteByIds(issueIds);
+      await issueService.deleteByIds(issueIds, projectId);
 
       expect(issueRepo.remove).toHaveBeenCalledWith([]);
     });
@@ -1053,6 +1054,7 @@ describe('IssueService test suite', () => {
     });
 
     describe('deleteByIds method', () => {
+      const projectId = faker.number.int();
       const issueIds = [faker.number.int(), faker.number.int()];
 
       it('deleteByIds method handles transaction rollback when statistics update fails', async () => {
@@ -1075,9 +1077,9 @@ describe('IssueService test suite', () => {
           .spyOn(issueStatisticsService, 'updateCount')
           .mockRejectedValue(new Error('Statistics update failed'));
 
-        await expect(issueService.deleteByIds(issueIds)).rejects.toThrow(
-          'Statistics update failed',
-        );
+        await expect(
+          issueService.deleteByIds(issueIds, projectId),
+        ).rejects.toThrow('Statistics update failed');
       });
 
       it('deleteByIds method handles transaction rollback when remove fails', async () => {
@@ -1103,9 +1105,9 @@ describe('IssueService test suite', () => {
           .spyOn(issueRepo, 'remove')
           .mockRejectedValue(new Error('Database remove failed'));
 
-        await expect(issueService.deleteByIds(issueIds)).rejects.toThrow(
-          'Database remove failed',
-        );
+        await expect(
+          issueService.deleteByIds(issueIds, projectId),
+        ).rejects.toThrow('Database remove failed');
       });
     });
   });

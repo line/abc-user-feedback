@@ -38,6 +38,7 @@ export class FindChannelByIdResponseDto {
 
   @Expose()
   @ApiProperty({ required: false })
+  @Type(() => ImageConfigResponseDto)
   imageConfig: ImageConfigResponseDto;
 
   @Expose()

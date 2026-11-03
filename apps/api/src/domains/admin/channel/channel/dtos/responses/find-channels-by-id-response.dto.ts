@@ -38,6 +38,7 @@ class FindChannelsByProjectDto {
 
   @Expose()
   @ApiProperty()
+  @Type(() => ImageConfigResponseDto)
   imageConfig: ImageConfigResponseDto;
 
   @Expose()

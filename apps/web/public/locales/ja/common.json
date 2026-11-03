@@ -389,6 +389,7 @@
       "select": "選択してください",
       "text": "入力してください",
       "text-or-generate": "入力または生成してください",
+      "keep-secret": "保存済み。空欄のままにすると現在の値が維持されます",
       "ai-endpoint-url": "別のEndpoint URL設定が必要な場合にのみ入力してください",
       "system-prompt": "生成型AIが追加で参照すべき内容がある場合は入力してください",
       "ai-field-template-prompt": "生成型AIがどのように処理すべきかの指示を入力してください",

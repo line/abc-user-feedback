@@ -24,7 +24,6 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -35,9 +34,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '@/domains/admin/auth/guards';
 import { PermissionEnum } from '@/domains/admin/project/role/permission.enum';
-import { RequirePermission } from '@/domains/admin/project/role/require-permission.decorator';
+import {
+  RequirePermission,
+  RequireProjectMember,
+} from '@/domains/admin/project/role/require-permission.decorator';
 import { ChannelService } from './channel.service';
 import { CreateChannelDto } from './dtos';
 import {
@@ -74,7 +75,7 @@ export class ChannelController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
+  @RequireProjectMember()
   @ApiOkResponse({ type: FindChannelsByProjectIdResponseDto })
   @Get('/')
   async findAllByProjectId(
@@ -90,7 +91,7 @@ export class ChannelController {
       }),
     );
   }
-  @UseGuards(JwtAuthGuard)
+  @RequireProjectMember()
   @Get('/name-check')
   @ApiOkResponse({ type: Boolean })
   async checkName(
@@ -101,7 +102,7 @@ export class ChannelController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
-  @UseGuards(JwtAuthGuard)
+  @RequireProjectMember()
   @ApiOkResponse({ type: FindChannelByIdResponseDto })
   @Get('/:channelId')
   async findOne(@Param('channelId', ParseIntPipe) channelId: number) {
@@ -138,9 +139,11 @@ export class ChannelController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
+  @RequirePermission(PermissionEnum.channel_image_update)
   @ApiOkResponse({ type: ImageUploadUrlTestResponseDto })
   @Post('/image-upload-url-test')
   async getImageUploadUrlTest(
+    @Param('projectId', ParseIntPipe) projectId: number,
     @Body()
     {
       accessKeyId,
@@ -148,12 +151,27 @@ export class ChannelController {
       endpoint,
       region,
       bucket,
+      channelId,
     }: ImageUploadUrlTestRequestDto,
   ) {
+    // Saved secrets are not returned to clients, so the settings form may
+    // test a stored configuration by passing its channel instead.
+    let secret = secretAccessKey;
+    if (!secret && channelId !== undefined) {
+      const channel = await this.channelService.findById({ channelId });
+      if (channel.project.id !== projectId) {
+        throw new BadRequestException('Invalid channel id');
+      }
+      secret = channel.imageConfig?.secretAccessKey;
+    }
+    if (!secret) {
+      throw new BadRequestException('secretAccessKey is required');
+    }
+
     return {
       success: await this.channelService.isValidImageConfig({
         accessKeyId,
-        secretAccessKey,
+        secretAccessKey: secret,
         endpoint,
         region,
         bucket,
@@ -171,7 +189,7 @@ export class ChannelController {
     example: 'test-image-key.jpg',
   })
   @ApiOkResponse({ type: String })
-  @UseGuards(JwtAuthGuard)
+  @RequireProjectMember()
   @Get('/:channelId/image-download-url')
   async getImageDownloadUrl(
     @Param('projectId', ParseIntPipe) projectId: number,

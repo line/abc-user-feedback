@@ -110,7 +110,12 @@ export class UserController {
   @ApiOkResponse({ type: GetRolesByIdResponseDto })
   @Get(':userId/roles')
   @UseGuards(JwtAuthGuard)
-  async getRoles(@Param('userId', ParseIntPipe) userId: number) {
+  async getRoles(
+    @Param('userId', ParseIntPipe) userId: number,
+    @CurrentUser() user: UserDto,
+  ) {
+    if (user.type !== UserTypeEnum.SUPER && user.id !== userId)
+      throw new UnauthorizedException();
     const roles = await this.userService.findRolesById(userId);
     return { roles };
   }

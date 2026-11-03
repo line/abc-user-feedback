@@ -15,8 +15,9 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
-import { getMockProvider } from '@/test-utils/util-functions';
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { IssueStatisticsController } from './issue-statistics.controller';
 import { IssueStatisticsService } from './issue-statistics.service';
 
@@ -37,6 +38,7 @@ describe('Issue Statistics Controller', () => {
       controllers: [IssueStatisticsController],
       providers: [
         getMockProvider(IssueStatisticsService, MockIssueStatisticsService),
+        getMockProvider(DataSource, MockDataSource),
       ],
     }).compile();
 
