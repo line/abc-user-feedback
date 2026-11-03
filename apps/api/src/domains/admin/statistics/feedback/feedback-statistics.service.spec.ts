@@ -117,6 +117,7 @@ describe('FeedbackStatisticsService suite', () => {
       dto.endDate = endDate;
       dto.interval = interval;
       dto.channelIds = channelIds;
+      dto.projectId = faker.number.int();
       jest
         .spyOn(feedbackStatsRepo, 'find')
         .mockResolvedValue(feedbackStatsFixture);
@@ -125,7 +126,7 @@ describe('FeedbackStatisticsService suite', () => {
 
       expect(feedbackStatsRepo.find).toHaveBeenCalledWith({
         where: {
-          channel: In(channelIds),
+          channel: { id: In(channelIds), project: { id: dto.projectId } },
           date: Between(new Date(startDate), new Date(endDate)),
         },
         relations: { channel: true },

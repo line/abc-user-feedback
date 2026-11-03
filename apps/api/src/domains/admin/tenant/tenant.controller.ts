@@ -57,6 +57,7 @@ export class TenantController {
     return GetTenantResponseDto.transform(tenant);
   }
 
+  @SuperUser()
   @ApiOkResponse({ type: CountFeedbacksByTenantIdResponseDto })
   @Get('/:tenantId/feedback-count')
   async countFeedbacks(@Param('tenantId', ParseIntPipe) tenantId: number) {

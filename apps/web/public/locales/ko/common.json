@@ -390,6 +390,7 @@
       "select": "선택해주세요.",
       "text": "입력해 주세요.",
       "text-or-generate": "입력 또는 생성해주세요.",
+      "keep-secret": "저장됨. 비워 두면 현재 값을 유지합니다.",
       "ai-endpoint-url": "별도의 Endpoint URL 설정이 필요한 경우에만 입력해 주세요.",
       "system-prompt": "생성형 AI가 추가적으로 참고해야 할 내용이 있다면 입력해 주세요.",
       "ai-field-template-prompt": "생성형 AI가 어떻게 처리해야 하는지 지시사항을 입력해 주세요.",

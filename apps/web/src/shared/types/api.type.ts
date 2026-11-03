@@ -1776,7 +1776,8 @@ export interface components {
     };
     ImageConfigRequestDto: {
       accessKeyId: string;
-      secretAccessKey: string;
+      /** @description Omit or leave empty to keep the secret already stored for the channel */
+      secretAccessKey?: string;
       endpoint: string;
       region: string;
       bucket: string;
@@ -1827,7 +1828,6 @@ export interface components {
     };
     ImageConfigResponseDto: {
       accessKeyId: string;
-      secretAccessKey: string;
       endpoint: string;
       region: string;
       bucket: string;
@@ -1920,10 +1920,12 @@ export interface components {
     };
     ImageUploadUrlTestRequestDto: {
       accessKeyId: string;
-      secretAccessKey: string;
+      /** @description Omit to test with the secret stored for channelId, since saved secrets are not returned to clients */
+      secretAccessKey?: string;
       endpoint: string;
       region: string;
       bucket: string;
+      channelId?: number;
     };
     ImageUploadUrlTestResponseDto: {
       success: boolean;
@@ -4113,6 +4115,7 @@ export interface operations {
         endDate: string;
         interval: string;
         channelIds: string;
+        projectId: number;
       };
       header?: never;
       path?: never;
@@ -4183,6 +4186,7 @@ export interface operations {
         endDate: string;
         interval: string;
         issueIds: string;
+        projectId: number;
       };
       header?: never;
       path?: never;

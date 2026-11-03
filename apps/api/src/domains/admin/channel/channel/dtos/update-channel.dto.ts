@@ -24,8 +24,11 @@ export class UpdateChannelDto {
   @Expose()
   description: string | null;
 
+  /** An empty secretAccessKey keeps the secret already stored. */
   @Expose()
-  imageConfig: ImageConfigDto | null;
+  imageConfig:
+    | (Omit<ImageConfigDto, 'secretAccessKey'> & { secretAccessKey?: string })
+    | null;
 
   @Expose()
   feedbackSearchMaxDays: number;

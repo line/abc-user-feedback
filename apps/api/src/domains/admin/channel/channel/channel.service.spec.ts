@@ -276,6 +276,30 @@ describe('ChannelService', () => {
       expect(channel.name).toEqual(dto.name);
       expect(channel.description).toEqual(dto.description);
     });
+    it('updating keeps the stored image secret when none is sent', async () => {
+      const storedSecret = faker.string.sample();
+      const dto = new UpdateChannelDto();
+      dto.name = faker.string.sample();
+      dto.description = faker.string.sample();
+      dto.feedbackSearchMaxDays = faker.number.int();
+      dto.imageConfig = {
+        accessKeyId: faker.string.sample(),
+        secretAccessKey: '',
+        endpoint: faker.internet.url(),
+        region: faker.string.sample(),
+        bucket: faker.string.sample(),
+        domainWhiteList: [],
+      };
+      jest.spyOn(channelRepo, 'findOne').mockResolvedValueOnce({
+        ...channelFixture,
+        imageConfig: { ...dto.imageConfig, secretAccessKey: storedSecret },
+      } as ChannelEntity);
+      jest.spyOn(channelRepo, 'findOne').mockResolvedValueOnce(null);
+
+      const channel = await channelService.updateInfo(channelFixture.id, dto);
+
+      expect(channel.imageConfig?.secretAccessKey).toEqual(storedSecret);
+    });
     it('updating fails with a duplicate channel name', async () => {
       const channelId = channelFixture.id;
       const dto = new UpdateChannelDto();

@@ -60,11 +60,11 @@ export class FeedbackStatisticsService {
   ) {}
 
   async getCountByDateByChannel(dto: GetCountByDateByChannelDto) {
-    const { startDate, endDate, interval, channelIds } = dto;
+    const { startDate, endDate, interval, channelIds, projectId } = dto;
 
     const feedbackStatistics = await this.repository.find({
       where: {
-        channel: In(channelIds),
+        channel: { id: In(channelIds), project: { id: projectId } },
         date: Between(new Date(startDate), new Date(endDate)),
       },
       relations: { channel: true },

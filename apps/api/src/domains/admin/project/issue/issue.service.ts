@@ -435,9 +435,9 @@ export class IssueService {
   }
 
   @Transactional()
-  async deleteByIds(ids: number[]) {
+  async deleteByIds(ids: number[], projectId: number) {
     const issues = await this.repository.find({
-      where: { id: In(ids) },
+      where: { id: In(ids), project: { id: projectId } },
       relations: { project: true },
     });
 

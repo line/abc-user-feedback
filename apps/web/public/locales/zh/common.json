@@ -389,6 +389,7 @@
       "select": "请选择。",
       "text": "请输入。",
       "text-or-generate": "请输入或生成。",
+      "keep-secret": "已保存。留空则保留当前值。",
       "ai-endpoint-url": "如果需要单独设置Endpoint URL，请输入。",
       "system-prompt": "如果生成型AI需要参考的其他内容，请输入。",
       "ai-field-template-prompt": "请输入生成型AI如何处理的指示。",

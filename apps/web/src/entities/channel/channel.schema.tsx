@@ -40,7 +40,11 @@ export const channelSchema = z.object({
     .nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  imageConfig: channelImageConfigSchema.nullable().optional(),
+  // The API never returns the stored secret.
+  imageConfig: channelImageConfigSchema
+    .partial({ secretAccessKey: true })
+    .nullable()
+    .optional(),
   feedbackSearchMaxDays: z.number(),
 });
 

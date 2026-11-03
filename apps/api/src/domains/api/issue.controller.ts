@@ -190,10 +190,10 @@ export class IssueController {
   })
   @Delete('')
   async deleteMany(
-    @Param('projectId', ParseIntPipe) _: number,
+    @Param('projectId', ParseIntPipe) projectId: number,
     @Body() { issueIds }: DeleteIssuesRequestDto,
   ) {
-    await this.issueService.deleteByIds(issueIds);
+    await this.issueService.deleteByIds(issueIds, projectId);
   }
 
   @ApiOperation({

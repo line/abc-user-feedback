@@ -117,7 +117,15 @@ export class ChannelMySQLService {
 
     channel.name = name;
     channel.description = description;
-    channel.imageConfig = imageConfig;
+    // The secret is never sent to clients, so an empty value means "unchanged".
+    const storedSecret = channel.imageConfig?.secretAccessKey ?? '';
+    channel.imageConfig = imageConfig && {
+      ...imageConfig,
+      secretAccessKey:
+        imageConfig.secretAccessKey?.length ?
+          imageConfig.secretAccessKey
+        : storedSecret,
+    };
     channel.feedbackSearchMaxDays = feedbackSearchMaxDays;
     return await this.repository.save(channel);
   }

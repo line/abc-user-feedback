@@ -29,11 +29,20 @@ import {
 import type { ChannelImageConfig } from '../channel.type';
 
 interface IProps {
+  projectId: number;
+  channelId: number;
+  /** A secret is already stored; the API never returns it. */
+  hasStoredSecret?: boolean;
   readOnly?: boolean;
 }
 
 const ImageConfigForm: React.FC<IProps> = (props) => {
-  const { readOnly = false } = props;
+  const {
+    projectId,
+    channelId,
+    hasStoredSecret = false,
+    readOnly = false,
+  } = props;
 
   const { t } = useTranslation();
 
@@ -83,7 +92,7 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
   const { mutate: testConection } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/channels/image-upload-url-test',
-    pathParams: { projectId: 0 },
+    pathParams: { projectId },
     queryOptions: {
       onSuccess(data) {
         if (data?.success) {
@@ -127,7 +136,7 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
       setError('region', { message: t('hint.required') });
       isError = true;
     }
-    if (secretAccessKey.length === 0) {
+    if (secretAccessKey.length === 0 && !hasStoredSecret) {
       setError('secretAccessKey', { message: t('hint.required') });
       isError = true;
     }
@@ -135,7 +144,13 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
       setConnectionError(true);
       return;
     }
-    testConection(getValues());
+    testConection({
+      accessKeyId,
+      bucket,
+      endpoint,
+      region,
+      ...(secretAccessKey.length > 0 ? { secretAccessKey } : { channelId }),
+    });
   };
 
   return (
@@ -155,7 +170,11 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
           <TextInput
             {...register('secretAccessKey')}
             label="Secret Access Key"
-            placeholder={t('v2.placeholder.text')}
+            placeholder={
+              hasStoredSecret ?
+                t('v2.placeholder.keep-secret')
+              : t('v2.placeholder.text')
+            }
             error={formState.errors.secretAccessKey?.message}
             disabled={readOnly}
           />

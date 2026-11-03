@@ -15,8 +15,9 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
-import { getMockProvider } from '@/test-utils/util-functions';
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { FeedbackStatisticsController } from './feedback-statistics.controller';
 import { FeedbackStatisticsService } from './feedback-statistics.service';
 
@@ -25,6 +26,8 @@ const MockFeedbackStatisticsService = {
   getCount: jest.fn(),
   getIssuedRatio: jest.fn(),
 };
+
+const projectId = 1;
 
 describe('FeedbackStatisticsController', () => {
   let feedbackStatisticsController: FeedbackStatisticsController;
@@ -37,6 +40,7 @@ describe('FeedbackStatisticsController', () => {
           FeedbackStatisticsService,
           MockFeedbackStatisticsService,
         ),
+        getMockProvider(DataSource, MockDataSource),
       ],
     }).compile();
 
@@ -80,6 +84,7 @@ describe('FeedbackStatisticsController', () => {
         endDate,
         interval,
         channelIds,
+        projectId,
       );
 
       expect(
@@ -92,6 +97,7 @@ describe('FeedbackStatisticsController', () => {
         endDate,
         interval,
         channelIds: [1, 2, 3],
+        projectId,
       });
       expect(result).toEqual(mockServiceResponse);
     });
@@ -112,6 +118,7 @@ describe('FeedbackStatisticsController', () => {
         endDate,
         interval,
         channelIds,
+        projectId,
       );
 
       expect(
@@ -121,6 +128,7 @@ describe('FeedbackStatisticsController', () => {
         endDate,
         interval,
         channelIds: [],
+        projectId,
       });
       expect(result).toEqual(mockServiceResponse);
     });
@@ -141,6 +149,7 @@ describe('FeedbackStatisticsController', () => {
         endDate,
         interval,
         channelIds,
+        projectId,
       );
 
       expect(
@@ -150,6 +159,7 @@ describe('FeedbackStatisticsController', () => {
         endDate,
         interval,
         channelIds: [1, 3],
+        projectId,
       });
       expect(result).toEqual(mockServiceResponse);
     });

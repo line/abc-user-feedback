@@ -18,4 +18,5 @@ export class GetCountByDateByIssueDto {
   endDate: string;
   interval: 'day' | 'week' | 'month';
   issueIds: number[];
+  projectId: number;
 }

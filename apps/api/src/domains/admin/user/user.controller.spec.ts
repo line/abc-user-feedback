@@ -228,12 +228,27 @@ describe('user controller', () => {
       { id: 2, name: 'User', project: { id: 2, name: 'Project 2' } },
     ];
 
+    const userDto = new UserDto();
+    userDto.id = userId;
+    userDto.type = UserTypeEnum.GENERAL;
+
     jest.spyOn(MockUserService, 'findRolesById').mockResolvedValue(mockRoles);
-    const result = await userController.getRoles(userId);
+    const result = await userController.getRoles(userId, userDto);
 
     expect(MockUserService.findRolesById).toHaveBeenCalledTimes(1);
     expect(MockUserService.findRolesById).toHaveBeenCalledWith(userId);
     expect(result).toEqual({ roles: mockRoles });
+  });
+
+  it('getRoles rejects a GENERAL user reading another user', async () => {
+    const userDto = new UserDto();
+    userDto.id = faker.number.int();
+    userDto.type = UserTypeEnum.GENERAL;
+
+    await expect(
+      userController.getRoles(userDto.id + 1, userDto),
+    ).rejects.toThrow(UnauthorizedException);
+    expect(MockUserService.findRolesById).not.toHaveBeenCalled();
   });
 
   describe('deleteUser', () => {

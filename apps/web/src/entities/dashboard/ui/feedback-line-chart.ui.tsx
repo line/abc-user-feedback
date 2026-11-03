@@ -61,6 +61,7 @@ const FeedbackLineChartWrapper: React.FC<IProps> = (props) => {
       startDate: dayjs(from).startOf('day').format('YYYY-MM-DD'),
       endDate: dayjs(to).endOf('day').format('YYYY-MM-DD'),
       channelIds: currentChannels.map(({ id }) => id).join(','),
+      projectId,
       interval: dayCount > 50 ? 'week' : 'day',
     },
     queryOptions: {

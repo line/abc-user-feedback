@@ -14,8 +14,9 @@
  * under the License.
  */
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 
+import { RequireProjectMember } from '@/domains/admin/project/role/require-permission.decorator';
 import {
   FindCountByDateResponseDto,
   FindCountByStatusResponseDto,
@@ -24,6 +25,8 @@ import {
 import { IssueStatisticsService } from './issue-statistics.service';
 
 @Controller('/admin/statistics/issue')
+@ApiBearerAuth()
+@RequireProjectMember()
 export class IssueStatisticsController {
   constructor(
     private readonly issueStatisticsService: IssueStatisticsService,

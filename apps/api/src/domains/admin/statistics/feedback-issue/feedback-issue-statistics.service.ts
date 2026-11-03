@@ -53,11 +53,11 @@ export class FeedbackIssueStatisticsService {
   ) {}
 
   async getCountByDateByIssue(dto: GetCountByDateByIssueDto) {
-    const { startDate, endDate, interval, issueIds } = dto;
+    const { startDate, endDate, interval, issueIds, projectId } = dto;
 
     const feedbackIssueStatistics = await this.repository.find({
       where: {
-        issue: { id: In(issueIds) },
+        issue: { id: In(issueIds), project: { id: projectId } },
         date: Between(new Date(startDate), new Date(endDate)),
       },
       relations: { issue: true },

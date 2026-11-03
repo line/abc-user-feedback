@@ -22,7 +22,6 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -31,9 +30,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '../../auth/guards';
 import { PermissionEnum } from '../role/permission.enum';
-import { RequirePermission } from '../role/require-permission.decorator';
+import {
+  RequirePermission,
+  RequireProjectMember,
+} from '../role/require-permission.decorator';
 import { CreateIssueDto } from './dtos';
 import {
   CreateIssueRequestDto,
@@ -54,7 +55,7 @@ export class IssueController {
   constructor(private readonly issueService: IssueService) {}
 
   @ApiParam({ name: 'projectId', type: Number })
-  @UseGuards(JwtAuthGuard)
+  @RequirePermission(PermissionEnum.issue_create)
   @ApiBearerAuth()
   @ApiOkResponse({ type: CreateIssueResponseDto })
   @Post()
@@ -70,6 +71,8 @@ export class IssueController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
+  @RequireProjectMember()
+  @ApiBearerAuth()
   @ApiOkResponse({ type: FindIssueByIdResponseDto })
   @Get(':issueId')
   async findById(@Param('issueId', ParseIntPipe) issueId: number) {
@@ -79,6 +82,7 @@ export class IssueController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
+  @RequirePermission(PermissionEnum.issue_update)
   @ApiBearerAuth()
   @Put(':issueId/category/:categoryId')
   async updateByCategoryId(
@@ -92,6 +96,7 @@ export class IssueController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
+  @RequirePermission(PermissionEnum.issue_update)
   @ApiBearerAuth()
   @Delete(':issueId/category/:categoryId')
   async deleteByCategoryId(
@@ -105,7 +110,7 @@ export class IssueController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
-  @UseGuards(JwtAuthGuard)
+  @RequireProjectMember()
   @ApiBearerAuth()
   @ApiOkResponse({ type: FindIssuesByProjectIdResponseDto })
   @Post('search')
@@ -145,9 +150,9 @@ export class IssueController {
   @ApiBearerAuth()
   @Delete('')
   async deleteMany(
-    @Param('projectId', ParseIntPipe) _: number,
+    @Param('projectId', ParseIntPipe) projectId: number,
     @Body() { issueIds }: DeleteIssuesRequestDto,
   ) {
-    await this.issueService.deleteByIds(issueIds);
+    await this.issueService.deleteByIds(issueIds, projectId);
   }
 }

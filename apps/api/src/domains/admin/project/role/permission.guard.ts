@@ -35,35 +35,40 @@ export class PermissionGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredPermission = this.reflector.getAllAndOverride<PermissionEnum>(
-      PERMISSIONS_KEY,
-      [context.getHandler(), context.getClass()],
-    );
+    const requiredPermission = this.reflector.getAllAndOverride<
+      PermissionEnum | undefined
+    >(PERMISSIONS_KEY, [context.getHandler(), context.getClass()]);
 
     const {
       user,
       params,
+      query,
     }: {
       user: UserEntity;
       params: Record<string, string | undefined>;
+      query: Record<string, unknown> | undefined;
     } = context.switchToHttp().getRequest();
 
     if (user.type === UserTypeEnum.SUPER) return true;
 
-    if (!params.projectId)
-      throw new BadRequestException('projectId is required in params');
+    const queryProjectId =
+      typeof query?.projectId === 'string' ? query.projectId : undefined;
+    const projectId = params.projectId ?? queryProjectId;
+    if (!projectId || !Number.isInteger(Number(projectId)))
+      throw new BadRequestException('projectId is required');
 
     const roleRepo = this.dataSource.getRepository(RoleEntity);
     const role = await roleRepo.findOne({
       where: {
         members: { user: { id: user.id } },
-        project: { id: Number(params.projectId) },
+        project: { id: Number(projectId) },
       },
     });
 
     if (!role) return false;
-    if (!role.permissions.includes(requiredPermission)) return false;
+    if (requiredPermission && !role.permissions.includes(requiredPermission))
+      return false;
 
-    return isWithinProjectScope(this.dataSource, params);
+    return isWithinProjectScope(this.dataSource, { ...params, projectId });
   }
 }

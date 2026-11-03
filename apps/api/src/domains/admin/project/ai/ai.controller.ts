@@ -69,6 +69,7 @@ export class AIController {
 
   @ApiOkResponse({ type: ValidateAPIKeyResponseDto })
   @ApiParam({ name: 'projectId', type: Number })
+  @RequirePermission(PermissionEnum.project_genai_update)
   @Post('validate')
   async validateAPIKey(@Body() body: ValidteAPIKeyRequestDto) {
     return this.aiService.validateAPIKey(

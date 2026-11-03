@@ -21,7 +21,6 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -30,7 +29,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '../../auth/guards';
+import { PermissionEnum } from '../role/permission.enum';
+import {
+  RequirePermission,
+  RequireProjectMember,
+} from '../role/require-permission.decorator';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dtos';
 import {
@@ -49,7 +52,7 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @ApiParam({ name: 'projectId', type: Number })
-  @UseGuards(JwtAuthGuard)
+  @RequirePermission(PermissionEnum.issue_update)
   @ApiBearerAuth()
   @ApiOkResponse({ type: CreateCategoryResponseDto })
   @Post()
@@ -65,7 +68,7 @@ export class CategoryController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
-  @UseGuards(JwtAuthGuard)
+  @RequireProjectMember()
   @ApiBearerAuth()
   @ApiOkResponse({ type: GetAllCategoriesResponseDto })
   @Post('/search')
@@ -82,7 +85,7 @@ export class CategoryController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
-  @UseGuards(JwtAuthGuard)
+  @RequirePermission(PermissionEnum.issue_update)
   @ApiBearerAuth()
   @Put(':categoryId')
   async update(
@@ -94,7 +97,7 @@ export class CategoryController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
-  @UseGuards(JwtAuthGuard)
+  @RequirePermission(PermissionEnum.issue_update)
   @ApiBearerAuth()
   @Delete(':categoryId')
   async delete(

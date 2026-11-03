@@ -18,4 +18,5 @@ export class GetCountByDateByChannelDto {
   endDate: string;
   interval: 'day' | 'week' | 'month';
   channelIds: number[];
+  projectId: number;
 }

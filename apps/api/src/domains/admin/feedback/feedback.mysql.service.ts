@@ -695,7 +695,7 @@ export class FeedbackMySQLService {
   @Transactional()
   async deleteByIds({ channelId, feedbackIds }: DeleteByIdsDto) {
     const feedbacks = await this.feedbackRepository.find({
-      where: { id: In(feedbackIds) },
+      where: { id: In(feedbackIds), channel: { id: channelId } },
       relations: { issues: true },
     });
 
