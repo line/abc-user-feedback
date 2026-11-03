@@ -374,7 +374,8 @@
     "create-tenant": {
       "tenant": {
         "title": "Create Tenant",
-        "description": "Please enter the name of the company/organization/team that will manage ABC User Feedback."
+        "description": "Please enter the name of the company/organization/team that will manage ABC User Feedback.",
+        "setup-code-hint": "Shown in the API server log (or by 'auf-cli start') until the first tenant is created."
       },
       "user": {
         "title": "Create Master Account",

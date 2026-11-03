@@ -14,7 +14,13 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 import { IsPassword } from '@/common/decorators/is-password';
 
@@ -32,4 +38,12 @@ export class SetupTenantRequestDto {
   @ApiProperty()
   @IsPassword()
   password: string;
+
+  @ApiProperty({
+    description:
+      'Setup code printed in the API server log while no tenant exists',
+  })
+  @IsOptional()
+  @IsString()
+  setupCode?: string;
 }
