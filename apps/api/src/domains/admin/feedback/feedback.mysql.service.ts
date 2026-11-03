@@ -225,17 +225,22 @@ export class FeedbackMySQLService {
             where: { field: { id } },
           });
 
-          for (const optionKey of value as string[]) {
-            const option =
-              options.find((option) => option.key === optionKey) ??
-              new OptionEntity();
+          const fieldIndex = Object.keys(query).indexOf(fieldKey);
+          (value as string[]).forEach((optionKey, index) => {
+            const option = options.find((option) => option.key === optionKey);
+            if (!option) {
+              queryBuilder.andWhere('1 = 0');
+              return;
+            }
+            const paramName = `multiSelect${fieldIndex}_${index}`;
             queryBuilder.andWhere(
               `JSON_CONTAINS(
                 JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
-                '"${option.key}"',
+                :${paramName},
                 '$')`,
+              { [paramName]: JSON.stringify(option.key) },
             );
-          }
+          });
         } else if (format === FieldFormatEnum.aiField) {
           const jsonExtractExpression = `JSON_EXTRACT(JSON_UNQUOTE(JSON_EXTRACT(feedbacks.data, '$.${fieldKey}')), '$.message')`;
           queryBuilder.andWhere(`${jsonExtractExpression} like :value`, {
@@ -286,7 +291,8 @@ export class FeedbackMySQLService {
       } else if (fieldName === 'updatedAt') {
         queryBuilder.addOrderBy('updated_at', sort[fieldName]);
       } else {
-        queryBuilder.addOrderBy(fieldName, sort[fieldName]);
+        // ORDER BY takes the key as raw SQL, so only known columns are allowed.
+        throw new BadRequestException(`invalid sort key: ${fieldName}`);
       }
     });
 
@@ -443,10 +449,13 @@ export class FeedbackMySQLService {
                       JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
                       '$[*]' COLUMNS(value VARCHAR(255) PATH '$')
                     ) AS jt),
-                    JSON_ARRAY(${values.map((optionKey) => `'${optionKey}'`).join(', ')}),
+                    CAST(:values${paramName} AS JSON),
                     '$'
                   )`,
-                  { [`arrayLength${paramName}`]: values.length },
+                  {
+                    [`arrayLength${paramName}`]: values.length,
+                    [`values${paramName}`]: JSON.stringify(values),
+                  },
                 );
               } else if (condition === QueryV2ConditionsEnum.CONTAINS) {
                 if (values.length > 0) {
@@ -456,10 +465,13 @@ export class FeedbackMySQLService {
                         JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
                         '$[*]' COLUMNS(value VARCHAR(255) PATH '$')
                       ) AS jt),
-                      JSON_ARRAY(${values.map((optionKey) => `'${optionKey}'`).join(', ')}),
+                      CAST(:values${paramName} AS JSON),
                       '$'
                     )`,
-                    { [`arrayLength${paramName}`]: values.length },
+                    {
+                      [`arrayLength${paramName}`]: values.length,
+                      [`values${paramName}`]: JSON.stringify(values),
+                    },
                   );
                 } else {
                   qb[method]('1 = 0');
@@ -515,7 +527,8 @@ export class FeedbackMySQLService {
       } else if (fieldName === 'updatedAt') {
         queryBuilder.addOrderBy('updated_at', sort[fieldName]);
       } else {
-        queryBuilder.addOrderBy(fieldName, sort[fieldName]);
+        // ORDER BY takes the key as raw SQL, so only known columns are allowed.
+        throw new BadRequestException(`invalid sort key: ${fieldName}`);
       }
     });
 
