@@ -41,7 +41,7 @@
     "clsx": "^2.1.1",
     "cookies-next": "^6.1.1",
     "countries-and-timezones": "^3.11.0",
-    "date-fns": "^4.1.0",
+    "date-fns": "^4.4.0",
     "dayjs": "^1.11.23",
     "i18next": "^25.10.10",
     "immer": "^11.1.21",
