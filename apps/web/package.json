@@ -40,7 +40,7 @@
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "cookies-next": "^6.1.1",
-    "countries-and-timezones": "^3.8.0",
+    "countries-and-timezones": "^3.11.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.23",
     "i18next": "^25.10.10",
