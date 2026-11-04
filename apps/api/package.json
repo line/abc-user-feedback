@@ -52,7 +52,7 @@
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
     "@ufb/shared": "workspace:*",
-    "@willsoto/nestjs-prometheus": "^6.0.2",
+    "@willsoto/nestjs-prometheus": "^6.1.1",
     "axios": "^1.20.0",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
