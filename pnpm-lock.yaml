@@ -319,8 +319,8 @@ importers:
         specifier: ^14.0.3
         version: 14.0.3
       js-toml:
-        specifier: ^1.0.3
-        version: 1.1.2
+        specifier: ^1.2.2
+        version: 1.2.2
       toml:
         specifier: ^5.0.1
         version: 5.0.1
@@ -9597,8 +9597,8 @@ packages:
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
-  js-toml@1.1.2:
-    resolution: {integrity: sha512-noryT8sUWOuqWKfU5mNWZXBp5PUS9rkz6w3/EQcptJZBTVhgBD8j5/u6x+HWrWxoNn9hUYmuy8GYyT4NdvOHRg==}
+  js-toml@1.2.2:
+    resolution: {integrity: sha512-NapVhoCRGcW7P5gZJLjRTgabe9EOa+RVSIiyZfElKNiyAayP4kzOd0mvSzkbSt8uJ3psLkU03DuJLDVjYO6ueQ==}
 
   js-yaml@3.14.1:
     resolution: {integrity: sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==}
@@ -24249,7 +24249,7 @@ snapshots:
 
   js-tokens@4.0.0: {}
 
-  js-toml@1.1.2:
+  js-toml@1.2.2:
     dependencies:
       chevrotain: 12.0.0
       xregexp: 5.1.2
