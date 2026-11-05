@@ -501,8 +501,8 @@ importers:
         specifier: ^25.10.10
         version: 25.10.10(typescript@5.9.3)
       immer:
-        specifier: ^11.1.21
-        version: 11.1.21
+        specifier: ^11.2.9
+        version: 11.2.9
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
@@ -571,7 +571,7 @@ importers:
         version: 4.6.7
       zustand:
         specifier: ^5.0.16
-        version: 5.0.16(@types/react@19.2.14)(immer@11.1.21)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
+        version: 5.0.16(@types/react@19.2.14)(immer@11.2.9)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4))
     devDependencies:
       '@babel/core':
         specifier: ^7.29.7
@@ -9008,8 +9008,8 @@ packages:
   immer@10.2.0:
     resolution: {integrity: sha512-d/+XTN3zfODyjr89gM3mPq1WNX2B8pYsu7eORitdwyA2sBubnTl3laYlBk4sXY5FUa5qTZGBDPJICVbvqzjlbw==}
 
-  immer@11.1.21:
-    resolution: {integrity: sha512-bZSadeCPGdaY5/qRLgr6mDSH1ra21rD3rqpiWk7+QTr4ayYPTE9qZYdLh/NdPhMe0wSrTvHD/Lk8q5EwhUs0aw==}
+  immer@11.2.9:
+    resolution: {integrity: sha512-IQ4UEtXjZjyefyWjtLEDXUSrF6T2hwjKPi6BIJl3bY/2XXW24d6cNGdXJSBOA/+KNnuiXkZY6DR0C3efolhitA==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -23479,7 +23479,7 @@ snapshots:
 
   immer@10.2.0: {}
 
-  immer@11.1.21: {}
+  immer@11.2.9: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -27632,7 +27632,7 @@ snapshots:
       decimal.js-light: 2.5.1
       es-toolkit: 1.41.0
       eventemitter3: 5.0.1
-      immer: 11.1.21
+      immer: 11.2.9
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
       react-is: 19.3.1
@@ -29905,10 +29905,10 @@ snapshots:
 
   zod@4.6.7: {}
 
-  zustand@5.0.16(@types/react@19.2.14)(immer@11.1.21)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4)):
+  zustand@5.0.16(@types/react@19.2.14)(immer@11.2.9)(react@19.2.4)(use-sync-external-store@1.6.0(react@19.2.4)):
     optionalDependencies:
       '@types/react': 19.2.14
-      immer: 11.1.21
+      immer: 11.2.9
       react: 19.2.4
       use-sync-external-store: 1.6.0(react@19.2.4)
 
