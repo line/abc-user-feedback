@@ -147,8 +147,8 @@ importers:
         specifier: ^5.12.7
         version: 5.12.7
       joi:
-        specifier: ^18.2.9
-        version: 18.2.9
+        specifier: ^18.3.1
+        version: 18.3.2
       luxon:
         specifier: ^3.7.2
         version: 3.7.2
@@ -442,7 +442,7 @@ importers:
         version: 10.6.0
       '@hookform/resolvers':
         specifier: ^5.9.2
-        version: 5.9.2(@sinclair/typebox@0.34.41)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(class-transformer@0.5.1)(class-validator@0.15.1)(joi@18.2.9)(react-hook-form@7.72.0(react@19.2.4))(zod@4.6.7)
+        version: 5.9.2(@sinclair/typebox@0.34.41)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(class-transformer@0.5.1)(class-validator@0.15.1)(joi@18.3.2)(react-hook-form@7.72.0(react@19.2.4))(zod@4.6.7)
       '@number-flow/react':
         specifier: ^0.6.2
         version: 0.6.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -9571,8 +9571,8 @@ packages:
   joi@17.13.8:
     resolution: {integrity: sha512-iPKOGmiRw1jxf/JOPwxmCcUQAOdF359mdzYiP2DJ+TMX0YK2zjK3D+zYOaGjpumWxOFF/l2xVWjRVK5bGSLdEw==}
 
-  joi@18.2.9:
-    resolution: {integrity: sha512-2mD929bUVKUhOLQQEVhlf6EZ0Mlo0DeRb5MO7cViR9AXLtBauuccEtB1py9Ocxpo/P7ucnh442iY/iOwrh3IQw==}
+  joi@18.3.2:
+    resolution: {integrity: sha512-iUivApKYw5GpZmq2Sy6El99j7noo8QSUFZlyQtr3HCkosC/b5wKF6/Y3teiHIlaM8WI38sAT3P+51rB0lhAhJA==}
     engines: {node: '>= 20'}
 
   joycon@3.1.1:
@@ -16828,7 +16828,7 @@ snapshots:
     dependencies:
       '@hapi/hoek': 11.0.7
 
-  '@hookform/resolvers@5.9.2(@sinclair/typebox@0.34.41)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(class-transformer@0.5.1)(class-validator@0.15.1)(joi@18.2.9)(react-hook-form@7.72.0(react@19.2.4))(zod@4.6.7)':
+  '@hookform/resolvers@5.9.2(@sinclair/typebox@0.34.41)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(class-transformer@0.5.1)(class-validator@0.15.1)(joi@18.3.2)(react-hook-form@7.72.0(react@19.2.4))(zod@4.6.7)':
     dependencies:
       '@standard-schema/utils': 0.3.0
       react-hook-form: 7.72.0(react@19.2.4)
@@ -16839,7 +16839,7 @@ snapshots:
       ajv-formats: 2.1.1(ajv@8.20.0)
       class-transformer: 0.5.1
       class-validator: 0.15.1
-      joi: 18.2.9
+      joi: 18.3.2
       zod: 4.6.7
 
   '@humanfs/core@0.19.2':
@@ -24219,7 +24219,7 @@ snapshots:
       '@sideway/formula': 3.0.1
       '@sideway/pinpoint': 2.0.0
 
-  joi@18.2.9:
+  joi@18.3.2:
     dependencies:
       '@hapi/address': 5.1.1
       '@hapi/formula': 3.0.2
