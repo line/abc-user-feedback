@@ -67,6 +67,8 @@ interface AccessTokenResponse {
 
 type UserProfileResponse = Record<string, string>;
 
+const OAUTH_STATE_TTL_MS = 10 * 60 * 1000;
+
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
@@ -257,7 +259,7 @@ export class AuthService {
       redirect_uri: this.getRedirectURI(),
       client_id: oauthConfig.clientId,
       response_type: 'code',
-      state: crypto.randomBytes(10).toString('hex'),
+      state: this.createOAuthState(),
       scope: oauthConfig.scopeString,
       callback_url: encodeURIComponent(callback_url ?? ''),
     });
@@ -364,7 +366,8 @@ export class AuthService {
     return email;
   }
 
-  async signInByOAuth(code: string) {
+  async signInByOAuth(code: string, state: string | undefined) {
+    this.verifyOAuthState(state);
     const accessToken = await this.getAccessToken(code);
 
     const email = await this.getEmailByAccessToken(accessToken);
@@ -379,6 +382,46 @@ export class AuthService {
       const user = await this.createUserService.createOAuthUser({ email });
       return await this.signIn(user);
     }
+  }
+
+  /**
+   * The state is signed so the API only accepts values it issued recently.
+   * The web client also keeps it in session storage and compares it on the
+   * callback, which ties the callback to the browser that started the login.
+   */
+  private createOAuthState() {
+    const nonce = crypto.randomBytes(16).toString('hex');
+    const expiresAt = Date.now() + OAUTH_STATE_TTL_MS;
+    const payload = `${nonce}.${expiresAt}`;
+    return `${payload}.${this.signOAuthState(payload)}`;
+  }
+
+  private verifyOAuthState(state: string | undefined) {
+    const [nonce, expiresAt, signature] = state?.split('.') ?? [];
+    if (!nonce || !expiresAt || !signature) {
+      throw new BadRequestException('Invalid OAuth state.');
+    }
+
+    const expected = Buffer.from(this.signOAuthState(`${nonce}.${expiresAt}`));
+    const actual = Buffer.from(signature);
+    if (
+      expected.length !== actual.length ||
+      !crypto.timingSafeEqual(expected, actual)
+    ) {
+      throw new BadRequestException('Invalid OAuth state.');
+    }
+    if (Number(expiresAt) < Date.now()) {
+      throw new BadRequestException('OAuth state has expired.');
+    }
+  }
+
+  private signOAuthState(payload: string) {
+    const { secret } = this.configService.get('jwt', { infer: true }) ?? {};
+    if (!secret) throw new Error('JWT_SECRET is not configured.');
+    return crypto
+      .createHmac('sha256', secret)
+      .update(`oauth-state:${payload}`)
+      .digest('hex');
   }
 
   private getRedirectURI() {

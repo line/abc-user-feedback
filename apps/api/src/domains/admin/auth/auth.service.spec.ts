@@ -547,22 +547,64 @@ describe('auth service ', () => {
   });
 
   describe('signInByOAuth', () => {
+    const issueState = async () => {
+      tenantRepo.setUseOAuth(true, {
+        clientId: faker.string.alphanumeric(8),
+        scopeString: 'email',
+        authCodeRequestURL: faker.internet.domainName(),
+      });
+      const url = await authService.getOAuthLoginURL();
+      return new URL(`https://${url}`).searchParams.get('state') ?? '';
+    };
+
     it('signing in by OAuth fails when OAuth is disabled', async () => {
       const code = faker.string.alphanumeric(32);
+      const state = await issueState();
       tenantRepo.setUseOAuth(false, null);
 
-      await expect(authService.signInByOAuth(code)).rejects.toThrow(
+      await expect(authService.signInByOAuth(code, state)).rejects.toThrow(
         new BadRequestException('OAuth login is disabled.'),
       );
     });
 
     it('signing in by OAuth fails with no OAuth config', async () => {
       const code = faker.string.alphanumeric(32);
+      const state = await issueState();
       tenantRepo.setUseOAuth(true, null);
 
-      await expect(authService.signInByOAuth(code)).rejects.toThrow(
+      await expect(authService.signInByOAuth(code, state)).rejects.toThrow(
         new BadRequestException('OAuth Config is required.'),
       );
+    });
+
+    it('signing in by OAuth fails without a state', async () => {
+      await expect(
+        authService.signInByOAuth(faker.string.alphanumeric(32), undefined),
+      ).rejects.toThrow(new BadRequestException('Invalid OAuth state.'));
+    });
+
+    it('signing in by OAuth fails with a state the API did not issue', async () => {
+      const [nonce, expiresAt] = (await issueState()).split('.');
+      const forged = `${nonce}.${expiresAt}.${'0'.repeat(64)}`;
+
+      await expect(
+        authService.signInByOAuth(faker.string.alphanumeric(32), forged),
+      ).rejects.toThrow(new BadRequestException('Invalid OAuth state.'));
+    });
+
+    it('signing in by OAuth fails with an expired state', async () => {
+      const state = await issueState();
+      const now = jest
+        .spyOn(Date, 'now')
+        .mockReturnValue(Date.now() + 11 * 60 * 1000);
+
+      try {
+        await expect(
+          authService.signInByOAuth(faker.string.alphanumeric(32), state),
+        ).rejects.toThrow(new BadRequestException('OAuth state has expired.'));
+      } finally {
+        now.mockRestore();
+      }
     });
   });
 });

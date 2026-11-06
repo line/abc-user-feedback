@@ -35,7 +35,7 @@ interface Action {
     email: string;
     password: string;
   }) => Promise<void>;
-  signInWithOAuth: (input: { code: string }) => Promise<void>;
+  signInWithOAuth: (input: { code: string; state: string }) => Promise<void>;
   signOut: () => Promise<void>;
   setUser: () => Promise<void>;
   _signIn: (jwt: Jwt) => Promise<void>;
@@ -53,10 +53,10 @@ export const useUserStore = create<State & Action>((set, get) => ({
 
     await get()._signIn(jwt);
   },
-  signInWithOAuth: async ({ code }) => {
+  signInWithOAuth: async ({ code, state }) => {
     const { data: jwt } = await client.get({
       path: '/api/admin/auth/signIn/oauth',
-      query: { code },
+      query: { code, state },
     });
     await get()._signIn(jwt);
   },
