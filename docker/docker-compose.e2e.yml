@@ -27,7 +27,7 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     environment:
-      - JWT_SECRET=jwtsecretjwtsecretjwtsecret
+      - JWT_SECRET=e2e-jwt-secret-not-for-production
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@host.docker.internal:13307/e2e
       - SMTP_HOST=localhost
       - SMTP_PORT=25

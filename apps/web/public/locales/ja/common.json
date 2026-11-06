@@ -374,7 +374,8 @@
     "create-tenant": {
       "tenant": {
         "title": "テナント作成",
-        "description": "ABC User Feedbackを管理する会社/組織/チームの名前を入力してください。"
+        "description": "ABC User Feedbackを管理する会社/組織/チームの名前を入力してください。",
+        "setup-code-hint": "最初のテナントを作成するまで、APIサーバーのログ（または 'auf-cli start' の出力）に表示されます"
       },
       "user": {
         "title": "マスターアカウント作成",

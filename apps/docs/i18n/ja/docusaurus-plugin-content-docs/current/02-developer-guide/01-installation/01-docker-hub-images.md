@@ -52,7 +52,8 @@ services:
   api:
     image: line/abc-user-feedback-api:latest
     environment:
-      - JWT_SECRET=jwtsecretjwtsecretjwtsecret
+      # 必須: ランダムな値（例: `openssl rand -hex 32` の出力）。公開されたデフォルト値は拒否されます。
+      - JWT_SECRET=${JWT_SECRET:?Set JWT_SECRET}
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
       - SMTP_HOST=smtp4dev
       - SMTP_PORT=25

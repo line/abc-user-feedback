@@ -46,6 +46,9 @@ http://localhost:3000
 ### Step 1: 테넌트 정보 입력
 
 테넌트 이름의 이름을 설정합니다.
+
+**Setup Code**도 함께 입력합니다. 첫 테넌트를 만들기 전까지 API 서버 로그에 표시되며(`docker compose logs api`), `auf-cli start`를 사용한 경우 명령 출력에도 표시됩니다.
+
 테넌트 이름을 입력한 후 **Next** 버튼을 클릭합니다.
 
 > 이 테넌트 이름은 로그인 UI에 표시됩니다.
