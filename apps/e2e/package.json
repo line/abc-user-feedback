@@ -7,7 +7,7 @@
     "test:e2e": "playwright test"
   },
   "devDependencies": {
-    "@opensearch-project/opensearch": "^3.5.1",
+    "@opensearch-project/opensearch": "^3.9.0",
     "@playwright/test": "^1.64.1",
     "axios": "^1.21.0",
     "mysql2": "^3.24.6"
