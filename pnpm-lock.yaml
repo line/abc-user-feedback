@@ -174,8 +174,8 @@ importers:
         specifier: ^0.7.0
         version: 0.7.0
       passport-custom:
-        specifier: ^1.1.1
-        version: 1.1.1
+        specifier: ^1.2.1
+        version: 1.2.1
       passport-jwt:
         specifier: ^4.0.1
         version: 4.0.1
@@ -10899,8 +10899,8 @@ packages:
   pascal-case@3.1.2:
     resolution: {integrity: sha512-uWlGT3YSnK9x3BQJaOdcZwrnV6hPpd8jFH1/ucpiLRPh/2zCVJKS19E4GvYHvaCcACn3foXZ0cLB9Wrx1KGe5g==}
 
-  passport-custom@1.1.1:
-    resolution: {integrity: sha512-/2m7jUGxmCYvoqenLB9UrmkCgPt64h8ZtV+UtuQklZ/Tn1NpKBeOorCYkB/8lMRoiZ5hUrCoMmDtxCS/d38mlg==}
+  passport-custom@1.2.1:
+    resolution: {integrity: sha512-id1DaCbfQOwchNbwbddyIH2h/tvQKT4seSQNwhdC4U/oOudTzqAq7DEDFjBJdF8tfhM0SXCmiJYYj82mUOd4vg==}
     engines: {node: '>= 0.10.0'}
 
   passport-jwt@4.0.1:
@@ -26286,8 +26286,10 @@ snapshots:
       no-case: 3.0.4
       tslib: 2.8.1
 
-  passport-custom@1.1.1:
+  passport-custom@1.2.1:
     dependencies:
+      '@types/express': 5.0.6
+      '@types/passport': 1.0.17
       passport-strategy: 1.0.0
 
   passport-jwt@4.0.1:
