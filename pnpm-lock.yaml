@@ -442,7 +442,7 @@ importers:
         version: 10.6.0
       '@hookform/resolvers':
         specifier: ^5.9.2
-        version: 5.9.2(@sinclair/typebox@0.34.41)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(class-transformer@0.5.1)(class-validator@0.15.1)(joi@18.3.2)(react-hook-form@7.72.0(react@19.2.4))(zod@4.6.7)
+        version: 5.9.2(@sinclair/typebox@0.34.41)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(class-transformer@0.5.1)(class-validator@0.15.1)(joi@18.3.2)(react-hook-form@7.91.0(@types/react@19.2.14)(react@19.2.4))(zod@4.6.7)
       '@number-flow/react':
         specifier: ^0.6.2
         version: 0.6.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -540,8 +540,8 @@ importers:
         specifier: ^19.2.4
         version: 19.2.4(react@19.2.4)
       react-hook-form:
-        specifier: ^7.72.0
-        version: 7.72.0(react@19.2.4)
+        specifier: ^7.91.0
+        version: 7.91.0(@types/react@19.2.14)(react@19.2.4)
       react-i18next:
         specifier: ^16.6.6
         version: 16.6.6(i18next@25.10.10(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
@@ -736,8 +736,8 @@ importers:
         specifier: 8.10.2
         version: 8.10.2(date-fns@4.4.0)(react@19.2.4)
       react-hook-form:
-        specifier: ^7.72.0
-        version: 7.72.0(react@19.2.4)
+        specifier: ^7.91.0
+        version: 7.91.0(@types/react@19.2.14)(react@19.2.4)
       sonner:
         specifier: ^2.0.8
         version: 2.0.8(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -11961,11 +11961,15 @@ packages:
   react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
 
-  react-hook-form@7.72.0:
-    resolution: {integrity: sha512-V4v6jubaf6JAurEaVnT9aUPKFbNtDgohj5CIgVGyPHvT9wRx5OZHVjz31GsxnPNI278XMu+ruFz+wGOscHaLKw==}
+  react-hook-form@7.91.0:
+    resolution: {integrity: sha512-5BEBUnCBwa28AFXYTYmOaB/+CSpJ/+CWVASHEvIGUzFdHyUiPHeRhG7r5hOZ8nZi0yP7pbHdFNXO/p31EKTJFQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
+      '@types/react': '*'
       react: ^16.8.0 || ^17 || ^18 || ^19
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
   react-i18next@16.6.6:
     resolution: {integrity: sha512-ZgL2HUoW34UKUkOV7uSQFE1CDnRPD+tCR3ywSuWH7u2iapnz86U8Bi3Vrs620qNDzCf1F47NxglCEkchCTDOHw==}
@@ -16829,10 +16833,10 @@ snapshots:
     dependencies:
       '@hapi/hoek': 11.0.7
 
-  '@hookform/resolvers@5.9.2(@sinclair/typebox@0.34.41)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(class-transformer@0.5.1)(class-validator@0.15.1)(joi@18.3.2)(react-hook-form@7.72.0(react@19.2.4))(zod@4.6.7)':
+  '@hookform/resolvers@5.9.2(@sinclair/typebox@0.34.41)(@standard-schema/spec@1.1.0)(ajv-formats@2.1.1(ajv@8.20.0))(ajv@8.20.0)(class-transformer@0.5.1)(class-validator@0.15.1)(joi@18.3.2)(react-hook-form@7.91.0(@types/react@19.2.14)(react@19.2.4))(zod@4.6.7)':
     dependencies:
       '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.72.0(react@19.2.4)
+      react-hook-form: 7.91.0(@types/react@19.2.14)(react@19.2.4)
     optionalDependencies:
       '@sinclair/typebox': 0.34.41
       '@standard-schema/spec': 1.1.0
@@ -27444,9 +27448,11 @@ snapshots:
 
   react-fast-compare@3.2.2: {}
 
-  react-hook-form@7.72.0(react@19.2.4):
+  react-hook-form@7.91.0(@types/react@19.2.14)(react@19.2.4):
     dependencies:
       react: 19.2.4
+    optionalDependencies:
+      '@types/react': 19.2.14
 
   react-i18next@16.6.6(i18next@25.10.10(typescript@5.9.3))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3):
     dependencies:
