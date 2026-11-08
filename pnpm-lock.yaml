@@ -48,7 +48,7 @@ importers:
         specifier: ^9.4.0
         version: 9.4.0
       '@fastify/static':
-        specifier: ^10.1.9
+        specifier: ^10.1.10
         version: 10.1.10
       '@nestjs-modules/mailer':
         specifier: ^2.3.10
