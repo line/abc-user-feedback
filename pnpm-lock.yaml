@@ -147,7 +147,7 @@ importers:
         specifier: ^5.12.8
         version: 5.12.8
       joi:
-        specifier: ^18.3.1
+        specifier: ^18.3.2
         version: 18.3.2
       luxon:
         specifier: ^3.7.2
