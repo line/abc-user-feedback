@@ -21,7 +21,7 @@
     "@ufb/tsconfig": "workspace:^",
     "autoprefixer": "^10.6.2",
     "eslint": "catalog:",
-    "glob": "^13.0.6",
+    "glob": "^13.0.7",
     "postcss": "^8.5.32",
     "postcss-import": "^16.2.0",
     "postcss-js": "^5.1.0",
