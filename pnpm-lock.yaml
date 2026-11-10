@@ -52,7 +52,7 @@ importers:
         version: 10.1.10
       '@nestjs-modules/mailer':
         specifier: ^2.3.10
-        version: 2.3.10(67be81ff9d9ffd786fa2e5baa780b883)
+        version: 2.3.10(f61f1776571f0bb8cfb40d16911b58e3)
       '@nestjs/axios':
         specifier: ^4.0.1
         version: 4.0.1(@nestjs/common@11.2.8(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.21.0)(rxjs@7.8.2)
@@ -168,8 +168,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0(@nestjs/common@11.2.8(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(typeorm@0.3.31(babel-plugin-macros@3.1.0)(mysql2@3.24.6(@types/node@24.19.2))(ts-node@10.9.2(@swc/core@1.13.5(@swc/helpers@0.5.24))(@types/node@24.19.2)(typescript@5.9.3)))
       nodemailer:
-        specifier: ^10.3.1
-        version: 10.3.1
+        specifier: ^10.4.0
+        version: 10.5.0
       passport:
         specifier: ^0.7.0
         version: 0.7.0
@@ -10589,6 +10589,7 @@ packages:
 
   node-abort-controller@3.1.1:
     resolution: {integrity: sha512-AGK2yQKIjRuqnc6VkX2Xj5d+QW8xZ87pa1UK6yA6ouUyuxfHuMP6umE5QK7UmTeOAymo+Zx1Fxiuw9rVx8taHQ==}
+    deprecated: This package is no longer needed on supported Node.js versions. Node.js 16+ includes AbortController and AbortSignal as built-in globals. All Node.js versions requiring this polyfill are end-of-life. Use the built-in globals instead.
 
   node-addon-api@7.1.1:
     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
@@ -10619,8 +10620,8 @@ packages:
     resolution: {integrity: sha512-kQK9LGGFiHtrWiNhZtA7Qbw17AQz+dmsEKODRIVTXA9+e5MS/2gZEBhYJt13GrAz5/IOZKddH/0Z3TP/Zgo+yw==}
     engines: {node: '>=18'}
 
-  nodemailer@10.3.1:
-    resolution: {integrity: sha512-uF0AFsJC07Y1vdW7p580DKAnh7rAO+4UPSSB3mDCPNDufoiaOebV6JmrzpxB14OjEEEiBsNdYoM2Y+fN8M7BBA==}
+  nodemailer@10.5.0:
+    resolution: {integrity: sha512-L/w/HH5MqpzMDuZD7fQdt/+KqymuvrpaApaIjAH2XA3ILePwlcvXCVVvP75xVrXCEt2ggK2marrrHHFB5Qu0kA==}
     engines: {node: '>=20.0.0'}
 
   nodemailer@9.1.1:
@@ -17716,13 +17717,13 @@ snapshots:
       '@tybys/wasm-util': 0.10.4
     optional: true
 
-  '@nestjs-modules/mailer@2.3.10(67be81ff9d9ffd786fa2e5baa780b883)':
+  '@nestjs-modules/mailer@2.3.10(f61f1776571f0bb8cfb40d16911b58e3)':
     dependencies:
       '@css-inline/css-inline': 0.22.0
       '@nestjs/common': 11.2.8(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/core': 11.2.8(@nestjs/common@11.2.8(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.2.8)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       glob: 13.0.6
-      nodemailer: 10.3.1
+      nodemailer: 10.5.0
       tslib: 2.8.1
     optionalDependencies:
       '@nestjs/event-emitter': 3.1.0(@nestjs/common@11.2.8(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.2.8)
@@ -25988,7 +25989,7 @@ snapshots:
 
   node-releases@2.0.57: {}
 
-  nodemailer@10.3.1: {}
+  nodemailer@10.5.0: {}
 
   nodemailer@9.1.1:
     optional: true
