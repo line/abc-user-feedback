@@ -9,7 +9,7 @@
   "devDependencies": {
     "@opensearch-project/opensearch": "^3.5.1",
     "@playwright/test": "^1.65.0",
-    "axios": "^1.21.0",
+    "axios": "^1.21.1",
     "mysql2": "^3.24.6"
   }
 }
