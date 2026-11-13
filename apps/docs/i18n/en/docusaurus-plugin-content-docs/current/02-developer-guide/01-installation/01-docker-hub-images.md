@@ -52,7 +52,8 @@ services:
   api:
     image: line/abc-user-feedback-api:latest
     environment:
-      - JWT_SECRET=jwtsecretjwtsecretjwtsecret
+      # Required: a random value (e.g. the output of `openssl rand -hex 32`). Published defaults are rejected.
+      - JWT_SECRET=${JWT_SECRET:?Set JWT_SECRET}
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
       - SMTP_HOST=smtp4dev
       - SMTP_PORT=25

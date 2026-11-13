@@ -16,6 +16,7 @@
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
   HttpCode,
   Param,
@@ -23,23 +24,38 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { SuperUser } from '@/domains/admin/user/super-user.decorator';
+import type { ConfigServiceType } from '@/types/config-service.type';
 import { SetupTenantRequestDto, UpdateTenantRequestDto } from './dtos/requests';
 import {
   CountFeedbacksByTenantIdResponseDto,
   GetTenantResponseDto,
 } from './dtos/responses';
+import { isValidTenantSetupCode } from './tenant-setup-code';
 import { TenantService } from './tenant.service';
 
 @ApiTags('tenant')
 @Controller('/admin/tenants')
 export class TenantController {
-  constructor(private readonly tenantService: TenantService) {}
+  constructor(
+    private readonly tenantService: TenantService,
+    private readonly configService: ConfigService<ConfigServiceType>,
+  ) {}
 
   @Post()
-  async setup(@Body() body: SetupTenantRequestDto) {
+  async setup(@Body() { setupCode, ...body }: SetupTenantRequestDto) {
+    const { secret } = this.configService.get('jwt', { infer: true }) ?? {};
+    if (
+      process.env.NODE_ENV !== 'test' &&
+      !isValidTenantSetupCode(secret ?? '', setupCode)
+    ) {
+      throw new ForbiddenException(
+        'Invalid setup code. Find it in the API server log.',
+      );
+    }
     await this.tenantService.create(body);
   }
 

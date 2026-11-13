@@ -14,6 +14,8 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
+import { ForbiddenException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
 
@@ -24,6 +26,7 @@ import {
   GetTenantResponseDto,
 } from './dtos/responses';
 import { LoginButtonTypeEnum } from './entities/enums';
+import { getTenantSetupCode } from './tenant-setup-code';
 import { TenantController } from './tenant.controller';
 import { TenantService } from './tenant.service';
 
@@ -33,6 +36,8 @@ const MockTenantService = {
   findOne: jest.fn(),
   countByTenantId: jest.fn(),
 };
+
+const JWT_SECRET = 'tenant-controller-spec-secret';
 
 describe('TenantController', () => {
   let tenantController: TenantController;
@@ -46,6 +51,10 @@ describe('TenantController', () => {
       providers: [
         getMockProvider(TenantService, MockTenantService),
         getMockProvider(DataSource, MockDataSource),
+        {
+          provide: ConfigService,
+          useValue: { get: () => ({ secret: JWT_SECRET }) },
+        },
       ],
     }).compile();
 
@@ -53,6 +62,47 @@ describe('TenantController', () => {
   });
 
   describe('setup', () => {
+    describe('outside the test environment', () => {
+      const nodeEnv = process.env.NODE_ENV;
+      beforeEach(() => {
+        process.env.NODE_ENV = 'production';
+      });
+      afterEach(() => {
+        process.env.NODE_ENV = nodeEnv;
+      });
+
+      const createDto = (setupCode?: string) => {
+        const dto = new SetupTenantRequestDto();
+        dto.siteName = faker.string.alphanumeric(10);
+        dto.email = faker.internet.email();
+        dto.password = '12345678';
+        dto.setupCode = setupCode;
+        return dto;
+      };
+
+      it('rejects setup without the setup code', async () => {
+        await expect(tenantController.setup(createDto())).rejects.toThrow(
+          ForbiddenException,
+        );
+        expect(MockTenantService.create).not.toHaveBeenCalled();
+      });
+
+      it('rejects setup with a wrong setup code', async () => {
+        await expect(
+          tenantController.setup(createDto('AAAA-BBBB-CCCC')),
+        ).rejects.toThrow(ForbiddenException);
+        expect(MockTenantService.create).not.toHaveBeenCalled();
+      });
+
+      it('accepts the setup code derived from JWT_SECRET', async () => {
+        const code = getTenantSetupCode(JWT_SECRET).toLowerCase();
+
+        await tenantController.setup(createDto(code));
+
+        expect(MockTenantService.create).toHaveBeenCalledTimes(1);
+      });
+    });
+
     it('should create a new tenant successfully', async () => {
       const mockTenant = {
         id: faker.number.int(),

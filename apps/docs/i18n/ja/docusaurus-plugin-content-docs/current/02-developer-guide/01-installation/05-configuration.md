@@ -17,7 +17,7 @@ sidebar_position: 5
 
 | 環境変数                     | 説明                      | デフォルト | 例                               |
 | ---------------------------- | ------------------------- | ---------- | -------------------------------- |
-| `JWT_SECRET`                 | JWT署名用シークレットキー | なし       | `jwtsecretjwtsecretjwtsecret`    |
+| `JWT_SECRET`                 | JWT署名用シークレットキー | なし       | output of `openssl rand -hex 32` |
 | `MYSQL_PRIMARY_URL`          | MySQL接続URL              | なし       | `mysql://user:pass@host:3306/db` |
 | `ACCESS_TOKEN_EXPIRED_TIME`  | Access Token有効期間      | `10m`      | `10m`、`30s`、`1h`               |
 | `REFRESH_TOKEN_EXPIRED_TIME` | Refresh Token有効期間     | `1h`       | `1h`、`7d`                       |
@@ -162,7 +162,7 @@ services:
   api:
     image: line/abc-user-feedback-api
     environment:
-      - JWT_SECRET=changeme
+      - JWT_SECRET=${JWT_SECRET:?Set JWT_SECRET}
       - MYSQL_PRIMARY_URL=mysql://user:pass@mysql:3306/userfeedback
       - SMTP_HOST=smtp.sendgrid.net
       - SMTP_USERNAME=apikey
@@ -173,7 +173,7 @@ services:
 
 ```env
 # apps/api/.env
-JWT_SECRET=changemechangemechangeme
+JWT_SECRET= # output of `openssl rand -hex 32`
 MYSQL_PRIMARY_URL=mysql://root:pass@localhost:3306/db
 ACCESS_TOKEN_EXPIRED_TIME=10m
 REFRESH_TOKEN_EXPIRED_TIME=1h

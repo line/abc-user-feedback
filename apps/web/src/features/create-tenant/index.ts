@@ -14,3 +14,4 @@
  * under the License.
  */
 export { default as CreateTenantForm } from './create-tenant-form.ui';
+export type { CreateTenant } from './create-tenant-form.type';

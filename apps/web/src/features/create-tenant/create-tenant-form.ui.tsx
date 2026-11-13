@@ -51,6 +51,14 @@ const CreateTenantForm: React.FC<IProps> = (props) => {
           error={formState.errors.siteName?.message}
           {...register('siteName')}
         />
+        <TextInput
+          label="Setup Code"
+          placeholder="XXXX-XXXX-XXXX"
+          required
+          infoCaption={t('v2.create-tenant.tenant.setup-code-hint')}
+          error={formState.errors.setupCode?.message}
+          {...register('setupCode')}
+        />
       </div>
       <Button type="submit">{submitText}</Button>
     </form>
