@@ -96,13 +96,13 @@ importers:
         specifier: ^3.5.1
         version: 3.5.1
       '@opentelemetry/exporter-logs-otlp-http':
-        specifier: ^0.301.0
+        specifier: ^0.301.1
         version: 0.301.1
       '@opentelemetry/resources':
-        specifier: ^2.12.0
+        specifier: ^2.12.1
         version: 2.12.1
       '@opentelemetry/sdk-logs':
-        specifier: ^0.223.0
+        specifier: ^0.223.1
         version: 0.223.1
       '@opentelemetry/semantic-conventions':
         specifier: ^1.45.0
