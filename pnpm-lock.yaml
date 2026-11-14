@@ -10,8 +10,8 @@ catalogs:
       specifier: ^10.14.0
       version: 10.14.0
     prettier:
-      specifier: ^3.9.10
-      version: 3.9.10
+      specifier: ^3.10.0
+      version: 3.10.1
     tailwindcss:
       specifier: ^3.4.19
       version: 3.4.19
@@ -28,7 +28,7 @@ importers:
         version: link:tooling/prettier
       prettier:
         specifier: 'catalog:'
-        version: 3.9.10
+        version: 3.10.1
       turbo:
         specifier: ^2.11.10
         version: 2.11.10
@@ -221,10 +221,10 @@ importers:
         version: 10.6.0
       '@nestjs/cli':
         specifier: ^11.0.24
-        version: 11.0.24(@swc/cli@0.8.2(@swc/core@1.13.5(@swc/helpers@0.5.24))(chokidar@4.0.3))(@swc/core@1.13.5(@swc/helpers@0.5.24))(@types/node@24.19.2)(cssnano@7.1.9(postcss@8.5.32))(postcss@8.5.32)(prettier@3.9.10)
+        version: 11.0.24(@swc/cli@0.8.2(@swc/core@1.13.5(@swc/helpers@0.5.24))(chokidar@4.0.3))(@swc/core@1.13.5(@swc/helpers@0.5.24))(@types/node@24.19.2)(cssnano@7.1.9(postcss@8.5.32))(postcss@8.5.32)(prettier@3.10.1)
       '@nestjs/schematics':
         specifier: ^11.1.0
-        version: 11.1.0(chokidar@4.0.3)(prettier@3.9.10)(typescript@5.9.3)
+        version: 11.1.0(chokidar@4.0.3)(prettier@3.10.1)(typescript@5.9.3)
       '@nestjs/testing':
         specifier: ^11.2.9
         version: 11.2.9(@nestjs/common@11.2.9(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.2.9)(@nestjs/platform-express@11.2.9)
@@ -287,7 +287,7 @@ importers:
         version: 3.0.5
       prettier:
         specifier: 'catalog:'
-        version: 3.9.10
+        version: 3.10.1
       supertest:
         specifier: ^7.3.2
         version: 7.3.2
@@ -403,7 +403,7 @@ importers:
         version: 10.14.0(jiti@1.21.7)
       prettier:
         specifier: 'catalog:'
-        version: 3.9.10
+        version: 3.10.1
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -647,7 +647,7 @@ importers:
         version: 8.5.32
       prettier:
         specifier: 'catalog:'
-        version: 3.9.10
+        version: 3.10.1
       tailwindcss:
         specifier: ^3.4.19
         version: 3.4.19(yaml@2.9.1)
@@ -768,7 +768,7 @@ importers:
         version: 10.14.0(jiti@1.21.7)
       prettier:
         specifier: 'catalog:'
-        version: 3.9.10
+        version: 3.10.1
       react:
         specifier: ^19.3.1
         version: 19.3.1
@@ -795,7 +795,7 @@ importers:
         version: 10.14.0(jiti@1.21.7)
       prettier:
         specifier: 'catalog:'
-        version: 3.9.10
+        version: 3.10.1
       react:
         specifier: ^19.3.1
         version: 19.3.1
@@ -840,7 +840,7 @@ importers:
         version: 14.0.3(postcss@8.5.32)
       prettier:
         specifier: 'catalog:'
-        version: 3.9.10
+        version: 3.10.1
       tailwindcss:
         specifier: 'catalog:'
         version: 3.4.19(yaml@2.9.1)
@@ -892,7 +892,7 @@ importers:
         version: 10.14.0(jiti@1.21.7)
       prettier:
         specifier: 'catalog:'
-        version: 3.9.10
+        version: 3.10.1
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -905,13 +905,13 @@ importers:
     dependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.7.1
-        version: 4.7.1(prettier@3.9.10)
+        version: 4.7.1(prettier@3.10.1)
       prettier:
         specifier: 'catalog:'
-        version: 3.9.10
+        version: 3.10.1
       prettier-plugin-tailwindcss:
         specifier: ^0.8.1
-        version: 0.8.1(@ianvs/prettier-plugin-sort-imports@4.7.1(prettier@3.9.10))(prettier@3.9.10)
+        version: 0.8.1(@ianvs/prettier-plugin-sort-imports@4.7.1(prettier@3.10.1))(prettier@3.10.1)
     devDependencies:
       '@types/node':
         specifier: 24.19.2
@@ -11786,8 +11786,8 @@ packages:
       prettier-plugin-svelte:
         optional: true
 
-  prettier@3.9.10:
-    resolution: {integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==}
+  prettier@3.10.1:
+    resolution: {integrity: sha512-70vp3ZUYoPlFbF9uiTdXHUUCGEIp7d4+6p+8DYbkm2jP7x/3i/paXVF6dopSI3zd/CEitrZN1rc4i85xWmmXlg==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -17019,13 +17019,13 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@ianvs/prettier-plugin-sort-imports@4.7.1(prettier@3.9.10)':
+  '@ianvs/prettier-plugin-sort-imports@4.7.1(prettier@3.10.1)':
     dependencies:
       '@babel/generator': 7.29.0
       '@babel/parser': 7.29.0
       '@babel/traverse': 7.29.0
       '@babel/types': 7.29.0
-      prettier: 3.9.10
+      prettier: 3.10.1
       semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
@@ -17876,13 +17876,13 @@ snapshots:
       axios: 1.21.1
       rxjs: 7.8.2
 
-  '@nestjs/cli@11.0.24(@swc/cli@0.8.2(@swc/core@1.13.5(@swc/helpers@0.5.24))(chokidar@4.0.3))(@swc/core@1.13.5(@swc/helpers@0.5.24))(@types/node@24.19.2)(cssnano@7.1.9(postcss@8.5.32))(postcss@8.5.32)(prettier@3.9.10)':
+  '@nestjs/cli@11.0.24(@swc/cli@0.8.2(@swc/core@1.13.5(@swc/helpers@0.5.24))(chokidar@4.0.3))(@swc/core@1.13.5(@swc/helpers@0.5.24))(@types/node@24.19.2)(cssnano@7.1.9(postcss@8.5.32))(postcss@8.5.32)(prettier@3.10.1)':
     dependencies:
       '@angular-devkit/core': 19.2.27(chokidar@4.0.3)
       '@angular-devkit/schematics': 19.2.27(chokidar@4.0.3)
       '@angular-devkit/schematics-cli': 19.2.27(@types/node@24.19.2)(chokidar@4.0.3)
       '@inquirer/prompts': 7.10.1(@types/node@24.19.2)
-      '@nestjs/schematics': 11.1.0(chokidar@4.0.3)(prettier@3.9.10)(typescript@5.9.3)
+      '@nestjs/schematics': 11.1.0(chokidar@4.0.3)(prettier@3.10.1)(typescript@5.9.3)
       ansis: 4.2.0
       chokidar: 4.0.3
       cli-table3: 0.6.5
@@ -18010,7 +18010,7 @@ snapshots:
       '@nestjs/core': 11.2.9(@nestjs/common@11.2.9(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.2.9)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       cron: 4.4.0
 
-  '@nestjs/schematics@11.1.0(chokidar@4.0.3)(prettier@3.9.10)(typescript@5.9.3)':
+  '@nestjs/schematics@11.1.0(chokidar@4.0.3)(prettier@3.10.1)(typescript@5.9.3)':
     dependencies:
       '@angular-devkit/core': 19.2.24(chokidar@4.0.3)
       '@angular-devkit/schematics': 19.2.24(chokidar@4.0.3)
@@ -18019,7 +18019,7 @@ snapshots:
       pluralize: 8.0.0
       typescript: 5.9.3
     optionalDependencies:
-      prettier: 3.9.10
+      prettier: 3.10.1
     transitivePeerDependencies:
       - chokidar
 
@@ -27259,13 +27259,13 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-tailwindcss@0.8.1(@ianvs/prettier-plugin-sort-imports@4.7.1(prettier@3.9.10))(prettier@3.9.10):
+  prettier-plugin-tailwindcss@0.8.1(@ianvs/prettier-plugin-sort-imports@4.7.1(prettier@3.10.1))(prettier@3.10.1):
     dependencies:
-      prettier: 3.9.10
+      prettier: 3.10.1
     optionalDependencies:
-      '@ianvs/prettier-plugin-sort-imports': 4.7.1(prettier@3.9.10)
+      '@ianvs/prettier-plugin-sort-imports': 4.7.1(prettier@3.10.1)
 
-  prettier@3.9.10: {}
+  prettier@3.10.1: {}
 
   pretty-error@4.0.0:
     dependencies:
