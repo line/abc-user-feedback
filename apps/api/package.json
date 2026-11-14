@@ -44,7 +44,7 @@
     "@nestjs/swagger": "^11.4.8",
     "@nestjs/terminus": "^11.1.1",
     "@nestjs/typeorm": "^11.0.3",
-    "@opensearch-project/opensearch": "^3.5.1",
+    "@opensearch-project/opensearch": "^3.10.0",
     "@opentelemetry/exporter-logs-otlp-http": "^0.301.1",
     "@opentelemetry/resources": "^2.12.1",
     "@opentelemetry/sdk-logs": "^0.223.1",
