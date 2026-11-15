@@ -10,7 +10,7 @@ catalogs:
       specifier: ^10.14.0
       version: 10.14.0
     prettier:
-      specifier: ^3.10.0
+      specifier: ^3.10.1
       version: 3.10.1
     tailwindcss:
       specifier: ^3.4.19
