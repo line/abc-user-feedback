@@ -2588,8 +2588,10 @@ export interface operations {
   };
   AuthController_handleCallback: {
     parameters: {
-      query?: {
+      query: {
         code?: unknown;
+        /** @description The state returned by the IdP with the code */
+        state: unknown;
       };
       header?: never;
       path?: never;
