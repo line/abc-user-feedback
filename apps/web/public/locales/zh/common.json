@@ -374,7 +374,8 @@
     "create-tenant": {
       "tenant": {
         "title": "创建Tenant",
-        "description": "请输入将管理ABC User Feedback的公司/组织/团队名称。"
+        "description": "请输入将管理ABC User Feedback的公司/组织/团队名称。",
+        "setup-code-hint": "在创建第一个租户之前，会显示在 API 服务器日志（或 'auf-cli start' 的输出）中。"
       },
       "user": {
         "title": "创建主帐户",

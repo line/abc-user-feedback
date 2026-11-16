@@ -47,6 +47,8 @@ When you first access the system, the **Tenant Creation and Administrator Accoun
 
 Set the tenant name.
 
+Also enter the **Setup Code**. Until the first tenant is created it is shown in the API server log (`docker compose logs api`), and in the output of `auf-cli start` if you use the CLI.
+
 After entering the tenant name, click the **Next** button.
 
 > This tenant name will be displayed in the login UI.

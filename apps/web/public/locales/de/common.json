@@ -374,7 +374,8 @@
     "create-tenant": {
       "tenant": {
         "title": "Tenant erstellen",
-        "description": "Bitte geben Sie den Namen des Unternehmens/der Organisation/des Teams ein, das ABC User Feedback verwalten wird."
+        "description": "Bitte geben Sie den Namen des Unternehmens/der Organisation/des Teams ein, das ABC User Feedback verwalten wird.",
+        "setup-code-hint": "Wird im API-Server-Log (oder von 'auf-cli start') angezeigt, bis der erste Tenant erstellt ist."
       },
       "user": {
         "title": "Hauptkonto erstellen",

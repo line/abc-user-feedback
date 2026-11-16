@@ -14,12 +14,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import crypto from 'crypto';
 import { Command } from 'commander';
 
 import packageJson from '../package.json';
 import { generateComposeContent } from './compose';
 import { loadConfig } from './config';
 import { exists, writeFile } from './fsutil';
+import { getTenantSetupCode } from './setup-code';
 import { run, runWithStdin } from './shell';
 
 const program = new Command();
@@ -67,6 +69,9 @@ program
     if (cfg.api.smtp.host === 'smtp4dev') {
       console.log(`   📧 SMTP Mail Web: http://localhost:5080`);
     }
+    console.log(
+      `🔑 Setup code for creating the first tenant: ${getTenantSetupCode(cfg.api.jwt_secret)}`,
+    );
   });
 
 program
@@ -115,7 +120,8 @@ port = 3000
 
 [api]
 port = 4000
-jwt_secret = "jwtsecretjwtsecretjwtsecretjwtsecretjwtsecretjwtsecret"
+# Generated for this installation. Keep it secret; changing it signs everyone out.
+jwt_secret = "${crypto.randomBytes(32).toString('hex')}"
 
 # master_api_key = "MASTER_KEY"
 # access_token_expired_time = "10m"

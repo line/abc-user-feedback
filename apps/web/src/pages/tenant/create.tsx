@@ -26,6 +26,7 @@ import type { NextPageWithLayout } from '@/shared/types';
 import { useTenantStore } from '@/entities/tenant';
 import type { SignUpWithEmailType } from '@/features/auth/sign-up-with-email';
 import { SignUpWithEmailForm } from '@/features/auth/sign-up-with-email';
+import type { CreateTenant } from '@/features/create-tenant';
 import { CreateTenantForm } from '@/features/create-tenant';
 import { AnonymousLayout } from '@/widgets/anonymous-layout';
 
@@ -46,7 +47,7 @@ const CreateTenantPage: NextPageWithLayout = () => {
   );
 
   const [data, setData] = useState<{
-    tenant: { siteName: string } | null;
+    tenant: CreateTenant | null;
     user: SignUpWithEmailType | null;
   }>({ tenant: null, user: null });
 
@@ -68,6 +69,7 @@ const CreateTenantPage: NextPageWithLayout = () => {
     if (!data.tenant || !data.user) return;
     createTenant({
       siteName: data.tenant.siteName,
+      setupCode: data.tenant.setupCode,
       email: data.user.email,
       password: data.user.password,
     });
@@ -92,8 +94,8 @@ const CreateTenantPage: NextPageWithLayout = () => {
       <div className="flex min-h-[300px] flex-col">
         {step === 'tenant' && (
           <CreateTenantForm
-            onSubmit={({ siteName }) => {
-              setData((prev) => ({ ...prev, tenant: { siteName } }));
+            onSubmit={(tenant) => {
+              setData((prev) => ({ ...prev, tenant }));
               void setStep('user');
             }}
             submitText={t('button.next')}

@@ -16,8 +16,23 @@
 import { registerAs } from '@nestjs/config';
 import Joi from 'joi';
 
+// Values published in compose files, the CLI template and the docs. A token
+// signed with any of them could be forged by anyone.
+export const KNOWN_DEFAULT_JWT_SECRETS = [
+  'jwtsecretjwtsecretjwtsecret',
+  'jwtsecretjwtsecretjwtsecretjwtsecretjwtsecretjwtsecret',
+  'changeme',
+  'changemechangemechangeme',
+];
+
 export const jwtConfigSchema = Joi.object({
-  JWT_SECRET: Joi.string().required(),
+  JWT_SECRET: Joi.string()
+    .required()
+    .invalid(...KNOWN_DEFAULT_JWT_SECRETS)
+    .messages({
+      'any.invalid':
+        'JWT_SECRET is a publicly known default. Set it to a random value, e.g. `openssl rand -hex 32`.',
+    }),
   ACCESS_TOKEN_EXPIRED_TIME: Joi.string().default('10m'),
   REFRESH_TOKEN_EXPIRED_TIME: Joi.string().default('1h'),
 });

@@ -17,7 +17,7 @@ This document explains the main environment variables used by ABC User Feedback'
 
 | Environment Variable         | Description                   | Default | Example                          |
 | ---------------------------- | ----------------------------- | ------- | -------------------------------- |
-| `JWT_SECRET`                 | Secret key for JWT signing    | None    | `jwtsecretjwtsecretjwtsecret`    |
+| `JWT_SECRET`                 | Secret key for JWT signing    | None    | output of `openssl rand -hex 32` |
 | `MYSQL_PRIMARY_URL`          | MySQL connection URL          | None    | `mysql://user:pass@host:3306/db` |
 | `ACCESS_TOKEN_EXPIRED_TIME`  | Access Token validity period  | `10m`   | `10m`, `30s`, `1h`               |
 | `REFRESH_TOKEN_EXPIRED_TIME` | Refresh Token validity period | `1h`    | `1h`, `7d`                       |
@@ -156,7 +156,7 @@ services:
   api:
     image: line/abc-user-feedback-api
     environment:
-      - JWT_SECRET=changeme
+      - JWT_SECRET=${JWT_SECRET:?Set JWT_SECRET}
       - MYSQL_PRIMARY_URL=mysql://user:pass@mysql:3306/userfeedback
       - SMTP_HOST=smtp.sendgrid.net
       - SMTP_USERNAME=apikey
@@ -167,7 +167,7 @@ services:
 
 ```env
 # apps/api/.env
-JWT_SECRET=changemechangemechangeme
+JWT_SECRET= # output of `openssl rand -hex 32`
 MYSQL_PRIMARY_URL=mysql://root:pass@localhost:3306/db
 ACCESS_TOKEN_EXPIRED_TIME=10m
 REFRESH_TOKEN_EXPIRED_TIME=1h

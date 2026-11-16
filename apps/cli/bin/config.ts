@@ -19,6 +19,13 @@ import { z } from 'zod';
 
 import { exists, readFile } from './fsutil';
 
+// Values that earlier versions of `auf-cli init` and the docs published.
+const KNOWN_DEFAULT_JWT_SECRETS = [
+  'jwtsecretjwtsecretjwtsecret',
+  'jwtsecretjwtsecretjwtsecretjwtsecretjwtsecretjwtsecret',
+  'changemechangemechangeme',
+];
+
 const ConfigSchema = z.object({
   web: z.object({
     port: z.number().default(3000),
@@ -26,7 +33,13 @@ const ConfigSchema = z.object({
   }),
   api: z.object({
     port: z.number().default(4000),
-    jwt_secret: z.string().min(32).default('jwtsecretjwtsecretjwtsecret'),
+    jwt_secret: z
+      .string()
+      .min(32)
+      .refine((secret) => !KNOWN_DEFAULT_JWT_SECRETS.includes(secret), {
+        message:
+          "This is a publicly known default. Replace it with a random value, e.g. 'openssl rand -hex 32'.",
+      }),
     master_api_key: z.string().optional(),
     access_token_expired_time: z.string().optional(),
     refresh_token_expired_time: z.string().optional(),

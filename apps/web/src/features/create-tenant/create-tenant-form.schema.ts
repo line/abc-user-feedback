@@ -17,4 +17,5 @@ import { z } from 'zod';
 
 export const createTenantFormSchema = z.object({
   siteName: z.string().trim().min(2).max(20),
+  setupCode: z.string().trim().min(1),
 });

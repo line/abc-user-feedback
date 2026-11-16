@@ -33,6 +33,8 @@ setup('tenant create and authenticate', async ({ page }) => {
 
   await page.locator("input[name='siteName']").click();
   await page.locator("input[name='siteName']").fill('TestTenant');
+  // The API skips the setup code check when NODE_ENV=test.
+  await page.locator("input[name='setupCode']").fill('test');
   await page.getByRole('button', { name: 'Next', exact: true }).click();
   await page.waitForTimeout(1000);
 
