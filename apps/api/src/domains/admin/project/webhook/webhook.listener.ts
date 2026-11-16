@@ -70,7 +70,7 @@ export class WebhookListener {
             .pipe(
               tap(() => {
                 this.logger.log(
-                  `Successfully sent webhook to ${webhook.url}(event: ${event}, data: ${JSON.stringify(data)}, token: ${webhook.token})`,
+                  `Successfully sent webhook to ${webhook.url}(event: ${event}, data: ${JSON.stringify(data)})`,
                 );
               }),
               retry({

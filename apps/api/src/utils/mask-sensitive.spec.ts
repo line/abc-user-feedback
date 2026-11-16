@@ -53,4 +53,34 @@ describe('mask-sensitive', () => {
       maskBody({ apiKey: 'k', accessToken: 't', code: 'c', name: 'n' }),
     ).toEqual({ apiKey: '****', accessToken: '****', code: '****', name: 'n' });
   });
+
+  it('masks storage, webhook and changed-password secrets', () => {
+    expect(
+      maskBody({
+        newPassword: 'np',
+        imageConfig: { accessKeyId: 'id', secretAccessKey: 's' },
+        token: 'wt',
+        refreshToken: 'rt',
+        url: 'https://example.com',
+      }),
+    ).toEqual({
+      newPassword: '****',
+      imageConfig: { accessKeyId: 'id', secretAccessKey: '****' },
+      token: '****',
+      refreshToken: '****',
+      url: 'https://example.com',
+    });
+  });
+
+  it('masks route-specific secrets only on their route', () => {
+    expect(
+      maskBody({ value: 'custom-key' }, '/api/admin/projects/1/api-keys'),
+    ).toEqual({ value: '****' });
+    expect(
+      maskBody(
+        { queries: [{ key: 'name', value: 'abc' }] },
+        '/api/admin/projects/1/channels/1/feedbacks/search',
+      ),
+    ).toEqual({ queries: [{ key: 'name', value: 'abc' }] });
+  });
 });

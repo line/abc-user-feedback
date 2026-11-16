@@ -80,7 +80,7 @@ async function bootstrap() {
           method: req.method,
           url: req.url,
           headers: maskHeaders(req.headers),
-          body: maskBody(body),
+          body: maskBody(body, req.url),
           params: req.params,
           query: req.query,
         };
@@ -99,7 +99,7 @@ async function bootstrap() {
             method: request.method,
             url: request.url,
             headers: maskHeaders(request.headers),
-            body: maskBody(request.body),
+            body: maskBody(request.body, request.url),
             params: request.params,
             query: request.query,
           },
