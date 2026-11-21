@@ -95,7 +95,7 @@
     "openapi-typescript": "^7.13.0",
     "postcss": "^8.5.33",
     "prettier": "catalog:",
-    "tailwindcss": "^3.4.19",
+    "tailwindcss": "^4.3.5",
     "ts-toolbelt": "^9.6.0",
     "typescript": "catalog:"
   },
