@@ -23,7 +23,7 @@
     "eslint": "catalog:",
     "glob": "^13.0.7",
     "postcss": "^8.5.33",
-    "postcss-import": "^16.2.0",
+    "postcss-import": "^17.0.1",
     "postcss-js": "^5.1.0",
     "postcss-nesting": "^14.0.3",
     "prettier": "catalog:",
