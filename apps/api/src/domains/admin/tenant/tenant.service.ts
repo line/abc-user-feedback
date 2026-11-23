@@ -38,6 +38,7 @@ import {
   TenantAlreadyExistsException,
   TenantNotFoundException,
 } from './exceptions';
+import { getTenantSetupCode } from './tenant-setup-code';
 import type { OAuthConfig } from './tenant.entity';
 import { TenantEntity } from './tenant.entity';
 
@@ -175,6 +176,17 @@ export class TenantService {
         `channel(${id}) ${feedbackIdsToDelete.length} feedbacks were deleted`,
       );
     }
+  }
+
+  async logSetupCodeIfNotInitialized() {
+    if (process.env.NODE_ENV === 'test') return;
+    const tenants = await this.tenantRepo.find({ take: 1 });
+    if (tenants.length > 0) return;
+
+    const secret = this.configService.get<string>('jwt.secret') ?? '';
+    this.logger.warn(
+      `No tenant yet. Enter this setup code on the web setup page: ${getTenantSetupCode(secret)}`,
+    );
   }
 
   async addCronJob() {

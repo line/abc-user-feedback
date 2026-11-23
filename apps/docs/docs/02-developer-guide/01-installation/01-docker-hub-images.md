@@ -52,7 +52,8 @@ services:
   api:
     image: line/abc-user-feedback-api:latest
     environment:
-      - JWT_SECRET=jwtsecretjwtsecretjwtsecret
+      # 필수: 임의의 값 (예: `openssl rand -hex 32` 출력). 공개된 기본값은 거부됩니다.
+      - JWT_SECRET=${JWT_SECRET:?Set JWT_SECRET}
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
       - SMTP_HOST=smtp4dev
       - SMTP_PORT=25

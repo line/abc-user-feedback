@@ -55,4 +55,7 @@ export class TenantModule {
   async onModuleInit() {
     await this.service.addCronJob();
   }
+  async onApplicationBootstrap() {
+    await this.service.logSetupCodeIfNotInitialized();
+  }
 }

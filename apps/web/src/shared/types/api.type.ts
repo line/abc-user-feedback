@@ -1456,6 +1456,8 @@ export interface components {
       siteName: string;
       email: string;
       password: string;
+      /** @description Setup code printed in the API server log while no tenant exists */
+      setupCode: string;
     };
     /** @enum {string} */
     LoginButtonTypeEnum: 'CUSTOM' | 'GOOGLE';

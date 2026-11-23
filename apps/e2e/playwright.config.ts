@@ -88,7 +88,7 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
       env: {
-        JWT_SECRET: 'jwtsecretjwtsecretjwtsecret',
+        JWT_SECRET: 'e2e-jwt-secret-not-for-production',
         BASE_URL: 'http://localhost:3000',
         MYSQL_PRIMARY_URL:
           'mysql://userfeedback:userfeedback@localhost:13307/e2e',
