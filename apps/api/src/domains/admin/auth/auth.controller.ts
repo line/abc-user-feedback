@@ -108,10 +108,15 @@ export class AuthController {
 
   @UseGuards(UseOAuthGuard)
   @ApiQuery({ name: 'code', required: false })
+  @ApiQuery({
+    name: 'state',
+    required: true,
+    description: 'The state returned by the IdP with the code',
+  })
   @ApiOkResponse({ type: SignInResponseDto })
   @Get('signIn/oauth')
-  async handleCallback(@Query() query: { code: string }) {
-    return await this.authService.signInByOAuth(query.code);
+  async handleCallback(@Query() query: { code: string; state?: string }) {
+    return await this.authService.signInByOAuth(query.code, query.state);
   }
 
   @ApiBearerAuth()

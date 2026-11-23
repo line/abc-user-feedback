@@ -332,7 +332,10 @@ describe('AuthController', () => {
 
   describe('handleCallback', () => {
     it('should handle OAuth callback successfully', async () => {
-      const query = { code: faker.string.alphanumeric(32) };
+      const query = {
+        code: faker.string.alphanumeric(32),
+        state: faker.string.alphanumeric(32),
+      };
       const mockTokens = {
         accessToken: faker.string.alphanumeric(32),
         refreshToken: faker.string.alphanumeric(32),
@@ -342,7 +345,10 @@ describe('AuthController', () => {
 
       const result = await authController.handleCallback(query);
 
-      expect(authService.signInByOAuth).toHaveBeenCalledWith(query.code);
+      expect(authService.signInByOAuth).toHaveBeenCalledWith(
+        query.code,
+        query.state,
+      );
       expect(authService.signInByOAuth).toHaveBeenCalledTimes(1);
       expect(result).toEqual(mockTokens);
     });
