@@ -52,7 +52,7 @@ importers:
         version: 10.1.12
       '@nestjs-modules/mailer':
         specifier: ^2.3.10
-        version: 2.3.10(1be1f094925686bb8c4f805a7b1443c0)
+        version: 2.3.10(093c31f0ae16544fd8f0e2f523dee492)
       '@nestjs/axios':
         specifier: ^4.0.1
         version: 4.0.1(@nestjs/common@11.2.11(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.21.1)(rxjs@7.8.2)
@@ -168,8 +168,8 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0(@nestjs/common@11.2.11(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(typeorm@0.3.31(babel-plugin-macros@3.1.0)(mysql2@3.24.6(@types/node@24.19.2))(ts-node@10.9.2(@swc/core@1.13.5(@swc/helpers@0.5.24))(@types/node@24.19.2)(typescript@5.9.3)))
       nodemailer:
-        specifier: ^10.6.0
-        version: 10.6.0
+        specifier: ^10.6.1
+        version: 10.6.1
       passport:
         specifier: ^0.7.0
         version: 0.7.0
@@ -10828,8 +10828,8 @@ packages:
     resolution: {integrity: sha512-kQK9LGGFiHtrWiNhZtA7Qbw17AQz+dmsEKODRIVTXA9+e5MS/2gZEBhYJt13GrAz5/IOZKddH/0Z3TP/Zgo+yw==}
     engines: {node: '>=18'}
 
-  nodemailer@10.6.0:
-    resolution: {integrity: sha512-jWanL7D9GD3jvUDYKmoC5rWTiG8MnBgnN2yV68bgMKip1zUJhiSTyz7Eg+18y8sk5OvdVDzws5nZK5arSI4f5Q==}
+  nodemailer@10.6.1:
+    resolution: {integrity: sha512-d7kfFfS/tR4Aca+SBvRaQ+MXKNv7d2JiRe5TxaRcFT/kYMh4GGPnW9aKksTIEvyEbA7d/7HYWE4YPDEHxzJj/g==}
     engines: {node: '>=20.0.0'}
 
   nodemailer@9.1.1:
@@ -18171,13 +18171,13 @@ snapshots:
       '@tybys/wasm-util': 0.10.4
     optional: true
 
-  '@nestjs-modules/mailer@2.3.10(1be1f094925686bb8c4f805a7b1443c0)':
+  '@nestjs-modules/mailer@2.3.10(093c31f0ae16544fd8f0e2f523dee492)':
     dependencies:
       '@css-inline/css-inline': 0.22.0
       '@nestjs/common': 11.2.11(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/core': 11.2.11(@nestjs/common@11.2.11(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.2.11)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       glob: 13.0.6
-      nodemailer: 10.6.0
+      nodemailer: 10.6.1
       tslib: 2.8.1
     optionalDependencies:
       '@nestjs/event-emitter': 3.1.0(@nestjs/common@11.2.11(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.2.11)
@@ -26496,7 +26496,7 @@ snapshots:
 
   node-releases@2.0.57: {}
 
-  nodemailer@10.6.0: {}
+  nodemailer@10.6.1: {}
 
   nodemailer@9.1.1:
     optional: true
