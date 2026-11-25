@@ -43,7 +43,7 @@
     "countries-and-timezones": "^3.11.0",
     "date-fns": "^4.4.0",
     "dayjs": "^1.11.23",
-    "i18next": "^26.0.0",
+    "i18next": "^26.7.2",
     "immer": "^11.2.10",
     "jwt-decode": "^4.0.0",
     "linkify": "^0.2.1",
