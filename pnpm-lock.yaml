@@ -824,8 +824,8 @@ importers:
         specifier: 'catalog:'
         version: 10.15.0(jiti@1.21.7)
       glob:
-        specifier: ^13.0.7
-        version: 13.0.7
+        specifier: ^14.0.6
+        version: 14.0.6
       postcss:
         specifier: ^8.5.33
         version: 8.5.33
@@ -8887,6 +8887,10 @@ packages:
 
   glob@14.0.4:
     resolution: {integrity: sha512-mMiwNKoJZ4HAIRVJxotO6LsNRReA30gQwP9E2/p94tfLv+jygCNpKDjhhSL6OLY6LE371EZm5EAf7RpYuUqlsw==}
+    engines: {node: 18 || 20 || >=22}
+
+  glob@14.0.6:
+    resolution: {integrity: sha512-OwXjVP2svY5EyLY75Vek96C8qK43gqrt4xsZ+qSILdnaEiJPXkd62mcfUSNx/TQErQRdu5uM5kF67sfONragKw==}
     engines: {node: 18 || 20 || >=22}
 
   glob@7.2.3:
@@ -23589,6 +23593,12 @@ snapshots:
       path-scurry: 2.0.2
 
   glob@14.0.4:
+    dependencies:
+      minimatch: 11.0.5
+      minipass: 7.1.3
+      path-scurry: 3.0.0
+
+  glob@14.0.6:
     dependencies:
       minimatch: 11.0.5
       minipass: 7.1.3
