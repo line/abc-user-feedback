@@ -498,7 +498,7 @@ importers:
         specifier: ^1.11.23
         version: 1.11.23
       i18next:
-        specifier: ^26.0.0
+        specifier: ^26.7.2
         version: 26.7.2(typescript@5.9.3)
       immer:
         specifier: ^11.2.10
