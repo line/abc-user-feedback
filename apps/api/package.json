@@ -49,7 +49,7 @@
     "@opentelemetry/resources": "^2.12.1",
     "@opentelemetry/sdk-logs": "^0.223.2",
     "@opentelemetry/semantic-conventions": "^1.45.0",
-    "@types/passport-jwt": "^4.0.1",
+    "@types/passport-jwt": "^4.0.2",
     "@types/passport-local": "^1.0.38",
     "@ufb/shared": "workspace:*",
     "@willsoto/nestjs-prometheus": "^6.1.1",
