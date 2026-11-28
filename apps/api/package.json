@@ -99,7 +99,7 @@
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/luxon": "^3.7.6",
-    "@types/node": "24.19.2",
+    "@types/node": "24.19.4",
     "@types/nodemailer": "^8.0.2",
     "@types/passport-jwt": "*",
     "@types/supertest": "^7.2.1",
