@@ -604,7 +604,7 @@ importers:
         specifier: 24.19.4
         version: 24.19.4
       '@types/react':
-        specifier: ^19.3.1
+        specifier: ^19.3.3
         version: 19.3.3
       '@types/react-dom':
         specifier: ^19.3.0
@@ -746,7 +746,7 @@ importers:
         version: 3.7.1
     devDependencies:
       '@types/react':
-        specifier: ^19.3.1
+        specifier: ^19.3.3
         version: 19.3.3
       '@types/react-dom':
         specifier: ^19.3.0
